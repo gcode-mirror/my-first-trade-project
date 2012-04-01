@@ -2,9 +2,12 @@
 #use strict;
 use Tkx;
 use Cwd;
+use Win32::Sound;
+Win32::Sound::Volume('100%');
 
 # ======================================================= GLOBALS =================================================================
 our $INPUT_FILE = getcwd."/experts/files/notify.bin";
+our $ALERT_SOUND = getcwd."/Sounds/alert2.wav";
 our $LAST_MOD = 0;
 
 our $BASE_WINDOW;
@@ -13,7 +16,7 @@ our $BASE_WINDOW_GEO2 = "-110+-20";
 
 our $NOTIFY_FRAME;
 our $NOTIFY_LABEL;
-our $NOTIFY_LABEL_TXT;
+our $NOTIFY_LABEL_TXT = 0;
 
 our @WIDGETS;
 our @DATA;
@@ -113,7 +116,14 @@ sub start{
     $NOTIFY_LABEL->configure(-style =>'has.TLabel');
   }
   
-  $NOTIFY_LABEL_TXT = $nr_of_notified;
+  if($NOTIFY_LABEL_TXT != $nr_of_notified){
+    if($nr_of_notified > $NOTIFY_LABEL_TXT){
+      Win32::Sound::Stop();
+      Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
+    }
+    $NOTIFY_LABEL_TXT = $nr_of_notified;
+  }
+
 }
 
 sub setAsVisited{
