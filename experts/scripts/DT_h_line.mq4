@@ -11,7 +11,7 @@
 //+------------------------------------------------------------------+
 int start(){
   double price = WindowPriceMax(0)-((WindowPriceMax(0)-WindowPriceMin(0))/10);
-  string name = "DT_GO_h_line"+DoubleToStr(TimeCurrent(),0);
+  string name = "DT_GO_h_line_"+DoubleToStr(TimeLocal(),0);
   
   ObjectCreate(name, OBJ_HLINE, 0, 0, price);
   ObjectSet(name, OBJPROP_COLOR, Peru);
@@ -24,5 +24,9 @@ int start(){
     ObjectSet(name, OBJPROP_TIMEFRAMES, OBJ_PERIOD_M1|OBJ_PERIOD_M5|OBJ_PERIOD_M15|OBJ_PERIOD_M30|OBJ_PERIOD_H1|OBJ_PERIOD_H4);
   }
   
+  int e = GetLastError();
+  if(e != 0){
+    Alert(StringConcatenate("Error :",e));
+  }
   return(0);
 }

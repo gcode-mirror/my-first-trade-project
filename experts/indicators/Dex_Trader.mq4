@@ -24,8 +24,8 @@
 #include <DT_archive.mqh>
 #include <DT_news.mqh>
 #include <DT_functions.mqh>
-#include <DT_compare.mqh>
-#include <DT_boundary.mqh>
+#include <DT_channel.mqh>
+// #include <DT_boundary.mqh>
 
 //int k;
 int init(){
@@ -34,11 +34,11 @@ int init(){
   createGlobal("RULER_SWITCH", "1");
   createGlobal("MONITOR_SWITCH", "0");
   createGlobal("TRADE_LINES_SWITCH", "0");
-  createGlobal("FIBO_LINES_SWITCH", "0");
   createGlobal("ARCHIVE_SWITCH", "0");
   createGlobal("NEWS_SWITCH", "1");
-  createGlobal("COMPARE_SWITCH", "0");
-  createGlobal("BOUNDARY_SWITCH", "0");
+  createGlobal("CHANNEL_SWITCH", "1");
+  // createGlobal("FIBO_LINES_SWITCH", "0");
+  // createGlobal("BOUNDARY_SWITCH", "0");
   
   createGlobal("LOT", "0.1");
   createGlobal("NEWS_UPLOAD_TIME", "0.0");
@@ -47,11 +47,12 @@ int init(){
   initHud();
   initRuler(getGlobal("RULER_SWITCH"));
   initTradeLines(getGlobal("TRADE_LINES_SWITCH"));	
-  initFiboLines(getGlobal("FIBO_LINES_SWITCH"));	
   initArchive(getGlobal("ARCHIVE_SWITCH"));	
   initNews(getGlobal("NEWS_SWITCH"));	
-  initCompare(getGlobal("COMPARE_SWITCH"));	
-  initBoundary(getGlobal("BOUNDARY_SWITCH"));	
+  initChannel(getGlobal("CHANNEL_SWITCH"));	
+  initMonitor(getGlobal("MONITOR_SWITCH"));	
+  // initFiboLines(getGlobal("FIBO_LINES_SWITCH"));	
+  // initBoundary(getGlobal("BOUNDARY_SWITCH"));	
   
   return(0);
 }
@@ -62,12 +63,12 @@ int start(){
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	
 	startTradeLines(getGlobal("TRADE_LINES_SWITCH"));
-	startFiboLines(getGlobal("FIBO_LINES_SWITCH"));
 	startArchive(getGlobal("ARCHIVE_SWITCH"));
 	startNews(getGlobal("NEWS_SWITCH"));
-	startCompare(getGlobal("COMPARE_SWITCH"));
-	startBoundary(getGlobal("BOUNDARY_SWITCH"));
+  startChannel(getGlobal("CHANNEL_SWITCH"));
 	startMonitor(getGlobal("MONITOR_SWITCH"));
+	// startBoundary(getGlobal("BOUNDARY_SWITCH"));
+	// startFiboLines(getGlobal("FIBO_LINES_SWITCH"));
 	
 //	Alert(k-GetTickCount());  
   return(0);
@@ -79,12 +80,12 @@ int deinit(){
   if(getGlobal("TRADE_LINES_SWITCH") == "0"){
     deInitTradeLines();
   }
-  if(getGlobal("FIBO_LINES_SWITCH") == "0"){
-    deInitFiboLines();
-  }
-  if(getGlobal("BOUNDARY_SWITCH") == "0"){
-    deInitBoundary();
-  }
+  // if(getGlobal("FIBO_LINES_SWITCH") == "0"){
+    // deInitFiboLines();
+  // }
+  // if(getGlobal("BOUNDARY_SWITCH") == "0"){
+    // deInitBoundary();
+  // }
   return(0);
 }
 

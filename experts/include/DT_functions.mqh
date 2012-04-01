@@ -20,6 +20,7 @@ bool errorCheck(string text = "unknown function"){
       case 4200: err = "Object exists already."; break;
       case 4009: err = "Not initialized string in array."; break;
       case 4002: err = "Array index is out of range."; break;
+      case 4058: err = "Global variable not found."; return (0); break;
       default: err = err+e; break;      
     }
     
@@ -79,7 +80,7 @@ bool removeObjects(string filter = "", string type = "BO"){
   int j, obj_total= ObjectsTotal();
   string name;
   
-  if(filter == ""){      
+  if(filter == ""){    
     for (j= obj_total-1; j>=0; j--) {
        name= ObjectName(j);
        if (StringSubstr(name,3,2)==type){
@@ -90,10 +91,10 @@ bool removeObjects(string filter = "", string type = "BO"){
     filter = type+"_"+filter;   
     int len = StringLen(filter);
     for (j= obj_total-1; j>=0; j--) {
-       name= ObjectName(j);
-       if (StringSubstr(name,3,len)==filter){
-          ObjectDelete(name);
-       }
+      name= ObjectName(j);
+      if (StringSubstr(name,3,len)==filter){
+        ObjectDelete(name);
+      }
     }
   }
   return (errorCheck("removeObjects (filter:"+filter+")"));
@@ -303,16 +304,6 @@ string myFloor(double num, int prec){
 	return (DoubleToStr(MathFloor(num*tmp)/tmp, prec));
 }
 
-string getSymbolShort(string sym){
-  int i, len = ArraySize(ALL_SYMBOLS_STR);
-  for(i=0;i<len;i++){
-    if(ALL_SYMBOLS_STR[i] == sym){
-      return (ALL_SYMBOLS[i]);
-    }
-  }
-  return ("missing: "+sym);
-}
-
 string getTPLevel(double& price){
   for(int i=FIBO_LV_NR-1;i>0;i--){
     if(ObjectGet("DT_GO_FiboLines_RECT_lv"+i,OBJPROP_TIMEFRAMES) != -1){
@@ -342,6 +333,10 @@ bool menuControl(int index){
         changeIcon("DT_BO_icon_monitor", "0");
         addComment("Switch Monitor to OFF.",2);
       }else{
+        if(Symbol() != "EURUSD-Pro"){
+          addComment("Switch ON Monitor only allow in EURUSD-Pro!",1);
+          return (false);
+        }
         setGlobal("MONITOR_SWITCH", "1");
         changeIcon("DT_BO_icon_monitor", "1");
         addComment("Switch Monitor to ON.");
@@ -359,14 +354,14 @@ bool menuControl(int index){
       }
     break;    
     case 3:
-      if(getGlobal("FIBO_LINES_SWITCH") == "1"){
-        setGlobal("FIBO_LINES_SWITCH", "0");
-        changeIcon("DT_BO_icon_fibo_lines", "0");
-        addComment("Switch Fibo lines to OFF.");
+      if(getGlobal("CHANNEL_SWITCH") == "1"){
+        setGlobal("CHANNEL_SWITCH", "0");
+        changeIcon("DT_BO_icon_channel", "0");
+        addComment("Switch Channel collision to OFF.");
       }else{
-        setGlobal("FIBO_LINES_SWITCH", "1");
-        changeIcon("DT_BO_icon_fibo_lines", "1");
-        addComment("Switch Fibo lines to ON.");
+        setGlobal("CHANNEL_SWITCH", "1");
+        changeIcon("DT_BO_icon_channel", "1");
+        addComment("Switch Channel collision to ON.");
       }
     break;
     case 4:
@@ -392,17 +387,26 @@ bool menuControl(int index){
       }
     break;
     case 6:
+      // if(getGlobal("FIBO_LINES_SWITCH") == "1"){
+        // setGlobal("FIBO_LINES_SWITCH", "0");
+        // changeIcon("DT_BO_icon_fibo_lines", "0");
+        // addComment("Switch Fibo lines to OFF.");
+      // }else{
+        // setGlobal("FIBO_LINES_SWITCH", "1");
+        // changeIcon("DT_BO_icon_fibo_lines", "1");
+        // addComment("Switch Fibo lines to ON.");
+      // }
     break;
     case 7:
-      if(getGlobal("BOUNDARY_SWITCH") == "1"){
-        setGlobal("BOUNDARY_SWITCH", "0");
-        changeIcon("DT_BO_icon_boundary", "0");
-        addComment("Boundary to OFF.");
-      }else{
-        setGlobal("BOUNDARY_SWITCH", "1");
-        changeIcon("DT_BO_icon_boundary", "1");
-        addComment("Boundary to ON.");
-      }
+      // if(getGlobal("BOUNDARY_SWITCH") == "1"){
+        // setGlobal("BOUNDARY_SWITCH", "0");
+        // changeIcon("DT_BO_icon_boundary", "0");
+        // addComment("Switch Boundary to OFF.");
+      // }else{
+        // setGlobal("BOUNDARY_SWITCH", "1");
+        // changeIcon("DT_BO_icon_boundary", "1");
+        // addComment("Switch Boundary to ON.");
+      // }
     break;
     default:
       addComment("mellé",2);

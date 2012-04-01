@@ -18,11 +18,11 @@ bool initIcons(){
   showIcon("DT_BO_icon_round", 3, 1, "G", "Wingdings 3", getGlobal("RULER_SWITCH"));
   showIcon("DT_BO_icon_monitor", 2, 2, "N", "Webdings", getGlobal("MONITOR_SWITCH")); 
   showIcon("DT_BO_icon_trade_lines", 1, 2, "!", "Wingdings", getGlobal("TRADE_LINES_SWITCH"));
-  showIcon("DT_BO_icon_fibo_lines", 7, -2, "f", "Comic Sans MS", getGlobal("FIBO_LINES_SWITCH"));
+  showIcon("DT_BO_icon_channel", 6, 1, "/", "Wingdings 3", getGlobal("CHANNEL_SWITCH")); 
   showIcon("DT_BO_icon_archive", 2, 1, "Í", "Webdings", getGlobal("ARCHIVE_SWITCH")); 
   showIcon("DT_BO_icon_news", 1, 1, "ü", "Webdings", getGlobal("NEWS_SWITCH")); 
-  showIcon("DT_BO_icon_compare", 2, 1, "q", "Webdings", getGlobal("COMPARE_SWITCH")); 
-  showIcon("DT_BO_icon_boundary", 4, 1, ".", "Wingdings 3", getGlobal("BOUNDARY_SWITCH")); 
+  // showIcon("DT_BO_icon_fibo_lines", 7, -2, "f", "Comic Sans MS", getGlobal("FIBO_LINES_SWITCH"));
+  // showIcon("DT_BO_icon_boundary", 4, 1, ".", "Wingdings 3", getGlobal("BOUNDARY_SWITCH")); 
   return (errorCheck("initIcons"));
 }
 

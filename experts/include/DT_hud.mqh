@@ -7,7 +7,7 @@
 #property link      ""
 
 bool initHud(){
-  deinitHud();
+  if(deinitHud()){}
   ObjectCreate("DT_BO_hud_spread", OBJ_LABEL, 0, 0, 0);
   ObjectSet("DT_BO_hud_spread", OBJPROP_CORNER, 0);
   ObjectSet("DT_BO_hud_spread", OBJPROP_XDISTANCE, 272);
@@ -42,7 +42,7 @@ bool deinitHud(){
 
 bool updateHud(){
 	double lot = StrToDouble(getGlobal("LOT"));
-  ObjectSetText("DT_BO_hud_info",StringConcatenate(getSymbolShort(Symbol())," | ",getPeriodName()," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
+  ObjectSetText("DT_BO_hud_info",StringConcatenate(StringSubstr(Symbol(), 0, 6)," | ",getPeriodName()," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
 }
 
 string getPeriodName(){
