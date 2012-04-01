@@ -45,6 +45,7 @@ sub init{
   
   $BASE_WINDOW->g_bind("<Enter>", [sub{toggleWindow(1,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
+  $BASE_WINDOW->g_bind("<Alt-1>", sub {resetData();});
   
   $NOTIFY_FRAME = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
   $NOTIFY_FRAME -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
@@ -85,7 +86,7 @@ sub start{
   my @lines = read_file($INPUT_FILE);
   my @arr;
   my $nr_of_notified = 0;
-  for($i = 0, $len = $#lines; $i <= $len; $i++) {
+  for(my $i = 0, $len = $#lines; $i <= $len; $i++) {
     @arr = split(/;/, $lines[$i]);
     
     if($WIDGETS[$i][3] eq '-'){
@@ -124,6 +125,14 @@ sub start{
     $NOTIFY_LABEL_TXT = $nr_of_notified;
   }
 
+}
+
+sub resetData{
+  for(my $i = 0, $len = $#DATA; $i <= $len; $i++) {
+    $DATA[$i] = 0;
+    setAsVisited($i);
+  }
+  start();
 }
 
 sub setAsVisited{

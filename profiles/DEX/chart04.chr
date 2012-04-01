@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=240
-leftpos=1643
+leftpos=1645
 digits=3
 scale=4
 graph=1
@@ -74,7 +74,7 @@ type=2
 object_name=DT_GO_CHANNEL_SWITCH
 period_flags=0
 create_time=1333183903
-description=0
+description=1
 color=255
 style=0
 weight=1

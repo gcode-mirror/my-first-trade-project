@@ -47,6 +47,9 @@ bool startChannel(string isOn){
       }
       price = ObjectGetValueByShift( name, 0);
     }else if( type == "h_line"){
+      if(ObjectGet(name,OBJPROP_WIDTH) != 2){
+        continue;
+      }
       price = ObjectGet(name, OBJPROP_PRICE1);
     }else{
       continue;
