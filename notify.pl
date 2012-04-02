@@ -20,6 +20,8 @@ our $NOTIFY_LABEL_TXT = 0;
 our $PROFIT_LABEL;
 our $PROFIT_LABEL_TXT = 0;
 
+our $FLIP_WINDOW = 0;
+
 our @WIDGETS;
 our @DATA;
 
@@ -42,12 +44,14 @@ sub init{
 	$BASE_WINDOW->g_wm_resizable(0,0);
 	$BASE_WINDOW->g_wm_geometry($BASE_WINDOW_GEO1);
 	$BASE_WINDOW->g_wm_minsize(12,12);
-	$BASE_WINDOW->g_wm_maxsize(60,150);
+	$BASE_WINDOW->g_wm_maxsize(200,150);
   $BASE_WINDOW->g_bind("<2>",sub {Tkx::destroy($BASE_WINDOW);});
   
   $BASE_WINDOW->g_bind("<Enter>", [sub{toggleWindow(1,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
+  
   $BASE_WINDOW->g_bind("<Alt-1>", sub {resetData();});
+  $BASE_WINDOW->g_bind("<Alt-3>", sub {flipWindow();});
   
   my $frame = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
   $frame -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
@@ -58,6 +62,7 @@ sub init{
     @arr = split(/;/, $lines[$#lines]);
     $PROFIT_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_LABEL_TXT, -background => "white", -foreground => "#333", -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -3 0 -2");
     $PROFIT_LABEL->g_grid(-row => 1, -column => 0, -sticky => "nwes");
+    
     if( $arr[0] == 1){
       $PROFIT_LABEL_TXT = $arr[1];
     }else{
@@ -73,7 +78,7 @@ sub init{
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
     
-    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 0':'0 0').' 0 0', -style =>(($i == 0)?'sep.TFrame':''));
+    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 0').' 0 0', -style =>(($i == 0)?'sep.TFrame':''));
 		$WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0, -sticky => "nwes");
     
       $WIDGETS[$i][1] = $WIDGETS[$i][0]->new_ttk__label(-text => getShortName($arr[0]), -font => "verdana 7 bold", -foreground => "black", -borderwidth => 0, -padding => "1 -1 1 -1", -style => (($i % 2 == 1)?'even.TLabel':'odd.TLabel'));
@@ -130,7 +135,7 @@ sub start{
     $PROFIT_LABEL -> g_grid(); 
     $PROFIT_LABEL_TXT = $arr[1];
   }else{
-    $WIDGETS[$i][0]->g_grid_remove();
+    $PROFIT_LABEL->g_grid_remove();
   }
   
   if($nr_of_notified == 0){
@@ -147,6 +152,32 @@ sub start{
     $NOTIFY_LABEL_TXT = $nr_of_notified;
   }
 
+}
+
+sub flipWindow{
+  if($FLIP_WINDOW == 0){
+    for($i = 0; $i <= $#WIDGETS; $i++){
+      $WIDGETS[$i][0]->g_grid(-row => 0, -column => $i+1);
+      $WIDGETS[$i][2]->g_grid(-row => 1, -column => 0);
+      
+      $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'2':'0').' 0 0 0');
+      $WIDGETS[$i][1] -> configure(-padding => "0 -3 0 -2");
+      $WIDGETS[$i][2] -> configure(-padding => "0 -3 0 -2");
+    }
+    $NOTIFY_LABEL -> g_grid_remove();
+    $FLIP_WINDOW = 1;
+  }else{
+    for($i = 0; $i <= $#WIDGETS; $i++){
+      $WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0);
+      $WIDGETS[$i][2]->g_grid(-row => 0, -column => 1);
+      
+      $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'0 2':'0 0').' 0 0');
+      $WIDGETS[$i][1] -> configure(-padding => "1 -2 1 -1");
+      $WIDGETS[$i][2] -> configure(-padding => "0 -2 0 -2");
+    }
+    $NOTIFY_LABEL -> g_grid();
+    $FLIP_WINDOW = 0;
+  }
 }
 
 sub resetData{
@@ -184,7 +215,7 @@ sub changeState{
 
 sub toggleWindow{
   my $i;
-  if($_[1] ne 'NotifyVirtual'){
+  if( $FLIP_WINDOW == 1 || $_[1] ne 'NotifyVirtual' ){
     return;
   }else{
     if($_[0] == 1){
