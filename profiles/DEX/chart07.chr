@@ -1,7 +1,7 @@
 <chart>
 symbol=XAGUSD-Pro
-period=240
-leftpos=1631
+period=60
+leftpos=1690
 digits=3
 scale=4
 graph=1
@@ -273,10 +273,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1333684800
-value_0=31.600753
-time_1=1328702400
-value_1=37.115565
+time_0=1333533600
+value_0=32.285877
+time_1=1330632000
+value_1=35.611000
 ray=0
 </object>
 <object>
