@@ -22,7 +22,7 @@ bool initMonitor(string isOn){
 bool startMonitor(string isOn){
   if(isOn == "0"){return (false);}
 	if(delayTimer(APP_ID_MONITOR, 4000)){return (false);}
-  
+
   int i, profit = 0, has_profit = 0;
   string name, out = "";
   double val;
