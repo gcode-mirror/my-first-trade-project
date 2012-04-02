@@ -14,9 +14,11 @@ our $BASE_WINDOW;
 our $BASE_WINDOW_GEO1 = "-110+-20";
 our $BASE_WINDOW_GEO2 = "-110+-20";
 
-our $NOTIFY_FRAME;
 our $NOTIFY_LABEL;
 our $NOTIFY_LABEL_TXT = 0;
+
+our $PROFIT_LABEL;
+our $PROFIT_LABEL_TXT = 0;
 
 our @WIDGETS;
 our @DATA;
@@ -47,19 +49,31 @@ sub init{
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Alt-1>", sub {resetData();});
   
-  $NOTIFY_FRAME = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
-  $NOTIFY_FRAME -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
+  my $frame = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
+  $frame -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
   
-  $NOTIFY_LABEL = $NOTIFY_FRAME->new_ttk__label(-textvariable => \$NOTIFY_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 7 bold", -padding =>"2 -1 2 0");
-  $NOTIFY_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes", );
-  
+    $NOTIFY_LABEL = $frame->new_ttk__label(-textvariable => \$NOTIFY_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 6 bold", -padding =>"2 -2 2 -2");
+    $NOTIFY_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes");
+    
+    @arr = split(/;/, $lines[$#lines]);
+    $PROFIT_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_LABEL_TXT, -background => "white", -foreground => "#333", -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -3 0 -2");
+    $PROFIT_LABEL->g_grid(-row => 1, -column => 0, -sticky => "nwes");
+    if( $arr[0] == 1){
+      $PROFIT_LABEL_TXT = $arr[1];
+    }else{
+      $PROFIT_LABEL -> g_grid_remove();
+    }
+   
+  $frame->g_grid_columnconfigure(0, -weight => 1);
+  $frame->g_grid_rowconfigure(0, -weight => 1);
+   
   $BASE_WINDOW->g_grid_columnconfigure(0, -weight => 1);
-  $NOTIFY_FRAME->g_grid_columnconfigure(0, -weight => 1);
+  $BASE_WINDOW->g_grid_rowconfigure(0, -weight => 1);
   
-  for(my $i = 0, $len = $#lines; $i <= $len; $i++) {
+  for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
     
-    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 0').' 0 0', -style =>(($i == 0)?'sep.TFrame':''));
+    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 0':'0 0').' 0 0', -style =>(($i == 0)?'sep.TFrame':''));
 		$WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0, -sticky => "nwes");
     
       $WIDGETS[$i][1] = $WIDGETS[$i][0]->new_ttk__label(-text => getShortName($arr[0]), -font => "verdana 7 bold", -foreground => "black", -borderwidth => 0, -padding => "1 -1 1 -1", -style => (($i % 2 == 1)?'even.TLabel':'odd.TLabel'));
@@ -86,7 +100,7 @@ sub start{
   my @lines = read_file($INPUT_FILE);
   my @arr;
   my $nr_of_notified = 0;
-  for(my $i = 0, $len = $#lines; $i <= $len; $i++) {
+  for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
     
     if($WIDGETS[$i][3] eq '-'){
@@ -109,6 +123,14 @@ sub start{
       $WIDGETS[$i][1] -> configure(-background =>'red', -foreground =>'white');
       $DATA[$i] = $arr[1];
     }
+  }
+  
+  @arr = split(/;/, $lines[$#lines]);
+  if( $arr[0] == 1){
+    $PROFIT_LABEL -> g_grid(); 
+    $PROFIT_LABEL_TXT = $arr[1];
+  }else{
+    $WIDGETS[$i][0]->g_grid_remove();
   }
   
   if($nr_of_notified == 0){
@@ -139,6 +161,10 @@ sub setAsVisited{
   if($WIDGETS[$_[0]][1] -> cget(-background) eq 'yellow'){
     $WIDGETS[$_[0]][1] -> configure(-background =>'', -foreground =>''); 
     $DATA[$_[0]] = 0;
+    $NOTIFY_LABEL_TXT--;
+    if( $NOTIFY_LABEL_TXT == 0){
+      $NOTIFY_LABEL->configure(-style =>'none.TLabel');
+    }
   }
 }
 
@@ -153,6 +179,7 @@ sub changeState{
     $WIDGETS[$_[0]][3] = '!';
     $WIDGETS[$_[0]][1] -> configure(-background =>'', -foreground =>'');
   }
+  start();
 }
 
 sub toggleWindow{
@@ -164,9 +191,7 @@ sub toggleWindow{
       for($i = 0; $i <= $#WIDGETS; $i++){
         $WIDGETS[$i][0]->g_grid(); 
       }
-      # $NOTIFY_FRAME->g_grid_remove();
     }else{
-      # $NOTIFY_FRAME->g_grid(); 
       for($i = 0; $i <= $#WIDGETS; $i++){
         $WIDGETS[$i][0]->g_grid_remove(); 
       }
