@@ -50,9 +50,7 @@ bool startMonitor(string isOn){
     }
   }  
   
-  if( has_profit == 1 ){
-    out = StringConcatenate(out, has_profit, ";", profit, ";\r\n");
-  }
+  out = StringConcatenate(out, has_profit, ";", profit, ";\r\n");
   
   if(has_change || has_profit == 1){
     int handle;   
