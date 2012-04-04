@@ -26,13 +26,16 @@ our @WIDGETS;
 our @DATA;
 
 # ======================================================== STYLE ==================================================================
-Tkx::ttk__style_configure('sep.TFrame', -background => "#F3F3F3");
-
-Tkx::ttk__style_configure('odd.TLabel', -background => "#eee");
-Tkx::ttk__style_configure('even.TLabel', -background => "white");
+Tkx::ttk__style_configure('sep.TFrame', -background => "CornflowerBlue");
 
 Tkx::ttk__style_configure('none.TLabel', -background => "#ccc", -foreground => "#555");
 Tkx::ttk__style_configure('has.TLabel', -background => "red", -foreground => "white");
+
+Tkx::ttk__style_configure('basic.TLabel', -background => "white", -foreground => "black");
+Tkx::ttk__style_configure('monitor.TLabel', -background => "white", -foreground => "blue");
+Tkx::ttk__style_configure('alert.TLabel', -background => "red", -foreground => "white");
+Tkx::ttk__style_configure('visited.TLabel', -background => "yellow", -foreground => "black");
+Tkx::ttk__style_configure('disable.TLabel', -background =>'#aaa', -foreground =>'#ddd');
 
 # ====================================================== FUNCTIONS ================================================================
 sub init{
@@ -78,15 +81,15 @@ sub init{
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
     
-    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 0').' 0 0', -style =>(($i == 0)?'sep.TFrame':''));
+    $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 1').' 0 0', -style =>'sep.TFrame');
 		$WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0, -sticky => "nwes");
     
-      $WIDGETS[$i][1] = $WIDGETS[$i][0]->new_ttk__label(-text => getShortName($arr[0]), -font => "verdana 7 bold", -foreground => "black", -borderwidth => 0, -padding => "1 -1 1 -1", -style => (($i % 2 == 1)?'even.TLabel':'odd.TLabel'));
+      $WIDGETS[$i][1] = $WIDGETS[$i][0]->new_ttk__label(-text => getShortName($arr[0]), -font => "verdana 7 bold",  -padding => "1 -1 1 -1", -style => 'basic.TLabel');
       $WIDGETS[$i][1]->g_grid(-row => 0, -column => 0, -sticky => "nwes");
       $WIDGETS[$i][1]->g_bind("<1>",[sub {setAsVisited($_[0]);},$i]);
       
-      $WIDGETS[$i][3] = '!';
-      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -width => 1, -borderwidth => 1, -anchor=> 'center', -relief => 'solid' ,-font => "verdana 7 bold", -foreground => "black", -borderwidth => 0, -padding => "1 -1 1 -1", -background => (($i % 2 == 1)?'#eee':'white'));
+      $WIDGETS[$i][3] = 0;
+      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -anchor=> 'center',-font => "verdana 5 bold", -padding => "-1 -1 -1 -1", -style => 'basic.TLabel');
       $WIDGETS[$i][2]->g_grid(-row => 0, -column => 1, -sticky => "nwes");
       $WIDGETS[$i][2]->g_bind("<1>",[sub {changeState($_[0]);},$i]);
       
@@ -105,29 +108,42 @@ sub start{
   my @lines = read_file($INPUT_FILE);
   my @arr;
   my $nr_of_notified = 0;
+  my $bg;
+  
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
+    $bg = $WIDGETS[$i][1] -> cget(-style);
     
-    if($WIDGETS[$i][3] eq '-'){
+    if($bg eq 'disable.TLabel'){
       next;
-    }elsif($WIDGETS[$i][3] eq '?'){
-      if($DATA[$i] == $arr[1] || $arr[1] == 0){
-        next;
-      }else{
-        $WIDGETS[$i][3] = '!';
+      
+    }elsif($bg eq 'monitor.TLabel'){
+      if( $DATA[$i] != $arr[1] ){
+        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
+        $nr_of_notified++;
       }
+      
+    }elsif($bg eq 'alert.TLabel'){
+      if( $arr[1] == 0 ){
+        $WIDGETS[$i][1] -> configure(-style =>'visited.TLabel');
+      }
+      $nr_of_notified++;
+    
+    }elsif($bg eq 'visited.TLabel'){
+      if( $arr[1] != 0 ){
+        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
+      }
+      $nr_of_notified++;
+    
+    }elsif($bg eq 'basic.TLabel'){
+      if( $arr[1] != 0 ){
+        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
+        $nr_of_notified++;
+      }
+      
     }
     
-    if($arr[1] == 0){
-      if($DATA[$i] != 0){
-        $nr_of_notified++;
-        $WIDGETS[$i][1] -> configure(-background =>'yellow', -foreground =>'black');
-      }
-    }else{
-      $nr_of_notified++;
-      $WIDGETS[$i][1] -> configure(-background =>'red', -foreground =>'white');
-      $DATA[$i] = $arr[1];
-    }
+    $WIDGETS[$i][3] = $arr[2];
   }
   
   @arr = split(/;/, $lines[$#lines]);
@@ -188,18 +204,23 @@ sub resetData{
   start();
 }
 
-sub setAsVisited{
-  if($WIDGETS[$_[0]][1] -> cget(-background) eq 'yellow'){
+sub changeState2{
+  my $bg = $WIDGETS[$_[0]][1] -> cget(-background);
+
+  if($bg eq 'yellow'){
     $WIDGETS[$_[0]][1] -> configure(-background =>'', -foreground =>''); 
     $DATA[$_[0]] = 0;
     $NOTIFY_LABEL_TXT--;
     if( $NOTIFY_LABEL_TXT == 0){
       $NOTIFY_LABEL->configure(-style =>'none.TLabel');
     }
+  }elsif($bg eq 'yellow'){
+    
   }
 }
 
 sub changeState{
+  
   if($WIDGETS[$_[0]][3] eq '!'){
     $WIDGETS[$_[0]][3] = '?';
     $WIDGETS[$_[0]][1] -> configure(-background =>'#aaa', -foreground =>'#ddd');

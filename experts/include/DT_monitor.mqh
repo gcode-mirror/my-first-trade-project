@@ -21,12 +21,11 @@ bool initMonitor(string isOn){
 
 bool startMonitor(string isOn){
   if(isOn == "0"){return (false);}
-	if(delayTimer(APP_ID_MONITOR, 4000)){return (false);}
+	if(delayTimer(APP_ID_MONITOR, 5000)){return (false);}
 
   int i, profit = 0, has_profit = 0;
   string name, out = "";
-  double val;
-  bool has_change = false;
+  double val, yc, dif, b;
   
   for(i=0; i<USED_SYM; i++){
     val = 0.0;
@@ -35,10 +34,18 @@ bool startMonitor(string isOn){
       val = GlobalVariableGet(name);
       if(MON_CURR_VAL[i] != val){
         MON_CURR_VAL[i] = val;
-        has_change = true;
       }
+      
+      yc = iClose(SYMBOLS_STR[i],PERIOD_D1,1);
+      b = MarketInfo(SYMBOLS_STR[i],MODE_BID);
+      if(yc > b){
+        dif = yc - b;
+      }else{
+        dif = b - yc;
+      }
+      
+      out = StringConcatenate(out, SYMBOLS[i], ";", DoubleToStr(val,0), ";", DoubleToStr((dif/yc*10000),0),";\r\n");
     }
-    out = StringConcatenate(out, SYMBOLS[i], ";", DoubleToStr(val,0), ";\r\n");
   }
   
   for (i = 0; i < OrdersTotal(); i++) {
@@ -52,16 +59,14 @@ bool startMonitor(string isOn){
   
   out = StringConcatenate(out, has_profit, ";", profit, ";\r\n");
   
-  if(has_change || has_profit == 1){
-    int handle;   
-    handle=FileOpen("notify.bin", FILE_BIN|FILE_WRITE);
-      if(handle<1){
-       errorCheck("startMonitor (open file)");
-       return(0);
-      }
-    FileWriteString(handle, out, StringLen(out));
-    FileClose(handle);
-  }
+  int handle;   
+  handle=FileOpen("notify.bin", FILE_BIN|FILE_WRITE);
+    if(handle<1){
+     errorCheck("startMonitor (open file)");
+     return(0);
+    }
+  FileWriteString(handle, out, StringLen(out));
+  FileClose(handle);
   
   return (errorCheck("startMonitor"));
 }

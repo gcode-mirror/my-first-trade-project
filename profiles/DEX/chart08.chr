@@ -1,9 +1,9 @@
 <chart>
 symbol=XAUUSD-Pro
-period=240
-leftpos=1711
+period=60
+leftpos=1957
 digits=3
-scale=4
+scale=8
 graph=1
 fore=0
 grid=0
@@ -34,7 +34,7 @@ askline_color=17919
 stops_color=17919
 
 <window>
-height=166
+height=199
 <indicator>
 name=main
 <object>
@@ -244,10 +244,10 @@ color=15570276
 style=0
 weight=2
 background=1
-time_0=1345075200
-value_0=1710.967681
-time_1=1225843200
-value_1=678.291762
+time_0=1344902400
+value_0=1731.331093
+time_1=1225670400
+value_1=698.655174
 ray=0
 </object>
 <object>
