@@ -1,7 +1,7 @@
 <chart>
 symbol=XAUUSD-Pro
-period=30
-leftpos=1639
+period=60
+leftpos=1766
 digits=3
 scale=4
 graph=1
@@ -245,81 +245,6 @@ show_data=1
 
 <window>
 height=50
-<indicator>
-name=Custom Indicator
-<expert>
-name=TIME II (VBO)
-flags=339
-window_num=1
-<inputs>
-Broker_standard_time_zone=0
-Broker_DST_start=978307200
-Broker_DST_end=978307200
-Clock_color=11119017
-font_color=11119017
-font_name=Tahoma
-font_size=8
-Number_of_days_display_sessions=10
-Session_borders_line_style=0
-Session_borders_line_width=1
-Customized_time_lines=
-</inputs>
-</expert>
-shift_0=0
-draw_0=0
-color_0=0
-style_0=0
-weight_0=0
-min=0.000000
-max=1.000000
-period_flags=0
-show_data=1
-<object>
-type=23
-object_name=Brief mode On/Off
-period_flags=0
-create_time=1333656380
-description=¤
-color=11119017
-font=Wingdings
-fontsize=14
-angle=0
-background=1
-corner=1
-x_distance=2
-y_distance=48
-</object>
-<object>
-type=23
-object_name=Drag and Drop on Option
-period_flags=0
-create_time=1333656380
-description=8
-color=11119017
-font=Wingdings
-fontsize=14
-angle=0
-background=0
-corner=1
-x_distance=5
-y_distance=4
-</object>
-<object>
-type=23
-object_name=Session borders On/Off
-period_flags=0
-create_time=1333656380
-description=¤
-color=11119017
-font=Wingdings
-fontsize=14
-angle=0
-background=1
-corner=1
-x_distance=2
-y_distance=26
-</object>
-</indicator>
 </window>
 </chart>
 
