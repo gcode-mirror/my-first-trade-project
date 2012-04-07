@@ -187,58 +187,26 @@ int getMoveAngle(string sym, int graph_period, int ma_period, double examined_pe
   }
 }
 
-int getMoveDirection(string sym, int timeframe, int period){
-  double p0 = iMA( sym, timeframe, period, 0, 0, 0, 0);
-  double p1 = p0;
-  double p2 = iMA( sym, timeframe, period, 0, 0, 0, 1);
-  double i = 1;
-  if(p1 == p2){ //EQUAL
-    return (0); 
-  }
-  
-  if( p1 - p2 > 0){ //UP
-    while(true){
-      if(p1 < p2 || i==10){        
-        return (90-(MathRound(MathArctan((i/WindowBarsPerChart())/((p0-p1)/(WindowPriceMax()-WindowPriceMin())))*180/3.14)));
-      }else{
-        i++;
-        p1 = p2;
-        p2 = iMA( sym, timeframe, period, 0, 0, 0, i);
-      } 
-    }
-  }else{ //DOWN
-    while(true){
-      if(p1 > p2 || i==10){
-        return ((MathRound(MathArctan((i/WindowBarsPerChart())/((p1-p0)/(WindowPriceMax()-WindowPriceMin())))*180/3.14))-90);
-      }else{
-        i++;
-        p1 = p2;
-        p2 = iMA( sym, timeframe, period, 0, 0, 0, i);
-      } 
-    }
-  }
-}
-
 int getUnitInSec(){
   return (WindowBarsPerChart()*Period()*60/100);
 }
 
 int Explode(string str, string delimiter, string& arr[]){
-   int i = 0;
-   int pos = StringFind(str, delimiter);
-   while(pos != -1){
-      if(pos == 0){
-        arr[i] = "";
-      }else{
-        arr[i] = StringSubstr(str, 0, pos);
-      }
-      i++;
-      str = StringSubstr(str, pos+StringLen(delimiter));
-      pos = StringFind(str, delimiter);
-      if(pos == -1 || str == "") break;
-   }
-   arr[i] = str;
-   return(i+1);
+  int i = 0;
+  int pos = StringFind(str, delimiter);
+  while(pos != -1){
+    if(pos == 0){
+      arr[i] = "";
+    }else{
+      arr[i] = StringSubstr(str, 0, pos);
+    }
+    i++;
+    str = StringSubstr(str, pos+StringLen(delimiter));
+    pos = StringFind(str, delimiter);
+    if(pos == -1 || str == "") break;
+  }
+  arr[i] = str;
+  return(i+1);
 }
 
 string toUpper(string sText) {  
@@ -280,12 +248,12 @@ double getMySpread(){
   return (0.0);
 }
 
-double getZigZag(int deph, int dev, int backstep, int nr, double& time){
+double getZigZag(double tf, int deph, int dev, int backstep, int nr, double& time){
   int found=0, i=0;
   double tmp=0;
-  while(true){
-    tmp = iCustom(Symbol(),0,"ZigZag",deph,dev,backstep,0,i);
-    if( tmp!=0 ){
+  while(i < 100){
+    tmp = iCustom(Symbol(),tf,"ZigZag",deph,dev,backstep,0,i);
+    if( tmp != 0 ){
       if(found == nr){
         time = Time[i];
         return (tmp);
@@ -421,4 +389,39 @@ int WindowLastVisibleBar(){
   }else{
     return (nr);
   }
+}
+
+int renameChannelLine(string sel_name){
+  string name;
+  if ( StringSubstr(sel_name,6,6) == "t_line"){
+    if( StringSubstr(sel_name,13,1) == "s" ){
+      name = "DT_GO_t_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
+      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
+      ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
+    }else{
+      name = "DT_GO_t_line_s_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
+      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
+      ObjectSet(name, OBJPROP_COLOR, DeepPink);
+    }
+    ObjectSet(name, OBJPROP_RAY, false);
+    ObjectSet(name, OBJPROP_BACK, true);
+    ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
+    ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+  }else{
+    if( StringSubstr(sel_name,13,1) == "s" ){
+      name = "DT_GO_h_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
+      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
+      ObjectSet(name, OBJPROP_COLOR, Peru);
+      
+    }else{
+      name = "DT_GO_h_line_s_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
+      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
+      ObjectSet(name, OBJPROP_COLOR, DeepPink);
+    }
+    ObjectSet(name, OBJPROP_RAY, false);
+    ObjectSet(name, OBJPROP_BACK, true);
+    ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
+    ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+  }
+  ObjectDelete(sel_name);
 }

@@ -58,7 +58,8 @@ int init(){
 }
 
 //========================================== Start ===========================================
-int start(){  
+int start(){
+  errorCheck("start");
   startHud();
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	

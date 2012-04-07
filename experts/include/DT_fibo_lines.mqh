@@ -31,8 +31,8 @@ bool initFiboLines(string isOn){
   deInitFiboLines();
   
   double f_time1, f_time2;
-  double f_price1 = getZigZag(12, 5, 3, 1, f_time1);
-  double f_price2 = getZigZag(12, 5, 3, 0, f_time2);
+  double f_price1 = getZigZag(0, 12, 5, 3, 1, f_time1);
+  double f_price2 = getZigZag(0, 12, 5, 3, 0, f_time2);
  
   ObjectCreate("DT_GO_FiboLines_FIBO_BASE", OBJ_FIBO, 0, f_time1, f_price1, f_time2, f_price2);
   ObjectSet("DT_GO_FiboLines_FIBO_BASE",OBJPROP_FIBOLEVELS,2);

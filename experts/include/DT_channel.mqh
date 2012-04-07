@@ -56,7 +56,7 @@ bool startChannel(string isOn){
     }
     
     if( Bid > price - CH_OFFSET && Bid < price + CH_OFFSET ){
-      ts = StrToDouble(StringSubstr(name, 13, 10));
+      ts = StrToDouble(StringSubstr(name, StringLen(name)-10, 10));
       if( GlobalVariableGet(CH_NAME) != ts ){
         GlobalVariableSet(CH_NAME, ts);
       }

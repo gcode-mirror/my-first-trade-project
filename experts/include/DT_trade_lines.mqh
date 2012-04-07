@@ -27,8 +27,8 @@ bool initTradeLines(string isOn){
     }  
   }else{
     double time1, time2;
-    tp_price = getZigZag(12, 5, 3, 1, time1);
-    sl_price = getZigZag(12, 5, 3, 0, time2);  
+    tp_price = getZigZag(0, 12, 5, 3, 1, time1);
+    sl_price = getZigZag(0, 12, 5, 3, 0, time2);  
     open_price = tp_price+(sl_price-tp_price)/2;
   }
    

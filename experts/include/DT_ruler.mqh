@@ -73,12 +73,16 @@ bool startRuler(string isOn){
 	double diff = MAX_PRICE_RULER-MIN_PRICE_RULER;
 	double offset = 1/MathPow( 10,( Digits )); 
 	
-  while(true){
-		prec = prec-1;
-		offset = offset*10;
-		if(diff/offset<ROUND_NR_STEP){
-			break;
-		}
+  if(diff != 0){
+    while(true){
+      prec = prec-1;
+      offset = offset*10;
+      if(diff/offset<ROUND_NR_STEP){
+        break;
+      }
+    }
+  }else{
+    return (errorCheck("startRuler Divided by Zero!"));
   }
 	
   peri = getUnitInSec();
