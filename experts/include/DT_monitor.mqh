@@ -23,9 +23,9 @@ bool startMonitor(string isOn){
   if(isOn == "0"){return (false);}
 	if(delayTimer(APP_ID_MONITOR, 5000)){return (false);}
 
-  int i, profit = 0, has_profit = 0;
+  int i, profit = 0;
   string name, out = "";
-  double val, yc, dif, b;
+  double val, yc, dif, b, has_profit = 0.0;
   
   for(i=0; i<USED_SYM; i++){
     val = 0.0;
@@ -57,11 +57,11 @@ bool startMonitor(string isOn){
     // }
   // }  
   
-  profit = AccountProfit()
-  if( profit != 0){
+  profit = AccountProfit();
+  if( profit != 0.0){
     has_profit = 1;
   }
-  out = StringConcatenate(out, has_profit, ";", profit, ";\r\n");
+  out = StringConcatenate(out, has_profit, ";", DoubleToStr(profit,0), ";\r\n");
   
   int handle;   
   handle=FileOpen("notify.bin", FILE_BIN|FILE_WRITE);
