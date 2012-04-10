@@ -37,7 +37,8 @@ int start(){
       if( OrderSelect(i, SELECT_BY_POS) ){        
         if( OrderSymbol() == Symbol() ){
           if( OrderMagicNumber() == 333 ){
-          
+return (0);
+/*          
             int o_type = OrderType();
             if( o_type < 2){
               return (0);
@@ -89,7 +90,7 @@ int start(){
               
               }
             }
-            
+*/            
           }
         }
       }
@@ -107,9 +108,9 @@ int start(){
         
           o = iOpen( NULL, PERIOD_H4, 0);
           spread = getMySpread();
-          double fibo_23 = getFibo23(cur_l_price);
           double lots = StrToDouble(getGlobal("LOT"));
           string comment = StringSubstr(CT_LINES[i], StringLen(CT_LINES[i])-10, 10);
+          double fibo_23 = getFibo23(cur_l_price, comment);
           
           if( o > cur_l_price ){
             if( l > cur_l_price ){
@@ -167,7 +168,7 @@ int start(){
             }
             
           }
-          
+          errorCheck("Channel trade");
           // deselect
           renameChannelLine(CT_LINES[i]);
           setChannelLinesArr();
@@ -201,7 +202,7 @@ int setChannelLinesArr(){
   return(0);
 }
 
-double getFibo23(double fibo_0){
+double getFibo23(double fibo_0, string comment){
   double time;
   double fibo_100 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
   
