@@ -48,15 +48,19 @@ bool startMonitor(string isOn){
     }
   }
   
-  for (i = 0; i < OrdersTotal(); i++) {
-    if (OrderSelect(i, SELECT_BY_POS)) {    
-      if(OrderType()<2){
-        profit = profit + OrderProfit();
-        has_profit = 1;
-      }
-    }
-  }  
+  // for (i = 0; i < OrdersTotal(); i++) {
+    // if (OrderSelect(i, SELECT_BY_POS)) {    
+      // if(OrderType()<2){
+        // profit = profit + OrderProfit();
+        // has_profit = 1;
+      // }
+    // }
+  // }  
   
+  profit = AccountProfit()
+  if( profit != 0){
+    has_profit = 1;
+  }
   out = StringConcatenate(out, has_profit, ";", profit, ";\r\n");
   
   int handle;   

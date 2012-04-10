@@ -50,6 +50,7 @@ int init(){
   initArchive(getGlobal("ARCHIVE_SWITCH"));	
   initNews(getGlobal("NEWS_SWITCH"));	
   initChannel(getGlobal("CHANNEL_SWITCH"));	
+  errorCheck("mon start");
   initMonitor(getGlobal("MONITOR_SWITCH"));	
   // initFiboLines(getGlobal("FIBO_LINES_SWITCH"));	
   // initBoundary(getGlobal("BOUNDARY_SWITCH"));	
