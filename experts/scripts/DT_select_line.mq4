@@ -14,7 +14,7 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine();
+  string sel_name = getSelectedLine(WindowTimeOnDropped(), WindowPriceOnDropped());
   
   if( sel_name != "" ){
     renameChannelLine(sel_name);

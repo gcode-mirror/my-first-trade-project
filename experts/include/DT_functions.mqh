@@ -136,12 +136,14 @@ bool selectFirstOpenPosition(string symb){
   return (false);
 }
 
-int getOpenPositionTicket(string symb){
-  for (int i = 0; i < OrdersTotal(); i++) {      
+int getOpenPositionByMagic(string symb, int magic){
+  int i = 0, len = OrdersTotal();
+  for (; i < len; i++) {      
     if (OrderSelect(i, SELECT_BY_POS)) {        
       if (OrderSymbol() == symb) {
-        return (OrderTicket());
-        break;
+        if( OrderMagicNumber() == magic ){
+          return (OrderTicket());
+        }
       }
     }
   }
@@ -426,13 +428,10 @@ int renameChannelLine(string sel_name){
   ObjectDelete(sel_name);
 }
 
-string getSelectedLine(){
+string getSelectedLine(double time_cord, double price_cord){
   int j, obj_total= ObjectsTotal();
   string type, name, sel_name = "";
-  double price, ts, tod, pod, t1, t2, dif, sel_dif = 999999;
-  
-  tod = WindowTimeOnDropped();
-  pod = WindowPriceOnDropped();
+  double price, ts, t1, t2, dif, sel_dif = 999999;
   
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
@@ -440,9 +439,9 @@ string getSelectedLine(){
     if ( type == "t_line"){
       t1 = ObjectGet(name,OBJPROP_TIME1);
       t2 = ObjectGet(name,OBJPROP_TIME2);
-      if( MathMax(t1, t2) > tod && MathMin(t1, t2) < tod ){
-        price = ObjectGetValueByShift( name, iBarShift(NULL,0,tod));
-        dif = MathMax(price, pod) - MathMin(price, pod);
+      if( MathMax(t1, t2) > time_cord && MathMin(t1, t2) < time_cord ){
+        price = ObjectGetValueByShift( name, iBarShift(NULL,0,time_cord));
+        dif = MathMax(price, price_cord) - MathMin(price, price_cord);
         if( dif < sel_dif ){
           sel_dif = dif;
           sel_name = name;
@@ -450,7 +449,7 @@ string getSelectedLine(){
       }
     }else if( type == "h_line"){
       price = ObjectGet(name, OBJPROP_PRICE1);
-      dif = MathMax(price, pod) - MathMin(price, pod);
+      dif = MathMax(price, price_cord) - MathMin(price, price_cord);
       if( dif < sel_dif ){
         sel_dif = dif;
         sel_name = name;
@@ -459,6 +458,7 @@ string getSelectedLine(){
       continue;
     }
   }
+  errorCheck("getSelectedLine");
   return (sel_name);
 }
 
@@ -476,4 +476,19 @@ int getShiftToFuture(double time, int shift){
     }
   }
   return (curr_time);
+}
+
+double getFibo23Dif(double fibo_0, double& fibo_100){
+  if( fibo_100 == 0.0){
+    double time;
+    double zz0 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
+    double zz1 = getZigZag(PERIOD_M15, 12, 5, 3, 1, time);
+    if( MathAbs(zz0-fibo_0) > MathAbs(zz1-fibo_0) ){
+      fibo_100 = zz0;
+    }else{
+      fibo_100 = zz1;
+    }
+  }
+
+  return ( (MathMax(fibo_0, fibo_100)-MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
 }

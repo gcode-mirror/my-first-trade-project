@@ -11,6 +11,7 @@
 #include <DT_functions.mqh>
 #include <DT_comments.mqh>
 
+double CHANNEL_LOT = 0.1;
 int CT_TIMER1 = 0;
 int CT_TIMER2 = 0;
 double CT_OFFSET = 0.0;
@@ -26,165 +27,127 @@ int start(){
     CT_TIMER1 = GetTickCount() + 6000;
     setChannelLinesArr();
   }
-  
+
   if( GetTickCount() > CT_TIMER2 ){
     CT_TIMER2 = GetTickCount() + 4000;
-    
-    int i, len, ticket;
-    double cur_l_price, spread, dif, fibo_23, fibo_100;
+
+    int ticket, o_type;
     string comment, ts;
-    
-    len = OrdersTotal();
-    for( i = 0; i < len; i++ ){      
-      if( OrderSelect(i, SELECT_BY_POS) ){        
-        if( OrderSymbol() == Symbol() ){
-          if( OrderMagicNumber() == 333 ){
-  return (0);
-            int o_type = OrderType();
-            if( o_type < 2){
-              return (0);
-            }else{
-              double op, sl, tp;              
-              comment = OrderComment();
-              ts = StringSubstr(comment, 0, 10);
-              sl = OrderStopLoss();
-              tp = OrderTakeProfit();
-              op = OrderOpenPrice();
-              cur_l_price = ObjectGetValueByShift( "DT_GO_t_line_"+ts, 0);
-              ticket = OrderTicket();
-              spread = getMySpread();              
-              fibo_100 = StrToDouble(StringSubstr(comment, 11, StringLen(comment)-11));
-              fibo_23 = (MathMax(cur_l_price, fibo_100)-MathMin(cur_l_price, fibo_100)) * 0.23;
-              
-              if( o_type == OP_BUYSTOP ){
-                if( cur_l_price+spread == op ){
-                  return (0);
-                }else{
-                  dif = cur_l_price+spread - op;
-                  
-                  Print(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
-                  Alert(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
-                
-                  //OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
-              
-              //--------------------------------------------   
-                  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, op+dif);
-                  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_TIME1, sl+dif);
-                  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_TIME1, tp+dif);
-              //-------------------------------------------- 
-                }
-              }else{
-                if( cur_l_price == op ){
-                  return (0);
-                }else{
-                  dif = cur_l_price - op;
-                  
-                  Print(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
-                  Alert(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
-                
-                  //OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
-              
-              //--------------------------------------------   
-                  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, op+dif);
-                  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_TIME1, sl+dif);
-                  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_TIME1, tp+dif);
-              //-------------------------------------------- 
-                }
-              
-              }
-            }
-            
+    double fibo_100 = 0.0, fibo_23_dif, trade_line_price, spread, op;
+
+    ticket = getOpenPositionByMagic(Symbol(), 333);
+    if( ticket ){
+      o_type = OrderType();
+      
+      if( o_type < 2 ){
+        return (0);
+      }else{
+        comment = OrderComment();
+        ts = StringSubstr(comment, 0, 10);
+        trade_line_price = ObjectGetValueByShift( "DT_GO_t_line_"+ts, 0);
+        spread = getMySpread();
+        op = OrderOpenPrice();
+
+        if( o_type == OP_BUYSTOP && trade_line_price+spread == op ){
+          return (0);
+        }else if( o_type == OP_SELLSTOP && trade_line_price == op ){
+          return (0);
+        }else{
+          double new_op, new_sl, new_tp;
+          fibo_100 = StrToDouble(StringSubstr(comment, 11, StringLen(comment)-11));
+          fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
+
+          if( o_type == OP_BUYSTOP ){
+            new_op = NormalizeDouble( trade_line_price + spread, Digits );
+            new_sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
+            new_tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
+          }else{
+            new_op = NormalizeDouble( trade_line_price, Digits );
+            new_sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );
+            new_tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
           }
+
+          OrderModify(ticket, new_op, new_sl, new_tp, TimeCurrent()+5400);
+
+/* !! */  Print(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400));
+/* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400));
+
+/* !! */  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, new_op);
+/* !! */  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_TIME1, new_sl);
+/* !! */  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_TIME1, new_tp);
+
         }
       }
-    }
-    
-    len = ArraySize(CT_LINES);
-    double h, l, o;
-    if( len > 0 ){
+
+    }else{
+      double h, l;
+      string trade_line;
+
       RefreshRates();
       l = iLow( NULL, PERIOD_H4, 0);
       h = iHigh( NULL, PERIOD_H4, 0);
-      for( i = 0; i < len; i++ ) {
-        cur_l_price = ObjectGetValueByShift( CT_LINES[i], 0);
-        if( ( l < cur_l_price + CT_OFFSET && l > cur_l_price - CT_OFFSET ) || ( h > cur_l_price - CT_OFFSET && h < cur_l_price + CT_OFFSET ) ){
+
+      trade_line= getLineInTradeZone(h, l);
+      if( trade_line != "" ){
+        double o, sl, tp;
         
-          o = iOpen( NULL, PERIOD_H4, 0);
-          spread = getMySpread();
-          double lots = StrToDouble(getGlobal("LOT"));
-          ts = StringSubstr(CT_LINES[i], StringLen(CT_LINES[i])-10, 10);
-          double time;
-          fibo_100 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
-          fibo_23 = getFibo23(cur_l_price, comment);
-          comment = ts+" "+DoubleToStr( fibo_100, Digits);
+        o = iOpen( NULL, PERIOD_H4, 0);
+        trade_line_price = ObjectGetValueByShift( trade_line, 0);
+        fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
+        spread = getMySpread();
+        ts = StringSubstr( trade_line, StringLen( trade_line ) - 10, 10 );
+        comment = ts +" "+ DoubleToStr( fibo_100, Digits );
+
+        if( o > trade_line_price ){
+          if( l > trade_line_price ){                                                 // ----- BUY STOP -----
+            o_type = OP_BUYSTOP;
+            op = NormalizeDouble( trade_line_price + spread, Digits );
           
-          createHistoryLine(NormalizeDouble(fibo_100, Digits), Black, "fibo_100", "f100_"+ts);
-          
-          if( o > cur_l_price ){
-            if( l > cur_l_price ){
-              Print(StringConcatenate(Symbol(), " ", OP_BUYSTOP, " ", lots, " ", NormalizeDouble(cur_l_price+spread, Digits), " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              Alert(StringConcatenate(Symbol(), " ", OP_BUYSTOP, " ", lots, " ", NormalizeDouble(cur_l_price+spread, Digits), " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              //OrderSend(Symbol(), OP_BUYSTOP, lots, NormalizeDouble(cur_l_price+spread, Digits), 2, NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), comment, 333, TimeCurrent()+5400 );
-          
-          //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price+spread, Digits), Blue, "buy stop OP", "op_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy stop SL", "sl_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy stop TP", "tp_"+ts);
-          //--------------------------------------------    
-              
-            }else{
-              Print(StringConcatenate(Symbol(), " ", OP_BUY, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Ask,")", " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              Alert(StringConcatenate(Symbol(), " ", OP_BUY, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Ask,")", " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              
-              //ticket = OrderSend(Symbol(), OP_BUY, lots, Ask, 3, 0, 0, comment, 333);
-              //OrderSelect(ticket, SELECT_BY_TICKET);
-              //OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), 0);
-              
-          //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "buy OP", "op_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy SL", "sl_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy TP", "tp_"+ts);
-              createHistoryLine(NormalizeDouble(Ask, Digits), Orange, "buy ASK", "op2_"+ts);
-          //--------------------------------------------    
-            }
-          }else{
-            if( h < cur_l_price ){
-              Print(StringConcatenate(Symbol(), " ", OP_SELLSTOP, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              Alert(StringConcatenate(Symbol(), " ", OP_SELLSTOP, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              //OrderSend(Symbol(), OP_SELLSTOP, lots, NormalizeDouble(cur_l_price, Digits), 2, NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), comment, 333, TimeCurrent()+5400 );
-              
-          //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell stop OP", "op_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tp_"+ts);
-          //--------------------------------------------
-              
-            }else{
-              Print(StringConcatenate(Symbol(), " ", OP_SELL, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Bid,")", " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              Alert(StringConcatenate(Symbol(), " ", OP_SELL, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Bid,")", " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              
-              //ticket = OrderSend(Symbol(), OP_SELL, lots, Bid, 3, 0, 0, comment, 333);
-             // OrderSelect(ticket, SELECT_BY_TICKET);
-             // OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), 0);
-              
-          //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell OP", "op_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+ts);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tpp_"+ts);
-              createHistoryLine(NormalizeDouble(Bid, Digits), Orange, "Sell Bid", "op2_"+ts);
-          //--------------------------------------------
-            }
-            
+          }else{                                                                      // ------- BUY --------
+            o_type = OP_BUY;
+            op = NormalizeDouble( Ask, Digits );
           }
-          errorCheck("Channel trade");
-          // deselect
-          renameChannelLine(CT_LINES[i]);
-          setChannelLinesArr();
-          return(1);
+          sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
+          tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
+          
+        }else{
+          if( h < trade_line_price ){                                                  // ---- SELL STOP -----
+            o_type = OP_SELLSTOP;
+            op = NormalizeDouble( trade_line_price, Digits );
+            
+          }else{                                                                       // ------- SELL -------
+            o_type = OP_SELL;
+            op = NormalizeDouble( Bid, Digits );
+          }
+          sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );
+          tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
         }
+        
+        if( o_type < 2 ){
+          ticket = OrderSend(Symbol(), o_type, CHANNEL_LOT, op, 3, 0, 0, comment, 333);
+          OrderSelect( ticket, SELECT_BY_TICKET );
+          OrderModify( OrderTicket(), OrderOpenPrice(), sl, tp, 0 );
+          
+        }else{
+          OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 2, sl, tp, comment, 333, TimeCurrent()+5400 );
+          
+        }
+        
+        renameChannelLine( trade_line );
+        setChannelLinesArr();
+        
+/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400));
+/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400));
+
+/* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
+/* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "op_"+ts);
+/* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "op_"+ts);
+        
       }
     }
+    errorCheck("Channel trade");
   }
+
   return(0);
 }
 
@@ -195,7 +158,7 @@ int deinit(){
 int setChannelLinesArr(){
   int j = 1, i, len;
   string name, type;
-  
+
   ArrayResize(CT_LINES, 0);
   len= ObjectsTotal();
   for (i= len - 1; i>=0; i--) {
@@ -210,26 +173,28 @@ int setChannelLinesArr(){
   return(0);
 }
 
-double getFibo23(double fibo_0, string comment){
-  double time;
-  double fibo_100 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
-  
-  //--------------------------------------------    
-     // createHistoryLine(NormalizeDouble(fibo_100, Digits), Black, "fibo_100", "f100_"+ts);
-  //--------------------------------------------    
-  return ( (MathMax(fibo_0, fibo_100)-MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
-}
-
 int createHistoryLine(double price, color c, string text, string ts){
   double offset = PERIOD_H4*60;
   double time1 = Time[0]-offset;
   double time2 = Time[0]+offset;
   string name = "DT_GO_channel_hist_"+ts;
-  
+
   ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
-	ObjectSet(name, OBJPROP_COLOR, c);             
+	ObjectSet(name, OBJPROP_COLOR, c);
 	ObjectSet(name, OBJPROP_RAY, false);
 	ObjectSet(name, OBJPROP_STYLE, 4);
 	ObjectSet(name, OBJPROP_BACK, true);
 	ObjectSetText(name, text, 8);
+}
+
+string getLineInTradeZone(double h, double l){
+  int i, len = ArraySize(CT_LINES);
+  double trade_line_price;
+  for( i = 0; i < len; i++ ) {
+    trade_line_price = ObjectGetValueByShift( CT_LINES[i], 0);
+    if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
+      return ( CT_LINES[i] );
+    }
+  }
+  return ( "" );
 }

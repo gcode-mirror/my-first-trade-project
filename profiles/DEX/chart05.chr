@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=1878
+leftpos=1151
 digits=5
 scale=4
 graph=1
@@ -327,32 +327,6 @@ weight_0=0
 period_flags=0
 show_data=1
 </indicator>
-<indicator>
-name=Custom Indicator
-<expert>
-name=ZigZag
-flags=339
-window_num=0
-<inputs>
-ExtDepth=12
-ExtDeviation=5
-ExtBackstep=3
-</inputs>
-</expert>
-shift_0=0
-draw_0=1
-color_0=255
-style_0=0
-weight_0=0
-period_flags=0
-show_data=1
-</indicator>
 </window>
-
-<expert>
-name=DT_channel_trade
-flags=343
-window_num=0
-</expert>
 </chart>
 

@@ -26,12 +26,33 @@ bool initTradeLines(string isOn){
       open_price = OrderOpenPrice();
     }  
   }else{
-    double time1, time2;
-    tp_price = getZigZag(0, 12, 5, 3, 1, time1);
-    sl_price = getZigZag(0, 12, 5, 3, 0, time2);  
-    open_price = tp_price+(sl_price-tp_price)/2;
+    string near_line_name = getSelectedLine(Time[0], Bid);
+    open_price = NormalizeDouble( ObjectGetValueByShift( near_line_name, 0), Digits );
+    
+    if( open_price != 0.0 ){
+      double fibo_100 = 0.0;
+      double fibo_23_dif = getFibo23Dif( open_price, fibo_100 );
+      double spread = getMySpread();
+      
+      if( fibo_100 > open_price ){
+        open_price = open_price + spread;
+        sl_price = open_price - fibo_23_dif;
+        tp_price = open_price + fibo_23_dif;
+      }else{
+        sl_price = open_price + fibo_23_dif + spread;
+        tp_price = open_price - fibo_23_dif + spread;
+      }
+    }else{
+      GetLastError();
+    }
+      
+    if( near_line_name == "" || open_price == 0.0){
+      double time1, time2;
+      tp_price = getZigZag(0, 12, 5, 3, 1, time1);
+      sl_price = getZigZag(0, 12, 5, 3, 0, time2);  
+      open_price = tp_price+(sl_price-tp_price)/2;
+    }
   }
-   
   createLines("DT_GO_TradeLines_OP", open_price, Blue); 
   createLines("DT_GO_TradeLines_TP", tp_price, Green);
   createLines("DT_GO_TradeLines_SL", sl_price, Red);
@@ -136,7 +157,7 @@ bool createLines(string name, double price, color c){
     ObjectCreate(label, OBJ_TEXT, 0, 1, 0.1);
     ObjectSet(label, OBJPROP_COLOR, c);
 	}
-  return (errorCheck("createLines ("+name+")"));
+  return (errorCheck("createLines ("+name+", "+DoubleToStr(price,Digits)+")"));
 }
 
 
