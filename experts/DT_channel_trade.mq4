@@ -17,7 +17,7 @@ double CT_OFFSET = 0.0;
 string CT_LINES[];
 
 int init(){
-  CT_OFFSET = 75/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   return(0);
 }
 
@@ -31,27 +31,30 @@ int start(){
     CT_TIMER2 = GetTickCount() + 4000;
     
     int i, len, ticket;
-    double cur_l_price, spread, dif;
+    double cur_l_price, spread, dif, fibo_23, fibo_100;
+    string comment, ts;
+    
     len = OrdersTotal();
     for( i = 0; i < len; i++ ){      
       if( OrderSelect(i, SELECT_BY_POS) ){        
         if( OrderSymbol() == Symbol() ){
           if( OrderMagicNumber() == 333 ){
-return (0);
-/*          
+  return (0);
             int o_type = OrderType();
             if( o_type < 2){
               return (0);
             }else{
-              double op, sl, tp;
-              string ts = OrderComment();
-              int 
+              double op, sl, tp;              
+              comment = OrderComment();
+              ts = StringSubstr(comment, 0, 10);
               sl = OrderStopLoss();
               tp = OrderTakeProfit();
               op = OrderOpenPrice();
               cur_l_price = ObjectGetValueByShift( "DT_GO_t_line_"+ts, 0);
               ticket = OrderTicket();
-              spread = getMySpread();
+              spread = getMySpread();              
+              fibo_100 = StrToDouble(StringSubstr(comment, 11, StringLen(comment)-11));
+              fibo_23 = (MathMax(cur_l_price, fibo_100)-MathMin(cur_l_price, fibo_100)) * 0.23;
               
               if( o_type == OP_BUYSTOP ){
                 if( cur_l_price+spread == op ){
@@ -62,7 +65,7 @@ return (0);
                   Print(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
                   Alert(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
                 
-                  OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
+                  //OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
               
               //--------------------------------------------   
                   ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, op+dif);
@@ -79,7 +82,7 @@ return (0);
                   Print(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
                   Alert(StringConcatenate("Mod: " ,Symbol(), " ", ticket, " ", NormalizeDouble(op+dif, Digits), " ", NormalizeDouble(sl+dif, Digits), " ", NormalizeDouble(tp+dif, Digits), " ", TimeCurrent()+5400));
                 
-                  OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
+                  //OrderModify(ticket, NormalizeDouble(op+dif, Digits), NormalizeDouble(sl+dif, Digits), NormalizeDouble(tp+dif, Digits), TimeCurrent()+5400);
               
               //--------------------------------------------   
                   ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, op+dif);
@@ -90,7 +93,7 @@ return (0);
               
               }
             }
-*/            
+            
           }
         }
       }
@@ -109,61 +112,66 @@ return (0);
           o = iOpen( NULL, PERIOD_H4, 0);
           spread = getMySpread();
           double lots = StrToDouble(getGlobal("LOT"));
-          string comment = StringSubstr(CT_LINES[i], StringLen(CT_LINES[i])-10, 10);
-          double fibo_23 = getFibo23(cur_l_price, comment);
+          ts = StringSubstr(CT_LINES[i], StringLen(CT_LINES[i])-10, 10);
+          double time;
+          fibo_100 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
+          fibo_23 = getFibo23(cur_l_price, comment);
+          comment = ts+" "+DoubleToStr( fibo_100, Digits);
+          
+          createHistoryLine(NormalizeDouble(fibo_100, Digits), Black, "fibo_100", "f100_"+ts);
           
           if( o > cur_l_price ){
             if( l > cur_l_price ){
               Print(StringConcatenate(Symbol(), " ", OP_BUYSTOP, " ", lots, " ", NormalizeDouble(cur_l_price+spread, Digits), " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               Alert(StringConcatenate(Symbol(), " ", OP_BUYSTOP, " ", lots, " ", NormalizeDouble(cur_l_price+spread, Digits), " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              OrderSend(Symbol(), OP_BUYSTOP, lots, NormalizeDouble(cur_l_price+spread, Digits), 2, NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), comment, 333, TimeCurrent()+5400 );
+              //OrderSend(Symbol(), OP_BUYSTOP, lots, NormalizeDouble(cur_l_price+spread, Digits), 2, NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), comment, 333, TimeCurrent()+5400 );
           
           //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price+spread, Digits), Blue, "buy stop OP", "op_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy stop SL", "sl_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy stop TP", "tp_"+comment);
+              createHistoryLine(NormalizeDouble(cur_l_price+spread, Digits), Blue, "buy stop OP", "op_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy stop SL", "sl_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy stop TP", "tp_"+ts);
           //--------------------------------------------    
               
             }else{
               Print(StringConcatenate(Symbol(), " ", OP_BUY, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Ask,")", " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               Alert(StringConcatenate(Symbol(), " ", OP_BUY, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Ask,")", " ", 2, " ", NormalizeDouble(cur_l_price-fibo_23, Digits), " ", NormalizeDouble(cur_l_price+fibo_23, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               
-              ticket = OrderSend(Symbol(), OP_BUY, lots, Ask, 3, 0, 0, comment, 333);
-              OrderSelect(ticket, SELECT_BY_TICKET);
-              OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), 0);
+              //ticket = OrderSend(Symbol(), OP_BUY, lots, Ask, 3, 0, 0, comment, 333);
+              //OrderSelect(ticket, SELECT_BY_TICKET);
+              //OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price-fibo_23, Digits), NormalizeDouble(cur_l_price+fibo_23, Digits), 0);
               
           //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "buy OP", "op_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy SL", "sl_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy TP", "tp_"+comment);
-              createHistoryLine(NormalizeDouble(Ask, Digits), Orange, "buy ASK", "op2_"+comment);
+              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "buy OP", "op_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23, Digits), Red, "buy SL", "sl_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23, Digits), Green, "buy TP", "tp_"+ts);
+              createHistoryLine(NormalizeDouble(Ask, Digits), Orange, "buy ASK", "op2_"+ts);
           //--------------------------------------------    
             }
           }else{
             if( h < cur_l_price ){
               Print(StringConcatenate(Symbol(), " ", OP_SELLSTOP, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               Alert(StringConcatenate(Symbol(), " ", OP_SELLSTOP, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
-              OrderSend(Symbol(), OP_SELLSTOP, lots, NormalizeDouble(cur_l_price, Digits), 2, NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), comment, 333, TimeCurrent()+5400 );
+              //OrderSend(Symbol(), OP_SELLSTOP, lots, NormalizeDouble(cur_l_price, Digits), 2, NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), comment, 333, TimeCurrent()+5400 );
               
           //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell stop OP", "op_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tp_"+comment);
+              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell stop OP", "op_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tp_"+ts);
           //--------------------------------------------
               
             }else{
               Print(StringConcatenate(Symbol(), " ", OP_SELL, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Bid,")", " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               Alert(StringConcatenate(Symbol(), " ", OP_SELL, " ", lots, " ", NormalizeDouble(cur_l_price, Digits), "(", Bid,")", " ", 2, " ", NormalizeDouble(cur_l_price+fibo_23+spread, Digits), " ", NormalizeDouble(cur_l_price-fibo_23+spread, Digits), " ", comment, " ", 333, " ", TimeCurrent()+5400));
               
-              ticket = OrderSend(Symbol(), OP_SELL, lots, Bid, 3, 0, 0, comment, 333);
-              OrderSelect(ticket, SELECT_BY_TICKET);
-              OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), 0);
+              //ticket = OrderSend(Symbol(), OP_SELL, lots, Bid, 3, 0, 0, comment, 333);
+             // OrderSelect(ticket, SELECT_BY_TICKET);
+             // OrderModify(OrderTicket(), OrderOpenPrice(), NormalizeDouble(cur_l_price+fibo_23+spread, Digits), NormalizeDouble(cur_l_price-fibo_23+spread, Digits), 0);
               
           //--------------------------------------------    
-              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell OP", "op_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+comment);
-              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tpp_"+comment);
-              createHistoryLine(NormalizeDouble(Bid, Digits), Orange, "Sell Bid", "op2_"+comment);
+              createHistoryLine(NormalizeDouble(cur_l_price, Digits), Blue, "Sell OP", "op_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price+fibo_23+spread, Digits), Red, "Sell stop SL", "sl_"+ts);
+              createHistoryLine(NormalizeDouble(cur_l_price-fibo_23+spread, Digits), Green, "Sell stop TP", "tpp_"+ts);
+              createHistoryLine(NormalizeDouble(Bid, Digits), Orange, "Sell Bid", "op2_"+ts);
           //--------------------------------------------
             }
             
@@ -207,7 +215,7 @@ double getFibo23(double fibo_0, string comment){
   double fibo_100 = getZigZag(PERIOD_M15, 12, 5, 3, 0, time);
   
   //--------------------------------------------    
-      createHistoryLine(NormalizeDouble(fibo_100, Digits), Black, "fibo_100", "f100_"+comment);
+     // createHistoryLine(NormalizeDouble(fibo_100, Digits), Black, "fibo_100", "f100_"+ts);
   //--------------------------------------------    
   return ( (MathMax(fibo_0, fibo_100)-MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
 }
