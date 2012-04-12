@@ -440,13 +440,15 @@ string getSelectedLine(double time_cord, double price_cord){
     if ( type == "t_line"){
       t1 = ObjectGet(name,OBJPROP_TIME1);
       t2 = ObjectGet(name,OBJPROP_TIME2);
-      if( MathMax(t1, t2) > time_cord && MathMin(t1, t2) < time_cord ){
-        price = ObjectGetValueByShift( name, iBarShift(NULL,0,time_cord));
+      price = ObjectGetValueByShift( name, iBarShift(NULL,0, time_cord));
+      if( price != 0.0 ){
         dif = MathMax(price, price_cord) - MathMin(price, price_cord);
         if( dif < sel_dif ){
           sel_dif = dif;
           sel_name = name;
         }
+      }else{
+        GetLastError();
       }
     }else if( type == "h_line"){
       price = ObjectGet(name, OBJPROP_PRICE1);

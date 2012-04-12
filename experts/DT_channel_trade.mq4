@@ -21,7 +21,7 @@ string CT_LINES[];
 
 int init(){
   CT_OFFSET = 75/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
-  CT_START_TIME = GetTickCount() + 120000; // 2 min  
+  CT_START_TIME = GetTickCount() + 120000; // 2 min
   return(0);
 }
 
@@ -41,7 +41,7 @@ int start(){
     ticket = getOpenPositionByMagic(Symbol(), 333);
     if( ticket ){
       o_type = OrderType();
-      
+
       if( o_type < 2 ){
         return (0);
       }else{
@@ -51,16 +51,16 @@ int start(){
         spread = getMySpread();
         op = OrderOpenPrice();
 
-        if( o_type == OP_BUYSTOP && trade_line_price+spread == op ){
+        if( o_type == OP_BUYLIMIT && trade_line_price+spread == op ){
           return (0);
-        }else if( o_type == OP_SELLSTOP && trade_line_price == op ){
+        }else if( o_type == OP_SELLLIMIT && trade_line_price == op ){
           return (0);
         }else{
           double new_op, new_sl, new_tp;
           fibo_100 = StrToDouble(StringSubstr(comment, 11, StringLen(comment)-11));
           fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
 
-          if( o_type == OP_BUYSTOP ){
+          if( o_type == OP_BUYLIMIT ){
             new_op = NormalizeDouble( trade_line_price + spread, Digits );
             new_sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
             new_tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
@@ -71,7 +71,7 @@ int start(){
           }
 
           OrderModify(ticket, new_op, new_sl, new_tp, TimeCurrent()+5400);
-                    
+
 /* !! */  Print(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 /* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 
@@ -96,7 +96,7 @@ int start(){
       trade_line= getLineInTradeZone(h, l);
       if( trade_line != "" ){
         double o, sl, tp;
-        
+
         o = iOpen( NULL, PERIOD_H4, 0);
         trade_line_price = ObjectGetValueByShift( trade_line, 0);
         fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
@@ -105,23 +105,23 @@ int start(){
         comment = ts +" "+ DoubleToStr( fibo_100, Digits );
 
         if( o > trade_line_price ){
-          if( l > trade_line_price ){                                                 // ----- BUY STOP -----
-            o_type = OP_BUYSTOP;
+          if( l > trade_line_price ){   // ---- BUY LIMIT -----
+            o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + spread, Digits );
-          
-          }else{                                                                      // ------- BUY --------
+
+          }else{                       // ------- BUY --------
             o_type = OP_BUY;
             op = NormalizeDouble( Ask, Digits );
           }
           sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
           tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-          
+
         }else{
-          if( h < trade_line_price ){                                                  // ---- SELL STOP -----
-            o_type = OP_SELLSTOP;
+          if( h < trade_line_price ){ // ---- SELL LIMIT ----
+            o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price, Digits );
-            
-          }else{                                                                       // ------- SELL -------
+
+          }else{                      // ------- SELL -------
             o_type = OP_SELL;
             op = NormalizeDouble( Bid, Digits );
           }
@@ -133,41 +133,41 @@ int start(){
             return(0);
           }
         }
-       
+
         string error_text;
         if( o_type < 2 ){
           ticket = OrderSend(Symbol(), o_type, CHANNEL_LOT, op, 3, 0, 0, comment, 333);
           errorCheck("Channel trade OrderSend");
-          
-          OrderSelect( ticket, SELECT_BY_TICKET );          
+
+          OrderSelect( ticket, SELECT_BY_TICKET );
           OrderModify( OrderTicket(), OrderOpenPrice(), sl, tp, 0 );
-                    
+
           error_text = "Channel trade OrderModify";
-          
-          
+
+
         }else{
           OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 2, sl, tp, comment, 333, TimeCurrent()+5400 );
-          
-          error_text = "Channel trade OrderSend Pending";          
-          
+
+          error_text = "Channel trade OrderSend Pending";
+
         }
-        
+
         RefreshRates();
-        
+
 /* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 /* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
- 
+
 /* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
 /* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "sl_"+ts);
 /* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "tp_"+ts);
-                
+
         if(!errorCheck(error_text+" Bid:"+ Bid+ " Ask:"+ Ask)){
           return(0);
         }
-        
+
         renameChannelLine( trade_line );
         setChannelLinesArr();
-        
+
       }
     }
     errorCheck("Channel trade");
@@ -203,9 +203,9 @@ int createHistoryLine(double price, color c, string text, string ts){
   double time1 = Time[0]-offset;
   double time2 = Time[0]+offset;
   string name = "DT_GO_channel_hist_"+ts;
-  
+
   if(ObjectFind(name) == -1){
-    ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);  
+    ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
   }
 	ObjectSet(name, OBJPROP_COLOR, c);
 	ObjectSet(name, OBJPROP_RAY, false);
