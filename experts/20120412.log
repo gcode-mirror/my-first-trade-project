@@ -1,0 +1,676 @@
+08:09:05 Dex_Trader EURUSD-Pro,H1: loaded successfully
+08:09:06 Dex_Trader EURUSD-Pro,H1: zero divide
+08:09:06 Dex_Trader EURUSD-Pro,H1: initialized
+08:09:06 Dex_Trader EURUSD-Pro,H1: Alert: Error in start: unknown 4013 (EURUSD-Pro)
+08:09:06 Dex_Trader USDJPY-Pro,H1: loaded successfully
+08:09:06 Dex_Trader USDJPY-Pro,H1: zero divide
+08:09:06 Dex_Trader USDJPY-Pro,H1: initialized
+08:09:06 Dex_Trader USDJPY-Pro,H1: Alert: Error in start: unknown 4013 (USDJPY-Pro)
+08:09:06 Dex_Trader USDCHF-Pro,H1: loaded successfully
+08:09:06 Dex_Trader USDCHF-Pro,H1: zero divide
+08:09:06 Dex_Trader USDCHF-Pro,H1: initialized
+08:09:06 Dex_Trader USDCHF-Pro,H1: Alert: Error in start: unknown 4013 (USDCHF-Pro)
+08:09:06 Dex_Trader EURJPY-Pro,H4: loaded successfully
+08:09:06 Dex_Trader EURJPY-Pro,H4: zero divide
+08:09:06 Dex_Trader EURJPY-Pro,H4: initialized
+08:09:06 Dex_Trader EURJPY-Pro,H4: Alert: Error in start: unknown 4013 (EURJPY-Pro)
+08:09:06 Dex_Trader GBPUSD-Pro,H1: loaded successfully
+08:09:06 Dex_Trader GBPUSD-Pro,H1: zero divide
+08:09:06 Dex_Trader GBPUSD-Pro,H1: initialized
+08:09:06 Dex_Trader GBPUSD-Pro,H1: Alert: Error in start: unknown 4013 (GBPUSD-Pro)
+08:09:06 Dex_Trader AUDUSD-Pro,H1: loaded successfully
+08:09:06 Dex_Trader AUDUSD-Pro,H1: zero divide
+08:09:06 Dex_Trader AUDUSD-Pro,H1: initialized
+08:09:06 Dex_Trader AUDUSD-Pro,H1: Alert: Error in start: unknown 4013 (AUDUSD-Pro)
+08:09:06 Dex_Trader XAUUSD-Pro,H4: loaded successfully
+08:09:06 Dex_Trader XAUUSD-Pro,H4: zero divide
+08:09:06 Dex_Trader XAUUSD-Pro,H4: initialized
+08:09:06 Dex_Trader XAUUSD-Pro,H4: Alert: Error in start: unknown 4013 (XAUUSD-Pro)
+08:09:06 ZigZag EURUSD-Pro,M15: loaded successfully
+08:09:06 ZigZag EURUSD-Pro,M15: initialized
+08:11:30 Dex_Trader EURUSD-Pro,H1: deinitialized
+08:11:30 Dex_Trader EURUSD-Pro,H1: uninit reason 3
+08:11:30 Dex_Trader EURUSD-Pro,H4: initialized
+08:11:32 Dex_Trader USDJPY-Pro,H1: deinitialized
+08:11:32 Dex_Trader USDJPY-Pro,H1: uninit reason 3
+08:11:33 Dex_Trader USDJPY-Pro,H4: initialized
+08:11:35 Dex_Trader USDCHF-Pro,H1: deinitialized
+08:11:35 Dex_Trader USDCHF-Pro,H1: uninit reason 3
+08:11:35 Dex_Trader USDCHF-Pro,H4: initialized
+08:11:37 Dex_Trader EURJPY-Pro,H4: deinitialized
+08:11:37 Dex_Trader EURJPY-Pro,H4: uninit reason 3
+08:11:37 Dex_Trader EURJPY-Pro,H1: initialized
+08:11:37 Dex_Trader EURJPY-Pro,H1: deinitialized
+08:11:37 Dex_Trader EURJPY-Pro,H1: uninit reason 3
+08:11:37 Dex_Trader EURJPY-Pro,H4: initialized
+08:11:46 Dex_Trader GBPUSD-Pro,H1: deinitialized
+08:11:46 Dex_Trader GBPUSD-Pro,H1: uninit reason 3
+08:11:46 Dex_Trader GBPUSD-Pro,H4: initialized
+08:11:47 Dex_Trader GBPUSD-Pro,H4: deinitialized
+08:11:47 Dex_Trader GBPUSD-Pro,H4: uninit reason 3
+08:11:47 Dex_Trader GBPUSD-Pro,H1: initialized
+08:11:50 Dex_Trader AUDUSD-Pro,H1: deinitialized
+08:11:50 Dex_Trader AUDUSD-Pro,H1: uninit reason 3
+08:11:50 Dex_Trader AUDUSD-Pro,H4: initialized
+08:11:50 Dex_Trader AUDUSD-Pro,H4: deinitialized
+08:11:50 Dex_Trader AUDUSD-Pro,H4: uninit reason 3
+08:11:50 Dex_Trader AUDUSD-Pro,H1: initialized
+08:11:53 Dex_Trader XAUUSD-Pro,H4: deinitialized
+08:11:53 Dex_Trader XAUUSD-Pro,H4: uninit reason 3
+08:11:53 Dex_Trader XAUUSD-Pro,H1: initialized
+08:11:53 Dex_Trader XAUUSD-Pro,H1: deinitialized
+08:11:53 Dex_Trader XAUUSD-Pro,H1: uninit reason 3
+08:11:53 Dex_Trader XAUUSD-Pro,H4: initialized
+08:12:00 Dex_Trader AUDUSD-Pro,H1: deinitialized
+08:12:00 Dex_Trader AUDUSD-Pro,H1: uninit reason 3
+08:12:00 Dex_Trader AUDUSD-Pro,H4: initialized
+08:12:06 DT_toggle_button_2 AUDUSD-Pro,H4: loaded successfully
+08:12:06 DT_toggle_button_2 AUDUSD-Pro,H4: uninit reason 0
+08:12:06 DT_toggle_button_2 AUDUSD-Pro,H4: removed
+08:12:08 ZigZag AUDUSD-Pro,M15: loaded successfully
+08:12:08 ZigZag AUDUSD-Pro,M15: initialized
+08:12:18 DT_line_trade AUDUSD-Pro,H4: loaded successfully
+08:12:23 DT_line_trade AUDUSD-Pro,H4: open #48923160 sell limit 0.10 AUDUSD-Pro at 1.03943 sl: 1.04195 tp: 1.03721 ok
+08:12:23 DT_line_trade AUDUSD-Pro,H4: uninit reason 0
+08:12:23 DT_line_trade AUDUSD-Pro,H4: removed
+08:12:26 Dex_Trader AUDUSD-Pro,H4: deinitialized
+08:12:26 Dex_Trader AUDUSD-Pro,H4: uninit reason 3
+08:12:26 ZigZag AUDUSD-Pro,M15: uninit reason 1
+08:12:26 ZigZag AUDUSD-Pro,M15: removed
+08:12:26 Dex_Trader AUDUSD-Pro,M30: initialized
+08:12:35 Dex_Trader AUDUSD-Pro,M30: deinitialized
+08:12:35 Dex_Trader AUDUSD-Pro,M30: uninit reason 3
+08:12:35 Dex_Trader AUDUSD-Pro,H1: initialized
+08:12:54 Dex_Trader AUDUSD-Pro,H1: deinitialized
+08:12:54 Dex_Trader AUDUSD-Pro,H1: uninit reason 3
+08:12:54 Dex_Trader AUDUSD-Pro,H4: initialized
+08:13:07 Dex_Trader AUDUSD-Pro,H4: deinitialized
+08:13:07 Dex_Trader AUDUSD-Pro,H4: uninit reason 3
+08:13:07 Dex_Trader AUDUSD-Pro,H1: initialized
+08:13:19 DT_toggle_button_2 AUDUSD-Pro,H1: loaded successfully
+08:13:19 DT_toggle_button_2 AUDUSD-Pro,H1: uninit reason 0
+08:13:19 DT_toggle_button_2 AUDUSD-Pro,H1: removed
+08:13:33 DT_toggle_button_2 AUDUSD-Pro,H1: loaded successfully
+08:13:33 DT_toggle_button_2 AUDUSD-Pro,H1: uninit reason 0
+08:13:33 DT_toggle_button_2 AUDUSD-Pro,H1: removed
+08:13:37 ZigZag AUDUSD-Pro,M15: loaded successfully
+08:13:37 ZigZag AUDUSD-Pro,M15: initialized
+08:13:47 DT_line_trade AUDUSD-Pro,H1: loaded successfully
+08:13:52 DT_line_trade AUDUSD-Pro,H1: open #48923211 sell limit 0.10 AUDUSD-Pro at 1.03913 sl: 1.04163 tp: 1.03701 ok
+08:13:52 DT_line_trade AUDUSD-Pro,H1: uninit reason 0
+08:13:52 DT_line_trade AUDUSD-Pro,H1: removed
+08:16:41 Dex_Trader EURJPY-Pro,H4: deinitialized
+08:16:41 Dex_Trader EURJPY-Pro,H4: uninit reason 3
+08:16:41 Dex_Trader EURJPY-Pro,H1: initialized
+08:31:15 Dex_Trader AUDUSD-Pro,H1: deinitialized
+08:31:15 Dex_Trader AUDUSD-Pro,H1: uninit reason 3
+08:31:15 ZigZag AUDUSD-Pro,M15: uninit reason 1
+08:31:15 ZigZag AUDUSD-Pro,M15: removed
+08:31:15 Dex_Trader AUDUSD-Pro,H4: initialized
+08:31:36 Dex_Trader AUDUSD-Pro,H4: deinitialized
+08:31:36 Dex_Trader AUDUSD-Pro,H4: uninit reason 3
+08:31:36 Dex_Trader AUDUSD-Pro,H1: initialized
+08:35:10 Dex_Trader EURJPY-Pro,H1: deinitialized
+08:35:10 Dex_Trader EURJPY-Pro,H1: uninit reason 3
+08:35:10 Dex_Trader EURJPY-Pro,M30: initialized
+08:35:16 DT_toggle_button_2 EURJPY-Pro,M30: loaded successfully
+08:35:16 DT_toggle_button_2 EURJPY-Pro,M30: uninit reason 0
+08:35:16 DT_toggle_button_2 EURJPY-Pro,M30: removed
+08:35:17 ZigZag EURJPY-Pro,M15: loaded successfully
+08:35:17 ZigZag EURJPY-Pro,M15: initialized
+08:35:29 DT_line_trade EURJPY-Pro,M30: loaded successfully
+08:35:34 DT_line_trade EURJPY-Pro,M30: open #48924631 sell limit 0.10 EURJPY-Pro at 106.426 sl: 106.563 tp: 106.317 ok
+08:35:34 DT_line_trade EURJPY-Pro,M30: uninit reason 0
+08:35:34 DT_line_trade EURJPY-Pro,M30: removed
+08:37:27 DT_toggle_button_2 EURJPY-Pro,M30: loaded successfully
+08:37:27 DT_toggle_button_2 EURJPY-Pro,M30: uninit reason 0
+08:37:27 DT_toggle_button_2 EURJPY-Pro,M30: removed
+08:50:05 Compiling 'DT_channel_trade'
+08:53:16 Compiling 'DT_channel_trade'
+08:54:37 Compiling 'DT_channel_trade'
+08:54:59 Dex_Trader EURJPY-Pro,M30: deinitialized
+08:54:59 Dex_Trader EURJPY-Pro,M30: uninit reason 3
+08:54:59 ZigZag EURJPY-Pro,M15: uninit reason 1
+08:54:59 ZigZag EURJPY-Pro,M15: removed
+08:54:59 Dex_Trader EURJPY-Pro,M15: initialized
+08:55:02 ZigZag EURJPY-Pro,M15: loaded successfully
+08:55:02 ZigZag EURJPY-Pro,M15: initialized
+08:55:57 Dex_Trader EURJPY-Pro,M15: deinitialized
+08:55:57 Dex_Trader EURJPY-Pro,M15: uninit reason 3
+08:55:57 ZigZag EURJPY-Pro,M15: uninit reason 3
+08:55:57 Dex_Trader EURJPY-Pro,H1: initialized
+08:55:57 ZigZag EURJPY-Pro,H1: initialized
+08:59:24 Compiling 'DT_channel_trade'
+09:00:03 Compiling 'DT_line_trade'
+09:00:31 Compiling 'DT_line_trade'
+09:01:02 Compiling 'DT_channel_trade'
+09:08:53 Compiling 'DT_channel_trade'
+09:08:54 Dex_Trader AUDUSD-Pro,H1: deinitialized
+09:08:54 Dex_Trader AUDUSD-Pro,H1: uninit reason 2
+09:08:54 Dex_Trader AUDUSD-Pro,H1: loaded successfully
+09:08:54 Dex_Trader AUDUSD-Pro,H1: Alert: Error in createLines (DT_GO_TradeLines_OP, 1.03913): Object exists already. (AUDUSD-Pro)
+09:08:54 Dex_Trader AUDUSD-Pro,H1: initialized
+09:08:54 Dex_Trader EURJPY-Pro,H1: deinitialized
+09:08:54 Dex_Trader EURJPY-Pro,H1: uninit reason 2
+09:08:55 Dex_Trader EURJPY-Pro,H1: loaded successfully
+09:08:55 Dex_Trader EURJPY-Pro,H1: initialized
+09:08:55 Dex_Trader USDCHF-Pro,H4: deinitialized
+09:08:55 Dex_Trader USDCHF-Pro,H4: uninit reason 2
+09:08:55 Dex_Trader USDCHF-Pro,H4: loaded successfully
+09:08:55 Dex_Trader USDCHF-Pro,H4: initialized
+09:08:55 Dex_Trader USDJPY-Pro,H4: deinitialized
+09:08:55 Dex_Trader USDJPY-Pro,H4: uninit reason 2
+09:08:55 Dex_Trader USDJPY-Pro,H4: loaded successfully
+09:08:55 Dex_Trader USDJPY-Pro,H4: initialized
+09:08:55 Dex_Trader EURUSD-Pro,H4: deinitialized
+09:08:55 Dex_Trader EURUSD-Pro,H4: uninit reason 2
+09:08:55 Dex_Trader EURUSD-Pro,H4: loaded successfully
+09:08:55 Dex_Trader EURUSD-Pro,H4: initialized
+09:08:55 Dex_Trader XAUUSD-Pro,H4: deinitialized
+09:08:55 Dex_Trader XAUUSD-Pro,H4: uninit reason 2
+09:08:55 Dex_Trader XAUUSD-Pro,H4: loaded successfully
+09:08:55 Dex_Trader XAUUSD-Pro,H4: initialized
+09:08:55 Dex_Trader GBPUSD-Pro,H1: deinitialized
+09:08:55 Dex_Trader GBPUSD-Pro,H1: uninit reason 2
+09:08:55 Dex_Trader GBPUSD-Pro,H1: loaded successfully
+09:08:55 Dex_Trader GBPUSD-Pro,H1: initialized
+09:15:44 DT_toggle_button_2 AUDUSD-Pro,H1: loaded successfully
+09:15:44 DT_toggle_button_2 AUDUSD-Pro,H1: uninit reason 0
+09:15:44 DT_toggle_button_2 AUDUSD-Pro,H1: removed
+09:16:44 DT_channel_trade USDJPY-Pro,H4: loaded successfully
+09:16:45 DT_channel_trade USDJPY-Pro,H4: initialized
+09:20:42 Dex_Trader EURUSD-Pro,H4: deinitialized
+09:20:42 Dex_Trader EURUSD-Pro,H4: uninit reason 3
+09:20:42 Dex_Trader EURUSD-Pro,H1: initialized
+09:21:04 DT_channel_trade EURUSD-Pro,H1: loaded successfully
+09:21:05 DT_channel_trade EURUSD-Pro,H1: initialized
+09:21:11 DT_channel_trade USDJPY-Pro,H4: deinitialized
+09:21:11 DT_channel_trade USDJPY-Pro,H4: uninit reason 3
+09:21:11 Dex_Trader USDJPY-Pro,H4: deinitialized
+09:21:11 Dex_Trader USDJPY-Pro,H4: uninit reason 3
+09:21:11 Dex_Trader USDJPY-Pro,H1: initialized
+09:21:12 DT_channel_trade USDJPY-Pro,H1: initialized
+09:22:11 Dex_Trader USDCHF-Pro,H4: deinitialized
+09:22:11 Dex_Trader USDCHF-Pro,H4: uninit reason 3
+09:22:11 Dex_Trader USDCHF-Pro,H1: initialized
+09:23:46 DT_toggle_button_3 EURJPY-Pro,H1: loaded successfully
+09:23:46 DT_toggle_button_3 EURJPY-Pro,H1: uninit reason 0
+09:23:46 DT_toggle_button_3 EURJPY-Pro,H1: removed
+09:23:47 DT_toggle_button_3 EURJPY-Pro,H1: loaded successfully
+09:23:47 DT_toggle_button_3 EURJPY-Pro,H1: uninit reason 0
+09:23:47 DT_toggle_button_3 EURJPY-Pro,H1: removed
+09:23:48 DT_toggle_button_2 EURJPY-Pro,H1: loaded successfully
+09:23:48 DT_toggle_button_2 EURJPY-Pro,H1: uninit reason 0
+09:23:48 DT_toggle_button_2 EURJPY-Pro,H1: removed
+09:23:48 ZigZag EURJPY-Pro,M15: loaded successfully
+09:23:48 ZigZag EURJPY-Pro,M15: initialized
+09:23:52 Dex_Trader EURJPY-Pro,H1: deinitialized
+09:23:52 Dex_Trader EURJPY-Pro,H1: uninit reason 3
+09:23:52 ZigZag EURJPY-Pro,M15: uninit reason 1
+09:23:52 ZigZag EURJPY-Pro,M15: removed
+09:23:52 ZigZag EURJPY-Pro,H1: uninit reason 3
+09:23:52 ZigZag EURJPY-Pro,M15: loaded successfully
+09:23:52 ZigZag EURJPY-Pro,M15: initialized
+09:23:52 Dex_Trader EURJPY-Pro,M15: initialized
+09:23:52 ZigZag EURJPY-Pro,M15: initialized
+09:27:05 DT_toggle_button_4 EURJPY-Pro,M15: loaded successfully
+09:27:05 DT_toggle_button_4 EURJPY-Pro,M15: uninit reason 0
+09:27:05 DT_toggle_button_4 EURJPY-Pro,M15: removed
+09:27:29 Dex_Trader AUDUSD-Pro,H1: deinitialized
+09:27:29 Dex_Trader AUDUSD-Pro,H1: uninit reason 3
+09:27:29 Dex_Trader AUDUSD-Pro,H4: initialized
+09:27:31 DT_t_line AUDUSD-Pro,H4: loaded successfully
+09:27:32 DT_t_line AUDUSD-Pro,H4: uninit reason 0
+09:27:32 DT_t_line AUDUSD-Pro,H4: removed
+09:29:18 DT_toggle_button_2 GBPUSD-Pro,H1: loaded successfully
+09:29:18 DT_toggle_button_2 GBPUSD-Pro,H1: uninit reason 0
+09:29:18 DT_toggle_button_2 GBPUSD-Pro,H1: removed
+09:29:18 ZigZag GBPUSD-Pro,M15: loaded successfully
+09:29:18 ZigZag GBPUSD-Pro,M15: initialized
+09:29:23 DT_toggle_button_2 GBPUSD-Pro,H1: loaded successfully
+09:29:23 DT_toggle_button_2 GBPUSD-Pro,H1: uninit reason 0
+09:29:23 DT_toggle_button_2 GBPUSD-Pro,H1: removed
+09:30:23 DT_toggle_button_3 EURJPY-Pro,M15: loaded successfully
+09:30:23 DT_toggle_button_3 EURJPY-Pro,M15: uninit reason 0
+09:30:23 DT_toggle_button_3 EURJPY-Pro,M15: removed
+09:30:24 DT_toggle_button_3 EURJPY-Pro,M15: loaded successfully
+09:30:24 DT_toggle_button_3 EURJPY-Pro,M15: uninit reason 0
+09:30:24 DT_toggle_button_3 EURJPY-Pro,M15: removed
+09:30:24 DT_toggle_button_4 EURJPY-Pro,M15: loaded successfully
+09:30:24 DT_toggle_button_4 EURJPY-Pro,M15: uninit reason 0
+09:30:24 DT_toggle_button_4 EURJPY-Pro,M15: removed
+09:38:34 DT_select_line EURUSD-Pro,H1: loaded successfully
+09:38:34 DT_select_line EURUSD-Pro,H1: uninit reason 0
+09:38:34 DT_select_line EURUSD-Pro,H1: removed
+09:38:41 DT_select_line USDJPY-Pro,H1: loaded successfully
+09:38:41 DT_select_line USDJPY-Pro,H1: uninit reason 0
+09:38:41 DT_select_line USDJPY-Pro,H1: removed
+09:38:59 DT_select_line USDCHF-Pro,H1: loaded successfully
+09:38:59 DT_select_line USDCHF-Pro,H1: uninit reason 0
+09:38:59 DT_select_line USDCHF-Pro,H1: removed
+09:39:04 DT_channel_trade USDCHF-Pro,H1: loaded successfully
+09:39:05 DT_channel_trade USDCHF-Pro,H1: initialized
+09:39:32 Dex_Trader EURJPY-Pro,M15: deinitialized
+09:39:32 Dex_Trader EURJPY-Pro,M15: uninit reason 3
+09:39:32 ZigZag EURJPY-Pro,M15: uninit reason 1
+09:39:32 ZigZag EURJPY-Pro,M15: removed
+09:39:32 ZigZag EURJPY-Pro,M15: uninit reason 3
+09:39:32 ZigZag EURJPY-Pro,M15: loaded successfully
+09:39:32 ZigZag EURJPY-Pro,M15: initialized
+09:39:32 Dex_Trader EURJPY-Pro,H4: initialized
+09:39:32 ZigZag EURJPY-Pro,H4: initialized
+09:39:37 DT_toggle_button_2 EURJPY-Pro,H4: loaded successfully
+09:39:37 DT_toggle_button_2 EURJPY-Pro,H4: uninit reason 0
+09:39:37 DT_toggle_button_2 EURJPY-Pro,H4: removed
+09:39:41 Dex_Trader EURJPY-Pro,H4: deinitialized
+09:39:41 Dex_Trader EURJPY-Pro,H4: uninit reason 3
+09:39:41 ZigZag EURJPY-Pro,M15: uninit reason 1
+09:39:41 ZigZag EURJPY-Pro,M15: removed
+09:39:41 ZigZag EURJPY-Pro,H4: uninit reason 3
+09:39:41 Dex_Trader EURJPY-Pro,H1: initialized
+09:39:41 ZigZag EURJPY-Pro,H1: initialized
+09:41:19 ZigZag EURUSD-Pro,M15: loaded successfully
+09:41:19 ZigZag EURUSD-Pro,M15: initialized
+09:41:19 DT_channel_trade EURUSD-Pro,H1: EURUSD-Pro Order type:4 Lots:0.1 Open price:1.3108 Stop loss:1.3097 Take profit:1.3117 Comment:1334046306 1.31504 Magic:333 Expired:1334225505
+09:41:19 DT_channel_trade EURUSD-Pro,H1: Alert: EURUSD-Pro Order type:4 Lots:0.1 Open price:1.3108 Stop loss:1.3097 Take profit:1.3117 Comment:1334046306 1.31504 Magic:333 Expired:1334225505
+09:41:19 DT_channel_trade EURUSD-Pro,H1: Alert: Error in Channel trade: Object exists already. (EURUSD-Pro)
+09:41:43 xxx EURUSD-Pro,H1: loaded successfully
+09:41:43 xxx EURUSD-Pro,H1: Alert: 1.345
+09:41:43 xxx EURUSD-Pro,H1: uninit reason 0
+09:41:43 xxx EURUSD-Pro,H1: removed
+09:42:14 DT_toggle_button_2 EURUSD-Pro,H1: loaded successfully
+09:42:14 DT_toggle_button_2 EURUSD-Pro,H1: uninit reason 0
+09:42:14 DT_toggle_button_2 EURUSD-Pro,H1: removed
+09:42:14 ZigZag EURUSD-Pro,M15: loaded successfully
+09:42:14 ZigZag EURUSD-Pro,M15: initialized
+09:42:18 DT_line_trade EURUSD-Pro,H1: loaded successfully
+09:42:31 DT_line_trade EURUSD-Pro,H1: open #48930065 buy limit 0.10 EURUSD-Pro at 1.31081 sl: 1.30982 tp: 1.31180 ok
+09:42:31 DT_line_trade EURUSD-Pro,H1: uninit reason 0
+09:42:31 DT_line_trade EURUSD-Pro,H1: removed
+09:42:57 DT_toggle_button_2 EURUSD-Pro,H1: loaded successfully
+09:42:57 DT_toggle_button_2 EURUSD-Pro,H1: uninit reason 0
+09:42:57 DT_toggle_button_2 EURUSD-Pro,H1: removed
+09:43:02 DT_channel_trade EURUSD-Pro,H1: deinitialized
+09:43:02 DT_channel_trade EURUSD-Pro,H1: uninit reason 3
+09:43:02 ZigZag EURUSD-Pro,M15: uninit reason 1
+09:43:02 ZigZag EURUSD-Pro,M15: removed
+09:43:02 Dex_Trader EURUSD-Pro,H1: deinitialized
+09:43:02 Dex_Trader EURUSD-Pro,H1: uninit reason 3
+09:43:02 ZigZag EURUSD-Pro,M15: uninit reason 1
+09:43:02 ZigZag EURUSD-Pro,M15: removed
+09:43:02 Dex_Trader EURUSD-Pro,M30: initialized
+09:43:03 DT_channel_trade EURUSD-Pro,M30: initialized
+09:46:57 DT_channel_trade EURUSD-Pro,M30: deinitialized
+09:46:57 DT_channel_trade EURUSD-Pro,M30: uninit reason 3
+09:46:57 Dex_Trader EURUSD-Pro,M30: deinitialized
+09:46:57 Dex_Trader EURUSD-Pro,M30: uninit reason 3
+09:46:57 Dex_Trader EURUSD-Pro,M15: initialized
+09:46:57 DT_channel_trade EURUSD-Pro,M15: initialized
+09:47:28 DT_channel_trade EURUSD-Pro,M15: deinitialized
+09:47:28 DT_channel_trade EURUSD-Pro,M15: uninit reason 3
+09:47:28 Dex_Trader EURUSD-Pro,M15: deinitialized
+09:47:28 Dex_Trader EURUSD-Pro,M15: uninit reason 3
+09:47:28 Dex_Trader EURUSD-Pro,H1: initialized
+09:47:30 DT_channel_trade EURUSD-Pro,H1: initialized
+09:49:06 DT_channel_trade EURUSD-Pro,H1: deinitialized
+09:49:06 DT_channel_trade EURUSD-Pro,H1: uninit reason 3
+09:49:06 Dex_Trader EURUSD-Pro,H1: deinitialized
+09:49:06 Dex_Trader EURUSD-Pro,H1: uninit reason 3
+09:49:06 Dex_Trader EURUSD-Pro,M15: initialized
+09:49:06 DT_channel_trade EURUSD-Pro,M15: initialized
+09:49:08 DT_channel_trade EURUSD-Pro,M15: deinitialized
+09:49:08 DT_channel_trade EURUSD-Pro,M15: uninit reason 3
+09:49:08 Dex_Trader EURUSD-Pro,M15: deinitialized
+09:49:08 Dex_Trader EURUSD-Pro,M15: uninit reason 3
+09:49:08 Dex_Trader EURUSD-Pro,M5: initialized
+09:49:09 DT_channel_trade EURUSD-Pro,M5: initialized
+09:49:35 DT_channel_trade EURUSD-Pro,M5: deinitialized
+09:49:35 DT_channel_trade EURUSD-Pro,M5: uninit reason 2
+09:49:35 DT_channel_trade USDCHF-Pro,H1: deinitialized
+09:49:35 DT_channel_trade USDCHF-Pro,H1: uninit reason 2
+09:49:35 DT_channel_trade USDCHF-Pro,H1: loaded successfully
+09:49:35 DT_channel_trade USDCHF-Pro,H1: initialized
+09:49:35 DT_channel_trade EURUSD-Pro,M5: loaded successfully
+09:49:35 DT_channel_trade EURUSD-Pro,M5: initialized
+09:49:35 DT_channel_trade USDJPY-Pro,H1: deinitialized
+09:49:35 DT_channel_trade USDJPY-Pro,H1: uninit reason 2
+09:49:35 DT_channel_trade USDJPY-Pro,H1: loaded successfully
+09:49:35 DT_channel_trade USDJPY-Pro,H1: initialized
+09:50:45 DT_channel_trade EURUSD-Pro,M5: deinitialized
+09:50:45 DT_channel_trade EURUSD-Pro,M5: uninit reason 3
+09:50:45 Dex_Trader EURUSD-Pro,M5: deinitialized
+09:50:45 Dex_Trader EURUSD-Pro,M5: uninit reason 3
+09:50:45 Dex_Trader EURUSD-Pro,M15: initialized
+09:50:45 DT_channel_trade EURUSD-Pro,M15: initialized
+09:50:48 DT_channel_trade EURUSD-Pro,M15: deinitialized
+09:50:48 DT_channel_trade EURUSD-Pro,M15: uninit reason 3
+09:50:48 Dex_Trader EURUSD-Pro,M15: deinitialized
+09:50:48 Dex_Trader EURUSD-Pro,M15: uninit reason 3
+09:50:48 Dex_Trader EURUSD-Pro,M30: initialized
+09:50:50 DT_channel_trade EURUSD-Pro,M30: initialized
+09:51:12 Dex_Trader AUDUSD-Pro,H4: deinitialized
+09:51:12 Dex_Trader AUDUSD-Pro,H4: uninit reason 3
+09:51:12 Dex_Trader AUDUSD-Pro,M5: initialized
+09:51:37 Dex_Trader AUDUSD-Pro,M5: deinitialized
+09:51:37 Dex_Trader AUDUSD-Pro,M5: uninit reason 3
+09:51:37 Dex_Trader AUDUSD-Pro,H1: initialized
+09:54:34 DT_channel_trade EURUSD-Pro,M30: deinitialized
+09:54:34 DT_channel_trade EURUSD-Pro,M30: uninit reason 3
+09:54:34 Dex_Trader EURUSD-Pro,M30: deinitialized
+09:54:34 Dex_Trader EURUSD-Pro,M30: uninit reason 3
+09:54:34 Dex_Trader EURUSD-Pro,M15: initialized
+09:54:34 DT_channel_trade EURUSD-Pro,M15: initialized
+09:54:45 ZigZag EURUSD-Pro,M15: loaded successfully
+09:54:50 ZigZag EURUSD-Pro,M15: initialized
+09:55:17 DT_channel_trade EURUSD-Pro,M15: deinitialized
+09:55:17 DT_channel_trade EURUSD-Pro,M15: uninit reason 3
+09:55:17 Dex_Trader EURUSD-Pro,M15: deinitialized
+09:55:17 Dex_Trader EURUSD-Pro,M15: uninit reason 3
+09:55:17 ZigZag EURUSD-Pro,M15: uninit reason 3
+09:55:17 Dex_Trader EURUSD-Pro,H1: initialized
+09:55:17 ZigZag EURUSD-Pro,H1: initialized
+09:55:18 DT_channel_trade EURUSD-Pro,H1: initialized
+09:56:01 DT_select_line USDCHF-Pro,H1: loaded successfully
+09:56:01 DT_select_line USDCHF-Pro,H1: uninit reason 0
+09:56:01 DT_select_line USDCHF-Pro,H1: removed
+09:56:26 DT_toggle_button_2 EURUSD-Pro,H1: loaded successfully
+09:56:26 DT_toggle_button_2 EURUSD-Pro,H1: uninit reason 0
+09:56:26 DT_toggle_button_2 EURUSD-Pro,H1: removed
+09:56:32 DT_toggle_button_2 EURUSD-Pro,H1: loaded successfully
+09:56:32 DT_toggle_button_2 EURUSD-Pro,H1: uninit reason 0
+09:56:32 DT_toggle_button_2 EURUSD-Pro,H1: removed
+10:04:13 DT_toggle_button_3 EURUSD-Pro,H1: loaded successfully
+10:04:13 DT_toggle_button_3 EURUSD-Pro,H1: uninit reason 0
+10:04:13 DT_toggle_button_3 EURUSD-Pro,H1: removed
+10:04:14 DT_toggle_button_3 EURUSD-Pro,H1: loaded successfully
+10:04:14 DT_toggle_button_3 EURUSD-Pro,H1: uninit reason 0
+10:04:14 DT_toggle_button_3 EURUSD-Pro,H1: removed
+10:04:14 DT_toggle_button_4 EURUSD-Pro,H1: loaded successfully
+10:04:14 DT_toggle_button_4 EURUSD-Pro,H1: uninit reason 0
+10:04:14 DT_toggle_button_4 EURUSD-Pro,H1: removed
+10:07:20 DT_toggle_button_4 EURUSD-Pro,H1: loaded successfully
+10:07:20 DT_toggle_button_4 EURUSD-Pro,H1: uninit reason 0
+10:07:20 DT_toggle_button_4 EURUSD-Pro,H1: removed
+10:16:14 Dex_Trader XAUUSD-Pro,H4: deinitialized
+10:16:14 Dex_Trader XAUUSD-Pro,H4: uninit reason 3
+10:16:14 Dex_Trader XAUUSD-Pro,H1: initialized
+12:03:41 Dex_Trader XAUUSD-Pro,H1: deinitialized
+12:03:41 Dex_Trader XAUUSD-Pro,H1: uninit reason 3
+12:03:41 Dex_Trader XAUUSD-Pro,H4: initialized
+12:04:21 Dex_Trader XAUUSD-Pro,H4: deinitialized
+12:04:21 Dex_Trader XAUUSD-Pro,H4: uninit reason 3
+12:04:21 Dex_Trader XAUUSD-Pro,H1: initialized
+12:05:01 Dex_Trader XAUUSD-Pro,H1: deinitialized
+12:05:01 Dex_Trader XAUUSD-Pro,H1: uninit reason 3
+12:05:01 Dex_Trader XAUUSD-Pro,H4: initialized
+12:05:23 DT_channel_trade XAUUSD-Pro,H4: loaded successfully
+12:05:24 DT_channel_trade XAUUSD-Pro,H4: initialized
+12:05:28 DT_select_line XAUUSD-Pro,H4: loaded successfully
+12:05:28 DT_select_line XAUUSD-Pro,H4: uninit reason 0
+12:05:28 DT_select_line XAUUSD-Pro,H4: removed
+12:05:48 DT_channel_trade EURUSD-Pro,H1: deinitialized
+12:05:48 DT_channel_trade EURUSD-Pro,H1: uninit reason 3
+12:05:48 Dex_Trader EURUSD-Pro,H1: deinitialized
+12:05:48 Dex_Trader EURUSD-Pro,H1: uninit reason 3
+12:05:48 ZigZag EURUSD-Pro,H1: uninit reason 3
+12:05:48 Dex_Trader EURUSD-Pro,M30: initialized
+12:05:48 ZigZag EURUSD-Pro,M30: initialized
+12:05:50 DT_channel_trade EURUSD-Pro,M30: initialized
+12:07:43 ZigZag EURJPY-Pro,H1: uninit reason 5
+12:07:43 ZigZag EURJPY-Pro,H1: initialized
+12:08:02 Dex_Trader EURJPY-Pro,H1: deinitialized
+12:08:02 Dex_Trader EURJPY-Pro,H1: uninit reason 3
+12:08:02 ZigZag EURJPY-Pro,H1: uninit reason 3
+12:08:02 Dex_Trader EURJPY-Pro,M30: initialized
+12:08:02 ZigZag EURJPY-Pro,M30: initialized
+12:08:04 Dex_Trader EURJPY-Pro,M30: deinitialized
+12:08:04 Dex_Trader EURJPY-Pro,M30: uninit reason 3
+12:08:04 ZigZag EURJPY-Pro,M30: uninit reason 3
+12:08:04 Dex_Trader EURJPY-Pro,M15: initialized
+12:08:04 ZigZag EURJPY-Pro,M15: initialized
+12:08:49 Dex_Trader EURJPY-Pro,M15: deinitialized
+12:08:49 Dex_Trader EURJPY-Pro,M15: uninit reason 3
+12:08:49 ZigZag EURJPY-Pro,M15: uninit reason 3
+12:08:49 Dex_Trader EURJPY-Pro,H1: initialized
+12:08:49 ZigZag EURJPY-Pro,H1: initialized
+12:09:01 Dex_Trader EURJPY-Pro,H1: deinitialized
+12:09:01 Dex_Trader EURJPY-Pro,H1: uninit reason 3
+12:09:01 ZigZag EURJPY-Pro,H1: uninit reason 3
+12:09:01 Dex_Trader EURJPY-Pro,M15: initialized
+12:09:01 ZigZag EURJPY-Pro,M15: initialized
+12:09:41 Dex_Trader EURJPY-Pro,M15: deinitialized
+12:09:41 Dex_Trader EURJPY-Pro,M15: uninit reason 3
+12:09:41 ZigZag EURJPY-Pro,M15: uninit reason 3
+12:09:41 Dex_Trader EURJPY-Pro,H1: initialized
+12:09:41 ZigZag EURJPY-Pro,H1: initialized
+12:15:01 Dex_Trader GBPUSD-Pro,H1: deinitialized
+12:15:01 Dex_Trader GBPUSD-Pro,H1: uninit reason 3
+12:15:01 ZigZag GBPUSD-Pro,M15: uninit reason 1
+12:15:01 ZigZag GBPUSD-Pro,M15: removed
+12:15:01 Dex_Trader GBPUSD-Pro,M30: initialized
+12:15:33 Dex_Trader GBPUSD-Pro,M30: deinitialized
+12:15:33 Dex_Trader GBPUSD-Pro,M30: uninit reason 3
+12:15:33 Dex_Trader GBPUSD-Pro,H1: initialized
+12:15:40 DT_t_line GBPUSD-Pro,H1: loaded successfully
+12:15:40 DT_t_line GBPUSD-Pro,H1: uninit reason 0
+12:15:40 DT_t_line GBPUSD-Pro,H1: removed
+12:17:05 DT_select_line EURUSD-Pro,M30: loaded successfully
+12:17:05 DT_select_line EURUSD-Pro,M30: uninit reason 0
+12:17:05 DT_select_line EURUSD-Pro,M30: removed
+13:37:05 ZigZag USDCHF-Pro,M15: loaded successfully
+13:37:05 ZigZag USDCHF-Pro,M15: initialized
+13:37:05 DT_channel_trade USDCHF-Pro,H1: Alert: Error in Channel trade OrderSend Pending: unknown 130 (USDCHF-Pro)
+13:37:05 DT_channel_trade USDCHF-Pro,H1: USDCHF-Pro Order type:4 Lots:0.1 Open price:0.9127 Stop loss:0.9114 Take profit:0.9137 Comment:1333723991 0.91753 Magic:333 Expired:1334239651
+13:37:05 DT_channel_trade USDCHF-Pro,H1: Alert: USDCHF-Pro Order type:4 Lots:0.1 Open price:0.9127 Stop loss:0.9114 Take profit:0.9137 Comment:1333723991 0.91753 Magic:333 Expired:1334239651
+13:46:11 DT_toggle_button_2 USDCHF-Pro,H1: loaded successfully
+13:46:11 DT_toggle_button_2 USDCHF-Pro,H1: uninit reason 0
+13:46:11 DT_toggle_button_2 USDCHF-Pro,H1: removed
+13:46:12 ZigZag USDCHF-Pro,M15: loaded successfully
+13:46:12 ZigZag USDCHF-Pro,M15: initialized
+13:46:19 DT_line_trade USDCHF-Pro,H1: loaded successfully
+13:46:28 DT_line_trade USDCHF-Pro,H1: open #48954673 buy limit 0.10 USDCHF-Pro at 0.91269 sl: 0.91155 tp: 0.91383 ok
+13:46:28 DT_line_trade USDCHF-Pro,H1: uninit reason 0
+13:46:28 DT_line_trade USDCHF-Pro,H1: removed
+13:50:03 xxx USDCHF-Pro,H1: loaded successfully
+13:50:03 xxx USDCHF-Pro,H1: Alert: 1.345
+13:50:03 xxx USDCHF-Pro,H1: uninit reason 0
+13:50:03 xxx USDCHF-Pro,H1: removed
+13:51:09 xxx USDCHF-Pro,H1: loaded successfully
+13:51:09 xxx USDCHF-Pro,H1: Alert: 1.345
+13:51:09 xxx USDCHF-Pro,H1: uninit reason 0
+13:51:09 xxx USDCHF-Pro,H1: removed
+13:59:01 DT_channel_trade USDCHF-Pro,H1: deinitialized
+13:59:01 DT_channel_trade USDCHF-Pro,H1: uninit reason 2
+13:59:01 ZigZag USDCHF-Pro,M15: uninit reason 1
+13:59:01 ZigZag USDCHF-Pro,M15: removed
+13:59:01 DT_channel_trade EURUSD-Pro,M30: deinitialized
+13:59:01 DT_channel_trade EURUSD-Pro,M30: uninit reason 2
+13:59:01 DT_channel_trade EURUSD-Pro,M30: loaded successfully
+13:59:01 DT_channel_trade EURUSD-Pro,M30: initialized
+13:59:01 DT_channel_trade XAUUSD-Pro,H4: deinitialized
+13:59:01 DT_channel_trade XAUUSD-Pro,H4: uninit reason 2
+13:59:01 DT_channel_trade XAUUSD-Pro,H4: loaded successfully
+13:59:01 DT_channel_trade XAUUSD-Pro,H4: initialized
+13:59:01 DT_channel_trade USDJPY-Pro,H1: deinitialized
+13:59:01 DT_channel_trade USDJPY-Pro,H1: uninit reason 2
+13:59:01 DT_channel_trade USDJPY-Pro,H1: loaded successfully
+13:59:01 DT_channel_trade USDJPY-Pro,H1: initialized
+13:59:01 DT_channel_trade USDCHF-Pro,H1: loaded successfully
+13:59:01 DT_channel_trade USDCHF-Pro,H1: initialized
+13:59:25 DT_channel_trade USDCHF-Pro,H1: deinitialized
+13:59:25 DT_channel_trade USDCHF-Pro,H1: uninit reason 3
+13:59:25 Dex_Trader USDCHF-Pro,H1: deinitialized
+13:59:25 Dex_Trader USDCHF-Pro,H1: uninit reason 3
+13:59:25 ZigZag USDCHF-Pro,M15: uninit reason 1
+13:59:25 ZigZag USDCHF-Pro,M15: removed
+13:59:25 Dex_Trader USDCHF-Pro,M15: initialized
+13:59:25 DT_channel_trade USDCHF-Pro,M15: initialized
+14:06:10 DT_channel_trade USDCHF-Pro,M15: deinitialized
+14:06:10 DT_channel_trade USDCHF-Pro,M15: uninit reason 2
+14:06:10 DT_channel_trade EURUSD-Pro,M30: deinitialized
+14:06:10 DT_channel_trade EURUSD-Pro,M30: uninit reason 2
+14:06:10 DT_channel_trade EURUSD-Pro,M30: loaded successfully
+14:06:10 DT_channel_trade EURUSD-Pro,M30: initialized
+14:06:10 DT_channel_trade XAUUSD-Pro,H4: deinitialized
+14:06:10 DT_channel_trade XAUUSD-Pro,H4: uninit reason 2
+14:06:10 DT_channel_trade XAUUSD-Pro,H4: loaded successfully
+14:06:10 DT_channel_trade XAUUSD-Pro,H4: initialized
+14:06:10 DT_channel_trade USDCHF-Pro,M15: loaded successfully
+14:06:10 DT_channel_trade USDCHF-Pro,M15: initialized
+14:06:10 DT_channel_trade USDJPY-Pro,H1: deinitialized
+14:06:10 DT_channel_trade USDJPY-Pro,H1: uninit reason 2
+14:06:10 DT_channel_trade USDJPY-Pro,H1: loaded successfully
+14:06:10 DT_channel_trade USDJPY-Pro,H1: initialized
+14:18:04 DT_channel_trade USDCHF-Pro,M15: deinitialized
+14:18:04 DT_channel_trade USDCHF-Pro,M15: uninit reason 2
+14:18:04 DT_channel_trade EURUSD-Pro,M30: deinitialized
+14:18:04 DT_channel_trade EURUSD-Pro,M30: uninit reason 2
+14:18:04 DT_channel_trade USDJPY-Pro,H1: deinitialized
+14:18:04 DT_channel_trade USDJPY-Pro,H1: uninit reason 2
+14:18:04 DT_channel_trade EURUSD-Pro,M30: loaded successfully
+14:18:04 DT_channel_trade EURUSD-Pro,M30: initialized
+14:18:04 DT_channel_trade USDJPY-Pro,H1: loaded successfully
+14:18:04 DT_channel_trade USDJPY-Pro,H1: initialized
+14:18:04 DT_channel_trade USDCHF-Pro,M15: loaded successfully
+14:18:04 DT_channel_trade USDCHF-Pro,M15: initialized
+14:18:04 DT_channel_trade XAUUSD-Pro,H4: deinitialized
+14:18:04 DT_channel_trade XAUUSD-Pro,H4: uninit reason 2
+14:18:04 DT_channel_trade XAUUSD-Pro,H4: loaded successfully
+14:18:04 DT_channel_trade XAUUSD-Pro,H4: initialized
+15:07:16 DT_channel_trade USDCHF-Pro,M15: deinitialized
+15:07:16 DT_channel_trade USDCHF-Pro,M15: uninit reason 3
+15:07:16 Dex_Trader USDCHF-Pro,M15: deinitialized
+15:07:16 Dex_Trader USDCHF-Pro,M15: uninit reason 3
+15:07:16 ZigZag USDCHF-Pro,H1: loaded successfully
+15:07:16 ZigZag USDCHF-Pro,H1: initialized
+15:07:16 Dex_Trader USDCHF-Pro,H1: initialized
+15:07:18 DT_channel_trade USDCHF-Pro,H1: initialized
+15:41:39 DT_select_line EURUSD-Pro,M30: loaded successfully
+15:41:39 DT_select_line EURUSD-Pro,M30: uninit reason 0
+15:41:39 DT_select_line EURUSD-Pro,M30: removed
+15:41:46 DT_select_line USDJPY-Pro,H1: loaded successfully
+15:41:46 DT_select_line USDJPY-Pro,H1: uninit reason 0
+15:41:46 DT_select_line USDJPY-Pro,H1: removed
+15:44:59 DT_select_line USDCHF-Pro,H1: loaded successfully
+15:44:59 DT_select_line USDCHF-Pro,H1: uninit reason 0
+15:44:59 DT_select_line USDCHF-Pro,H1: removed
+15:45:05 ZigZag USDCHF-Pro,M15: loaded successfully
+15:45:05 ZigZag USDCHF-Pro,M15: initialized
+15:45:11 DT_channel_trade USDCHF-Pro,H1: open #48967461 buy 0.10 USDCHF-Pro at 0.91296 ok
+15:45:13 DT_channel_trade USDCHF-Pro,H1: modify #48967461 buy 0.10 USDCHF-Pro at 0.91296 sl: 0.91139 tp: 0.91368 ok
+15:45:13 DT_channel_trade USDCHF-Pro,H1: USDCHF-Pro Order type:0 Lots:0.1 Open price:0.9129 Stop loss:0.9114 Take profit:0.9137 Comment:1333723991 0.91753 Magic:333 Expired:1334247338 Bid:0.9129 Ask:0.913
+15:45:13 DT_channel_trade USDCHF-Pro,H1: Alert: USDCHF-Pro Order type:0 Lots:0.1 Open price:0.9129 Stop loss:0.9114 Take profit:0.9137 Comment:1333723991 0.91753 Magic:333 Expired:1334247338 Bid:0.9129 Ask:0.913
+15:45:29 DT_toggle_button_2 USDCHF-Pro,H1: loaded successfully
+15:45:29 DT_toggle_button_2 USDCHF-Pro,H1: uninit reason 0
+15:45:29 DT_toggle_button_2 USDCHF-Pro,H1: removed
+15:53:40 ZigZag XAUUSD-Pro,M15: loaded successfully
+15:53:40 ZigZag XAUUSD-Pro,M15: initialized
+15:53:40 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247846 Bid:1668.568 Ask:1668.891
+15:53:40 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247846 Bid:1668.568 Ask:1668.891
+15:53:40 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.56800000 Ask:1668.89100000: Invalid stops. (XAUUSD-Pro)
+15:53:44 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247850 Bid:1668.869 Ask:1669.192
+15:53:44 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247850 Bid:1668.869 Ask:1669.192
+15:53:44 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.86900000 Ask:1669.19200000: Invalid stops. (XAUUSD-Pro)
+15:53:48 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247854 Bid:1668.561 Ask:1668.884
+15:53:48 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247854 Bid:1668.561 Ask:1668.884
+15:53:48 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.56100000 Ask:1668.88400000: Invalid stops. (XAUUSD-Pro)
+15:53:52 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247858 Bid:1668.802 Ask:1669.125
+15:53:52 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247858 Bid:1668.802 Ask:1669.125
+15:53:52 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.80200000 Ask:1669.12500000: Invalid stops. (XAUUSD-Pro)
+15:53:56 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247862 Bid:1668.942 Ask:1669.265
+15:53:56 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247862 Bid:1668.942 Ask:1669.265
+15:53:56 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.94200000 Ask:1669.26500000: Invalid stops. (XAUUSD-Pro)
+15:54:00 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247866 Bid:1668.842 Ask:1669.165
+15:54:00 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247866 Bid:1668.842 Ask:1669.165
+15:54:00 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.84200000 Ask:1669.16500000: Invalid stops. (XAUUSD-Pro)
+15:54:05 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247871 Bid:1668.978 Ask:1669.301
+15:54:05 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247871 Bid:1668.978 Ask:1669.301
+15:54:05 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.97800000 Ask:1669.30100000: Invalid stops. (XAUUSD-Pro)
+15:54:09 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247875 Bid:1669.015 Ask:1669.338
+15:54:09 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247875 Bid:1669.015 Ask:1669.338
+15:54:09 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.01500000 Ask:1669.33800000: Invalid stops. (XAUUSD-Pro)
+15:54:13 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247879 Bid:1669.266 Ask:1669.589
+15:54:13 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247879 Bid:1669.266 Ask:1669.589
+15:54:13 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.26600000 Ask:1669.58900000: Invalid stops. (XAUUSD-Pro)
+15:54:18 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247884 Bid:1669.204 Ask:1669.527
+15:54:18 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247884 Bid:1669.204 Ask:1669.527
+15:54:18 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.20400000 Ask:1669.52700000: Invalid stops. (XAUUSD-Pro)
+15:54:22 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247888 Bid:1669.02 Ask:1669.343
+15:54:22 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247888 Bid:1669.02 Ask:1669.343
+15:54:22 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.02000000 Ask:1669.34300000: Invalid stops. (XAUUSD-Pro)
+15:54:27 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247893 Bid:1668.844 Ask:1669.167
+15:54:27 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247893 Bid:1668.844 Ask:1669.167
+15:54:27 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.84400000 Ask:1669.16700000: Invalid stops. (XAUUSD-Pro)
+15:54:31 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247897 Bid:1668.915 Ask:1669.238
+15:54:31 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247897 Bid:1668.915 Ask:1669.238
+15:54:31 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.91500000 Ask:1669.23800000: Invalid stops. (XAUUSD-Pro)
+15:54:36 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247902 Bid:1668.985 Ask:1669.308
+15:54:36 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247902 Bid:1668.985 Ask:1669.308
+15:54:36 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1668.98500000 Ask:1669.30800000: Invalid stops. (XAUUSD-Pro)
+15:54:40 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247906 Bid:1669.438 Ask:1669.761
+15:54:40 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247906 Bid:1669.438 Ask:1669.761
+15:54:40 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.43800000 Ask:1669.76100000: Invalid stops. (XAUUSD-Pro)
+15:54:44 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247910 Bid:1669.532 Ask:1669.855
+15:54:44 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247910 Bid:1669.532 Ask:1669.855
+15:54:44 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.53200000 Ask:1669.85500000: Invalid stops. (XAUUSD-Pro)
+15:54:48 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247914 Bid:1669.521 Ask:1669.844
+15:54:48 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247914 Bid:1669.521 Ask:1669.844
+15:54:48 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.52100000 Ask:1669.84400000: Invalid stops. (XAUUSD-Pro)
+15:54:52 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247918 Bid:1669.582 Ask:1669.905
+15:54:52 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:5 Lots:0.1 Open price:1669.694 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247918 Bid:1669.582 Ask:1669.905
+15:54:52 DT_channel_trade XAUUSD-Pro,H4: Alert: Error in Channel trade OrderSend Pending Bid:1669.58200000 Ask:1669.90500000: Invalid stops. (XAUUSD-Pro)
+15:55:02 DT_channel_trade XAUUSD-Pro,H4: open #48969069 sell 0.10 XAUUSD-Pro at 1669.977 ok
+15:55:04 DT_channel_trade XAUUSD-Pro,H4: modify #48969069 sell 0.10 XAUUSD-Pro at 1669.977 sl: 1674.169 tp: 1665.218 ok
+15:55:04 DT_channel_trade XAUUSD-Pro,H4: XAUUSD-Pro Order type:1 Lots:0.1 Open price:1669.66 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247930 Bid:1669.982 Ask:1670.305
+15:55:04 DT_channel_trade XAUUSD-Pro,H4: Alert: XAUUSD-Pro Order type:1 Lots:0.1 Open price:1669.66 Stop loss:1674.169 Take profit:1665.218 Comment:1333141199 1650.236 Magic:333 Expired:1334247930 Bid:1669.982 Ask:1670.305
+17:13:03 DT_channel_trade XAUUSD-Pro,H4: deinitialized
+17:13:03 DT_channel_trade XAUUSD-Pro,H4: uninit reason 3
+17:13:03 ZigZag XAUUSD-Pro,M15: uninit reason 1
+17:13:03 ZigZag XAUUSD-Pro,M15: removed
+17:13:03 Dex_Trader XAUUSD-Pro,H4: deinitialized
+17:13:03 Dex_Trader XAUUSD-Pro,H4: uninit reason 3
+17:13:03 Dex_Trader XAUUSD-Pro,H1: initialized
+17:13:04 DT_channel_trade XAUUSD-Pro,H1: initialized
+17:13:15 Dex_Trader EURUSD-Pro,M30: deinitialized
+17:13:15 Dex_Trader EURUSD-Pro,M30: uninit reason 1
+17:13:15 ZigZag EURUSD-Pro,M30: uninit reason 1
+17:13:15 DT_channel_trade EURUSD-Pro,M30: deinitialized
+17:13:15 DT_channel_trade EURUSD-Pro,M30: uninit reason 4
+17:13:15 DT_channel_trade EURUSD-Pro,M30: removed
+17:13:15 Dex_Trader EURUSD-Pro,M30: removed
+17:13:15 ZigZag EURUSD-Pro,M30: removed
+17:13:15 Dex_Trader USDJPY-Pro,H1: deinitialized
+17:13:15 Dex_Trader USDJPY-Pro,H1: uninit reason 1
+17:13:15 DT_channel_trade USDJPY-Pro,H1: deinitialized
+17:13:15 DT_channel_trade USDJPY-Pro,H1: uninit reason 4
+17:13:15 DT_channel_trade USDJPY-Pro,H1: removed
+17:13:15 Dex_Trader USDJPY-Pro,H1: removed
+17:13:15 Dex_Trader USDCHF-Pro,H1: deinitialized
+17:13:15 Dex_Trader USDCHF-Pro,H1: uninit reason 1
+17:13:15 ZigZag USDCHF-Pro,H1: uninit reason 1
+17:13:15 ZigZag USDCHF-Pro,H1: removed
+17:13:15 DT_channel_trade USDCHF-Pro,H1: deinitialized
+17:13:15 DT_channel_trade USDCHF-Pro,H1: uninit reason 4
+17:13:15 ZigZag USDCHF-Pro,M15: uninit reason 1
+17:13:15 ZigZag USDCHF-Pro,M15: removed
+17:13:15 DT_channel_trade USDCHF-Pro,H1: removed
+17:13:15 Dex_Trader USDCHF-Pro,H1: removed
+17:13:15 Dex_Trader EURJPY-Pro,H1: deinitialized
+17:13:15 Dex_Trader EURJPY-Pro,H1: uninit reason 1
+17:13:15 ZigZag EURJPY-Pro,H1: uninit reason 1
+17:13:15 Dex_Trader EURJPY-Pro,H1: removed
+17:13:15 ZigZag EURJPY-Pro,H1: removed
+17:13:15 Dex_Trader GBPUSD-Pro,H1: deinitialized
+17:13:15 Dex_Trader GBPUSD-Pro,H1: uninit reason 1
+17:13:15 Dex_Trader GBPUSD-Pro,H1: removed
+17:13:15 Dex_Trader AUDUSD-Pro,H1: deinitialized
+17:13:15 Dex_Trader AUDUSD-Pro,H1: uninit reason 1
+17:13:15 Dex_Trader AUDUSD-Pro,H1: removed
+17:13:15 Dex_Trader XAUUSD-Pro,H1: deinitialized
+17:13:15 Dex_Trader XAUUSD-Pro,H1: uninit reason 1
+17:13:15 DT_channel_trade XAUUSD-Pro,H1: deinitialized
+17:13:15 DT_channel_trade XAUUSD-Pro,H1: uninit reason 4
+17:13:15 DT_channel_trade XAUUSD-Pro,H1: removed
+17:13:15 Dex_Trader XAUUSD-Pro,H1: removed
+17:13:15 ZigZag EURUSD-Pro,M15: uninit reason 1
+17:13:15 ZigZag EURUSD-Pro,M15: removed

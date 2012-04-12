@@ -10,15 +10,18 @@
 #include <DT_icons.mqh>
 #include <DT_functions.mqh>
 #include <DT_comments.mqh>
+#include <WinUser32.mqh>
 
 double CHANNEL_LOT = 0.1;
 int CT_TIMER1 = 0;
 int CT_TIMER2 = 0;
+int CT_START_TIME;
 double CT_OFFSET = 0.0;
 string CT_LINES[];
 
 int init(){
-  CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_OFFSET = 75/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_START_TIME = GetTickCount() + 120000; // 2 min  
   return(0);
 }
 
@@ -68,14 +71,17 @@ int start(){
           }
 
           OrderModify(ticket, new_op, new_sl, new_tp, TimeCurrent()+5400);
-
-/* !! */  Print(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400));
-/* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400));
+                    
+/* !! */  Print(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
+/* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 
 /* !! */  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, new_op);
 /* !! */  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_TIME1, new_sl);
 /* !! */  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_TIME1, new_tp);
 
+          if( !errorCheck("Channel trade OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
+            return(0);
+          }
         }
       }
 
@@ -122,26 +128,45 @@ int start(){
           sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );
           tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
         }
-        
+        if( GetTickCount() < CT_START_TIME ){
+          if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want open position in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
+            return(0);
+          }
+        }
+       
+        string error_text;
         if( o_type < 2 ){
           ticket = OrderSend(Symbol(), o_type, CHANNEL_LOT, op, 3, 0, 0, comment, 333);
-          OrderSelect( ticket, SELECT_BY_TICKET );
+          errorCheck("Channel trade OrderSend");
+          
+          OrderSelect( ticket, SELECT_BY_TICKET );          
           OrderModify( OrderTicket(), OrderOpenPrice(), sl, tp, 0 );
+                    
+          error_text = "Channel trade OrderModify";
+          
           
         }else{
           OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 2, sl, tp, comment, 333, TimeCurrent()+5400 );
           
+          error_text = "Channel trade OrderSend Pending";          
+          
+        }
+        
+        RefreshRates();
+        
+/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
+/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
+ 
+/* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
+/* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "sl_"+ts);
+/* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "tp_"+ts);
+                
+        if(!errorCheck(error_text+" Bid:"+ Bid+ " Ask:"+ Ask)){
+          return(0);
         }
         
         renameChannelLine( trade_line );
         setChannelLinesArr();
-        
-/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400));
-/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400));
-
-/* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
-/* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "op_"+ts);
-/* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "op_"+ts);
         
       }
     }
@@ -178,8 +203,10 @@ int createHistoryLine(double price, color c, string text, string ts){
   double time1 = Time[0]-offset;
   double time2 = Time[0]+offset;
   string name = "DT_GO_channel_hist_"+ts;
-
-  ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
+  
+  if(ObjectFind(name) == -1){
+    ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);  
+  }
 	ObjectSet(name, OBJPROP_COLOR, c);
 	ObjectSet(name, OBJPROP_RAY, false);
 	ObjectSet(name, OBJPROP_STYLE, 4);

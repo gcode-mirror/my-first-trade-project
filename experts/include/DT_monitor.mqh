@@ -23,9 +23,9 @@ bool startMonitor(string isOn){
   if(isOn == "0"){return (false);}
 	if(delayTimer(APP_ID_MONITOR, 5000)){return (false);}
 
-  int i, profit = 0;
+  int i, has_profit = 0;
   string name, out = "";
-  double val, yc, dif, b, has_profit = 0.0;
+  double val, yc, dif, b, profit = 0.0;
   
   for(i=0; i<USED_SYM; i++){
     val = 0.0;

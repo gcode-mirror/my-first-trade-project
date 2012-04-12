@@ -21,6 +21,7 @@ bool errorCheck(string text = "unknown function"){
       case 4009: err = "Not initialized string in array."; break;
       case 4002: err = "Array index is out of range."; break;
       case 4058: err = "Global variable not found."; return (0); break;
+      case 130: err = "Invalid stops."; break;
       default: err = err+e; break;      
     }
     
