@@ -42,7 +42,8 @@ bool startChannel(string isOn){
     name = ObjectName(j);
     type = StringSubstr(name,6,6);
     if ( type == "t_line"){
-      if( MathMax(ObjectGet(name,OBJPROP_TIME1),ObjectGet(name,OBJPROP_TIME2)) < Time[0] ){
+      if( ObjectGetValueByShift( name, -1) == 0.0 ){
+        GetLastError();
         continue;
       }
       price = ObjectGetValueByShift( name, 0);

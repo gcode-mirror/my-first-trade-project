@@ -396,6 +396,7 @@ int WindowLastVisibleBar(){
 
 int renameChannelLine(string sel_name){
   string name;
+  bool ray = ObjectGet(sel_name,OBJPROP_RAY);
   if ( StringSubstr(sel_name,6,6) == "t_line"){
     if( StringSubstr(sel_name,13,1) == "s" ){
       name = "DT_GO_t_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
@@ -406,10 +407,7 @@ int renameChannelLine(string sel_name){
       ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
       ObjectSet(name, OBJPROP_COLOR, DeepPink);
     }
-    ObjectSet(name, OBJPROP_RAY, false);
-    ObjectSet(name, OBJPROP_BACK, true);
-    ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
-    ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+    
   }else{
     if( StringSubstr(sel_name,13,1) == "s" ){
       name = "DT_GO_h_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
@@ -421,11 +419,13 @@ int renameChannelLine(string sel_name){
       ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
       ObjectSet(name, OBJPROP_COLOR, DeepPink);
     }
-    ObjectSet(name, OBJPROP_RAY, false);
-    ObjectSet(name, OBJPROP_BACK, true);
-    ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
-    ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
   }
+  
+  ObjectSet(name, OBJPROP_RAY, ray);
+  ObjectSet(name, OBJPROP_BACK, true);
+  ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
+  ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+  
   ObjectDelete(sel_name);
 }
 
