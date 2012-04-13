@@ -49,23 +49,26 @@ int start(){
         ts = StringSubstr(comment, 0, 10);
         trade_line_price = ObjectGetValueByShift( "DT_GO_t_line_"+ts, 0);
         spread = getMySpread();
-        op = OrderOpenPrice();
+        op = NormalizeDouble( OrderOpenPrice(), Digits );
+        double new_op;
 
-        if( o_type == OP_BUYLIMIT && trade_line_price+spread == op ){
-          return (0);
-        }else if( o_type == OP_SELLLIMIT && trade_line_price == op ){
+        if( o_type == OP_BUYLIMIT ){
+          new_op = NormalizeDouble( trade_line_price + spread, Digits );
+        }else{
+          new_op = NormalizeDouble( trade_line_price, Digits );
+        }
+        
+        if( new_op == op ){
           return (0);
         }else{
-          double new_op, new_sl, new_tp;
+          double new_sl, new_tp;
           fibo_100 = StrToDouble(StringSubstr(comment, 11, StringLen(comment)-11));
           fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
 
-          if( o_type == OP_BUYLIMIT ){
-            new_op = NormalizeDouble( trade_line_price + spread, Digits );
+          if( o_type == OP_BUYLIMIT ){            
             new_sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
             new_tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-          }else{
-            new_op = NormalizeDouble( trade_line_price, Digits );
+          }else{            
             new_sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );
             new_tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
           }
@@ -90,14 +93,14 @@ int start(){
       string trade_line;
 
       RefreshRates();
-      l = iLow( NULL, PERIOD_H4, 0);
-      h = iHigh( NULL, PERIOD_H4, 0);
+      l = iLow( NULL, PERIOD_H1, 0);
+      h = iHigh( NULL, PERIOD_H1, 0);
 
       trade_line= getLineInTradeZone(h, l);
       if( trade_line != "" ){
         double o, sl, tp;
 
-        o = iOpen( NULL, PERIOD_H4, 0);
+        o = iOpen( NULL, PERIOD_H1, 0);
         trade_line_price = ObjectGetValueByShift( trade_line, 0);
         fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
         spread = getMySpread();
@@ -199,13 +202,18 @@ int setChannelLinesArr(){
 }
 
 int createHistoryLine(double price, color c, string text, string ts){
-  double offset = PERIOD_H4*60;
+  double offset = PERIOD_H1*60;
   double time1 = Time[0]-offset;
   double time2 = Time[0]+offset;
   string name = "DT_GO_channel_hist_"+ts;
 
   if(ObjectFind(name) == -1){
     ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
+  }else{
+    ObjectSet(name, OBJPROP_TIME1, time1);
+    ObjectSet(name, OBJPROP_TIME2, time2);
+    ObjectSet(name, OBJPROP_PRICE1, price);
+    ObjectSet(name, OBJPROP_PRICE2, price);
   }
 	ObjectSet(name, OBJPROP_COLOR, c);
 	ObjectSet(name, OBJPROP_RAY, false);
