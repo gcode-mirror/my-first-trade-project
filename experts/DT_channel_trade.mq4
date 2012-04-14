@@ -39,7 +39,7 @@ int start(){
     double fibo_100 = 0.0, fibo_23_dif, trade_line_price, spread, op;
 
     ticket = getOpenPositionByMagic(Symbol(), 333);
-    if( ticket ){
+    if( ticket != 0 ){
       o_type = OrderType();
 
       if( o_type < 2 ){
@@ -96,13 +96,16 @@ int start(){
       l = iLow( NULL, PERIOD_H1, 0);
       h = iHigh( NULL, PERIOD_H1, 0);
 
-      trade_line= getLineInTradeZone(h, l);
+      trade_line = getLineInTradeZone(h, l, trade_line_price);
       if( trade_line != "" ){
         double o, sl, tp;
 
+        fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901 );
+        if( fibo_23_dif == 0.0 ){
+          return(0);
+        }
+        
         o = iOpen( NULL, PERIOD_H1, 0);
-        trade_line_price = ObjectGetValueByShift( trade_line, 0);
-        fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
         spread = getMySpread();
         ts = StringSubstr( trade_line, StringLen( trade_line ) - 10, 10 );
         comment = ts +" "+ DoubleToStr( fibo_100, Digits );
@@ -222,9 +225,8 @@ int createHistoryLine(double price, color c, string text, string ts){
 	ObjectSetText(name, text, 8);
 }
 
-string getLineInTradeZone(double h, double l){
+string getLineInTradeZone(double h, double l, double& trade_line_price){
   int i, len = ArraySize(CT_LINES);
-  double trade_line_price;
   for( i = 0; i < len; i++ ) {
     trade_line_price = ObjectGetValueByShift( CT_LINES[i], 0);
     if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
