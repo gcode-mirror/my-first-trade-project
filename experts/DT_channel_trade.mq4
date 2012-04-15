@@ -17,10 +17,12 @@ int CT_TIMER1 = 0;
 int CT_TIMER2 = 0;
 int CT_START_TIME;
 double CT_OFFSET = 0.0;
+double CT_MIN_DIST = 0.0;
 string CT_LINES[];
 
 int init(){
   CT_OFFSET = 75/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_MIN_DIST = 333/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 120000; // 2 min
   return(0);
 }
@@ -90,21 +92,31 @@ int start(){
 
     }else{
       double h, l;
-      string trade_line;
+      string trade_line = "";
 
       RefreshRates();
       l = iLow( NULL, PERIOD_H1, 0);
       h = iHigh( NULL, PERIOD_H1, 0);
-
-      trade_line = getLineInTradeZone(h, l, trade_line_price);
+      
+      int i, len = ArraySize(CT_LINES);
+      for( i = 0; i < len; i++ ) {
+        trade_line_price = ObjectGetValueByShift( CT_LINES[i], 0 );
+        if( trade_line_price != 0.0){
+          if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
+            fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901, CT_MIN_DIST );
+            if( fibo_23_dif != 0.0 ){
+              trade_line = CT_LINES[i];
+              break;
+            }
+          }
+        }else{
+          GetLastError();
+        }  
+      }
+          
       if( trade_line != "" ){
         double o, sl, tp;
 
-        fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901 );
-        if( fibo_23_dif == 0.0 ){
-          return(0);
-        }
-        
         o = iOpen( NULL, PERIOD_H1, 0);
         spread = getMySpread();
         ts = StringSubstr( trade_line, StringLen( trade_line ) - 10, 10 );
@@ -225,13 +237,3 @@ int createHistoryLine(double price, color c, string text, string ts){
 	ObjectSetText(name, text, 8);
 }
 
-string getLineInTradeZone(double h, double l, double& trade_line_price){
-  int i, len = ArraySize(CT_LINES);
-  for( i = 0; i < len; i++ ) {
-    trade_line_price = ObjectGetValueByShift( CT_LINES[i], 0);
-    if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
-      return ( CT_LINES[i] );
-    }
-  }
-  return ( "" );
-}
