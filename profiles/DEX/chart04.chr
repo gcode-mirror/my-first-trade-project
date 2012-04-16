@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=4400
+leftpos=785
 digits=3
 scale=4
 graph=1
@@ -265,21 +265,6 @@ value_0=0.000000
 time_1=1333404180
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=2
-object_name=Trendline 3219
-period_flags=0
-create_time=1334578323
-color=255
-style=0
-weight=1
-background=0
-time_0=1332892800
-value_0=110.880000
-time_1=1333587600
-value_1=108.395000
-ray=1
 </object>
 </indicator>
 <indicator>

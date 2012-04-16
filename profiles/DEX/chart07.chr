@@ -1,7 +1,7 @@
 <chart>
 symbol=XAUUSD-Pro
-period=240
-leftpos=1755
+period=60
+leftpos=1910
 digits=3
 scale=4
 graph=1
@@ -169,10 +169,10 @@ color=15570276
 style=0
 weight=2
 background=1
-time_0=1221955200
-value_0=692.743180
-time_1=1334692800
-value_1=1661.099220
+time_0=1226966400
+value_0=730.800000
+time_1=1333036800
+value_1=1645.236000
 ray=1
 </object>
 <object>

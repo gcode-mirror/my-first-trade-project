@@ -89,3 +89,16 @@ int getIconIndex(){
   }
   return (-1);
 }
+
+int getObjectNr(string filter, string type = "BO"){
+	filter = type+"_"+filter;
+	string name;
+	int len = StringLen(filter), nr = 0, j;
+	for (j= ObjectsTotal()-1; j>=0; j--) {
+    name= ObjectName(j);
+		if (StringSubstr(name,3,len)==filter){
+			nr++;
+		}
+	}
+	return (nr);
+}

@@ -19,7 +19,7 @@ int start(){
     double sl = NormalizeDouble(ObjectGet("DT_GO_TradeLines_SL", OBJPROP_PRICE1), Digits);
     bool has_pos = selectFirstOpenPosition(Symbol());
     
-    if(has_pos && OrderMagicNumber() == 555){
+    if(has_pos /*&& OrderMagicNumber() == 555*/){
       if(IDYES == MessageBox(StringConcatenate("Do you want modify an open position (",OrderTicket(),")?"), "Line trading", MB_YESNO|MB_ICONQUESTION )){
         if(OrderType() > OP_SELL){
           OrderModify(OrderTicket(), op, sl, tp, 0); 

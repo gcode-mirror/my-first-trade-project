@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=15
-leftpos=2088
+period=240
+leftpos=3712
 digits=5
 scale=4
 graph=1
@@ -155,7 +155,7 @@ type=2
 object_name=DT_GO_NEWS_UPLOAD_TIME
 period_flags=0
 create_time=1333402549
-description=1334597295
+description=1334618855
 color=255
 style=0
 weight=1
@@ -281,10 +281,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1333598400
-value_0=1.301533
-time_1=1334390400
-value_1=1.307829
+time_0=1333675800
+value_0=1.302385
+time_1=1334318400
+value_1=1.307215
 ray=1
 </object>
 <object>
@@ -319,10 +319,10 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_t_line_s_1334522628
+object_name=DT_GO_t_line_1334522628
 period_flags=63
-create_time=1334517954
-color=9639167
+create_time=1334598311
+color=15570276
 style=0
 weight=1
 background=1
@@ -371,7 +371,7 @@ name=ZigZag
 flags=339
 window_num=0
 <inputs>
-ExtDepth=12
+ExtDepth=10
 ExtDeviation=5
 ExtBackstep=3
 </inputs>

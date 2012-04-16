@@ -1,7 +1,7 @@
 <chart>
 symbol=USDCHF-Pro
 period=60
-leftpos=2370
+leftpos=2438
 digits=5
 scale=4
 graph=1
@@ -293,9 +293,9 @@ style=0
 weight=1
 background=1
 time_0=1333632600
-value_0=0.922210
-time_1=1334055600
-value_1=0.921030
+value_0=0.922181
+time_1=1334057400
+value_1=0.921001
 ray=1
 </object>
 <object>
@@ -307,10 +307,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1333623600
-value_0=0.920651
-time_1=1334046600
-value_1=0.919471
+time_0=1333625400
+value_0=0.920949
+time_1=1334048400
+value_1=0.919769
 ray=1
 </object>
 <object>

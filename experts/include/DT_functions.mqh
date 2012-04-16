@@ -101,31 +101,6 @@ bool removeObjects(string filter = "", string type = "BO"){
   return (errorCheck("removeObjects (filter:"+filter+")"));
 }
 
-bool destroyDexTrade(){
-  int j;
-  string name;       
-  for (j= ObjectsTotal()-1; j>=0; j--) {
-    name= ObjectName(j);
-    if (StringSubstr(name,0,3)=="DT_"){
-     ObjectDelete(name);
-    }
-  }  
-  return (0);
-}
-
-int getObjectNr(string filter, string type = "BO"){
-	filter = type+"_"+filter;
-	string name;
-	int len = StringLen(filter), nr = 0, j;
-	for (j= ObjectsTotal()-1; j>=0; j--) {
-    name= ObjectName(j);
-		if (StringSubstr(name,3,len)==filter){
-			nr++;
-		}
-	}
-	return (nr);
-}
-
 bool selectFirstOpenPosition(string symb){
   for (int i = 0; i < OrdersTotal(); i++) {      
     if (OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) {        
@@ -161,33 +136,6 @@ double selectLastPositionTime(string symb){
     }
   }
   return (time);
-}
-
-int getMoveAngle(string sym, int graph_period, int ma_period, double examined_period){
-  double p1 = iMA( sym, graph_period, ma_period, 0, 0, 6, 0);
-  double p2 = iMA( sym, graph_period, ma_period, 0, 0, 6, examined_period-1);
-  double min = WindowPriceMin();
-  double max = WindowPriceMax();
-  
-  
-  
-  if( p1 - p2 > 0){ //UP
-  
-    Alert(p1+"-"+p2+"="+(p1-p2));
-  Alert(max+"-"+min+"="+(max-min));
-  Alert("(p2-p1)/(max-min)="+((p1-p2)/(max-min)));
-  Alert("examined_period/WindowBarsPerChart() "+WindowBarsPerChart()+" = "+(examined_period/WindowBarsPerChart()));
-  Alert("(examined_period/WindowBarsPerChart())/((p2-p1)/(max-min)) "+" = "+(examined_period/WindowBarsPerChart())/((p1-p2)/(max-min)));
-  
-  return (90-MathArctan(MathTan(((p1-p2)/(WindowPriceMax()- WindowPriceMin()))/(examined_period/WindowBarsPerChart())))*180/3.14); 
-  
-   // return (90-(MathRound(MathArctan(((p1-p2)/(max-min))/(examined_period/WindowBarsPerChart()))*180/3.14)));
-  }else{ //DOWN
-  
-  
-  
-    return ((MathRound(MathArctan((examined_period/WindowBarsPerChart())/((p2-p1)/(WindowPriceMax()-WindowPriceMin())))*180/3.14))-90);
-  }
 }
 
 int getUnitInSec(){
@@ -273,16 +221,6 @@ string myFloor(double num, int prec){
 		prec = 0;
 	}
 	return (DoubleToStr(MathFloor(num*tmp)/tmp, prec));
-}
-
-string getTPLevel(double& price){
-  for(int i=FIBO_LV_NR-1;i>0;i--){
-    if(ObjectGet("DT_GO_FiboLines_RECT_lv"+i,OBJPROP_TIMEFRAMES) != -1){
-      price = NormalizeDouble(ObjectGet("DT_GO_FiboLines_RECT_lv"+i, OBJPROP_PRICE2), Digits);
-      return (ObjectDescription("DT_GO_FiboLines_RECT_lv"+i));
-    }
-  }
-  return (0);
 }
 
 bool menuControl(int index){
@@ -465,27 +403,11 @@ string getSelectedLine(double time_cord, double price_cord){
   return (sel_name);
 }
 
-int getShiftToFuture(double time, int shift){
-  int i, curr_time = time, tow, h, m;
-  for(i = 1; i <= shift; i++){
-    curr_time = curr_time + (Period()*60);
-    tow = TimeDayOfWeek(curr_time);
-    h = TimeHour(curr_time);
-    m = TimeMinute(curr_time);
-    if( tow == 6 ){
-      shift++;
-    }else if( tow == 0 && h < 22 && m < 15 ){
-      shift++;
-    }
-  }
-  return (curr_time);
-}
-
 double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0){
   if( fibo_100 == 0.0 ){
     double time1, time2;
-    double zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
-    double zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
+    double zz0 = getZigZag( PERIOD_M15, 10, 5, 3, 0, time1 );
+    double zz1 = getZigZag( PERIOD_M15, 10, 5, 3, 1, time2 );
     
     if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
       fibo_100 = zz0;
@@ -510,4 +432,26 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
   }
 
   return ( (MathMax(fibo_0, fibo_100) - MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
+}
+
+int getPositionByDaD(double price_cord, string symb = ""){
+  int i = 0, len = OrdersTotal(), ticket = 0;
+  double o, dif = 999999;
+
+  if( symb == ""){
+    symb = Symbol();
+  }
+  
+  for (; i < len; i++) {      
+    if (OrderSelect(i, SELECT_BY_POS)) {        
+      if (OrderSymbol() == symb) {
+        o = OrderOpenPrice();
+        if( MathAbs( o - price_cord ) < dif ){
+          dif = MathAbs( o - price_cord );
+          ticket = OrderTicket();
+        }
+      }
+    }
+  }
+  return (ticket);
 }

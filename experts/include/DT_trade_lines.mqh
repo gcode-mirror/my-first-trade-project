@@ -20,11 +20,11 @@ bool initTradeLines(string isOn){
   
   double tp_price, sl_price, open_price;
   if( selectFirstOpenPosition(Symbol())){
-    if( OrderMagicNumber() == 555 ){
+    //if( OrderMagicNumber() == 555 ){
       tp_price = OrderTakeProfit();
       sl_price = OrderStopLoss();
       open_price = OrderOpenPrice();
-    }  
+    //}  
   }else{
     string near_line_name = getSelectedLine(Time[0], Bid);
     open_price = NormalizeDouble( ObjectGetValueByShift( near_line_name, 0), Digits );
@@ -48,8 +48,8 @@ bool initTradeLines(string isOn){
       
     if( near_line_name == "" || open_price == 0.0){
       double time1, time2;
-      tp_price = getZigZag(0, 12, 5, 3, 1, time1);
-      sl_price = getZigZag(0, 12, 5, 3, 0, time2);  
+      tp_price = getZigZag(0, 10, 5, 3, 1, time1);
+      sl_price = getZigZag(0, 10, 5, 3, 0, time2);  
       open_price = tp_price+(sl_price-tp_price)/2;
     }
   }
