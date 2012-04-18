@@ -332,39 +332,48 @@ int WindowLastVisibleBar(){
   }
 }
 
-int renameChannelLine(string sel_name){
+int renameChannelLine(string sel_name, string status = "", bool sup_res = false){
   string name;
-  bool ray = ObjectGet(sel_name,OBJPROP_RAY);
-  if ( StringSubstr(sel_name,6,6) == "t_line"){
-    if( StringSubstr(sel_name,13,1) == "s" ){
-      name = "DT_GO_t_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
-      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
-      ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
-    }else{
-      name = "DT_GO_t_line_s_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
-      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
-      ObjectSet(name, OBJPROP_COLOR, DeepPink);
-    }
-    
+  bool need_rename = false;
+  if( status == "" ){
+    name = StringConcatenate( StringSubstr(sel_name,0,12), StringSubstr(sel_name, StringLen(sel_name)-11, 11) );
   }else{
-    if( StringSubstr(sel_name,13,1) == "s" ){
-      name = "DT_GO_h_line_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
-      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
-      ObjectSet(name, OBJPROP_COLOR, Peru);
-      
-    }else{
-      name = "DT_GO_h_line_s_"+StringSubstr(sel_name, StringLen(sel_name)-10, 10);
-      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
-      ObjectSet(name, OBJPROP_COLOR, DeepPink);
-    }
+    name = StringConcatenate( StringSubstr(sel_name,0,13), "s_", status, StringSubstr(sel_name, StringLen(sel_name)-11, 11) );
   }
   
-  ObjectSet(name, OBJPROP_RAY, ray);
+  if( ObjectFind(name) == -1 ){
+    if( StringSubstr(sel_name,6,2) == "t_"){
+      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
+    }else{
+      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
+    }
+    need_rename = true;
+  }
+  
+  if( status == "" ){
+    ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
+    
+  }else if( status == "res" ){
+    ObjectSet(name, OBJPROP_COLOR, DeepPink);
+    ObjectSetText(name, "\/ \/ \/ \/ \/ \/ \/ \/ \/ ");
+    
+  }else if( status == "sup" ){
+    ObjectSet(name, OBJPROP_COLOR, LimeGreen);
+    ObjectSetText(name, "/\ /\ /\ /\ /\ /\ /\ /\ /\ ");
+  
+  }else if( status == "all" ){
+    ObjectSet(name, OBJPROP_COLOR, Magenta);
+    ObjectSetText(name, "/\ \/ /\ \/ /\ \/ /\ \/ /\ \/");
+  }
+  
+  ObjectSet(name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY));
   ObjectSet(name, OBJPROP_BACK, true);
   ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
   ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
   
-  ObjectDelete(sel_name);
+  if( need_rename ){
+    ObjectDelete(sel_name);
+  }
 }
 
 string getSelectedLine(double time_cord, double price_cord){
@@ -403,7 +412,7 @@ string getSelectedLine(double time_cord, double price_cord){
   return (sel_name);
 }
 
-double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0){
+double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0, double max_dist = 0.0){
   if( fibo_100 == 0.0 ){
     double time1, time2;
     double zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
@@ -418,14 +427,21 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     
     if( min_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) < min_dist ){
-        Alert("Fibo distance is too small! "+(fibo_100 - fibo_0));
+        Alert(Symbol()+" Fibo distance is too small! "+(fibo_100 - fibo_0));
+        return (0.0);
+      }
+    }
+    
+    if( max_dist != 0.0 ){
+      if( MathAbs( fibo_100 - fibo_0 ) > max_dist ){
+        Alert(Symbol()+" Fibo distance is too small! "+(fibo_100 - fibo_0));
         return (0.0);
       }
     }
     
     if( min_time != 0.0 ){
       if( Time[0] - time1 < min_time ){
-        Alert("Fibo time is too small! "+(Time[0] - time1));
+        Alert(Symbol()+" Fibo time is too small! "+(Time[0] - time1));
         return (0.0);
       }
     }

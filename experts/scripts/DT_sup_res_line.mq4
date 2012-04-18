@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                               DT_select_line.mq4 |
+//|                                              DT_sup_res_line.mq4 |
 //|                                                              Dex |
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -14,14 +14,21 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine(WindowTimeOnDropped(), WindowPriceOnDropped());
-  
+  double pod = WindowPriceOnDropped();
+  double tod = WindowTimeOnDropped();
+  string sel_name = getSelectedLine(tod, pod);
   if( sel_name != "" ){
-    string status = "";
-    if( StringSubstr(sel_name,13,2) != "s_" ){
-      status = "all";
+    double price;
+    if( StringSubstr(sel_name,6,2) == "t_"){
+      price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
+    }else{
+      price = ObjectGet(sel_name,OBJPROP_PRICE1);
     }
-    renameChannelLine(sel_name, status);
+    if( pod > price ){
+      renameChannelLine(sel_name, "sup");
+    }else{
+      renameChannelLine(sel_name, "res");
+    }
   }
   
   return(0);

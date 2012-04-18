@@ -14,7 +14,7 @@ int start(){
   string name = "DT_GO_h_line_"+DoubleToStr(TimeLocal(),0);
   
   ObjectCreate(name, OBJ_HLINE, 0, 0, price);
-  ObjectSet(name, OBJPROP_COLOR, Peru);
+  ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
   ObjectSet(name, OBJPROP_RAY, false);
   ObjectSet(name, OBJPROP_BACK, true);
   

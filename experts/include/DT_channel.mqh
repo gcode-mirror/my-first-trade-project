@@ -14,7 +14,7 @@ bool initChannel(string isOn){
   if(isOn == "0"){    
     return (false);
   }
-  CH_OFFSET = 70/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CH_OFFSET = 60/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CH_NAME = StringConcatenate(StringSubstr(Symbol(), 0, 6),"_Channel");
   GlobalVariableSet(CH_NAME, 0.0);
   

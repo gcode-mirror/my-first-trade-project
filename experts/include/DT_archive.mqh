@@ -93,7 +93,7 @@ bool addHistoryPosition(int ticket, datetime open_time, datetime close_time, dou
     result_c = Red;
   }
   
-  createArrow("DT_BO_archive_result_"+ticket, open_time-(Period()*120), MathMax(sl,tp), result_c, result, 5, text );
+  createArrow("DT_BO_archive_result_"+ticket, open_time-(Period()*120), MathMax(sl,tp), result_c, result, 2, text );
   
   createRectangle("DT_BO_archive_move_"+ticket, open_time, open_price, close_time, close_price, type, text);
   return (errorCheck("addHistoryPosition"));

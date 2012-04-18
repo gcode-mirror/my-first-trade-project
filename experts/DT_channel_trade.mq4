@@ -18,12 +18,14 @@ int CT_TIMER2 = 0;
 int CT_START_TIME;
 double CT_OFFSET = 0.0;
 double CT_MIN_DIST = 0.0;
+double CT_MAX_DIST = 0.0;
 string CT_LINES[];
 
 int init(){
-  CT_OFFSET = 75/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_OFFSET = 60/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 333/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
-  CT_START_TIME = GetTickCount() + 120000; // 2 min
+  CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_START_TIME = GetTickCount() + 180000; // 3 min
   return(0);
 }
 
@@ -103,7 +105,7 @@ int start(){
         trade_line_price = ObjectGetValueByShift( CT_LINES[i], 0 );
         if( trade_line_price != 0.0){
           if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
-            fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901, CT_MIN_DIST );
+            fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901, CT_MIN_DIST, CT_MAX_DIST );
             if( fibo_23_dif != 0.0 ){
               trade_line = CT_LINES[i];
               break;
@@ -127,9 +129,11 @@ int start(){
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + spread, Digits );
 
-          }else{                       // ------- BUY --------
+          }else if( Bid < trade_line_price + fibo_23_dif){  // ------- BUY --------
             o_type = OP_BUY;
             op = NormalizeDouble( Ask, Digits );
+          }else{
+            return(0);
           }
           sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
           tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
@@ -139,9 +143,11 @@ int start(){
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price, Digits );
 
-          }else{                      // ------- SELL -------
+          }else if( Ask > trade_line_price - fibo_23_dif ){ // ------- SELL -------
             o_type = OP_SELL;
             op = NormalizeDouble( Bid, Digits );
+          }else{
+            return(0);
           }
           sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );
           tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
@@ -172,17 +178,14 @@ int start(){
 
         RefreshRates();
 
-/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
-/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
+/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask));
+/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask));
 
 /* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
 /* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "sl_"+ts);
 /* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "tp_"+ts);
 
-        if(!errorCheck(error_text+" Bid:"+ Bid+ " Ask:"+ Ask)){
-          return(0);
-        }
-
+        errorCheck(error_text+" Bid:"+ Bid+ " Ask:"+ Ask);
         renameChannelLine( trade_line );
         setChannelLinesArr();
 
