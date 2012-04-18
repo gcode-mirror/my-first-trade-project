@@ -406,8 +406,8 @@ string getSelectedLine(double time_cord, double price_cord){
 double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0){
   if( fibo_100 == 0.0 ){
     double time1, time2;
-    double zz0 = getZigZag( PERIOD_M15, 10, 5, 3, 0, time1 );
-    double zz1 = getZigZag( PERIOD_M15, 10, 5, 3, 1, time2 );
+    double zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
+    double zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
     
     if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
       fibo_100 = zz0;
