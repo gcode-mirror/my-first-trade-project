@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=240
-leftpos=1779
+period=60
+leftpos=1325
 digits=5
 scale=4
 graph=1
@@ -297,7 +297,7 @@ object_name=DT_GO_t_line_1334346589
 period_flags=63
 create_time=1334763781
 color=15570276
-style=0
+style=1
 weight=1
 background=1
 time_0=1334055600
@@ -404,11 +404,5 @@ period_flags=4
 show_data=1
 </indicator>
 </window>
-
-<expert>
-name=DT_channel_trade
-flags=343
-window_num=0
-</expert>
 </chart>
 
