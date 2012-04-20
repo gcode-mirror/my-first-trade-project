@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=1779
+leftpos=1735
 digits=5
 scale=4
 graph=1
@@ -270,26 +270,10 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_t_line_1334863376
+object_name=DT_GO_t_line_1334265509
 period_flags=63
-create_time=1334856176
+create_time=1334935148
 color=15570276
-style=0
-weight=1
-background=1
-time_0=1334102400
-value_0=1.022501
-time_1=1334822400
-value_1=1.034984
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_t_line_s_all_1334265509
-period_flags=63
-create_time=1334838917
-description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
-color=16711935
 style=0
 weight=1
 background=1
