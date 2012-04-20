@@ -427,14 +427,14 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     
     if( min_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) < min_dist ){
-        Alert(Symbol()+" Fibo distance is too small! "+(fibo_100 - fibo_0));
+        Alert(Symbol()+" Fibo distance is too small! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
         return (0.0);
       }
     }
     
     if( max_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) > max_dist ){
-        Alert(Symbol()+" Fibo distance is too small! "+(fibo_100 - fibo_0));
+        Alert(Symbol()+" Fibo distance is too small! MAXDIST: "+max_dist+" DIST:"+(fibo_100 - fibo_0));
         return (0.0);
       }
     }

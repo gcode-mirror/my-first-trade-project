@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=60
-leftpos=857
+period=240
+leftpos=1785
 digits=3
 scale=4
 graph=1
@@ -389,5 +389,11 @@ period_flags=4
 show_data=1
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 

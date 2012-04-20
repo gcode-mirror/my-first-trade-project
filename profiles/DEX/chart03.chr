@@ -1,7 +1,7 @@
 <chart>
 symbol=USDCHF-Pro
-period=240
-leftpos=1745
+period=60
+leftpos=2468
 digits=5
 scale=4
 graph=1
@@ -393,10 +393,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1334233800
-value_0=0.921642
-time_1=1334939580
-value_1=0.912502
+time_0=1334217600
+value_0=0.920356
+time_1=1334923200
+value_1=0.911216
 ray=1
 </object>
 <object>
@@ -452,5 +452,11 @@ period_flags=4
 show_data=1
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 

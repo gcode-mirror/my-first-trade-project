@@ -23,7 +23,7 @@ string CT_LINES[];
 
 int init(){
   CT_OFFSET = 60/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
-  CT_MIN_DIST = 333/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_MIN_DIST = 300/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   return(0);
@@ -133,6 +133,7 @@ int start(){
             o_type = OP_BUY;
             op = NormalizeDouble( Ask, Digits );
           }else{
+            Alert("no");
             return(0);
           }
           sl = NormalizeDouble( trade_line_price - fibo_23_dif, Digits );
@@ -147,6 +148,7 @@ int start(){
             o_type = OP_SELL;
             op = NormalizeDouble( Bid, Digits );
           }else{
+            Alert("no2");
             return(0);
           }
           sl = NormalizeDouble( trade_line_price + fibo_23_dif + spread, Digits );

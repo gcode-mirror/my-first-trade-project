@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=3133
+leftpos=2069
 digits=5
 scale=4
 graph=1
@@ -166,7 +166,7 @@ type=2
 object_name=DT_GO_NEWS_UPLOAD_TIME
 period_flags=0
 create_time=1333402549
-description=1334879884
+description=1334939132
 color=255
 style=0
 weight=1
@@ -292,10 +292,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1334280600
-value_0=1.303525
-time_1=1334892780
-value_1=1.317325
+time_0=1334268180
+value_0=1.304422
+time_1=1334880000
+value_1=1.318222
 ray=1
 </object>
 <object>
@@ -414,5 +414,11 @@ period_flags=4
 show_data=1
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 
