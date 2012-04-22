@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=3265
+leftpos=3267
 digits=5
 scale=4
 graph=1
@@ -97,6 +97,27 @@ time_1=1334224800
 value_1=1.315305
 ray=1
 </object>
+</indicator>
+</window>
+
+<window>
+height=50
+<indicator>
+name=Custom Indicator
+<expert>
+name=DT_trading_sessions
+flags=339
+window_num=1
+</expert>
+shift_0=0
+draw_0=0
+color_0=0
+style_0=0
+weight_0=0
+min=0.000000
+max=2.000000
+period_flags=0
+show_data=1
 </indicator>
 </window>
 </chart>

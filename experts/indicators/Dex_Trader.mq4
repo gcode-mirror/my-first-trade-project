@@ -54,13 +54,13 @@ int init(){
   initMonitor(getGlobal("MONITOR_SWITCH"));	
   // initFiboLines(getGlobal("FIBO_LINES_SWITCH"));	
   // initBoundary(getGlobal("BOUNDARY_SWITCH"));	
+  errorCheck("start");
   
   return(0);
 }
 
 //========================================== Start ===========================================
 int start(){
-  errorCheck("start");
   startHud();
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	
