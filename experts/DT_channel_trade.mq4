@@ -233,8 +233,8 @@ int start(){
 
         RefreshRates();
 
-/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask));
-/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask));
+/* !! */  Print(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Line type:", line_type));
+/* !! */  Alert(StringConcatenate(Symbol(), " Order type:", o_type, " Lots:", CHANNEL_LOT, " Open price:", op, " Stop loss:", sl, " Take profit:", tp, " Comment:", comment, " Magic:", 333, " Expired:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Line type:", line_type));
 
 /* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
 /* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "sl_"+ts);
@@ -253,7 +253,7 @@ int start(){
 }
 
 int deinit(){
-  ObjectDelete( "DT_BO_channel_trade_info" );
+  
   return(0);
 }
 
