@@ -30,12 +30,14 @@ int init(){
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   
-  ObjectCreate( "DT_BO_channel_trade_info", OBJ_LABEL, 0, 0, 0 );
-  ObjectSet( "DT_BO_channel_trade_info", OBJPROP_CORNER, 0 );
-  ObjectSet( "DT_BO_channel_trade_info", OBJPROP_XDISTANCE, 800 );
-  ObjectSet( "DT_BO_channel_trade_info", OBJPROP_YDISTANCE, 0 );
-  ObjectSet( "DT_BO_channel_trade_info", OBJPROP_BACK, true);
-  ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", DarkOrange );
+  if( ObjectFind("DT_BO_channel_trade_info") == -1 ){
+    ObjectCreate( "DT_BO_channel_trade_info", OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( "DT_BO_channel_trade_info", OBJPROP_CORNER, 0 );
+    ObjectSet( "DT_BO_channel_trade_info", OBJPROP_XDISTANCE, 800 );
+    ObjectSet( "DT_BO_channel_trade_info", OBJPROP_YDISTANCE, 0 );
+    ObjectSet( "DT_BO_channel_trade_info", OBJPROP_BACK, true);
+    ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", DarkOrange );
+  }
   return(0);
 }
 
@@ -49,13 +51,13 @@ int start(){
       CT_INFO_STATUS = true;
     }
     
-    if( ObjectFind("DT_BO_channel_trade_time_limit") == -1 ){
+    if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
       if( CT_STOP_TRADE ){
         ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
         CT_STOP_TRADE = false;
       }
     }else{
-      if( ObjectGet( "DT_BO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
+      if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
         if( !CT_STOP_TRADE ){
           ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade Stopped!", 10, "Arial", Red );
           CT_STOP_TRADE = true;
@@ -168,15 +170,17 @@ int start(){
       }
           
       if( trade_line_name != "" ){
-        double o, sl, tp;
+        double sl, tp;
 
-        o = iOpen( NULL, PERIOD_H1, 0);
         spread = getMySpread();
-        ts = StringSubstr( trade_line_name, StringLen( trade_line_name ) - 10, 10 );
-        comment = trade_line_type +" "+ ts +" "+ DoubleToStr( fibo_100, Digits );
         line_type = StringSubstr( trade_line_name, 15, 3 );
 
-        if( o > trade_line_price && ( line_type == "all" || line_type == "sup" ) ){
+        if( fibo_100 > trade_line_price ){ // ================================================ Buy ================================================
+          if( line_type == "res" ){
+            Alert( Symbol()+" Resistance "+trade_line_name );
+            return(0);
+          }
+          
           if( l > trade_line_price ){   // ---- BUY LIMIT -----
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + spread, Digits );
@@ -184,14 +188,20 @@ int start(){
           }else if( Bid < trade_line_price + fibo_23_dif){  // ------- BUY --------
             o_type = OP_BUY;
             op = NormalizeDouble( Ask, Digits );
+            
           }else{
-            Alert("no");
+            Alert( Symbol()+" You are late from Buy "+trade_line_name );
             return(0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
           tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-
-        }else if( line_type == "all" || line_type == "res" ){
+        
+        }else{                       // ================================================ Sell ================================================
+          if( line_type == "sup" ){
+            Alert( Symbol()+" Support "+trade_line_name );
+            return(0);
+          }
+          
           if( h < trade_line_price ){ // ---- SELL LIMIT ----
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price, Digits );
@@ -205,13 +215,17 @@ int start(){
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + spread, Digits );
           tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
-        }
         
+        }
+      
         if( GetTickCount() < CT_START_TIME ){
           if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want open position in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
             return(0);
           }
         }
+        
+        ts = StringSubstr( trade_line_name, StringLen( trade_line_name ) - 10, 10 );
+        comment = trade_line_type +" "+ ts +" "+ DoubleToStr( fibo_100, Digits );
 
         string error_text;
         if( o_type < 2 ){
@@ -226,7 +240,6 @@ int start(){
 
         }else{
           OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 2, sl, tp, comment, 333, TimeCurrent()+5400 );
-
           error_text = "Channel trade OrderSend Pending";
 
         }
@@ -277,23 +290,19 @@ int setChannelLinesArr(){
 }
 
 int createHistoryLine(double price, color c, string text, string ts){
-  double offset = PERIOD_H1*60;
-  double time1 = Time[0]-offset;
-  double time2 = Time[0]+offset;
   string name = "DT_GO_channel_hist_"+ts;
-
   if(ObjectFind(name) == -1){
-    ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
+    ObjectCreate(name, OBJ_ARROW, 0, Time[0], price);
   }else{
-    ObjectSet(name, OBJPROP_TIME1, time1);
-    ObjectSet(name, OBJPROP_TIME2, time2);
+    ObjectSet(name, OBJPROP_TIME1, Time[0]);
     ObjectSet(name, OBJPROP_PRICE1, price);
-    ObjectSet(name, OBJPROP_PRICE2, price);
   }
+	ObjectSet(name, OBJPROP_ARROWCODE, 5);
 	ObjectSet(name, OBJPROP_COLOR, c);
-	ObjectSet(name, OBJPROP_RAY, false);
-	ObjectSet(name, OBJPROP_STYLE, 4);
 	ObjectSet(name, OBJPROP_BACK, true);
+	ObjectSet(name, OBJPROP_WIDTH, 1);
 	ObjectSetText(name, text, 8);
+  
+  
 }
 

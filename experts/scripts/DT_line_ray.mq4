@@ -27,11 +27,17 @@ int start(){
       ObjectSet(sel_name, OBJPROP_TIME2, t1);
       ObjectSet(sel_name, OBJPROP_PRICE1, p2);
       ObjectSet(sel_name, OBJPROP_PRICE2, p1);
+      t2 = t1;
     }
     if( ObjectGet(sel_name,OBJPROP_RAY) ){
       ObjectSet(sel_name, OBJPROP_RAY, false);
     }else{
       ObjectSet(sel_name, OBJPROP_RAY, true);
+    }
+    
+    if( t2 > Time[0] ){
+      ObjectSet(sel_name, OBJPROP_PRICE2, ObjectGetValueByShift( sel_name, 0 ));
+      ObjectSet(sel_name, OBJPROP_TIME2, Time[0]);
     }
   }
   return(0);
