@@ -25,7 +25,7 @@ bool CT_INFO_STATUS = false;
 bool CT_STOP_TRADE = false;
 
 int init(){
-  CT_OFFSET = 60/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 300/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min

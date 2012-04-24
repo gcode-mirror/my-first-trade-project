@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=898
+leftpos=1167
 digits=3
 scale=4
 graph=1
@@ -104,11 +104,10 @@ value_0=82.375272
 </object>
 <object>
 type=1
-object_name=DT_GO_h_line_s_all_1334669914
+object_name=DT_GO_h_line_1334669914
 period_flags=0
-create_time=1335084526
-description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
-color=16711935
+create_time=1335248954
+color=15570276
 style=0
 weight=2
 background=1
@@ -241,6 +240,21 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_t_line_1334355155
+period_flags=63
+create_time=1335253786
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1331773200
+value_0=84.175486
+time_1=1334822400
+value_1=81.552000
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_t_line_1335225153
 period_flags=63
 create_time=1335217968
@@ -281,7 +295,7 @@ background=1
 time_0=1334073600
 value_0=80.816194
 time_1=1335175200
-value_1=80.969194
+value_1=80.976000
 ray=1
 </object>
 <object>
@@ -343,22 +357,6 @@ time_0=1332331200
 value_0=84.068233
 time_1=1333332000
 value_1=83.278233
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_t_line_s_res_1334355155
-period_flags=63
-create_time=1335210497
-description=\/ \/ \/ \/ \/ \/ \/ \/ \/ 
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1331773200
-value_0=84.175486
-time_1=1332774000
-value_1=83.385486
 ray=1
 </object>
 <object>
