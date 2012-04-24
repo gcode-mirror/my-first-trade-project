@@ -23,6 +23,7 @@ double CT_SL_FACTOR = 1.3;
 string CT_LINES[][2];
 bool CT_INFO_STATUS = false;
 bool CT_STOP_TRADE = false;
+bool CT_UNEXPECTED_NEWS = false;
 
 int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
@@ -45,6 +46,7 @@ int start(){
   if( GetTickCount() > CT_TIMER1 ){
     CT_TIMER1 = GetTickCount() + 6000;
     setChannelLinesArr();
+    CT_UNEXPECTED_NEWS = setNewsAlert();
     
     if( !CT_INFO_STATUS ){
       ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
@@ -129,9 +131,9 @@ int start(){
 /* !! */  Print(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 /* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " Order type:", o_type, " Ticket:", ticket, " Open price:", new_op, " Stop loss:", new_sl, " Take profit:", new_tp, " Expired:", TimeCurrent()+5400, " Bid:", Bid, " Ask:", Ask));
 
-/* !! */  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_TIME1, new_op);
-/* !! */  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_TIME1, new_sl);
-/* !! */  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_TIME1, new_tp);
+/* !! */  ObjectSet("DT_GO_channel_hist_op_"+ts, OBJPROP_PRICE1, new_op);
+/* !! */  ObjectSet("DT_GO_channel_hist_sl_"+ts, OBJPROP_PRICE1, new_sl);
+/* !! */  ObjectSet("DT_GO_channel_hist_tp_"+ts, OBJPROP_PRICE1, new_tp);
 
           if( !errorCheck("Channel trade OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
             return(0);
@@ -171,6 +173,10 @@ int start(){
           
       if( trade_line_name != "" ){
         double sl, tp;
+        
+        if( CT_UNEXPECTED_NEWS ){
+          Alert( Symbol()+" Unexpected news " );
+        }
 
         spread = getMySpread();
         line_type = StringSubstr( trade_line_name, 15, 3 );
@@ -268,6 +274,25 @@ int start(){
 int deinit(){
   
   return(0);
+}
+
+bool setNewsAlert(){
+  int i, len;
+  string name;
+  double news_from = iTime( NULL, PERIOD_M1, 0) - 5400;
+  len= ObjectsTotal();
+  
+  for (i= len - 1; i>=0; i--) {
+    name = ObjectName(i);
+    if( StringSubstr(name,5,6) == "_news_" ){
+      if( ObjectGet( name, OBJPROP_TIME1 ) > news_from ){
+        if( ObjectGet( name, OBJPROP_WIDTH ) > 1 ){
+          return( true );
+        }
+      }
+    }
+  }
+  return( false );
 }
 
 int setChannelLinesArr(){

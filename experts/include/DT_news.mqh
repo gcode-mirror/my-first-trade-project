@@ -14,7 +14,9 @@ int InternetReadFile(int hFile, int& sBuffer[], int lNumBytesToRead, int& lNumbe
 int InternetCloseHandle(int hInet);
 
 string NEWS_FILE_NAME;
-double MIN_PRICE_NEWS = 0, MAX_PRICE_NEWS = 0, NEWS_RELOAD_TIMER;
+double MIN_PRICE_NEWS = 0, MAX_PRICE_NEWS = 0, LAST_UPDATE_ID = 0.0;
+int NEWS_DOWNLOAD_TIMER = 0;
+
 
 bool initNews(string isOn){
   setAppStatus(APP_ID_NEWS, isOn);
@@ -22,13 +24,15 @@ bool initNews(string isOn){
     return (false);    
   }
 
-  NEWS_RELOAD_TIMER = TimeLocal()+300;  
   NEWS_FILE_NAME = newsFileName();
       
   if(doFileDownLoad()){
-    setGlobal("NEWS_UPLOAD_TIME", DoubleToStr(TimeLocal()+500,0));
+    downLoadWebPageToFile();
+  }else if( GlobalVariableGet( "NEWS_update_id" )+60 < TimeCurrent() ){
     downLoadWebPageToFile();
   }
+  NEWS_DOWNLOAD_TIMER = GetTickCount() + 60000;
+  
   csvNewsFileToArray();  
   return (errorCheck("initNews"));
 }
@@ -45,16 +49,18 @@ bool startNews(string isOn){
 	if(isOn == "0" || Period() > PERIOD_H4){return (false);}
 	if(delayTimer(APP_ID_NEWS, 1000)){return (false);}
 
-  if(Symbol() == "EURUSD-Pro" && StrToDouble(getGlobal("NEWS_UPLOAD_TIME")) < TimeLocal()){
-    setGlobal("NEWS_UPLOAD_TIME", DoubleToStr(TimeLocal()+500,0));
-    downLoadWebPageToFile();   
+  if(Symbol() == "EURUSD-Pro"){
+    if( GetTickCount() > NEWS_DOWNLOAD_TIMER ){
+      NEWS_DOWNLOAD_TIMER = GetTickCount() + 60000;
+      downLoadWebPageToFile();   
+    }
   }
   
-  if(NEWS_RELOAD_TIMER < TimeLocal()){
-    NEWS_RELOAD_TIMER = TimeLocal()+300;
+  if( LAST_UPDATE_ID != GlobalVariableGet( "NEWS_update_id" ) ){
+    LAST_UPDATE_ID = GlobalVariableGet( "NEWS_update_id" );
     csvNewsFileToArray();
     displayNews();
-    
+  
   }else if(MIN_PRICE_NEWS != WindowPriceMin(0) || MAX_PRICE_NEWS != WindowPriceMax(0)){
     displayNews();
   }
@@ -203,15 +209,15 @@ string setNewsRelevance(string act, string forc){
   if(act == "-" || forc == "-"){
     return ("1");
   }  
-
   double max = MathMax(StrToDouble(act),StrToDouble(forc)), min = MathMin(StrToDouble(act),StrToDouble(forc));
   double dif = max-min, multi;
   min = MathAbs(min);
-  if(min == 0){
+  if(min == 0.0){
     multi = MathAbs(max);
   }else{
     multi = dif/min;
   }
+// Alert("act:"+StrToDouble(act)+" forc:"+StrToDouble(forc)+" dif:"+dif+" multi:"+multi+" iii:"+min);
   
   if(multi>3){
     return ("3");
@@ -340,5 +346,6 @@ bool downLoadWebPageToFile(){
    FileWrite(handle, fileContents);
    FileClose(handle);
   }
+  GlobalVariableSet( "NEWS_update_id", TimeCurrent() );
   return (errorCheck("downLoadWebPageToFile"));
 }

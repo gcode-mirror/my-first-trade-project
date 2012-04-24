@@ -41,7 +41,6 @@ int init(){
   // createGlobal("BOUNDARY_SWITCH", "0");
   
   createGlobal("LOT", "0.1");
-  createGlobal("NEWS_UPLOAD_TIME", "0.0");
 //=========================================== Init ===========================================
   initIcons();
   initHud();

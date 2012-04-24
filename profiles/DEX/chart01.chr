@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=15
-leftpos=2661
+period=60
+leftpos=3204
 digits=5
 scale=4
 graph=1
@@ -68,19 +68,6 @@ value_0=1.316220
 </object>
 <object>
 type=22
-object_name=DT_GO_channel_hist_op_1335224372
-period_flags=0
-create_time=1335274209
-description=Order type: 1, OP
-color=16711680
-weight=1
-background=1
-symbol_code=5
-time_0=1335276000
-value_0=1.318560
-</object>
-<object>
-type=22
 object_name=DT_GO_channel_hist_sl_1335216790
 period_flags=0
 create_time=1335209962
@@ -94,19 +81,6 @@ value_0=1.318030
 </object>
 <object>
 type=22
-object_name=DT_GO_channel_hist_sl_1335224372
-period_flags=0
-create_time=1335274209
-description=Order type: 1, SL
-color=255
-weight=1
-background=1
-symbol_code=5
-time_0=1335276000
-value_0=1.319890
-</object>
-<object>
-type=22
 object_name=DT_GO_channel_hist_tp_1335216790
 period_flags=0
 create_time=1335209962
@@ -117,19 +91,6 @@ background=1
 symbol_code=5
 time_0=0
 value_0=1.314970
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_tp_1335224372
-period_flags=0
-create_time=1335274209
-description=Order type: 1, TP
-color=32768
-weight=1
-background=1
-symbol_code=5
-time_0=1335276000
-value_0=1.317900
 </object>
 <object>
 type=2
@@ -278,7 +239,7 @@ type=2
 object_name=DT_GO_NEWS_UPLOAD_TIME
 period_flags=0
 create_time=1333402549
-description=1335285565
+description=1335300955
 color=255
 style=0
 weight=1

@@ -1,7 +1,7 @@
 <chart>
 symbol=USDCHF-Pro
 period=60
-leftpos=2498
+leftpos=2561
 digits=5
 scale=4
 graph=1
@@ -128,7 +128,7 @@ value_0=0.919022
 type=1
 object_name=DT_GO_h_line_1334669996
 period_flags=0
-create_time=1334775459
+create_time=1335294415
 color=15570276
 style=0
 weight=2
