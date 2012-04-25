@@ -279,14 +279,14 @@ int deinit(){
 bool setNewsAlert(){
   int i, len;
   string name;
-  double news_from = iTime( NULL, PERIOD_M1, 0) - 5400;
+  double news_from = iTime( NULL, PERIOD_M1, 0) - 14400;
   len= ObjectsTotal();
   
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
     if( StringSubstr(name,5,6) == "_news_" ){
-      if( ObjectGet( name, OBJPROP_TIME1 ) > news_from ){
-        if( ObjectGet( name, OBJPROP_WIDTH ) > 1 ){
+      if( ObjectGet( name, OBJPROP_TIME1 ) > news_from ){       
+        if( ObjectGet( name, OBJPROP_WIDTH ) > 1 ){         
           return( true );
         }
       }
