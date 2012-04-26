@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=2164
+period=5
+leftpos=6593
 digits=5
 scale=4
 graph=1
@@ -34,7 +34,7 @@ askline_color=17919
 stops_color=17919
 
 <window>
-height=205
+height=242
 <indicator>
 name=main
 <object>
@@ -117,7 +117,7 @@ color=4163021
 style=0
 weight=2
 background=0
-time_0=1335524400
+time_0=1335502980
 </object>
 <object>
 type=1
@@ -145,7 +145,7 @@ value_0=1.304817
 type=1
 object_name=DT_GO_h_line_1334258972
 period_flags=63
-create_time=1335250321
+create_time=1335476558
 color=15570276
 style=0
 weight=1
@@ -263,6 +263,22 @@ background=0
 time_0=0
 value_0=0.000000
 time_1=1333404180
+value_1=0.010000
+ray=0
+</object>
+<object>
+type=2
+object_name=DT_GO_SESSION_SWITCH
+period_flags=0
+create_time=1335476312
+description=0
+color=255
+style=0
+weight=1
+background=0
+time_0=0
+value_0=0.000000
+time_1=1335477780
 value_1=0.010000
 ray=0
 </object>

@@ -20,12 +20,11 @@
 #include <DT_comments.mqh>
 #include <DT_monitor.mqh>
 #include <DT_trade_lines.mqh>
-#include <DT_fibo_lines.mqh>
 #include <DT_archive.mqh>
 #include <DT_news.mqh>
 #include <DT_functions.mqh>
 #include <DT_channel.mqh>
-// #include <DT_boundary.mqh>
+#include <DT_sessions.mqh>
 
 //int k;
 int init(){
@@ -37,8 +36,7 @@ int init(){
   createGlobal("ARCHIVE_SWITCH", "0");
   createGlobal("NEWS_SWITCH", "1");
   createGlobal("CHANNEL_SWITCH", "1");
-  // createGlobal("FIBO_LINES_SWITCH", "0");
-  // createGlobal("BOUNDARY_SWITCH", "0");
+  createGlobal("SESSION_SWITCH", "0");
   
   createGlobal("LOT", "0.1");
 //=========================================== Init ===========================================
@@ -51,8 +49,7 @@ int init(){
   initChannel(getGlobal("CHANNEL_SWITCH"));	
   errorCheck("mon start");
   initMonitor(getGlobal("MONITOR_SWITCH"));	
-  // initFiboLines(getGlobal("FIBO_LINES_SWITCH"));	
-  // initBoundary(getGlobal("BOUNDARY_SWITCH"));	
+  initSession(getGlobal("SESSION_SWITCH"));	
   errorCheck("start");
   
   return(0);
@@ -68,9 +65,9 @@ int start(){
 	startNews(getGlobal("NEWS_SWITCH"));
   startChannel(getGlobal("CHANNEL_SWITCH"));
 	startMonitor(getGlobal("MONITOR_SWITCH"));
-	// startBoundary(getGlobal("BOUNDARY_SWITCH"));
-	// startFiboLines(getGlobal("FIBO_LINES_SWITCH"));
-	
+	startSession(getGlobal("SESSION_SWITCH"));
+  
+  
 //	Alert(k-GetTickCount());  
   return(0);
 }
@@ -81,12 +78,6 @@ int deinit(){
   if(getGlobal("TRADE_LINES_SWITCH") == "0"){
     deInitTradeLines();
   }
-  // if(getGlobal("FIBO_LINES_SWITCH") == "0"){
-    // deInitFiboLines();
-  // }
-  // if(getGlobal("BOUNDARY_SWITCH") == "0"){
-    // deInitBoundary();
-  // }
   return(0);
 }
 

@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=1215
+leftpos=970
 digits=3
 scale=4
 graph=1
@@ -34,7 +34,7 @@ askline_color=17919
 stops_color=17919
 
 <window>
-height=205
+height=328
 <indicator>
 name=main
 <object>
@@ -73,12 +73,12 @@ ray=0
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1335211336
+create_time=1335464548
 color=4163021
 style=0
 weight=2
 background=0
-time_0=1335477600
+time_0=1335474000
 </object>
 <object>
 type=1
@@ -195,6 +195,22 @@ ray=0
 </object>
 <object>
 type=2
+object_name=DT_GO_SESSION_SWITCH
+period_flags=0
+create_time=1335476312
+description=0
+color=255
+style=0
+weight=1
+background=0
+time_0=0
+value_0=0.000000
+time_1=1335479580
+value_1=0.010000
+ray=0
+</object>
+<object>
+type=2
 object_name=DT_GO_t_line_1332974976
 period_flags=63
 create_time=1333262867
@@ -302,7 +318,7 @@ ray=1
 type=2
 object_name=DT_GO_t_line_1335225424
 period_flags=63
-create_time=1335218224
+create_time=1335462810
 color=15570276
 style=0
 weight=1

@@ -11,13 +11,13 @@
 //+------------------------------------------------------------------+
 int start(){
   double price = WindowPriceMax(0)-((WindowPriceMax(0)-WindowPriceMin(0))/10);
-  double time2 = Time[WindowBarsPerChart()/4];
-  double time1 = Time[0];
+  double time1 = Time[WindowBarsPerChart()/4];
+  double time2 = Time[0];
   string name = "DT_GO_t_line_"+DoubleToStr(TimeLocal(),0);
   
   ObjectCreate(name, OBJ_TREND, 0, time1, price, time2, price);
   ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
-  ObjectSet(name, OBJPROP_RAY, false);
+  ObjectSet(name, OBJPROP_RAY, true);
   ObjectSet(name, OBJPROP_BACK, true);
   
   if(Period() > PERIOD_H4){    

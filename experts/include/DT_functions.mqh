@@ -296,15 +296,15 @@ bool menuControl(int index){
       }
     break;
     case 6:
-      // if(getGlobal("FIBO_LINES_SWITCH") == "1"){
-        // setGlobal("FIBO_LINES_SWITCH", "0");
-        // changeIcon("DT_BO_icon_fibo_lines", "0");
-        // addComment("Switch Fibo lines to OFF.");
-      // }else{
-        // setGlobal("FIBO_LINES_SWITCH", "1");
-        // changeIcon("DT_BO_icon_fibo_lines", "1");
-        // addComment("Switch Fibo lines to ON.");
-      // }
+      if(getGlobal("SESSION_SWITCH") == "1"){
+        setGlobal("SESSION_SWITCH", "0");
+        changeIcon("DT_BO_icon_session", "0");
+        addComment("Switch sessions to OFF.");
+      }else{
+        setGlobal("SESSION_SWITCH", "1");
+        changeIcon("DT_BO_icon_session", "1");
+        addComment("Switch sessions to ON.");
+      }
     break;
     case 7:
       // if(getGlobal("BOUNDARY_SWITCH") == "1"){
@@ -418,7 +418,9 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     double zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
     double zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
     
-    if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
+    if( MathMax(zz0, zz1) > fibo_0 && MathMin(zz0, zz1) < fibo_0 ){
+      fibo_100 = zz0;
+    }else if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
       fibo_100 = zz0;
     }else{
       fibo_100 = zz1;

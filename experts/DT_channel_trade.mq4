@@ -59,7 +59,7 @@ int start(){
 
     int ticket, o_type;
     string comment, ts, trade_line_type;
-    double fibo_100 = 0.0, fibo_23_dif, trade_line_price, spread, op, close_line;
+    double fibo_100 = 0.0, fibo_23_dif, trade_line_price, spread, op;
 
     ticket = getOpenPositionByMagic(Symbol(), 333);
     if( ticket != 0 ){
@@ -100,22 +100,14 @@ int start(){
           double new_sl, new_tp;
           fibo_100 = StrToDouble(StringSubstr(comment, 13, StringLen(comment)-13));
           fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
-          close_line = getCloseChannelLine( trade_line_price, fibo_23_dif );
 
           if( o_type == OP_BUYLIMIT ){            
             new_sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
-            if( close_line == 0.0 ){
-              new_tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-            }else{
-              new_tp = NormalizeDouble( trade_line_price + close_line, Digits );
-            }
+            new_tp = NormalizeDouble( trade_line_price + getCloseChannelLine( 1, trade_line_price, fibo_23_dif ), Digits );
+            
           }else{            
             new_sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + spread, Digits );
-            if( close_line == 0.0 ){
-              new_tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
-            }else{
-              new_tp = NormalizeDouble( trade_line_price - close_line + spread, Digits );
-            }
+            new_tp = NormalizeDouble( trade_line_price - getCloseChannelLine( -1, trade_line_price, fibo_23_dif ) + spread, Digits );
           }
 
           OrderModify(ticket, new_op, new_sl, new_tp, TimeCurrent()+5400);
@@ -168,11 +160,11 @@ int start(){
         
         if( CT_UNEXPECTED_NEWS ){
           Alert( Symbol()+" Unexpected news " );
+          return(0);
         }
 
         spread = getMySpread();
         line_type = StringSubstr( trade_line_name, 15, 3 );
-        close_line = getCloseChannelLine( trade_line_price, fibo_23_dif );
 
         if( fibo_100 > trade_line_price ){ // ================================================ Buy ================================================
           if( line_type == "res" ){
@@ -193,11 +185,7 @@ int start(){
             return(0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
-          if( close_line == 0.0 ){
-            tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-          }else{
-            tp = NormalizeDouble( trade_line_price + close_line, Digits );
-          }
+          tp = NormalizeDouble( trade_line_price + getCloseChannelLine( 1, trade_line_price, fibo_23_dif ), Digits );
         
         }else{                       // ================================================ Sell ================================================
           if( line_type == "sup" ){
@@ -213,16 +201,11 @@ int start(){
             o_type = OP_SELL;
             op = NormalizeDouble( Bid, Digits );
           }else{
-            Alert("no2");
+            Alert( Symbol()+" You are late from Buy "+trade_line_name );
             return(0);
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + spread, Digits );
-          
-          if( close_line == 0.0 ){
-            tp = NormalizeDouble( trade_line_price - fibo_23_dif + spread, Digits );
-          }else{
-            tp = NormalizeDouble( trade_line_price - close_line + spread, Digits );
-          }
+          tp = NormalizeDouble( trade_line_price - getCloseChannelLine( -1, trade_line_price, fibo_23_dif ) + spread, Digits );
         
         }
       
@@ -297,7 +280,7 @@ bool setNewsAlert(){
   return( false );
 }
 
-double getCloseChannelLine(double line, double dist){
+double getCloseChannelLine(int dir, double line, double dist){
   int i, len = ArrayRange( CT_LINES, 0 );
   double price, dif, min_dist = dist/3, closest = 9999999;
   for( i = 0; i < len; i++ ) {
@@ -306,6 +289,17 @@ double getCloseChannelLine(double line, double dist){
     }else{
       price = ObjectGet( CT_LINES[i][0], OBJPROP_PRICE1 );
     }
+    
+    if( dir == 1 ){
+      if( price < line ){
+        continue;
+      }
+    }else{
+      if( price > line ){
+        continue;
+      }
+    }
+    
     dif = MathAbs( line - price );
     if( dif < dist && dif > min_dist ){
       if( dif < closest ){
@@ -314,8 +308,9 @@ double getCloseChannelLine(double line, double dist){
     }
   }
   if( closest == 9999999 ){
-    return ( 0.0 );
+    return ( dist );
   }else{
+    Alert( Symbol()+" Used Close line "+closest );
     return ( closest );
   }
 }
