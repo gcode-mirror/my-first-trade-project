@@ -40,18 +40,18 @@ int start(){
     CT_UNEXPECTED_NEWS = setNewsAlert();
     
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
+      CT_STOP_TRADE = false;
+    }else{
       if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
         CT_STOP_TRADE = true;
       }else{
         CT_STOP_TRADE = false;
-      }
-    }else{
-      CT_STOP_TRADE = false;
+      }      
     }
-  }
+  }  
 
   if( GetTickCount() > CT_TIMER2 ){
-    CT_TIMER2 = GetTickCount() + 4000;
+    CT_TIMER2 = GetTickCount() + 4000;  
     
     if( CT_STOP_TRADE ){
       return (0);
