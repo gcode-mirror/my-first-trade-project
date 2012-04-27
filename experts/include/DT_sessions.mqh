@@ -57,6 +57,51 @@ bool initSession( string isOn ){
   TIMEZONES[CHICAGO][START] = 15;
   TIMEZONES[CHICAGO][STOP] = 23;  
 	
+	string name;
+	int i, len = ArrayRange( TIMEZONES, 0 );
+	for(i = 0; i < len; i++){
+    name = "DT_BO_session_curr_name_"+i;
+    ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( name, OBJPROP_CORNER, 0 );      
+    ObjectSet( name, OBJPROP_BACK, true);
+    ObjectSet( name, OBJPROP_XDISTANCE, 5 );    
+
+    name = "DT_BO_session_curr_time_"+i;
+    ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( name, OBJPROP_CORNER, 0 );      
+    ObjectSet( name, OBJPROP_BACK, true);
+    ObjectSet( name, OBJPROP_XDISTANCE, 70 );  
+    
+    name = "DT_BO_session_come_name_"+i;
+    ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( name, OBJPROP_CORNER, 0 );      
+    ObjectSet( name, OBJPROP_BACK, true);
+    ObjectSet( name, OBJPROP_XDISTANCE, 5 ); 
+    
+    name = "DT_BO_session_come_time_"+i;
+    ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( name, OBJPROP_CORNER, 0 );      
+    ObjectSet( name, OBJPROP_BACK, true);
+    ObjectSet( name, OBJPROP_XDISTANCE, 70 );  
+	}
+	
+  name = "DT_BO_session_curr_head";
+  ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( name, OBJPROP_CORNER, 0 );      
+  ObjectSet( name, OBJPROP_BACK, true);
+  ObjectSet( name, OBJPROP_XDISTANCE, 3 );
+  ObjectSet( name, OBJPROP_YDISTANCE, 45 );
+	ObjectSetText( name, "Current Sessions:", 11, "Arial", Black );
+
+	
+	name = "DT_BO_session_come_head";
+  ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( name, OBJPROP_CORNER, 0 );      
+  ObjectSet( name, OBJPROP_BACK, true);
+  ObjectSet( name, OBJPROP_XDISTANCE, 3 );
+	ObjectSetText( name, "Coming Sessions:", 11, "Arial", Black );
+
+    
   return (errorCheck("initSession"));
 }
 
@@ -74,22 +119,41 @@ bool startSession( string isOn ){
   
   double time = TimeCurrent();
   int len = ArrayRange( TIMEZONES, 0 );
-  int i, h, m, nr = 1, left_h, left_m;
-  string time_left = "", name_label, time_label;
+  int i, h, m, left_h, curr_nr = 0, come_nr = 0, ydist;
+  string label_name, label_time;
   color c;
   h = TimeHour(time);
   m = TimeMinute(time);
   
   for(i = 0; i < len; i++){
-    time_left = "";
-    if( TIMEZONES[i][START] > TIMEZONES[i][STOP] ){
+    if( h == TIMEZONES[i][START]-1 ){
+      ObjectSetText( "DT_BO_session_come_name_"+come_nr, ZONENAMES[i], 9, "Arial", Red );
+      ObjectSetText( "DT_BO_session_come_time_"+come_nr, getTimeFormated(0, 59 - m, ""), 9, "Arial", Red );
+      come_nr++;
+    }else if( TIMEZONES[i][START] > TIMEZONES[i][STOP] ){
       if( h >= TIMEZONES[i][START] ){
         left_h = 23 - h + TIMEZONES[i][STOP];
-        left_m = 59 - m;        
+        if( left_h == 0 ){
+          c = Red;
+        }else{
+          c = Black;
+        } 
+        
+        ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
+        ObjectSetText( "DT_BO_session_curr_time_"+curr_nr, getTimeFormated(left_h, 59 - m), 9, "Arial", c );
+        curr_nr++;       
       
       }else if( h < TIMEZONES[i][STOP] ){      
-        left_h = TIMEZONES[i][STOP] - 1 - h;
-        left_m = 59 - m;        
+        left_h = TIMEZONES[i][STOP] - 1 - h;        
+        if( left_h == 0 ){
+          c = Red;
+        }else{
+          c = Black;
+        } 
+        
+        ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
+        ObjectSetText( "DT_BO_session_curr_time_"+curr_nr, getTimeFormated(left_h, 59 - m), 9, "Arial", c );
+        curr_nr++;     
       
       }else{
         continue;
@@ -97,53 +161,60 @@ bool startSession( string isOn ){
     }else{
       if( h >= TIMEZONES[i][START] && h < TIMEZONES[i][STOP] ){
         left_h = TIMEZONES[i][STOP] - 1 - h;
-        left_m = 59 - m;        
+        if( left_h == 0 ){
+          c = Red;
+        }else{
+          c = Black;
+        }        
+        ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
+        ObjectSetText( "DT_BO_session_curr_time_"+curr_nr, getTimeFormated(left_h, 59 - m), 9, "Arial", c );
+        curr_nr++;      
       }else{
         continue;
       }     
     }
+  }  
+	
+	if( curr_nr == 0){  
+		ObjectSet( "DT_BO_session_curr_head", OBJPROP_TIMEFRAMES, -1 );
+	}else{
+		ObjectSet( "DT_BO_session_curr_head", OBJPROP_TIMEFRAMES, 0 );
+	}
+	
+	if( come_nr == 0){  
+		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, -1 );
+	}else{
+		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, 0 );
+		ObjectSet( "DT_BO_session_come_head", OBJPROP_YDISTANCE, 64 + (curr_nr * 17) + 6 );
+	}
     
-    time_left = getTimeFormated( left_h, left_m );
-    name_label = StringConcatenate( "DT_BO_session_name",nr );
-    time_label = StringConcatenate( "DT_BO_session_time",nr );
-    if( h == 0 ){
-      c = Red;
-    }else{
-      c = Black;
-    }
-    
-    if( ObjectFind( name_label ) == -1 ){
-      ObjectCreate( name_label, OBJ_LABEL, 0, 0, 0 );
-      ObjectSet( name_label, OBJPROP_CORNER, 0 );
-      ObjectSet( name_label, OBJPROP_XDISTANCE, 5 );
-      ObjectSet( name_label, OBJPROP_YDISTANCE, 47 + (nr * 20) );
-      ObjectSet( name_label, OBJPROP_BACK, true);
-      
-      
-      ObjectCreate( time_label, OBJ_LABEL, 0, 0, 0 );
-      ObjectSet( time_label, OBJPROP_CORNER, 0 );
-      ObjectSet( time_label, OBJPROP_XDISTANCE, 70 );
-      ObjectSet( time_label, OBJPROP_YDISTANCE, 47 + (nr * 20) );
-      ObjectSet( time_label, OBJPROP_BACK, true);      
-    }
-    
-    ObjectSetText( name_label, ZONENAMES[i], 10, "Arial", c );
-    ObjectSetText( time_label, time_left, 10, "Arial", c );
-    nr++;
-     
-  }
-  
-  if( nr > 1 ){
-    if( ObjectFind( "DT_BO_session_head_1" ) == -1 ){
-      ObjectCreate( "DT_BO_session_head_1", OBJ_LABEL, 0, 0, 0 );
-      ObjectSet( "DT_BO_session_head_1", OBJPROP_CORNER, 0 );
-      ObjectSet( "DT_BO_session_head_1", OBJPROP_XDISTANCE, 3 );
-      ObjectSet( "DT_BO_session_head_1", OBJPROP_YDISTANCE, 45 );
-      ObjectSet( "DT_BO_session_head_1", OBJPROP_BACK, true);
-	    ObjectSetText( "DT_BO_session_head_1", "Current Sessions:", 12, "Arial", Black );
-    }
-  }
-
+	for(i = 0; i < len; i++){
+		label_name = "DT_BO_session_curr_name_"+i;
+		label_time = "DT_BO_session_curr_time_"+i;
+		if( i < curr_nr ){
+			ydist = 64 + (i * 17);
+			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
+			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
+			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );
+			ObjectSet( label_time, OBJPROP_TIMEFRAMES, 0 );
+		}else{
+			ObjectSet( label_name, OBJPROP_TIMEFRAMES, -1 );
+			ObjectSet( label_time, OBJPROP_TIMEFRAMES, -1 );
+		}
+		
+		label_name = "DT_BO_session_come_name_"+i;
+		label_time = "DT_BO_session_come_time_"+i;
+		if( i < come_nr ){
+			ydist = 64 + (curr_nr * 17) + 25 +(i * 17);
+			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
+			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
+			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );
+			ObjectSet( label_time, OBJPROP_TIMEFRAMES, 0 );
+		}else{
+			ObjectSet( label_name, OBJPROP_TIMEFRAMES, -1 );
+			ObjectSet( label_time, OBJPROP_TIMEFRAMES, -1 );
+		}      
+	}
   return (errorCheck("startSession"));  
 }
 
@@ -152,8 +223,8 @@ bool deinitSession(){
   return (errorCheck("deinitSession"));
 }
 
-string getTimeFormated( int hour, int min ){
-  string result = "| ";
+string getTimeFormated( int hour, int min, string sign = "- " ){
+  string result = StringConcatenate("| ", sign);
   if( hour < 10 ){
     result = result + StringConcatenate( "0", hour, ":" );
   }else{
