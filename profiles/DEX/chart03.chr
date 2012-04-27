@@ -1,7 +1,7 @@
 <chart>
 symbol=USDCHF-Pro
-period=15
-leftpos=3196
+period=60
+leftpos=2567
 digits=5
 scale=4
 graph=1
@@ -52,45 +52,6 @@ value_0=0.000000
 time_1=1333404180
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_op_1334861899
-period_flags=0
-create_time=1335476556
-description=Order type: 3, OP
-color=16711680
-weight=1
-background=1
-symbol_code=5
-time_0=1335477780
-value_0=0.911430
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_sl_1334861899
-period_flags=0
-create_time=1335476556
-description=Order type: 3, SL
-color=255
-weight=1
-background=1
-symbol_code=5
-time_0=1335477780
-value_0=0.913010
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_tp_1334861899
-period_flags=0
-create_time=1335476556
-description=Order type: 3, TP
-color=32768
-weight=1
-background=1
-symbol_code=5
-time_0=1335477780
-value_0=0.910440
 </object>
 <object>
 type=2
