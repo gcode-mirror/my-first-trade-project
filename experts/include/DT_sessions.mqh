@@ -2,6 +2,7 @@
 //|                                                  DT_sessions.mq4 |
 //|                                                              Dex |
 //|                                                                  |
+//+------------------------------------------------------------------+
 #property copyright "Dex"
 #property link      ""
 
@@ -89,17 +90,17 @@ bool initSession( string isOn ){
   ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
   ObjectSet( name, OBJPROP_CORNER, 0 );      
   ObjectSet( name, OBJPROP_BACK, true);
-  ObjectSet( name, OBJPROP_XDISTANCE, 3 );
+  ObjectSet( name, OBJPROP_XDISTANCE, 5 );
   ObjectSet( name, OBJPROP_YDISTANCE, 45 );
-	ObjectSetText( name, "Current Sessions:", 11, "Arial", Black );
+	ObjectSetText( name, "Current Sessions:", 8, "Verdana", 0x5b5f60 );
 
 	
 	name = "DT_BO_session_come_head";
   ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
   ObjectSet( name, OBJPROP_CORNER, 0 );      
   ObjectSet( name, OBJPROP_BACK, true);
-  ObjectSet( name, OBJPROP_XDISTANCE, 3 );
-	ObjectSetText( name, "Coming Sessions:", 11, "Arial", Black );
+  ObjectSet( name, OBJPROP_XDISTANCE, 5 );
+	ObjectSetText( name, "Coming Sessions:", 8, "Verdana", 0x5b5f60 );
 
     
   return (errorCheck("initSession"));
@@ -127,16 +128,16 @@ bool startSession( string isOn ){
   
   for(i = 0; i < len; i++){
     if( h == TIMEZONES[i][START]-1 ){
-      ObjectSetText( "DT_BO_session_come_name_"+come_nr, ZONENAMES[i], 9, "Arial", Red );
-      ObjectSetText( "DT_BO_session_come_time_"+come_nr, getTimeFormated(0, 59 - m, ""), 9, "Arial", Red );
+      ObjectSetText( "DT_BO_session_come_name_"+come_nr, ZONENAMES[i], 9, "Arial", C'228,15,26' );
+      ObjectSetText( "DT_BO_session_come_time_"+come_nr, getTimeFormated(0, 59 - m, ""), 9, "Arial", C'228,15,26' );
       come_nr++;
     }else if( TIMEZONES[i][START] > TIMEZONES[i][STOP] ){
       if( h >= TIMEZONES[i][START] ){
         left_h = 23 - h + TIMEZONES[i][STOP];
         if( left_h == 0 ){
-          c = Red;
+          c = C'228,15,26';
         }else{
-          c = Black;
+          c = 0x333638;
         } 
         
         ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
@@ -146,9 +147,9 @@ bool startSession( string isOn ){
       }else if( h < TIMEZONES[i][STOP] ){      
         left_h = TIMEZONES[i][STOP] - 1 - h;        
         if( left_h == 0 ){
-          c = Red;
+          c = C'228,15,26';
         }else{
-          c = Black;
+          c = 0x333638;
         } 
         
         ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
@@ -162,9 +163,9 @@ bool startSession( string isOn ){
       if( h >= TIMEZONES[i][START] && h < TIMEZONES[i][STOP] ){
         left_h = TIMEZONES[i][STOP] - 1 - h;
         if( left_h == 0 ){
-          c = Red;
+          c = C'228,15,26';
         }else{
-          c = Black;
+          c = 0x333638;
         }        
         ObjectSetText( "DT_BO_session_curr_name_"+curr_nr, ZONENAMES[i], 9, "Arial", c );
         ObjectSetText( "DT_BO_session_curr_time_"+curr_nr, getTimeFormated(left_h, 59 - m), 9, "Arial", c );
@@ -185,14 +186,14 @@ bool startSession( string isOn ){
 		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, -1 );
 	}else{
 		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, 0 );
-		ObjectSet( "DT_BO_session_come_head", OBJPROP_YDISTANCE, 64 + (curr_nr * 17) + 6 );
+		ObjectSet( "DT_BO_session_come_head", OBJPROP_YDISTANCE, 60 + (curr_nr * 17) + 6 );
 	}
     
 	for(i = 0; i < len; i++){
 		label_name = "DT_BO_session_curr_name_"+i;
 		label_time = "DT_BO_session_curr_time_"+i;
 		if( i < curr_nr ){
-			ydist = 64 + (i * 17);
+			ydist = 60 + (i * 17);
 			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
 			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
 			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );
@@ -205,7 +206,7 @@ bool startSession( string isOn ){
 		label_name = "DT_BO_session_come_name_"+i;
 		label_time = "DT_BO_session_come_time_"+i;
 		if( i < come_nr ){
-			ydist = 64 + (curr_nr * 17) + 25 +(i * 17);
+			ydist = 60 + (curr_nr * 17) + 20 +(i * 17);
 			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
 			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
 			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );

@@ -307,15 +307,15 @@ bool menuControl(int index){
       }
     break;
     case 7:
-      // if(getGlobal("BOUNDARY_SWITCH") == "1"){
-        // setGlobal("BOUNDARY_SWITCH", "0");
-        // changeIcon("DT_BO_icon_boundary", "0");
-        // addComment("Switch Boundary to OFF.");
-      // }else{
-        // setGlobal("BOUNDARY_SWITCH", "1");
-        // changeIcon("DT_BO_icon_boundary", "1");
-        // addComment("Switch Boundary to ON.");
-      // }
+      if(getGlobal("ZOOM_SWITCH") != "0"){
+        setGlobal("ZOOM_SWITCH", "0");
+        changeIcon("DT_BO_icon_zoom", "0");
+        addComment("Switch zoom to OFF.");
+      }else{
+        setGlobal("ZOOM_SWITCH", Period());
+        changeIcon("DT_BO_icon_zoom", "1");
+        addComment("Switch zoom to ON.");
+      }
     break;
     default:
       addComment("mellé",2);
@@ -472,4 +472,43 @@ int getPositionByDaD(double price_cord, string symb = ""){
     }
   }
   return (ticket);
+}
+
+string getPeriodName( int peri ){
+  switch( peri ){
+    case 1: return ("Min 1 ");
+    case 5: return ("Min 5 ");
+    case 15: return ("Min 15");
+    case 30: return ("Min 30");
+    case 60: return ("Hour 1");
+    case 240: return ("Hour 4");
+    case 1440: return ("Daily ");
+    case 10080: return ("Weekly");
+    case 43200: return ("Month ");
+    default: return ("error");
+  }
+}
+
+int getPeriodSibling(int curr_peri, string dir){
+  int period_val[8] = {0,1,5,15,30,60,240,1440};
+  
+  int len = ArraySize(period_val);
+  for( int i=0; i < len; i++ ) {
+    if( period_val[i] == curr_peri ){
+      if( dir == "next" ){
+        if( i >= len ){
+          return ( period_val[1] );
+        }else{
+          return ( period_val[i+1] );
+        }
+      }else{
+        if( i < 1 ){
+          return ( period_val[7] );
+        }else{
+          return ( period_val[i-1] );
+        }
+      }
+    }
+  }
+  return ( 0 );
 }

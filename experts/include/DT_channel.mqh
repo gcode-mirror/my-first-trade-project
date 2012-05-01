@@ -38,6 +38,15 @@ bool startChannel(string isOn){
   string type, name;
   double price, ts;
   
+  if( ObjectFind("DT_GO_channel_trade_time_limit") != -1 ){
+    if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
+      if( GlobalVariableGet(CH_NAME) != 0.0){
+        GlobalVariableSet(CH_NAME, 0.0);
+      }
+      return (errorCheck("startChannel"));
+    }  
+  }
+  
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
     type = StringSubstr(name,6,6);

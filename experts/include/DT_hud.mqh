@@ -66,20 +66,5 @@ bool deinitHud(){
 
 bool updateHud(){
 	double lot = StrToDouble(getGlobal("LOT"));
-  ObjectSetText("DT_BO_hud_info",StringConcatenate(StringSubstr(Symbol(), 0, 6)," | ",getPeriodName()," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
-}
-
-string getPeriodName(){
-  switch(Period()){
-    case 1: return ("Min 1 ");
-    case 5: return ("Min 5 ");
-    case 15: return ("Min 15");
-    case 30: return ("Min 30");
-    case 60: return ("Hour 1");
-    case 240: return ("Hour 4");
-    case 1440: return ("Daily ");
-    case 10080: return ("Weekly");
-    case 43200: return ("Month ");
-    default: return ("error");
-  }
+  ObjectSetText("DT_BO_hud_info",StringConcatenate(StringSubstr(Symbol(), 0, 6)," | ",getPeriodName( Symbol() )," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
 }

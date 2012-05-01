@@ -22,6 +22,7 @@ bool initIcons(){
   showIcon("DT_BO_icon_archive", 2, 1, "Í", "Webdings", getGlobal("ARCHIVE_SWITCH")); 
   showIcon("DT_BO_icon_news", 1, 1, "ü", "Webdings", getGlobal("NEWS_SWITCH")); 
   showIcon("DT_BO_icon_session", 3, 2, "¸", "Wingdings", getGlobal("SESSION_SWITCH")); 
+  showIcon("DT_BO_icon_zoom", 1, 1, "L", "Webdings", getGlobal("ZOOM_SWITCH")); 
   // showIcon("DT_BO_icon_fibo_lines", 7, -2, "f", "Comic Sans MS", getGlobal("FIBO_LINES_SWITCH"));
   // showIcon("DT_BO_icon_boundary", 4, 1, ".", "Wingdings 3", getGlobal("BOUNDARY_SWITCH")); 
   return (errorCheck("initIcons"));
@@ -44,7 +45,7 @@ bool showIcon(string name, int x, int y, string text, string font, string appIsO
   ObjectSet(name, OBJPROP_XDISTANCE, x_cord+x);
   ObjectSet(name, OBJPROP_YDISTANCE, y_cord+y);
   ObjectSet(name, OBJPROP_BACK, false);
-  if(appIsOn == "1"){ lb_color = White; }else{ lb_color = DarkGray; }
+  if( appIsOn != "0" ){ lb_color = White; }else{ lb_color = DarkGray; }
   ObjectSetText(name,text,16,font,lb_color);
 	
   ObjectCreate(bg_name, OBJ_LABEL, 0, 0, 0);
@@ -52,7 +53,7 @@ bool showIcon(string name, int x, int y, string text, string font, string appIsO
   ObjectSet(bg_name, OBJPROP_XDISTANCE, x_cord);
   ObjectSet(bg_name, OBJPROP_YDISTANCE, y_cord);
   ObjectSet(bg_name, OBJPROP_BACK, false);
-  if(appIsOn == "1" ){ lb_color = DeepSkyBlue; }else{ lb_color = Gainsboro; }
+  if( appIsOn != "0" ){ lb_color = DeepSkyBlue; }else{ lb_color = Gainsboro; }
   ObjectSetText(bg_name,"g",18,"Webdings",lb_color);  
   
   ICON_NR++;
@@ -62,7 +63,7 @@ bool showIcon(string name, int x, int y, string text, string font, string appIsO
 bool changeIcon(string name, string appIsOn){  
   string bg_name = name+"_1";
   name = name+"_2";
-  if(appIsOn == "1"){ 
+  if( appIsOn != "0" ){ 
     ObjectSet(name, OBJPROP_COLOR, White);
     ObjectSet(bg_name, OBJPROP_COLOR, DeepSkyBlue);
   }else{
