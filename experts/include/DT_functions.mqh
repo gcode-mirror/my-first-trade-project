@@ -370,6 +370,7 @@ int renameChannelLine(string sel_name, string status = "", bool sup_res = false)
   ObjectSet(name, OBJPROP_BACK, true);
   ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
   ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+  ObjectSetText(name, ObjectDescription( sel_name ), 8);
   
   if( need_rename ){
     ObjectDelete(sel_name);

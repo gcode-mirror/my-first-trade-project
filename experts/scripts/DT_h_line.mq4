@@ -11,12 +11,14 @@
 //+------------------------------------------------------------------+
 int start(){
   double price = WindowPriceMax(0)-((WindowPriceMax(0)-WindowPriceMin(0))/10);
-  string name = "DT_GO_h_line_"+DoubleToStr(TimeLocal(),0);
+  double time = TimeLocal();
+  string name = "DT_GO_h_line_"+DoubleToStr( time, 0 );
   
   ObjectCreate(name, OBJ_HLINE, 0, 0, price);
   ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
   ObjectSet(name, OBJPROP_RAY, false);
   ObjectSet(name, OBJPROP_BACK, true);
+  ObjectSetText(name, TimeToStr( time, TIME_DATE|TIME_SECONDS), 8);
   
   if(Period() > PERIOD_H4){    
     ObjectSet(name, OBJPROP_WIDTH, 2);  
