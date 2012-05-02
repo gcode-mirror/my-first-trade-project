@@ -32,7 +32,7 @@
 #include <DT_functions.mqh>
 #include <DT_channel.mqh>
 #include <DT_sessions.mqh>
-#include <DT_zoom.mqh>
+//#include <DT_zoom.mqh>
 
 //int k;
 int init(){
@@ -45,7 +45,7 @@ int init(){
   createGlobal("NEWS_SWITCH", "1");
   createGlobal("CHANNEL_SWITCH", "1");
   createGlobal("SESSION_SWITCH", "0");
-  createGlobal("ZOOM_SWITCH", "0");
+ // createGlobal("ZOOM_SWITCH", "0");
   
   createGlobal("LOT", "0.1");
 //=========================================== Init ===========================================
@@ -59,7 +59,7 @@ int init(){
   errorCheck("mon start");
   initMonitor(getGlobal("MONITOR_SWITCH"));	
   initSession(getGlobal("SESSION_SWITCH"));	
-  initZoom(getGlobal("ZOOM_SWITCH"));	
+  //initZoom(getGlobal("ZOOM_SWITCH"));	
   errorCheck("start");
   
   return(0);
@@ -76,7 +76,7 @@ int start(){
   startChannel(getGlobal("CHANNEL_SWITCH"));
 	startMonitor(getGlobal("MONITOR_SWITCH"));
 	startSession(getGlobal("SESSION_SWITCH"));
-	startZoom(getGlobal("ZOOM_SWITCH"));
+	//startZoom(getGlobal("ZOOM_SWITCH"));
   
   
 //	Alert(k-GetTickCount());  

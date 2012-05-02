@@ -52,10 +52,6 @@ int start(){
 
   if( GetTickCount() > CT_TIMER2 ){
     CT_TIMER2 = GetTickCount() + 4000;  
-    
-    if( CT_STOP_TRADE ){
-      return (0);
-    }
 
     int ticket, o_type;
     string comment, ts, trade_line_type;
@@ -72,6 +68,10 @@ int start(){
         if( open_time + 5400 < TimeCurrent() ){
           OrderDelete( ticket );
           errorCheck( Symbol()+" Position closed, ticket id:"+ticket );
+          return (0);
+        }
+        
+        if( CT_STOP_TRADE ){
           return (0);
         }
       
@@ -126,6 +126,10 @@ int start(){
       }
 
     }else{
+      if( CT_STOP_TRADE ){
+        return (0);
+      }
+    
       double h, l;
       string trade_line_name = "", line_type;
 
