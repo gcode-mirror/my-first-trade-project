@@ -66,5 +66,5 @@ bool deinitHud(){
 
 bool updateHud(){
 	double lot = StrToDouble(getGlobal("LOT"));
-  ObjectSetText("DT_BO_hud_info",StringConcatenate(StringSubstr(Symbol(), 0, 6)," | ",getPeriodName( Symbol() )," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
+  ObjectSetText("DT_BO_hud_info",StringConcatenate(StringSubstr(Symbol(), 0, 6)," | ",getPeriodName( Period() )," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
 }

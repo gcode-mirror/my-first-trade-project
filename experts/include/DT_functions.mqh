@@ -364,13 +364,14 @@ int renameChannelLine(string sel_name, string status = "", bool sup_res = false)
   }else if( status == "all" ){
     ObjectSet(name, OBJPROP_COLOR, Magenta);
     ObjectSetText(name, "/\ \/ /\ \/ /\ \/ /\ \/ /\ \/");
+  }else{
+    ObjectSetText(name, ObjectDescription( sel_name ), 8);
   }
   
   ObjectSet(name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY));
   ObjectSet(name, OBJPROP_BACK, true);
   ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
   ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
-  ObjectSetText(name, ObjectDescription( sel_name ), 8);
   
   if( need_rename ){
     ObjectDelete(sel_name);
