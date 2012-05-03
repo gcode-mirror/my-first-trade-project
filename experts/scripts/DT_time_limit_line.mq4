@@ -19,7 +19,7 @@ int start(){
   if( ObjectFind( "DT_GO_channel_trade_time_limit" ) == -1 ){
     ObjectCreate( "DT_GO_channel_trade_time_limit", OBJ_VLINE, 0, tod, 0 );
     ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_COLOR, Peru );
-    ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_BACK, false );
+    ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_BACK, true );
     ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_WIDTH, 2 );
   }else{
     ObjectDelete( "DT_GO_channel_trade_time_limit" );
