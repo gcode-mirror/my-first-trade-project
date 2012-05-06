@@ -77,57 +77,61 @@ bool displayNews(){
   MAX_PRICE_NEWS = WindowPriceMax(0);
   MIN_PRICE_NEWS = WindowPriceMin(0);
   
-  double y1;
-  double size = (MAX_PRICE_NEWS-MIN_PRICE_NEWS)*0.015;
-  int len = ArrayRange(NEWS_DATA,0);
-  int news_same_time_up = 0, news_same_time_down = 0, position;
+  double pip, item_size, gap, p1 ,p2, time, prev_top_price, prev_bottom_price;
+  int position, i, len = ArrayRange(NEWS_DATA,0), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
   string desc;
-  double y2, time, round_time, prev_time = 0;
+
+  pip = 1 / MathPow(10,Digits);
+  item_size = NormalizeDouble( (MAX_PRICE_NEWS-MIN_PRICE_NEWS)/80, Digits );
+  if( item_size < pip ){
+    item_size = 6 * pip;
+  }
   
-  for(int i=0;i<len;i++){
+  gap = NormalizeDouble( (MAX_PRICE_NEWS-MIN_PRICE_NEWS)/300, Digits );
+  if( gap < pip ){
+    gap = 2 * pip;
+  }
+  
+  for( i=0; i < len; i++){
     position = StringFind( Symbol(), NEWS_DATA[i][NEWS_CURRENCY]);
     if(position != -1){
       time = StrToDouble(NEWS_DATA[i][NEWS_TIME]);
-      desc = StringConcatenate("[",NEWS_DATA[i][NEWS_ACT],"|",NEWS_DATA[i][NEWS_FORC],"|",NEWS_DATA[i][NEWS_PREV],"]",NEWS_DATA[i][NEWS_UNIT]," ",NEWS_DATA[i][NEWS_DESC],"|",TimeHour(time),":",TimeMinute(time));
-      round_time = MathFloor(time/(Period()*60.0));
+      desc = StringConcatenate("[",NEWS_DATA[i][NEWS_ACT],"|",NEWS_DATA[i][NEWS_FORC],"|",NEWS_DATA[i][NEWS_PREV],"]",NEWS_DATA[i][NEWS_UNIT]," ",NEWS_DATA[i][NEWS_DESC]," ",TimeHour(time),":",TimeMinute(time));
+      time_shift = iBarShift( NULL, 0, time - 604801 );
       
       if(position == 0){
-        y1 = MAX_PRICE_NEWS;
-        y2 = y1-size;
-        if(round_time == prev_time){
-          y1 = y1-(size*news_same_time_up)-(size/3*news_same_time_up);
-          y2 = y2-(size*news_same_time_up)-(size/3*news_same_time_up);
-          news_same_time_up++;
+        if( prev_top_time_shift == time_shift ){
+          p1 = prev_top_price - gap;
         }else{
-          news_same_time_up = 0;
-        }      
+          p1 = MAX_PRICE_NEWS;
+        }
+        p2 = p1 - item_size;
+        prev_top_price = p2;
+        prev_top_time_shift = time_shift;
       }else{
-        y1 = MIN_PRICE_NEWS;
-        y2 = y1+size;
-        if(round_time == prev_time){
-          y1 = y1+(size*news_same_time_down)+(size/3*news_same_time_down);
-          y2 = y2+(size*news_same_time_down)+(size/3*news_same_time_down);
-          news_same_time_down++;
+        if( prev_bottom_time_shift == time_shift ){
+          p2 = prev_bottom_price + gap;
         }else{
-          news_same_time_down = 0;
-        }  
+          p2 = MIN_PRICE_NEWS;
+        }
+        p1 = p2 + item_size;
+        prev_bottom_price = p1;
+        prev_bottom_time_shift = time_shift;
       }
-      
-      createNewsLine("DT_BO_news_"+i, time, y1, y2, desc, NEWS_DATA[i][NEWS_PRIO],StrToDouble(NEWS_DATA[i][NEWS_REL]));
-      
-      prev_time = round_time;
-    }    
+      createNewsLine(StringConcatenate("DT_BO_news_",NEWS_DATA[i][NEWS_CURRENCY],"_",i), time, p1, p2, desc, NEWS_DATA[i][NEWS_PRIO],StrToDouble(NEWS_DATA[i][NEWS_REL]));
+    }
   }
+  
   return (errorCheck("displayNews"));
 }
 
-bool createNewsLine(string name, double x, double y1, double y2, string text, string prio, double width){
+bool createNewsLine(string name, double t, double p1, double p2, string text, string prio, double width){
   color c = Green;
   if(prio == "HIGH"){ c = Red;
   }else if(prio == "MEDIUM"){c = Orange;
   }else if(prio == "LOW"){c = Blue; }
   
-	ObjectCreate(name, OBJ_TREND, 0, x, y1, x, y2);
+	ObjectCreate(name, OBJ_TREND, 0, t, p1, t, p2);
 	ObjectSet(name, OBJPROP_COLOR, c);             
 	ObjectSet(name, OBJPROP_RAY, false);
 	ObjectSet(name, OBJPROP_STYLE, STYLE_SOLID);
@@ -164,7 +168,7 @@ bool csvNewsFileToArray(){
       }else if(col_idx == 3){
         NEWS_DATA[line_idx][NEWS_CURRENCY] = toUpper(data);
       }else if(col_idx == 4){
-        NEWS_DATA[line_idx][NEWS_DESC] = data;
+        NEWS_DATA[line_idx][NEWS_DESC] = StringSubstr( data, 4, StringLen(data)-4 );
       }else if(col_idx == 5){
         prio = toUpper(StringTrimRight(StringTrimLeft(data)));       
         if(prio == "HIGH" || prio == "MEDIUM" || prio == "LOW"){
@@ -281,7 +285,7 @@ bool doFileDownLoad(){
 }
 
 string newsFileName(){   
-  datetime date =  TimeLocal() - (TimeDayOfWeek(TimeLocal())  * 86400);  
+  datetime date =  TimeLocal() - (TimeDayOfWeek(TimeLocal())  * 86400);
   return (StringConcatenate("Calendar-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),"-",TimeYear(date),".csv"));  
 }
 

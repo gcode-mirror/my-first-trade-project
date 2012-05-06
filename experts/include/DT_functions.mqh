@@ -368,6 +368,7 @@ int renameChannelLine(string sel_name, string status = "", bool sup_res = false)
     ObjectSetText(name, ObjectDescription( sel_name ), 8);
   }
   
+  ObjectSet( name, OBJPROP_STYLE, ObjectGet( sel_name, OBJPROP_STYLE ) );
   ObjectSet(name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY));
   ObjectSet(name, OBJPROP_BACK, true);
   ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
@@ -439,14 +440,14 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     if( max_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) > max_dist ){
         Alert(Symbol()+" Fibo distance is too big! MAXDIST: "+max_dist+" DIST:"+(fibo_100 - fibo_0));
-        return (0.0);
+        return ( -1.0 * iBarShift( NULL , 0, time1 ) );
       }
     }
     
     if( min_time != 0.0 ){
       if( Time[0] - time1 < min_time ){
         Alert(Symbol()+" Fibo time is too small! "+(Time[0] - time1));
-        return (0.0);
+        return ( -1.0 * iBarShift( NULL , 0, time1 ) );
       }
     }
   }

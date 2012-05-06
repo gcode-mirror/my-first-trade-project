@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=1361
+leftpos=1347
 digits=3
 scale=4
 graph=1
@@ -123,6 +123,78 @@ style=0
 weight=1
 background=1
 value_0=80.665116
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336260930
+period_flags=63
+create_time=1336253730
+description=2012.05.05 23:35:30
+color=15570276
+style=0
+weight=1
+background=1
+value_0=81.260182
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336261021
+period_flags=63
+create_time=1336253821
+description=2012.05.05 23:37:01
+color=15570276
+style=0
+weight=1
+background=1
+value_0=81.559273
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336261051
+period_flags=63
+create_time=1336253851
+description=2012.05.05 23:37:31
+color=15570276
+style=0
+weight=1
+background=1
+value_0=80.134727
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336261083
+period_flags=63
+create_time=1336253883
+description=2012.05.05 23:38:03
+color=15570276
+style=0
+weight=1
+background=1
+value_0=80.853532
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336261194
+period_flags=63
+create_time=1336253994
+description=2012.05.05 23:39:54
+color=15570276
+style=0
+weight=1
+background=1
+value_0=78.242143
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336261256
+period_flags=63
+create_time=1336254056
+description=2012.05.05 23:40:56
+color=15570276
+style=0
+weight=1
+background=1
+value_0=79.359299
 </object>
 <object>
 type=2
@@ -287,7 +359,7 @@ period_flags=63
 create_time=1335892130
 description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
 color=16711935
-style=0
+style=1
 weight=1
 background=1
 time_0=1331665200
@@ -300,9 +372,10 @@ ray=1
 type=2
 object_name=DT_GO_t_line_s_all_1334355035
 period_flags=63
-create_time=1336057140
+create_time=1336325124
+description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
 color=16711935
-style=0
+style=1
 weight=1
 background=1
 time_0=1331744400
@@ -318,7 +391,7 @@ period_flags=63
 create_time=1336077696
 description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
 color=16711935
-style=0
+style=1
 weight=1
 background=1
 time_0=1331776800
@@ -334,7 +407,7 @@ period_flags=63
 create_time=1335892095
 description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
 color=16711935
-style=0
+style=1
 weight=1
 background=1
 time_0=1331715600

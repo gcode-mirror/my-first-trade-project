@@ -19,8 +19,10 @@ int CT_START_TIME;
 double CT_OFFSET = 0.0;
 double CT_MIN_DIST = 0.0;
 double CT_MAX_DIST = 0.0;
+double CT_MIN_TIME = 9901;
 double CT_SL_FACTOR = 1.3;
-string CT_LINES[][2];
+string CT_SEL_LINES[][2];
+string CT_MID_FIBO_LINES[][2];
 bool CT_INFO_STATUS = false;
 bool CT_STOP_TRADE = false;
 bool CT_UNEXPECTED_NEWS = false;
@@ -38,7 +40,7 @@ int start(){
     CT_TIMER1 = GetTickCount() + 6000;
     setChannelLinesArr();
     CT_UNEXPECTED_NEWS = setNewsAlert();
-    
+
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
       CT_STOP_TRADE = false;
     }else{
@@ -46,12 +48,12 @@ int start(){
         CT_STOP_TRADE = true;
       }else{
         CT_STOP_TRADE = false;
-      }      
+      }
     }
-  }  
+  }
 
   if( GetTickCount() > CT_TIMER2 ){
-    CT_TIMER2 = GetTickCount() + 4000;  
+    CT_TIMER2 = GetTickCount() + 4000;
 
     int ticket, o_type;
     string comment, ts, trade_line_type;
@@ -70,11 +72,11 @@ int start(){
           errorCheck( Symbol()+" Position closed, ticket id:"+ticket );
           return (0);
         }
-        
+
         if( CT_STOP_TRADE ){
           return (0);
         }
-      
+
         comment = OrderComment();
         ts = StringSubstr(comment, 2, 10);
         trade_line_type = StringSubstr(comment, 0, 1);
@@ -83,7 +85,7 @@ int start(){
         }else{
           trade_line_price = ObjectGet( "DT_GO_h_line_"+ts, OBJPROP_PRICE1 );
         }
-        
+
         spread = getMySpread();
         op = NormalizeDouble( OrderOpenPrice(), Digits );
         double new_op;
@@ -93,21 +95,31 @@ int start(){
         }else{
           new_op = NormalizeDouble( trade_line_price, Digits );
         }
-        
+
         if( new_op == op ){
           return (0);
         }else{
           double new_sl, new_tp;
           fibo_100 = StrToDouble(StringSubstr(comment, 13, StringLen(comment)-13));
           fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100 );
+          if( fibo_23_dif <= 0.0 ){
+            return (0);
+          }
 
-          if( o_type == OP_BUYLIMIT ){            
+
+          if( o_type == OP_BUYLIMIT ){
             new_sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
             new_tp = NormalizeDouble( trade_line_price + getCloseChannelLine( 1, trade_line_price, fibo_23_dif ), Digits );
-            
-          }else{            
+
+          }else{
             new_sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + spread, Digits );
             new_tp = NormalizeDouble( trade_line_price - getCloseChannelLine( -1, trade_line_price, fibo_23_dif ) + spread, Digits );
+          }
+
+          if( GetTickCount() < CT_START_TIME ){
+            if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want MODIFY position(", ticket,") in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
+              return(0);
+            }
           }
 
           OrderModify(ticket, new_op, new_sl, new_tp, TimeCurrent()+5400);
@@ -129,39 +141,46 @@ int start(){
       if( CT_STOP_TRADE ){
         return (0);
       }
-    
+
       double h, l;
       string trade_line_name = "", line_type;
 
       RefreshRates();
       l = iLow( NULL, PERIOD_H1, 0);
       h = iHigh( NULL, PERIOD_H1, 0);
-      
-      int i, len = ArrayRange( CT_LINES, 0 );
+
+      int i, len = ArrayRange( CT_SEL_LINES, 0 );
       for( i = 0; i < len; i++ ) {
-        if( CT_LINES[i][1] == "t" ){
-          trade_line_price = ObjectGetValueByShift( CT_LINES[i][0], 0 );
+        if( CT_SEL_LINES[i][1] == "t" ){
+          trade_line_price = ObjectGetValueByShift( CT_SEL_LINES[i][0], 0 );
         }else{
-          trade_line_price = ObjectGet( CT_LINES[i][0], OBJPROP_PRICE1 );
+          trade_line_price = ObjectGet( CT_SEL_LINES[i][0], OBJPROP_PRICE1 );
         }
-        
+
         if( trade_line_price != 0.0){
           if( ( l < trade_line_price + CT_OFFSET && l > trade_line_price - CT_OFFSET ) || ( h > trade_line_price - CT_OFFSET && h < trade_line_price + CT_OFFSET ) ){
-            fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, 9901, CT_MIN_DIST, CT_MAX_DIST );
-            if( fibo_23_dif != 0.0 ){
-              trade_line_name = CT_LINES[i][0];
-              trade_line_type = CT_LINES[i][1];
+            fibo_23_dif = getFibo23Dif( trade_line_price, fibo_100, CT_MIN_TIME, CT_MIN_DIST, CT_MAX_DIST );
+            if( fibo_23_dif > 0.0 ){
+              trade_line_name = CT_SEL_LINES[i][0];
+              trade_line_type = CT_SEL_LINES[i][1];
               break;
+            }else if( fibo_23_dif < 0.0 ){
+              fibo_23_dif = findMiddleFibo100( trade_line_price, fibo_100, MathAbs(fibo_23_dif) );
+              if( fibo_23_dif != 0.0 ){
+                trade_line_name = CT_SEL_LINES[i][0];
+                trade_line_type = CT_SEL_LINES[i][1];
+                break;
+              }
             }
           }
         }else{
           GetLastError();
-        }  
+        }
       }
-          
+
       if( trade_line_name != "" ){
         double sl, tp;
-        
+
         if( CT_UNEXPECTED_NEWS ){
           Alert( Symbol()+" Unexpected news " );
           return(0);
@@ -175,7 +194,7 @@ int start(){
             Alert( Symbol()+" Resistance "+trade_line_name );
             return(0);
           }
-          
+
           if( l > trade_line_price ){   // ---- BUY LIMIT -----
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + spread, Digits );
@@ -183,20 +202,20 @@ int start(){
           }else if( Bid < trade_line_price + fibo_23_dif){  // ------- BUY --------
             o_type = OP_BUY;
             op = NormalizeDouble( Ask, Digits );
-            
+
           }else{
             Alert( Symbol()+" You are late from Buy "+trade_line_name );
             return(0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
           tp = NormalizeDouble( trade_line_price + getCloseChannelLine( 1, trade_line_price, fibo_23_dif ), Digits );
-        
+
         }else{                       // ================================================ Sell ================================================
           if( line_type == "sup" ){
             Alert( Symbol()+" Support "+trade_line_name );
             return(0);
           }
-          
+
           if( h < trade_line_price ){ // ---- SELL LIMIT ----
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price, Digits );
@@ -210,15 +229,15 @@ int start(){
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + spread, Digits );
           tp = NormalizeDouble( trade_line_price - getCloseChannelLine( -1, trade_line_price, fibo_23_dif ) + spread, Digits );
-        
+
         }
-      
+
         if( GetTickCount() < CT_START_TIME ){
-          if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want open position in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
+          if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want OPEN position in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
             return(0);
           }
         }
-        
+
         ts = StringSubstr( trade_line_name, StringLen( trade_line_name ) - 10, 10 );
         comment = trade_line_type +" "+ ts +" "+ DoubleToStr( fibo_100, Digits );
 
@@ -247,6 +266,7 @@ int start(){
 /* !! */  createHistoryLine(op, Blue, "Order type: "+o_type+", OP", "op_"+ts);
 /* !! */  createHistoryLine(sl, Red, "Order type: "+o_type+", SL", "sl_"+ts);
 /* !! */  createHistoryLine(tp, Green, "Order type: "+o_type+", TP", "tp_"+ts);
+/* !! */  createHistoryLine(fibo_100, Black, "Order type: "+o_type+", f100", "f100_"+ts);
 
         errorCheck(error_text+" Bid:"+ Bid+ " Ask:"+ Ask);
         renameChannelLine( trade_line_name );
@@ -261,7 +281,7 @@ int start(){
 }
 
 int deinit(){
-  
+
   return(0);
 }
 
@@ -270,12 +290,12 @@ bool setNewsAlert(){
   string name;
   double news_from = iTime( NULL, PERIOD_M1, 0) - 14400;
   len= ObjectsTotal();
-  
+
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
     if( StringSubstr(name,5,6) == "_news_" ){
-      if( ObjectGet( name, OBJPROP_TIME1 ) > news_from ){       
-        if( ObjectGet( name, OBJPROP_WIDTH ) > 1 ){         
+      if( ObjectGet( name, OBJPROP_TIME1 ) > news_from ){
+        if( ObjectGet( name, OBJPROP_WIDTH ) > 1 ){
           return( true );
         }
       }
@@ -285,15 +305,15 @@ bool setNewsAlert(){
 }
 
 double getCloseChannelLine(int dir, double line, double dist){
-  int i, len = ArrayRange( CT_LINES, 0 );
+  int i, len = ArrayRange( CT_SEL_LINES, 0 );
   double price, dif, min_dist = dist/3, closest = 9999999;
   for( i = 0; i < len; i++ ) {
-    if( CT_LINES[i][1] == "t" ){
-      price = ObjectGetValueByShift( CT_LINES[i][0], 0 );
+    if( CT_SEL_LINES[i][1] == "t" ){
+      price = ObjectGetValueByShift( CT_SEL_LINES[i][0], 0 );
     }else{
-      price = ObjectGet( CT_LINES[i][0], OBJPROP_PRICE1 );
+      price = ObjectGet( CT_SEL_LINES[i][0], OBJPROP_PRICE1 );
     }
-    
+
     if( dir == 1 ){
       if( price < line ){
         continue;
@@ -303,7 +323,7 @@ double getCloseChannelLine(int dir, double line, double dist){
         continue;
       }
     }
-    
+
     dif = MathAbs( line - price );
     if( dif < dist && dif > min_dist ){
       if( dif < closest ){
@@ -320,19 +340,31 @@ double getCloseChannelLine(int dir, double line, double dist){
 }
 
 int setChannelLinesArr(){
-  int j = 1, i, len;
-  string name, type;
+  int j = 1, k = 1, i, len;
+  string name;
 
-  ArrayResize(CT_LINES, 0);
+  ArrayResize(CT_SEL_LINES, 0);
+  ArrayResize(CT_MID_FIBO_LINES, 0);
+
   len= ObjectsTotal();
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
-    type = StringSubstr(name,7,8);
-    if( type == "_line_s_" ){
-      ArrayResize(CT_LINES, j);
-      CT_LINES[j-1][0] = name;
-      CT_LINES[j-1][1] = StringSubstr(name,6,1);
-      j++;
+    if( StringSubstr( name, 7, 6 ) == "_line_" ){
+
+      if( StringSubstr( name, 12, 3 ) == "_s_" ){
+        ArrayResize( CT_SEL_LINES, j );
+        CT_SEL_LINES[j-1][0] = name;
+        CT_SEL_LINES[j-1][1] = StringSubstr(name,6,1);
+        j++;
+      }
+
+      if( ObjectGet( name, OBJPROP_STYLE ) == STYLE_DASH ){
+        ArrayResize( CT_MID_FIBO_LINES, k );
+        CT_MID_FIBO_LINES[k-1][0] = name;
+        CT_MID_FIBO_LINES[k-1][1] = StringSubstr(name,6,1);
+        k++;
+      }
+
     }
   }
   return(0);
@@ -351,7 +383,55 @@ int createHistoryLine(double price, color c, string text, string ts){
 	ObjectSet(name, OBJPROP_BACK, true);
 	ObjectSet(name, OBJPROP_WIDTH, 1);
 	ObjectSetText(name, text, 8);
-  
-  
 }
 
+double findMiddleFibo100(double fibo_0, double& wrong_fibo_100, int fibo_100_shift){
+  int j, i, len = ArrayRange( CT_MID_FIBO_LINES, 0 );
+  double curr_fibo_100, fibo_23 = 9999999.0, max, min, tmp, h, l;
+  string found_fibo = "";
+  max = MathMax( wrong_fibo_100, fibo_0 );
+  min = MathMin( wrong_fibo_100, fibo_0 );
+
+  for( i = 0; i < len; i++ ) {
+    if( ObjectGet( CT_MID_FIBO_LINES[i][0], OBJPROP_STYLE ) == STYLE_DASH ){
+      if( CT_MID_FIBO_LINES[i][1] == "t" ){
+        curr_fibo_100 = ObjectGetValueByShift( CT_MID_FIBO_LINES[i][0], fibo_100_shift );
+      }else{
+        curr_fibo_100 = ObjectGet( CT_MID_FIBO_LINES[i][0], OBJPROP_PRICE1 );
+      }
+    }else{
+      continue;
+    }
+    
+    if( MathAbs( fibo_0 - curr_fibo_100 ) < CT_MIN_DIST ){
+      continue;
+    }
+
+    if( curr_fibo_100 > min && curr_fibo_100 < max ){
+      if( CT_MID_FIBO_LINES[i][1] == "t" ){
+        for( j = fibo_100_shift; j >= 0; j-- ) {
+          h = iHigh( NULL, 0, j) ;
+          l = iLow( NULL, 0, j) ;
+          tmp = ObjectGetValueByShift( CT_MID_FIBO_LINES[i][0], j );
+          if( tmp < h && tmp > l ){
+            curr_fibo_100 = tmp;
+            break;
+          }
+        }
+      }
+      tmp = ( MathMax(fibo_0, curr_fibo_100) - MathMin(fibo_0, curr_fibo_100) ) * 0.23 ;
+      if( tmp < fibo_23 ){
+        fibo_23 = tmp;
+        wrong_fibo_100 = curr_fibo_100;
+        found_fibo = StringConcatenate( CT_MID_FIBO_LINES[i][0]," at ", TimeToStr( iTime( NULL, 0, j ), TIME_DATE|TIME_SECONDS ), " price: ", curr_fibo_100, " fibo23:", fibo_23);
+      }
+    }
+  }
+
+  if( fibo_23 == 9999999.0 ){
+    return (0.0);
+  }else{
+    Alert( Symbol()+" Middle fibo found: "+ found_fibo );
+    return (fibo_23);
+  }
+}
