@@ -52,7 +52,7 @@ int start(){
     }
   }
 
-  if( GetTickCount() > CT_TIMER2 ){
+  if( IsTesting() || GetTickCount() > CT_TIMER2 ){
     CT_TIMER2 = GetTickCount() + 4000;
 
     int ticket, o_type;

@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=1299
+leftpos=1302
 digits=5
 scale=4
 graph=1
@@ -52,58 +52,6 @@ value_0=0.000000
 time_1=1333396800
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_f100_1333045088
-period_flags=0
-create_time=1336487445
-description=Order type: 2, f100
-color=0
-weight=1
-background=1
-symbol_code=5
-time_0=1336489200
-value_0=1.019690
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_op_1333045088
-period_flags=0
-create_time=1336487445
-description=Order type: 2, OP
-color=16711680
-weight=1
-background=1
-symbol_code=5
-time_0=1336489200
-value_0=1.009470
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_sl_1333045088
-period_flags=0
-create_time=1336487445
-description=Order type: 2, SL
-color=255
-weight=1
-background=1
-symbol_code=5
-time_0=1336489200
-value_0=1.006220
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_tp_1333045088
-period_flags=0
-create_time=1336487445
-description=Order type: 2, TP
-color=32768
-weight=1
-background=1
-symbol_code=5
-time_0=1336489200
-value_0=1.011700
 </object>
 <object>
 type=2

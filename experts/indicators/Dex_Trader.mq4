@@ -6,6 +6,11 @@
 #property copyright "Dex"
 #property link      ""
 
+#import "user32.dll"
+int GetWindowDC(int dc);
+int ReleaseDC(int h, int dc);
+bool GetWindowRect(int h, int& pos[4]);
+
 #property indicator_chart_window
 
 #property indicator_buffers 4

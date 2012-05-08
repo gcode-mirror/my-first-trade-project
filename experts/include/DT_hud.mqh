@@ -6,6 +6,9 @@
 #property copyright "Dex"
 #property link      ""
 
+double HUD_PRICE_MIN = 0, HUD_PRICE_MAX = 0;
+int HUD_WIDTH;
+
 bool initHud(){
   if(deinitHud()){}
   ObjectCreate("DT_BO_hud_spread", OBJ_LABEL, 0, 0, 0);
@@ -26,6 +29,23 @@ bool initHud(){
     ObjectSet( "DT_BO_channel_trade_info", OBJPROP_BACK, true);
     ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", DarkOrange );
   }
+  
+  int hWnd = WindowHandle(Symbol(), Period());
+  int hDC = GetWindowDC(hWnd);
+  int rect[4];
+  GetWindowRect(hWnd, rect);
+  HUD_WIDTH = rect[2] - rect[0] - 47; // Window width
+  
+  ObjectCreate( "DT_BO_hud_scale_info", OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_CORNER, 2 );
+  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE, HUD_WIDTH - 2 );
+  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_YDISTANCE, 10 );
+  
+  ObjectCreate( "DT_BO_hud_scale_label", OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( "DT_BO_hud_scale_label", OBJPROP_CORNER, 3 );
+  ObjectSet( "DT_BO_hud_scale_label", OBJPROP_XDISTANCE, 1 );
+  ObjectSet( "DT_BO_hud_scale_label", OBJPROP_YDISTANCE, 60 );
+  ObjectSet( "DT_BO_hud_scale_label", OBJPROP_ANGLE, 90 );
   
 	updateHud();
 	
@@ -55,6 +75,16 @@ bool startHud(){
   }else{
     ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", Black );
   }
+  
+  int scale = (((WindowPriceMax(0)-WindowPriceMin(0))/Point)*MarketInfo(Symbol(),MODE_TICKVALUE))/30;
+  
+  if( HUD_PRICE_MIN != WindowPriceMin(0) || HUD_PRICE_MAX != WindowPriceMax(0)){
+    HUD_PRICE_MIN = WindowPriceMin(0);
+    HUD_PRICE_MAX = WindowPriceMax(0);
+    ObjectSetText( "DT_BO_hud_scale_info", "g", scale, "Webdings", Black );
+    ObjectSetText( "DT_BO_hud_scale_label", scale+"", 7, "Microsoft Sans Serif", Black );
+  }
+  
   // GetLastError(); 
   return (errorCheck("startHud"));  
 }
