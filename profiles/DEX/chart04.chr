@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=4811
+leftpos=4780
 digits=3
 scale=4
 graph=1
@@ -102,6 +102,18 @@ style=0
 weight=1
 background=1
 value_0=107.654078
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336480205
+period_flags=63
+create_time=1336473005
+description=2012.05.08 12:30:05
+color=15570276
+style=0
+weight=1
+background=1
+value_0=104.441983
 </object>
 <object>
 type=1
@@ -338,16 +350,15 @@ ray=1
 type=2
 object_name=DT_GO_t_line_1336405698
 period_flags=63
-create_time=1336398498
-description=2012.05.07 15:48:18
+create_time=1336461657
 color=15570276
 style=1
 weight=1
 background=1
-time_0=1334678400
-value_0=106.300188
-time_1=1335920400
-value_1=104.535188
+time_0=1334656800
+value_0=106.312040
+time_1=1336471200
+value_1=103.732040
 ray=1
 </object>
 <object>
@@ -360,10 +371,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1334282400
-value_0=107.100468
-time_1=1336147200
-value_1=104.451000
+time_0=1334764800
+value_0=106.441630
+time_1=1336006800
+value_1=104.676630
 ray=1
 </object>
 <object>
