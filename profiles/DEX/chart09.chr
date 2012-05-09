@@ -1,8 +1,8 @@
 <chart>
-symbol=USDJPY-Pro
+symbol=GBPUSD-Pro
 period=15
-leftpos=3396
-digits=3
+leftpos=3603
+digits=5
 scale=2
 graph=2
 fore=0
@@ -16,10 +16,10 @@ days=0
 descriptions=0
 shift_size=10
 fixed_pos=0
-window_left=200
-window_top=200
-window_right=1655
-window_bottom=718
+window_left=25
+window_top=25
+window_right=1480
+window_bottom=543
 window_type=1
 background_color=16777215
 foreground_color=0
