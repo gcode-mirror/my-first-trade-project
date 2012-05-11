@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=4884
+leftpos=4848
 digits=3
 scale=4
 graph=1
