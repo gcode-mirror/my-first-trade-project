@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=30
-leftpos=5161
+period=60
+leftpos=3041
 digits=5
 scale=4
 graph=1
@@ -54,6 +54,58 @@ value_1=0.010000
 ray=0
 </object>
 <object>
+type=22
+object_name=DT_GO_channel_hist_f100_1336258942
+period_flags=0
+create_time=1337007076
+description=Order type: 3, f100
+color=0
+weight=1
+background=1
+symbol_code=5
+time_0=1337007600
+value_0=1.605900
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_op_1336258942
+period_flags=0
+create_time=1337007076
+description=Order type: 3, OP
+color=16711680
+weight=1
+background=1
+symbol_code=5
+time_0=1337007600
+value_0=1.611070
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_sl_1336258942
+period_flags=0
+create_time=1337007076
+description=Order type: 3, SL
+color=255
+weight=1
+background=1
+symbol_code=5
+time_0=1337007600
+value_0=1.612750
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_tp_1336258942
+period_flags=0
+create_time=1337007076
+description=Order type: 3, TP
+color=32768
+weight=1
+background=1
+symbol_code=5
+time_0=1337007600
+value_0=1.610020
+</object>
+<object>
 type=2
 object_name=DT_GO_CHANNEL_SWITCH
 period_flags=0
@@ -78,7 +130,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1337004900
+time_0=1337068800
 </object>
 <object>
 type=1
@@ -192,6 +244,18 @@ style=0
 weight=1
 background=1
 value_0=1.615054
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1336992864
+period_flags=63
+create_time=1336985664
+description=2012.05.14 10:54:24
+color=15570276
+style=0
+weight=1
+background=1
+value_0=1.605317
 </object>
 <object>
 type=1
@@ -457,7 +521,7 @@ ray=1
 type=2
 object_name=DT_GO_t_line_1336258942
 period_flags=63
-create_time=1336627744
+create_time=1337007076
 color=15570276
 style=1
 weight=1
