@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=2454
+leftpos=4238
 digits=5
 scale=4
 graph=1
@@ -500,6 +500,22 @@ time_0=1334610000
 value_0=1.314244
 time_1=1335895200
 value_1=1.298717
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_t_line_1337022922
+period_flags=63
+create_time=1337015722
+description=2012.05.14 19:15:22
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1334836800
+value_0=1.306977
+time_1=1336658400
+value_1=1.285606
 ray=1
 </object>
 <object>
