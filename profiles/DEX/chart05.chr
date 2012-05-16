@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=60
-leftpos=3285
+period=30
+leftpos=2845
 digits=5
 scale=4
 graph=1
@@ -185,6 +185,18 @@ background=1
 value_0=0.992325
 </object>
 <object>
+type=1
+object_name=DT_GO_h_line_1337181467
+period_flags=63
+create_time=1337174267
+description=2012.05.16 15:17:47
+color=15570276
+style=0
+weight=1
+background=1
+value_0=0.995654
+</object>
+<object>
 type=2
 object_name=DT_GO_LOT
 period_flags=0
@@ -355,16 +367,15 @@ weight=1
 background=1
 time_0=1335499200
 value_0=1.038808
-time_1=1337184600
-value_1=0.991638
+time_1=1337202000
+value_1=0.990825
 ray=1
 </object>
 <object>
 type=2
 object_name=DT_GO_t_line_1337124141
 period_flags=63
-create_time=1337116941
-description=2012.05.15 23:22:21
+create_time=1337167665
 color=15570276
 style=0
 weight=1
@@ -373,6 +384,22 @@ time_0=1335490200
 value_0=1.044184
 time_1=1337175600
 value_1=0.997014
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_t_line_1337174874
+period_flags=63
+create_time=1337167674
+description=2012.05.16 13:27:54
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1336390200
+value_0=1.019486
+time_1=1336620600
+value_1=1.010096
 ray=1
 </object>
 <object>
