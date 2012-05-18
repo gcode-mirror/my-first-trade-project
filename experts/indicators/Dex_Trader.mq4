@@ -72,7 +72,7 @@ int init(){
 
 //========================================== Start ===========================================
 int start(){
-  startHud();
+  // startHud();
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	
 	startTradeLines(getGlobal("TRADE_LINES_SWITCH"));

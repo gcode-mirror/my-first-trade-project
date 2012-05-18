@@ -432,26 +432,27 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     
     if( min_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) < min_dist ){
-        Alert(Symbol()+" Fibo distance is too small! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
+        Alert(Symbol()+" Fibo DISTANCE is too SMALL! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
         return (0.0);
       }
     }
     
     if( max_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) > max_dist ){
-        Alert(Symbol()+" Fibo distance is too big! MAXDIST: "+max_dist+" DIST:"+(fibo_100 - fibo_0));
+        Alert(Symbol()+" Fibo DISTANCE is too BIG! MAXDIST: "+max_dist+" DIST:"+(fibo_100 - fibo_0));
         return ( -1.0 * iBarShift( NULL , 0, time1 ) );
       }
     }
     
     if( min_time != 0.0 ){
       if( Time[0] - time1 < min_time ){
-        Alert(Symbol()+" Fibo time is too small! "+(Time[0] - time1));
+        Alert(Symbol()+" Fibo TIME is too SMALL! "+(Time[0] - time1));
         return ( -1.0 * iBarShift( NULL , 0, time1 ) );
       }
     }
   }
 
+  Alert(Symbol()+" time: "+(Time[0] - time1)+" dist:"+(fibo_100 - fibo_0));  
   return ( (MathMax(fibo_0, fibo_100) - MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
 }
 
