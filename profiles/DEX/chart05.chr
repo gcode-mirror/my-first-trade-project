@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=15
-leftpos=4373
+leftpos=4292
 digits=5
 scale=4
 graph=1
@@ -54,58 +54,6 @@ value_1=0.010000
 ray=0
 </object>
 <object>
-type=22
-object_name=DT_GO_channel_hist_f100_1337344456
-period_flags=0
-create_time=1337339303
-description=Order type: 3, f100
-color=0
-weight=1
-background=1
-symbol_code=5
-time_0=1337342400
-value_0=0.979500
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_op_1337344456
-period_flags=0
-create_time=1337339303
-description=Order type: 3, OP
-color=16711680
-weight=1
-background=1
-symbol_code=5
-time_0=1337342400
-value_0=0.987830
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_sl_1337344456
-period_flags=0
-create_time=1337339303
-description=Order type: 3, SL
-color=255
-weight=1
-background=1
-symbol_code=5
-time_0=1337342400
-value_0=0.990470
-</object>
-<object>
-type=22
-object_name=DT_GO_channel_hist_tp_1337344456
-period_flags=0
-create_time=1337339303
-description=Order type: 3, TP
-color=32768
-weight=1
-background=1
-symbol_code=5
-time_0=1337342400
-value_0=0.986070
-</object>
-<object>
 type=2
 object_name=DT_GO_CHANNEL_SWITCH
 period_flags=0
@@ -130,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1337356800
+time_0=1337375700
 </object>
 <object>
 type=1
@@ -374,16 +322,15 @@ ray=1
 type=2
 object_name=DT_GO_t_line_1337124102
 period_flags=63
-create_time=1337116902
-description=2012.05.15 23:21:42
+create_time=1337354107
 color=15570276
 style=0
 weight=1
 background=1
 time_0=1336379400
 value_0=1.016619
-time_1=1337349600
-value_1=0.984769
+time_1=1337331600
+value_1=0.985739
 ray=1
 </object>
 <object>

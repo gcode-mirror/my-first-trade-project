@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=15
-leftpos=4375
+period=60
+leftpos=1591
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1337185800
+time_0=1337371200
 </object>
 <object>
 type=1
@@ -467,16 +467,15 @@ ray=0
 type=2
 object_name=DT_GO_t_line_1337343175
 period_flags=63
-create_time=1337335975
-description=2012.05.18 12:12:55
+create_time=1337353820
 color=15570276
 style=0
 weight=1
 background=1
 time_0=1335859200
 value_0=79.643000
-time_1=1336564800
-value_1=79.430000
+time_1=1337270400
+value_1=79.202000
 ray=1
 </object>
 <object>
@@ -509,6 +508,22 @@ time_0=1335866400
 value_0=79.882047
 time_1=1337328000
 value_1=79.432047
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_t_line_1337357858
+period_flags=63
+create_time=1337350658
+description=2012.05.18 16:17:38
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1335780000
+value_0=80.206805
+time_1=1337241600
+value_1=79.756805
 ray=1
 </object>
 <object>
