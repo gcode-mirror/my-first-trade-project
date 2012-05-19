@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=15
-leftpos=4422
+leftpos=2047
 digits=5
 scale=4
 graph=2
@@ -18,7 +18,7 @@ shift_size=10
 fixed_pos=0
 window_left=175
 window_top=175
-window_right=1630
+window_right=1211
 window_bottom=693
 window_type=1
 background_color=16777215

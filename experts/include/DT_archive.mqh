@@ -33,9 +33,9 @@ bool initArchive(string isOn){
   }
   
   ObjectCreate("DT_BO_archive_hud", OBJ_LABEL, 0, 0, 0);
-  ObjectSet("DT_BO_archive_hud", OBJPROP_CORNER, 0);
-  ObjectSet("DT_BO_archive_hud", OBJPROP_XDISTANCE, 3);
-  ObjectSet("DT_BO_archive_hud", OBJPROP_YDISTANCE, 45);
+  ObjectSet("DT_BO_archive_hud", OBJPROP_CORNER, 3);
+  ObjectSet("DT_BO_archive_hud", OBJPROP_XDISTANCE, 7);
+  ObjectSet("DT_BO_archive_hud", OBJPROP_YDISTANCE, 3);
   ObjectSet("DT_BO_archive_hud", OBJPROP_BACK, true);
   
   return (errorCheck("initArchive"));
@@ -67,7 +67,7 @@ bool startArchive(string isOn){
     }
   }
   text = "<<< "+pos_left+"  |  "+(len-pos_left)+" >>>";
-  ObjectSetText("DT_BO_archive_hud",text,10,"Arial",Black);
+  ObjectSetText("DT_BO_archive_hud",text,8,"Arial",Black);
   return (errorCheck("startArchive"));
 }
 

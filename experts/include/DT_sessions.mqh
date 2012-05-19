@@ -22,6 +22,8 @@
 double TIMEZONES[7][4];
 string ZONENAMES[7];
 
+int SESS_Y_POS = 45;
+
 bool initSession( string isOn ){
   setAppStatus( APP_ID_SESSION, isOn );
   if( isOn == "0" ){        
@@ -91,7 +93,7 @@ bool initSession( string isOn ){
   ObjectSet( name, OBJPROP_CORNER, 0 );      
   ObjectSet( name, OBJPROP_BACK, true);
   ObjectSet( name, OBJPROP_XDISTANCE, 5 );
-  ObjectSet( name, OBJPROP_YDISTANCE, 45 );
+  ObjectSet( name, OBJPROP_YDISTANCE, SESS_Y_POS - 15 );
 	ObjectSetText( name, "Current Sessions:", 8, "Verdana", 0x5b5f60 );
 
 	
@@ -186,14 +188,14 @@ bool startSession( string isOn ){
 		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, -1 );
 	}else{
 		ObjectSet( "DT_BO_session_come_head", OBJPROP_TIMEFRAMES, 0 );
-		ObjectSet( "DT_BO_session_come_head", OBJPROP_YDISTANCE, 60 + (curr_nr * 17) + 6 );
+		ObjectSet( "DT_BO_session_come_head", OBJPROP_YDISTANCE, SESS_Y_POS + (curr_nr * 17) + 6 );
 	}
     
 	for(i = 0; i < len; i++){
 		label_name = "DT_BO_session_curr_name_"+i;
 		label_time = "DT_BO_session_curr_time_"+i;
 		if( i < curr_nr ){
-			ydist = 60 + (i * 17);
+			ydist = SESS_Y_POS + (i * 17);
 			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
 			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
 			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );

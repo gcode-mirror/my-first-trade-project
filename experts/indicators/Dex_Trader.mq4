@@ -26,9 +26,9 @@ bool GetWindowRect(int h, int& pos[4]);
 
 
 //========================================== Imports =========================================
-#include <DT_hud.mqh>
 #include <DT_ruler.mqh>
 #include <DT_icons.mqh>
+#include <DT_hud.mqh>
 #include <DT_comments.mqh>
 #include <DT_monitor.mqh>
 #include <DT_trade_lines.mqh>
@@ -72,7 +72,7 @@ int init(){
 
 //========================================== Start ===========================================
 int start(){
-  // startHud();
+  startHud();
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	
 	startTradeLines(getGlobal("TRADE_LINES_SWITCH"));

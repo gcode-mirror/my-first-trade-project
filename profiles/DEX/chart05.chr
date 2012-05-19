@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=15
-leftpos=4292
+leftpos=2233
 digits=5
 scale=4
 graph=1
@@ -18,7 +18,7 @@ shift_size=11
 fixed_pos=0
 window_left=0
 window_top=0
-window_right=1232
+window_right=1036
 window_bottom=478
 window_type=1
 background_color=16777215
@@ -185,18 +185,6 @@ value_0=0.995654
 </object>
 <object>
 type=1
-object_name=DT_GO_h_line_1337280034
-period_flags=63
-create_time=1337272834
-description=2012.05.17 18:40:34
-color=15570276
-style=0
-weight=1
-background=1
-value_0=0.986975
-</object>
-<object>
-type=1
 object_name=DT_GO_h_line_1337337755
 period_flags=63
 create_time=1337330555
@@ -206,6 +194,18 @@ style=0
 weight=1
 background=1
 value_0=0.980914
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1337422482
+period_flags=63
+create_time=1337415282
+description=2012.05.19 10:14:42
+color=15570276
+style=0
+weight=1
+background=1
+value_0=0.988435
 </object>
 <object>
 type=2
@@ -345,8 +345,8 @@ weight=1
 background=1
 time_0=1336609800
 value_0=1.004445
-time_1=1337328000
-value_1=0.982725
+time_1=1337328420
+value_1=0.982900
 ray=1
 </object>
 <object>
@@ -417,7 +417,7 @@ type=2
 object_name=DT_GO_TRADE_LINES_SWITCH
 period_flags=0
 create_time=1333403228
-description=0
+description=1
 color=255
 style=0
 weight=1
@@ -427,6 +427,84 @@ value_0=0.000000
 time_1=1333396800
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_OP
+period_flags=0
+create_time=1337415903
+description=0.1 lot
+color=16711680
+style=1
+weight=1
+background=0
+value_0=0.995765
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_OP_label
+period_flags=0
+create_time=1337415903
+description=0.1 lot
+color=16711680
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1337264100
+value_0=0.995765
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_SL
+period_flags=0
+create_time=1337415903
+description=1212 pip  121.2 USD  28266 HUF  121.2 unit
+color=255
+style=1
+weight=1
+background=0
+value_0=0.983648
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_SL_label
+period_flags=0
+create_time=1337415903
+description=1212 pip  121.2 USD  28266 HUF  121.2 unit
+color=255
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1337264100
+value_0=0.983648
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_TP
+period_flags=0
+create_time=1337415903
+description=75 pip  7.5 USD  1742 HUF  7.5 unit
+color=32768
+style=1
+weight=1
+background=0
+value_0=0.996512
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_TP_label
+period_flags=0
+create_time=1337415903
+description=75 pip  7.5 USD  1742 HUF  7.5 unit
+color=32768
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1337264100
+value_0=0.996512
 </object>
 <object>
 type=2
@@ -443,6 +521,17 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=1
+object_name=Horizontal Line 22716
+period_flags=0
+create_time=1337415868
+color=255
+style=0
+weight=1
+background=0
+value_0=0.985971
 </object>
 </indicator>
 <indicator>
@@ -462,7 +551,7 @@ draw_0=1
 color_0=255
 style_0=0
 weight_0=0
-period_flags=4
+period_flags=6
 show_data=1
 </indicator>
 <indicator>

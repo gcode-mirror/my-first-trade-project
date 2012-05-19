@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=15
-leftpos=4247
+leftpos=2986
 digits=5
 scale=2
 graph=2
@@ -18,7 +18,7 @@ shift_size=10
 fixed_pos=0
 window_left=25
 window_top=25
-window_right=1480
+window_right=1061
 window_bottom=543
 window_type=1
 background_color=16777215

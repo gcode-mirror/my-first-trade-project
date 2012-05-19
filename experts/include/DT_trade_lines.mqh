@@ -143,9 +143,10 @@ bool updateTradeLines(){
 
 string getLineText(double price1, double price2){
   double diff = MathMax(price1,price2)-MathMin(price1,price2);
-  double usd = (diff/Point)*StrToDouble(getGlobal("LOT"))*MarketInfo(Symbol(),MODE_TICKVALUE);
-  double huf =MarketInfo("USDHUF-Pro", MODE_BID)*usd;
-  return (DoubleToStr(diff*MathPow(10,Digits),0)+" pip  "+DoubleToStr(usd,1)+" USD  "+ DoubleToStr(huf,0)+" HUF");
+  double unit = (diff/Point)*MarketInfo(Symbol(),MODE_TICKVALUE);
+  double usd = unit * StrToDouble(getGlobal("LOT"));
+  double huf = MarketInfo("USDHUF-Pro", MODE_BID) * usd;
+  return ( StringConcatenate( DoubleToStr(diff*MathPow(10,Digits),0), " pip  ", DoubleToStr(usd,1), " USD  ", DoubleToStr(huf,0), " HUF", "  ", DoubleToStr( unit * 0.1, 1), " unit"));
 }
 
 bool createLines(string name, double price, color c){
