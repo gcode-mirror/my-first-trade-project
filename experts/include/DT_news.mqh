@@ -97,7 +97,7 @@ bool displayNews(){
     if(position != -1){
       time = StrToDouble(NEWS_DATA[i][NEWS_TIME]);
       desc = StringConcatenate("[",NEWS_DATA[i][NEWS_ACT],"|",NEWS_DATA[i][NEWS_FORC],"|",NEWS_DATA[i][NEWS_PREV],"]",NEWS_DATA[i][NEWS_UNIT]," ",NEWS_DATA[i][NEWS_DESC]," ",TimeHour(time),":",TimeMinute(time));
-      time_shift = iBarShift( NULL, 0, time - 604805 );
+      time_shift = iBarShift( NULL, 0, time - 604801 );
       
       if(position == 0){
         if( prev_top_time_shift == time_shift ){
@@ -118,7 +118,7 @@ bool displayNews(){
         prev_bottom_price = p1;
         prev_bottom_time_shift = time_shift;
       }
-      createNewsLine(StringConcatenate("DT_BO_news_",NEWS_DATA[i][NEWS_CURRENCY],"_",i), Time[iBarShift( NULL, 0, time )], p1, p2, desc, NEWS_DATA[i][NEWS_PRIO],StrToDouble(NEWS_DATA[i][NEWS_REL]));
+      createNewsLine(StringConcatenate("DT_BO_news_",NEWS_DATA[i][NEWS_CURRENCY],"_",i), time, p1, p2, desc, NEWS_DATA[i][NEWS_PRIO],StrToDouble(NEWS_DATA[i][NEWS_REL]));
     }
   }
   
