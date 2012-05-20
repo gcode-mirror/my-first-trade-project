@@ -14,6 +14,7 @@
 #define UNDO 0
 #define REDO 1
 
+double HUD_MY_SPREAD;
 double HUD_SPREAD_LIMIT;
 
 double HUD_PRICE_MIN = 0.0, HUD_PRICE_MAX = 0.0;
@@ -30,18 +31,21 @@ double HUD_SELF_HISTORY_GLOBAL_VAL;
 
 int HUD_OBJ_TOTAL = 0;
 
-// bool initHud(){
-bool initHud(string isOn){
-	setAppStatus(APP_ID_RULER, isOn);
-  if(isOn == "0"){
-    return (false);
-  }
+double HUD_WINDOW_FADE = 0.0;
+
+bool initHud(){
+// bool initHud(string isOn){
+	// setAppStatus(APP_ID_RULER, isOn);
+  // if(isOn == "0"){
+    // return (false);
+  // }
 	deinitHud();
 	string sym = StringSubstr(Symbol(), 0, 6);
 	int pos_x = ICONS_X_POS + ( (ICONS_RANGE + ICON_SIZE) * ICON_NR );
 
 	// main info bar
-	HUD_SPREAD_LIMIT = getMySpread() * MathPow( 10, Digits ) * 1.5;
+  HUD_MY_SPREAD = getMySpread() * MathPow( 10, Digits );
+	HUD_SPREAD_LIMIT = HUD_MY_SPREAD * 1.5;
 
 	ObjectCreate( "DT_BO_hud_info", OBJ_LABEL, 0, 0, 0 );
   ObjectSet( "DT_BO_hud_info", OBJPROP_CORNER, 0 );
@@ -84,6 +88,11 @@ bool initHud(string isOn){
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_YDISTANCE, 60 );
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_ANGLE, 90 );
 
+  // Window Fade
+  if( !GlobalVariableCheck( "DT_window_fade" ) ){
+    GlobalVariableSet( "DT_window_fade", 0.0 );
+  }
+  
 	// History info bar and data
 	HUD_HISTORY_GLOBAL_NAME = StringConcatenate( sym,"_History");
   HUD_SELF_HISTORY_GLOBAL_VAL = 1.0;
@@ -99,19 +108,19 @@ bool initHud(string isOn){
 	return (errorCheck("initHud"));
 }
 
-// bool startHud(){
-	// if(delayTimer(APP_ID_HUD, 2000)){return (false);}
-bool startHud(string isOn){
-	if(isAppStatusChanged(APP_ID_RULER, isOn)){
-    if(isOn == "1"){
-      initHud("1");
-    }else{
-      deinitHud();
-      return (false);
-    }
-  }
-	if(isOn == "0"){return (false);}
-	if(delayTimer(APP_ID_RULER, 1000)){return (false);}
+bool startHud(){
+	if(delayTimer(APP_ID_HUD, 2000)){return (false);}
+// bool startHud(string isOn){
+	// if(isAppStatusChanged(APP_ID_RULER, isOn)){
+    // if(isOn == "1"){
+      // initHud("1");
+    // }else{
+      // deinitHud();
+      // return (false);
+    // }
+  // }
+	// if(isOn == "0"){return (false);}
+	// if(delayTimer(APP_ID_RULER, 1500)){return (false);}
 
 
 	// main info bar
@@ -120,7 +129,7 @@ bool startHud(string isOn){
   if( spread > HUD_SPREAD_LIMIT ){
     c = Red;
   }
-	ObjectSetText( "DT_BO_hud_spread",StringConcatenate( "Spread: ",DoubleToStr(spread,0) ),8,"Arial",c );
+	ObjectSetText( "DT_BO_hud_spread",StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
 
 	// channel_trade info bar
 	if( IsExpertEnabled() ){
@@ -145,6 +154,24 @@ bool startHud(string isOn){
 		int scale = (((HUD_PRICE_MAX-HUD_PRICE_MIN)/Point) * MarketInfo(Symbol(),MODE_TICKVALUE))/30;
     ObjectSetText( "DT_BO_hud_scale_info", "g", scale, "Webdings", Black );
     ObjectSetText( "DT_BO_hud_scale_label", scale+"", 7, "Microsoft Sans Serif", Black );
+  }
+  
+  // Window Fade
+  if( HUD_WINDOW_FADE != GlobalVariableGet("DT_window_fade") ){
+    HUD_WINDOW_FADE = GlobalVariableGet("DT_window_fade");
+    if( HUD_WINDOW_FADE == 1.0 ){
+      ObjectCreate( "DT_BO_w_hud_fade_main", OBJ_LABEL, 0, 0, 0 );
+      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_CORNER, 0 );
+      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_XDISTANCE, 0 );
+      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_YDISTANCE, 0 );
+      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_BACK, false );
+      int width = HUD_WIDTH * 0.7;
+      ObjectSetText( "DT_BO_w_hud_fade_main", "g", width, "Webdings", White );
+      
+      printRandomText();
+    }else{
+      removeObjects("w_hud");
+    }
   }
 
 	// History info bar
@@ -252,6 +279,7 @@ bool startHud(string isOn){
 
 bool deinitHud(){
   removeObjects("hud");
+  removeObjects("w_hud");
   return (errorCheck("deinitHud"));
 }
 
@@ -335,4 +363,55 @@ bool printArr(){
 		p = p + i + " UNDO " + HUD_HISTORY_LINE_NAMES[i][UNDO]+" "+HUD_HISTORY_LINE_DATA[i][UNDO][T1]+" "+HUD_HISTORY_LINE_DATA[i][UNDO][P1]+" "+HUD_HISTORY_LINE_DATA[i][UNDO][T2]+" "+HUD_HISTORY_LINE_DATA[i][UNDO][T2]+" \n";
 	}
 	Alert(p);
+}
+
+bool printRandomText(){
+  string name, random_txt[] = {
+    "int start(){",
+    "	string gv_name = StringConcatenate( StringSubstr(Symbol(), 0, 6), '_History');",
+    "	double gv_val;",
+    "	string desc = ObjectDescription( 'DT_BO_hud_history' );",
+    "	int start = StringFind(desc, ' ', 0) + 1;",
+    "	int char_nr = StringFind(desc, '/', 0) - start;",
+    "	int len = StrToInteger(StringSubstr( desc, start, char_nr ));",
+    "	if( len == 0 ){",
+    "		addComment( 'Can't REDO history is empty!', 1 );",
+    "	}else{",
+    "		if( GlobalVariableCheck( gv_name ) ){",
+    "			gv_val = GlobalVariableGet( gv_name );",
+    "			if( gv_val < len ){",
+    "				gv_val = gv_val + 1.0;",
+    "				GlobalVariableSet( gv_name, gv_val );",
+    "				addComment( 'REDO to '+DoubleToStr(gv_val,0)+' position', 2 );",
+    "			}else{",
+    "				addComment( 'Can't REDO, history limit reached!', 1 );",
+    "			}",
+    "		}else{",
+    "			addComment( 'Can't REDO '+DoubleToStr(gv_name,0)+' global does not exist!', 1 );",
+    "		}",
+    "	}",
+    " return(0);",
+    "}"
+  };
+  int i, j, space, len = ArraySize(random_txt), cha;
+  
+  for( i = 0; i < len; i++ ){
+    space = 0;
+    for( j = 0; j < StringLen(random_txt[i]); j++ ){
+      cha = StringGetChar(random_txt[i], j);
+      if( cha == 32 || cha == 9 ){
+        space++;
+      }else{
+        break;
+      }
+    }
+    name = "DT_BO_w_hud_fade_txt_"+i;
+    ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+    ObjectSet( name, OBJPROP_CORNER, 0 );
+    ObjectSet( name, OBJPROP_XDISTANCE, 30 + ( space * 40 ) );
+    ObjectSet( name, OBJPROP_YDISTANCE, 20 + ( i * 19 ) );
+    ObjectSet( name, OBJPROP_BACK, false );
+    ObjectSetText( name, StringTrimLeft(random_txt[i]), 10, "Lucida Console", Black );
+  }
+
 }
