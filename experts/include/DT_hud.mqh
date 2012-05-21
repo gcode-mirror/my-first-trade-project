@@ -92,6 +92,14 @@ bool initHud(){
   if( !GlobalVariableCheck( "DT_window_fade" ) ){
     GlobalVariableSet( "DT_window_fade", 0.0 );
   }
+  ObjectCreate( "DT_BO_w0_hud_fade_main", OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_CORNER, 0 );
+  ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_XDISTANCE, 0 );
+  ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_YDISTANCE, 0 );
+  ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_BACK, false );
+  int width = HUD_WIDTH * 0.7;
+  ObjectSetText( "DT_BO_w0_hud_fade_main", "g", width, "Webdings", White );
+  ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, -1 );
   
 	// History info bar and data
 	HUD_HISTORY_GLOBAL_NAME = StringConcatenate( sym,"_History");
@@ -160,17 +168,7 @@ bool startHud(){
   if( HUD_WINDOW_FADE != GlobalVariableGet("DT_window_fade") ){
     HUD_WINDOW_FADE = GlobalVariableGet("DT_window_fade");
     if( HUD_WINDOW_FADE == 1.0 ){
-      ObjectCreate( "DT_BO_w_hud_fade_main", OBJ_LABEL, 0, 0, 0 );
-      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_CORNER, 0 );
-      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_XDISTANCE, 0 );
-      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_YDISTANCE, 0 );
-      ObjectSet( "DT_BO_w_hud_fade_main", OBJPROP_BACK, false );
-      int width = HUD_WIDTH * 0.7;
-      ObjectSetText( "DT_BO_w_hud_fade_main", "g", width, "Webdings", White );
-      
       printRandomText();
-    }else{
-      removeObjects("w_hud");
     }
   }
 
@@ -280,6 +278,7 @@ bool startHud(){
 bool deinitHud(){
   removeObjects("hud");
   removeObjects("w_hud");
+  removeObjects("w0_hud");
   return (errorCheck("deinitHud"));
 }
 
