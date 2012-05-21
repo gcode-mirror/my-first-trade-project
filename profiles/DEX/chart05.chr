@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=30
-leftpos=4775
+period=15
+leftpos=4339
 digits=5
 scale=4
 graph=1
@@ -193,7 +193,7 @@ color=15570276
 style=0
 weight=1
 background=1
-value_0=0.980914
+value_0=0.980804
 </object>
 <object>
 type=1
@@ -206,6 +206,18 @@ style=0
 weight=1
 background=1
 value_0=0.988435
+</object>
+<object>
+type=1
+object_name=DT_GO_h_line_1337584589
+period_flags=63
+create_time=1337577389
+description=2012.05.21 07:16:29
+color=15570276
+style=0
+weight=1
+background=1
+value_0=0.984613
 </object>
 <object>
 type=2
