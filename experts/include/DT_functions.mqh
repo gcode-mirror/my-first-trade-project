@@ -516,3 +516,19 @@ int getPeriodSibling(int curr_peri, string dir){
   }
   return ( 0 );
 }
+
+bool toggleObjects( string filter, int status, string type = "BO" ){
+  int i, len, total;
+  string name;  
+  total= ObjectsTotal();
+
+  filter = type + "_" + filter;
+  len = StringLen(filter);
+  for( i= total - 1 ; i >= 0; i-- ) {
+    name= ObjectName(i);
+    if( StringSubstr( name, 3, len ) == filter ){
+      ObjectSet( name, OBJPROP_TIMEFRAMES, status );
+    }
+  }
+  return (errorCheck( StringConcatenate("toggleObjects (filter:",filter," status:", status,")") ));
+}

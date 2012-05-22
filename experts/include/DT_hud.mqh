@@ -168,7 +168,18 @@ bool startHud(){
   if( HUD_WINDOW_FADE != GlobalVariableGet("DT_window_fade") ){
     HUD_WINDOW_FADE = GlobalVariableGet("DT_window_fade");
     if( HUD_WINDOW_FADE == 1.0 ){
-      printRandomText();
+      ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, 0 );
+      if( ObjectFind( "DT_BO_w_hud_fade_txt_0" ) != -1 ){
+        toggleObjects( "w_hud", 0 );      
+      }else{
+        printRandomText();
+      }
+      
+    }else{
+      ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, -1 );      
+      if( ObjectFind( "DT_BO_w_hud_fade_txt_0" ) != -1 ){
+        toggleObjects( "w_hud", -1 );      
+      }
     }
   }
 
