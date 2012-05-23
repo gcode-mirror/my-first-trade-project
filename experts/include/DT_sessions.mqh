@@ -208,7 +208,7 @@ bool startSession( string isOn ){
 		label_name = "DT_BO_session_come_name_"+i;
 		label_time = "DT_BO_session_come_time_"+i;
 		if( i < come_nr ){
-			ydist = 60 + (curr_nr * 17) + 20 +(i * 17);
+			ydist = SESS_Y_POS + (curr_nr * 17) + 20 +(i * 17);
 			ObjectSet( label_name, OBJPROP_YDISTANCE, ydist );
 			ObjectSet( label_name, OBJPROP_TIMEFRAMES, 0 );
 			ObjectSet( label_time, OBJPROP_YDISTANCE, ydist );
