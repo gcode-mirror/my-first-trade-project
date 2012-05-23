@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=30
-leftpos=5446
+period=60
+leftpos=2619
 digits=5
 scale=4
 graph=1
@@ -196,6 +196,18 @@ background=1
 value_0=1.278460
 </object>
 <object>
+type=1
+object_name=DT_GO_h_line_1337760867
+period_flags=63
+create_time=1337753667
+description=2012.05.23 08:14:27
+color=15570276
+style=0
+weight=1
+background=1
+value_0=1.265478
+</object>
+<object>
 type=2
 object_name=DT_GO_LOT
 period_flags=0
@@ -216,7 +228,7 @@ type=2
 object_name=DT_GO_MONITOR_SWITCH
 period_flags=0
 create_time=1333402549
-description=0
+description=1
 color=255
 style=0
 weight=1
@@ -613,6 +625,21 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=2
+object_name=Trendline 45439
+period_flags=0
+create_time=1337766271
+color=255
+style=0
+weight=1
+background=1
+time_0=1337572800
+value_0=1.274847
+time_1=1337749200
+value_1=1.263877
+ray=1
 </object>
 </indicator>
 <indicator>

@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=1643
+period=240
+leftpos=1937
 digits=3
 scale=4
 graph=1
@@ -182,7 +182,7 @@ color=15570276
 style=0
 weight=1
 background=1
-value_0=79.428881
+value_0=79.445372
 </object>
 <object>
 type=1
@@ -459,6 +459,21 @@ ray=0
 </object>
 <object>
 type=2
+object_name=Trendline 32411
+period_flags=0
+create_time=1337753243
+color=255
+style=0
+weight=1
+background=1
+time_0=1337356800
+value_0=79.036000
+time_1=1337745600
+value_1=79.515000
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 61546
 period_flags=0
 create_time=1337716842
@@ -466,10 +481,10 @@ color=255
 style=0
 weight=1
 background=1
-time_0=1334919600
-value_0=81.778000
-time_1=1337248800
-value_1=80.374000
+time_0=1334908800
+value_0=81.784881
+time_1=1337241600
+value_1=80.380881
 ray=1
 </object>
 </indicator>
