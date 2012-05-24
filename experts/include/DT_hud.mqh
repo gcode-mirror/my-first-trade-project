@@ -140,7 +140,7 @@ bool startHud(){
 	ObjectSetText( "DT_BO_hud_spread",StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
 
 	// channel_trade info bar
-	if( IsExpertEnabled() ){
+	if( IsExpertEnabled() && Period() < PERIOD_D1 ){
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
       ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
     }else{

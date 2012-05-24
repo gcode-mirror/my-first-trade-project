@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=30
-leftpos=3120
+period=60
+leftpos=5121
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1337112000
+time_0=1338015600
 </object>
 <object>
 type=1
@@ -396,22 +396,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_t_line_1337721196
-period_flags=63
-create_time=1337713996
-description=2012.05.22 21:13:16
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1335963600
-value_0=105.128246
-time_1=1337763600
-value_1=101.245485
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_t_line_1337721214
 period_flags=63
 create_time=1337714014
@@ -454,17 +438,33 @@ weight=1
 background=1
 time_0=1335943800
 value_0=104.568993
-time_1=1337758200
-value_1=100.648172
+time_1=1337868000
+value_1=100.265000
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_t_line_1337803992
+object_name=DT_GO_t_line_s_all_1337721196
 period_flags=63
-create_time=1337796792
-description=2012.05.23 20:13:12
-color=15570276
+create_time=1337875071
+description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
+color=16711935
+style=0
+weight=1
+background=1
+time_0=1335963600
+value_0=105.128246
+time_1=1337763600
+value_1=101.245485
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_t_line_s_all_1337803992
+period_flags=63
+create_time=1337875411
+description=/\ \/ /\ \/ /\ \/ /\ \/ /\ \/
+color=16711935
 style=0
 weight=1
 background=1

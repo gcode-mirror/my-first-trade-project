@@ -96,8 +96,9 @@ bool displayNews(){
     position = StringFind( Symbol(), NEWS_DATA[i][NEWS_CURRENCY]);
     if(position != -1){
       time = StrToDouble(NEWS_DATA[i][NEWS_TIME]);
+      time = time - MathMod( time, (Period() * 60) );
       desc = StringConcatenate("[",NEWS_DATA[i][NEWS_ACT],"|",NEWS_DATA[i][NEWS_FORC],"|",NEWS_DATA[i][NEWS_PREV],"]",NEWS_DATA[i][NEWS_UNIT]," ",NEWS_DATA[i][NEWS_DESC]," ",TimeHour(time),":",TimeMinute(time));
-      time_shift = iBarShift( NULL, 0, time - 604801 );
+      time_shift = iBarShift( NULL, 0, time - 604800 );
       
       if(position == 0){
         if( prev_top_time_shift == time_shift ){

@@ -52,7 +52,7 @@ int start(){
     }
   }
 
-  if( IsTesting() || GetTickCount() > CT_TIMER2 ){
+  if( Period() < PERIOD_D1 && ( IsTesting() || GetTickCount() > CT_TIMER2 ) ){
     CT_TIMER2 = GetTickCount() + 4000;
 
     int ticket, o_type;
@@ -350,21 +350,21 @@ int setChannelLinesArr(){
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
     if( StringSubstr( name, 7, 6 ) == "_line_" ){
+      if( ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
+        if( StringSubstr( name, 12, 3 ) == "_s_" ){
+          ArrayResize( CT_SEL_LINES, j );
+          CT_SEL_LINES[j-1][0] = name;
+          CT_SEL_LINES[j-1][1] = StringSubstr(name,6,1);
+          j++;
+        }
 
-      if( StringSubstr( name, 12, 3 ) == "_s_" ){
-        ArrayResize( CT_SEL_LINES, j );
-        CT_SEL_LINES[j-1][0] = name;
-        CT_SEL_LINES[j-1][1] = StringSubstr(name,6,1);
-        j++;
+        if( ObjectGet( name, OBJPROP_STYLE ) == STYLE_DASH ){
+          ArrayResize( CT_MID_FIBO_LINES, k );
+          CT_MID_FIBO_LINES[k-1][0] = name;
+          CT_MID_FIBO_LINES[k-1][1] = StringSubstr(name,6,1);
+          k++;
+        }
       }
-
-      if( ObjectGet( name, OBJPROP_STYLE ) == STYLE_DASH ){
-        ArrayResize( CT_MID_FIBO_LINES, k );
-        CT_MID_FIBO_LINES[k-1][0] = name;
-        CT_MID_FIBO_LINES[k-1][1] = StringSubstr(name,6,1);
-        k++;
-      }
-
     }
   }
   return(0);
