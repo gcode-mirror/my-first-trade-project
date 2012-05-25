@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=5121
+leftpos=5089
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1338015600
+time_0=1338073200
 </object>
 <object>
 type=1
@@ -438,8 +438,8 @@ weight=1
 background=1
 time_0=1335943800
 value_0=104.568993
-time_1=1337868000
-value_1=100.265000
+time_1=1337553900
+value_1=101.271000
 ray=1
 </object>
 <object>
