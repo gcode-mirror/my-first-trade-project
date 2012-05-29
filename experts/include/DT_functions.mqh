@@ -6,6 +6,11 @@
 #property copyright "Dex"
 #property link      ""
 
+#define CLINE_STATE_SIG 100
+#define CLINE_STATE_ALL 102
+#define CLINE_STATE_SUP 103
+#define CLINE_STATE_RES 104
+
 bool errorCheck(string text = "unknown function"){
   int e = GetLastError();
   if(e != 0){
@@ -332,87 +337,109 @@ int WindowLastVisibleBar(){
   }
 }
 
-int renameChannelLine(string sel_name, string status = "", bool sup_res = false){
-  string name;
-  bool need_rename = false;
-  if( status == "" ){
-    name = StringConcatenate( StringSubstr(sel_name,0,12), StringSubstr(sel_name, StringLen(sel_name)-11, 11) );
-  }else{
-    name = StringConcatenate( StringSubstr(sel_name,0,13), "s_", status, StringSubstr(sel_name, StringLen(sel_name)-11, 11) );
+bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
+  string name, desc;
+  if( group == -1 ){
+    group = getCLineProperty( sel_name, "group" );
   }
   
-  if( ObjectFind(name) == -1 ){
-    if( StringSubstr(sel_name,6,2) == "t_"){
-      ObjectCreate(name, OBJ_TREND, 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2));
-    }else{
-      ObjectCreate(name, OBJ_HLINE, 0, 0, ObjectGet(sel_name,OBJPROP_PRICE1));
-    }
-    need_rename = true;
+  if( state == "" ){
+    state = StringSubstr( sel_name, 15, 3 );
   }
   
-  if( status == "" ){
-    ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
-    
-  }else if( status == "res" ){
-    ObjectSet(name, OBJPROP_COLOR, DeepPink);
-    ObjectSetText(name, "\/ \/ \/ \/ \/ \/ \/ \/ \/ ");
-    
-  }else if( status == "sup" ){
-    ObjectSet(name, OBJPROP_COLOR, LimeGreen);
-    ObjectSetText(name, "/\ /\ /\ /\ /\ /\ /\ /\ /\ ");
+  name = StringConcatenate( "DT_GO_cLine_g", group , "_", state, "_", StringSubstr(sel_name, StringLen(sel_name)-10, 11) );
   
-  }else if( status == "all" ){
-    ObjectSet(name, OBJPROP_COLOR, Magenta);
-    ObjectSetText(name, "/\ \/ /\ \/ /\ \/ /\ \/ /\ \/");
-  }else{
-    ObjectSetText(name, ObjectDescription( sel_name ), 8);
+  if( ObjectFind(name) != -1 ){
+    addComment( name+" is already exist!", 1 );
+    return ( false );
   }
   
+  ObjectCreate( name, ObjectType(sel_name), 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2) );
   ObjectSet( name, OBJPROP_STYLE, ObjectGet( sel_name, OBJPROP_STYLE ) );
-  ObjectSet(name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY));
-  ObjectSet(name, OBJPROP_BACK, true);
-  ObjectSet(name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH));
-  ObjectSet(name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES));
+  ObjectSet( name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY) );
+  ObjectSet( name, OBJPROP_BACK, true );
+  ObjectSet( name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH) );
+  ObjectSet( name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES) );
   
-  if( need_rename ){
-    ObjectDelete(sel_name);
+  desc = ObjectDescription( sel_name );
+  if( desc == "" ){
+    desc = StringConcatenate(TimeToStr( TimeLocal(), TIME_DATE|TIME_SECONDS)," G",group);
   }
+  
+  if( state == "res" ){
+    ObjectSet( name, OBJPROP_COLOR, DeepPink);
+    ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group, " \\/ \\/ \\/ \\/ \\/" ));
+    
+    
+  }else if( state == "sup" ){
+    ObjectSet( name, OBJPROP_COLOR, LimeGreen);
+    ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group, " /\\ /\\ /\\ /\\ /\\" ));
+  
+  }else if( state == "all" ){
+    ObjectSet( name, OBJPROP_COLOR, Magenta);
+    ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group, " /\\ \\/ /\\ \\/ /\\" ));
+    
+  }else{
+    ObjectSet( name, OBJPROP_COLOR, CornflowerBlue );
+    ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group));
+  }
+  
+  ObjectDelete(sel_name);
+  return ( true );
 }
 
-string getSelectedLine(double time_cord, double price_cord){
-  int j, obj_total= ObjectsTotal();
-  string type, name, sel_name = "";
-  double price, ts, t1, t2, dif, sel_dif = 999999;
+string getSelectedLine( double time_cord, double price_cord, bool search_all = false ){
+  int j, obj_total= ObjectsTotal(), type;
+  string name, sel_name = "";
+  double price, ts, t1, t2, dif, sel_dif = 999999, max_dist = ( WindowPriceMax(0) - WindowPriceMin(0) ) / 10;
   
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
-    type = StringSubstr(name,6,6);
-    if ( type == "t_line"){
-      t1 = ObjectGet(name,OBJPROP_TIME1);
-      t2 = ObjectGet(name,OBJPROP_TIME2);
-      price = ObjectGetValueByShift( name, iBarShift(NULL,0, time_cord));
-      if( price != 0.0 ){
-        dif = MathMax(price, price_cord) - MathMin(price, price_cord);
+    if( (search_all || StringSubstr( name, 5, 7 ) == "_cLine_") && ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
+      type = ObjectType( name );
+      if( type == OBJ_TREND ){
+        t1 = ObjectGet(name,OBJPROP_TIME1);
+        t2 = ObjectGet(name,OBJPROP_TIME2);
+        price = ObjectGetValueByShift( name, iBarShift( NULL, 0, time_cord ));
+        if( price != 0.0 ){
+          dif = MathAbs( price - price_cord );         
+          if( dif < sel_dif && dif < max_dist ){
+            sel_dif = dif;
+            sel_name = name;
+          }
+        }else{
+          GetLastError();
+        }
+      }else if( type == OBJ_HLINE ){
+        price = ObjectGet(name, OBJPROP_PRICE1);
+        dif = MathAbs( price - price_cord );
         if( dif < sel_dif ){
           sel_dif = dif;
           sel_name = name;
         }
-      }else{
-        GetLastError();
       }
-    }else if( type == "h_line"){
-      price = ObjectGet(name, OBJPROP_PRICE1);
-      dif = MathMax(price, price_cord) - MathMin(price, price_cord);
-      if( dif < sel_dif ){
-        sel_dif = dif;
-        sel_name = name;
-      }
-    }else{
-      continue;
     }
   }
   errorCheck("getSelectedLine");
   return (sel_name);
+}
+
+bool getFibo100( double fibo_0, double& fibo_100, double& time ){
+  double time1, time2, zz0, zz1;
+  zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
+  zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
+  
+  if( MathMax(zz0, zz1) > fibo_0 && MathMin(zz0, zz1) < fibo_0 ){
+    fibo_100 = zz0;
+    time = time1;
+  }else if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
+    fibo_100 = zz0;
+    time = time1;
+  }else{
+    fibo_100 = zz1;
+    time = time2;
+  }
+  errorCheck("getFibo100");
 }
 
 double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0, double max_dist = 0.0){
@@ -432,7 +459,7 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     
     if( min_dist != 0.0 ){
       if( MathAbs( fibo_100 - fibo_0 ) < min_dist ){
-        Alert(Symbol()+" Fibo DISTANCE is too SMALL! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
+        // Alert(Symbol()+" Fibo DISTANCE is too SMALL! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
         return (0.0);
       }
     }
@@ -446,7 +473,7 @@ double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, doub
     
     if( min_time != 0.0 ){
       if( Time[0] - time1 < min_time ){
-        Alert(Symbol()+" Fibo TIME is too SMALL! "+(Time[0] - time1));
+        //Alert(Symbol()+" Fibo TIME is too SMALL! "+(Time[0] - time1));
         return ( -1.0 * iBarShift( NULL , 0, time1 ) );
       }
     }
@@ -531,4 +558,51 @@ bool toggleObjects( string filter, int status, string type = "BO" ){
     }
   }
   return (errorCheck( StringConcatenate("toggleObjects (filter:",filter," status:", status,")") ));
+}
+
+double getScaleNumber( double p1, double p2, string sym ){
+  return ( NormalizeDouble((MathAbs( p1 - p2 ) / MarketInfo( sym, MODE_POINT )) * MarketInfo( sym, MODE_TICKVALUE ), 1) );
+}
+
+int getCLineProperty( string name, string attr_name ){
+  if( attr_name == "group" ){
+    string g_id = StringSubstr( name, 13, 1 );
+    if( IsNumeric(g_id) ){
+      return ( StrToInteger(g_id) );
+    }
+  }else if( attr_name == "state" ){
+    string state = StringSubstr( name, 15, 3 );
+    if( state == "sig" ){
+      return ( CLINE_STATE_SIG );
+      
+    }else if( state == "sup" ){
+      return ( CLINE_STATE_SUP );
+      
+    }else if( state == "res" ){
+      return ( CLINE_STATE_RES );
+    
+    }else if( state == "all" ){
+      return ( CLINE_STATE_ALL );
+    }
+  }else if( attr_name == "ts" ){
+    string ts = StringSubstr( name, 19, 10 );
+    if( IsNumeric(ts) ){
+      return ( StrToInteger(ts) );
+    }
+  }
+  Alert( "Input fail getCLineProperty name: "+name+" attribute: "+attr_name );
+  return ( -1 );
+}
+
+bool IsNumeric(string c){
+  int i = StringGetChar( c, 0 );
+  return( i >= 48 && i <= 57 );
+}
+
+double getClineValueByShift( string name, int shift = 0 ){
+  if( ObjectType( name ) == OBJ_TREND ){
+    return ( ObjectGetValueByShift( name, shift ) );
+  }else{
+    return ( ObjectGet( name, OBJPROP_PRICE1 ) );
+  }
 }

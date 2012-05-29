@@ -18,10 +18,12 @@ int start(){
   
   if( sel_name != "" ){
     string status = "";
-    if( StringSubstr(sel_name,13,2) != "s_" ){
+    if( getCLineProperty(sel_name, "state") == CLINE_STATE_SIG ){
       status = "all";
+    }else{
+      status = "sig";
     }
-    renameChannelLine(sel_name, status);
+    renameChannelLine( sel_name, status );
   }
   
   return(0);

@@ -19,15 +19,15 @@ int start(){
   string sel_name = getSelectedLine(tod, pod);
   if( sel_name != "" ){
     double price;
-    if( StringSubstr(sel_name,6,2) == "t_"){
+    if( ObjectType(sel_name) == OBJ_TREND ){
       price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
     }else{
       price = ObjectGet(sel_name,OBJPROP_PRICE1);
     }
     if( pod > price ){
-      renameChannelLine(sel_name, "sup");
+      renameChannelLine( sel_name, "sup" );
     }else{
-      renameChannelLine(sel_name, "res");
+      renameChannelLine( sel_name, "res" );
     }
   }
   

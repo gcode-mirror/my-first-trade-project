@@ -16,7 +16,7 @@ int start(){
   
   for ( i = 0; i < len; i++) {
     name = ObjectName(i);
-    if( StringSubstr(name,7,6) == "_line_" ){
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
       if( ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
         show_obj = true;
         break;
@@ -29,7 +29,7 @@ int start(){
   
   for ( i = 0; i < len; i++) {
     name = ObjectName(i);
-    if( StringSubstr(name,7,6) == "_line_" ){
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
       if( show_obj ){
         if( ObjectGet( name, OBJPROP_WIDTH ) == 2 ){
           ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );

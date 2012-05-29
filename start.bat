@@ -1,4 +1,4 @@
-TortoiseProc.exe /command:update /path:"%CD%\profiles\DEX\"
+TortoiseProc.exe /command:update /path:"%CD%\profiles\"
 
 sleep 10
 
@@ -7,4 +7,4 @@ terminal.exe
 
 sleep 3
 
-TortoiseProc.exe /command:commit /path:"%CD%\profiles\DEX\"
+TortoiseProc.exe /command:commit /path:"%CD%\profiles\"

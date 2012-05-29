@@ -14,9 +14,9 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine(WindowTimeOnDropped(), WindowPriceOnDropped());
-  
-  if( sel_name != "" ){
+  string sel_name = getSelectedLine( WindowTimeOnDropped(), WindowPriceOnDropped(), true );
+
+  if( sel_name != "" && ObjectType( sel_name ) == OBJ_TREND ){
     double t1, t2, p1, p2;
     t1 = ObjectGet(sel_name,OBJPROP_TIME1);
     t2 = ObjectGet(sel_name,OBJPROP_TIME2);
@@ -39,6 +39,10 @@ int start(){
       ObjectSet(sel_name, OBJPROP_PRICE2, ObjectGetValueByShift( sel_name, 0 ));
       ObjectSet(sel_name, OBJPROP_TIME2, Time[0]);
     }
+    
+    addComment(sel_name+" selected.",2);
+  }else{
+    addComment("Can not find trend line!",1);
   }
   return(0);
 }

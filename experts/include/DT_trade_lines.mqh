@@ -26,13 +26,14 @@ bool initTradeLines(string isOn){
       open_price = OrderOpenPrice();
     //}  
   }else{
-    string near_line_name = getSelectedLine(Time[0], Bid);
-    open_price = NormalizeDouble( ObjectGetValueByShift( near_line_name, 0), Digits );
+    string near_line_name = getSelectedLine( Time[0], Bid, true );
     
-    if( open_price != 0.0 ){
-      double fibo_100 = 0.0;
-      double fibo_23_dif = getFibo23Dif( open_price, fibo_100 );
-      double spread = getMySpread();
+    if( near_line_name != "" ){
+      open_price = NormalizeDouble( getClineValueByShift( near_line_name, 0 ), Digits );
+      double fibo_23_dif, fibo_100_time, fibo_100, spread;
+      getFibo100( open_price ,fibo_100, fibo_100_time );
+      spread = getMySpread();
+      fibo_23_dif = MathAbs( fibo_100 - open_price ) * 0.23; // 0.236
       
       if( fibo_100 > open_price ){
         open_price = open_price + spread;
@@ -42,11 +43,8 @@ bool initTradeLines(string isOn){
         sl_price = open_price + fibo_23_dif + spread;
         tp_price = open_price - fibo_23_dif + spread;
       }
-    }else{
-      GetLastError();
-    }
       
-    if( near_line_name == "" || open_price == 0.0){
+    }else{
       double time1, time2;
       tp_price = getZigZag(0, 10, 5, 3, 1, time1);
       sl_price = getZigZag(0, 10, 5, 3, 0, time2);  

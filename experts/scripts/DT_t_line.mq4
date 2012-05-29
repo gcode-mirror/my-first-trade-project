@@ -14,13 +14,13 @@ int start(){
   double time = TimeLocal();
   double t1 = Time[WindowBarsPerChart()/4];
   double t2 = Time[0];
-  string name = "DT_GO_t_line_"+DoubleToStr( time, 0 );
+  string name = "DT_GO_cLine_g0_sig_"+DoubleToStr( time, 0 );
   
   ObjectCreate(name, OBJ_TREND, 0, t1, price, t2, price);
   ObjectSet(name, OBJPROP_COLOR, CornflowerBlue);
   ObjectSet(name, OBJPROP_RAY, true);
   ObjectSet(name, OBJPROP_BACK, true);
-  ObjectSetText(name, TimeToStr( time, TIME_DATE|TIME_SECONDS), 8);
+  ObjectSetText(name, TimeToStr( time, TIME_DATE|TIME_SECONDS)+" G0 ", 8);
   
   if(Period() > PERIOD_H4){    
     ObjectSet(name, OBJPROP_WIDTH, 2);  

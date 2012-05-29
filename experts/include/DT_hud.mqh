@@ -80,8 +80,8 @@ bool initHud(){
   ObjectCreate( "DT_BO_hud_scale_info", OBJ_LABEL, 0, 0, 0 );
   ObjectSet( "DT_BO_hud_scale_info", OBJPROP_CORNER, 2 );
   ObjectSet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE, HUD_WIDTH - 2 );
-  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_YDISTANCE, 10 );
-
+  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_YDISTANCE, 1 );
+  
   ObjectCreate( "DT_BO_hud_scale_label", OBJ_LABEL, 0, 0, 0 );
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_CORNER, 3 );
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_XDISTANCE, 1 );
@@ -159,9 +159,9 @@ bool startHud(){
     HUD_PRICE_MIN = WindowPriceMin(0);
     HUD_PRICE_MAX = WindowPriceMax(0);
 
-		int scale = (((HUD_PRICE_MAX-HUD_PRICE_MIN)/Point) * MarketInfo(Symbol(),MODE_TICKVALUE))/30;
+		int scale = ( 500 / getScaleNumber(HUD_PRICE_MIN, HUD_PRICE_MAX, Symbol()) ) * HUD_WIDTH;
     ObjectSetText( "DT_BO_hud_scale_info", "g", scale, "Webdings", Black );
-    ObjectSetText( "DT_BO_hud_scale_label", scale+"", 7, "Microsoft Sans Serif", Black );
+    ObjectSetText( "DT_BO_hud_scale_label", scale+" px", 7, "Microsoft Sans Serif", Black );
   }
   
   // Window Fade
@@ -350,7 +350,7 @@ bool updateChannelArray(){
   len= ObjectsTotal();
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
-    if( StringSubstr( name, 7, 6 ) == "_line_" ){
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
 
       ArrayResize( HUD_CHANNEL_LINE_NAMES, j + 1 );
       ArrayResize( HUD_CHANNEL_LINE_DATA, j + 1 );
