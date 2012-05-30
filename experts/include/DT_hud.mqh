@@ -133,11 +133,13 @@ bool startHud(){
 
 	// main info bar
   double spread = MarketInfo( Symbol(), MODE_SPREAD );
-  color c = Blue;
+  color c;
   if( spread > HUD_SPREAD_LIMIT ){
     c = Red;
+  }else{
+    c = Blue;
   }
-	ObjectSetText( "DT_BO_hud_spread",StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
+	ObjectSetText( "DT_BO_hud_spread", StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
 
 	// channel_trade info bar
 	if( IsExpertEnabled() && Period() < PERIOD_D1 ){

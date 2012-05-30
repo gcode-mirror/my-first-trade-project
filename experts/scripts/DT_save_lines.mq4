@@ -95,7 +95,25 @@ int start(){
 
     string sel_name = getSelectedLine(tod, pod);
     if( sel_name != "" ){
-      out = out + StringConcatenate(sel_name,";",DoubleToStr( ObjectGet( sel_name, OBJPROP_TIME1 ) ,0 ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_PRICE1 ) ,Digits ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_TIME2 ) ,0 ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_PRICE2 ) ,Digits ),";",ObjectGet( sel_name, OBJPROP_STYLE ),";",ObjectGet( sel_name, OBJPROP_COLOR ),";",ObjectType( sel_name ));
+      int from_shift = WindowFirstVisibleBar();
+      int to_shift = iBarShift( NULL, 0, tod );
+      double t1, p1, t2, p2;
+      
+      p1 = getClineValueByShift( sel_name, from_shift );
+      t1 = Time[from_shift];
+      if( p1 == 0.0 ){
+        p1 =  ObjectGet( sel_name, OBJPROP_PRICE1 );
+        t1 = ObjectGet( sel_name, OBJPROP_TIME1 );
+      }
+      
+      p2 = getClineValueByShift( sel_name, to_shift );
+      t2 = Time[to_shift];
+      if( p2 == 0.0 ){
+        p2 =  ObjectGet( sel_name, OBJPROP_PRICE2 );
+        t2 = ObjectGet( sel_name, OBJPROP_TIME2 );
+      }
+      
+      out = out + StringConcatenate(sel_name,";",DoubleToStr( t1 ,0 ),";",DoubleToStr( p1 ,Digits ),";",DoubleToStr( t2 ,0 ),";",DoubleToStr( p2 ,Digits ),";",ObjectGet( sel_name, OBJPROP_STYLE ),";",ObjectGet( sel_name, OBJPROP_COLOR ),";",ObjectType( sel_name ));
       FileWriteString(handle, out, StringLen(out));
       FileClose(handle);
       addComment(sel_name+" line added!");

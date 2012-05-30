@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=30
-leftpos=3332
+leftpos=5734
 digits=5
 scale=4
 graph=1
@@ -63,7 +63,7 @@ color=0
 weight=1
 background=1
 symbol_code=5
-time_0=1338366600
+time_0=1338400800
 value_0=1.247140
 </object>
 <object>
@@ -76,8 +76,8 @@ color=16711680
 weight=1
 background=1
 symbol_code=5
-time_0=1338391800
-value_0=1.238520
+time_0=1338400800
+value_0=1.238490
 </object>
 <object>
 type=22
@@ -89,8 +89,8 @@ color=255
 weight=1
 background=1
 symbol_code=5
-time_0=1338391800
-value_0=1.235840
+time_0=1338400800
+value_0=1.235800
 </object>
 <object>
 type=22
@@ -102,8 +102,8 @@ color=32768
 weight=1
 background=1
 symbol_code=5
-time_0=1338391800
-value_0=1.240440
+time_0=1338400800
+value_0=1.240420
 </object>
 <object>
 type=2
@@ -206,10 +206,10 @@ color=3329330
 style=0
 weight=1
 background=1
-time_0=1336346100
-value_0=1.295468
+time_0=1336347000
+value_0=1.295470
 time_1=1337331600
-value_1=1.265098
+value_1=1.265262
 ray=1
 </object>
 <object>
