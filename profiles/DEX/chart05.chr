@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=4218
+leftpos=3335
 digits=5
 scale=4
 graph=1
@@ -79,22 +79,6 @@ style=0
 weight=2
 background=1
 time_0=1338215400
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1338238674
-period_flags=63
-create_time=1338232378
-description=2012.05.28 20:57:54 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1335501900
-value_0=1.038905
-time_1=1336609800
-value_1=1.005805
-ray=1
 </object>
 <object>
 type=2
@@ -222,75 +206,27 @@ value_0=0.966725
 </object>
 <object>
 type=2
-object_name=Trendline 1338058850
+object_name=Trendline 1338366305
 period_flags=0
-create_time=1338051650
-description=2012.05.26 19:00:50
-color=255
+create_time=1338359105
+description=2012.05.30 08:25:05
+color=9408444
 style=0
 weight=1
 background=1
-time_0=1331078400
-value_0=1.050926
-time_1=1334332800
-value_1=1.026889
+time_0=1335501900
+value_0=1.038905
+time_1=1336609800
+value_1=1.005805
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338058857
+object_name=Trendline 1338366311
 period_flags=0
-create_time=1338051657
-description=2012.05.26 19:00:57
-color=255
-style=0
-weight=1
-background=1
-time_0=1331008200
-value_0=1.060426
-time_1=1332122400
-value_1=1.052656
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1338058863
-period_flags=0
-create_time=1338051663
-description=2012.05.26 19:01:03
-color=255
-style=0
-weight=1
-background=1
-time_0=1330993800
-value_0=1.069100
-time_1=1332108900
-value_1=1.061330
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1338058866
-period_flags=0
-create_time=1338051666
-description=2012.05.26 19:01:06
-color=255
-style=0
-weight=1
-background=1
-time_0=1331787600
-value_0=1.073586
-time_1=1332849600
-value_1=1.066348
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1338108511
-period_flags=0
-create_time=1338101311
-description=2012.05.27 08:48:31
-color=255
+create_time=1338359111
+description=2012.05.30 08:25:11
+color=9408444
 style=0
 weight=1
 background=1
@@ -302,11 +238,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338108513
+object_name=Trendline 1338366316
 period_flags=0
-create_time=1338101313
-description=2012.05.27 08:48:33
-color=255
+create_time=1338359116
+description=2012.05.30 08:25:16
+color=9408444
 style=0
 weight=1
 background=1
@@ -318,11 +254,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338108515
+object_name=Trendline 1338366320
 period_flags=0
-create_time=1338101315
-description=2012.05.27 08:48:35
-color=255
+create_time=1338359120
+description=2012.05.30 08:25:20
+color=9408444
 style=0
 weight=1
 background=1
@@ -334,11 +270,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338108534
+object_name=Trendline 1338366326
 period_flags=0
-create_time=1338101334
-description=2012.05.27 08:48:54
-color=255
+create_time=1338359126
+description=2012.05.30 08:25:26
+color=9408444
 style=0
 weight=1
 background=1
@@ -346,6 +282,70 @@ time_0=1331866800
 value_0=1.037569
 time_1=1332982800
 value_1=1.029799
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338366328
+period_flags=0
+create_time=1338359128
+description=2012.05.30 08:25:28
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1331078400
+value_0=1.050926
+time_1=1334332800
+value_1=1.026889
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338366333
+period_flags=0
+create_time=1338359133
+description=2012.05.30 08:25:33
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1331008200
+value_0=1.060426
+time_1=1332122400
+value_1=1.052656
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338366337
+period_flags=0
+create_time=1338359137
+description=2012.05.30 08:25:37
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1330993800
+value_0=1.069100
+time_1=1332108900
+value_1=1.061330
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338366341
+period_flags=0
+create_time=1338359141
+description=2012.05.30 08:25:41
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1331787600
+value_0=1.073586
+time_1=1332849600
+value_1=1.066348
 ray=1
 </object>
 <object>
@@ -460,5 +460,11 @@ period_flags=0
 show_data=1
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 

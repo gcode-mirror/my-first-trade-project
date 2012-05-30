@@ -49,30 +49,20 @@ bool startChannel(string isOn){
   
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
-    type = StringSubstr(name,6,6);
-    if ( type == "t_line"){
-      if( ObjectGetValueByShift( name, -1) == 0.0 ){
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+      price = getClineValueByShift( name ); 
+      if( price != 0.0 ){
+        if( Bid > price - CH_OFFSET && Bid < price + CH_OFFSET ){
+          ts = StrToDouble(StringSubstr(name, StringLen(name)-10, 10));
+          if( GlobalVariableGet(CH_NAME) != ts ){
+            GlobalVariableSet(CH_NAME, ts);
+          }
+          return (errorCheck("startChannel"));
+        }      
+      }else{
         GetLastError();
-        continue;
       }
-      price = ObjectGetValueByShift( name, 0);
-    }else if( type == "h_line"){
-      if(ObjectGet(name,OBJPROP_WIDTH) != 2){
-        continue;
-      }
-      price = ObjectGet(name, OBJPROP_PRICE1);
-    }else{
-      continue;
     }
-    
-    if( Bid > price - CH_OFFSET && Bid < price + CH_OFFSET ){
-      ts = StrToDouble(StringSubstr(name, StringLen(name)-10, 10));
-      if( GlobalVariableGet(CH_NAME) != ts ){
-        GlobalVariableSet(CH_NAME, ts);
-      }
-      return (errorCheck("startChannel"));
-    }
-    
   }
   if( GlobalVariableGet(CH_NAME) != 0.0){
     GlobalVariableSet(CH_NAME, 0.0);

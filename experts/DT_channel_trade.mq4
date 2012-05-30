@@ -166,6 +166,10 @@ int start(){
       
       for( i = 0; i < len; i++ ){
         if( CT_CLINES[i][CL_STATE] != "sig" ){
+          if( ObjectFind( CT_CLINES[i][CL_NAME] ) == -1 ){
+            setChannelLinesArr();
+            return (0);
+          }         
           trade_line_price = getClineValueByShift( CT_CLINES[i][CL_NAME] );
 
           if( trade_line_price != 0.0){
@@ -331,31 +335,29 @@ int deinit(){
 }
 
 void setChannelLinesArr(){
-  double price, tmp_arr[][2];
+  double price, tmp_arr[0][2];
   int i, j = 0, len = ObjectsTotal();
-  string name;
+  string name; 
 
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
-    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
-      if( ObjectType( name ) == OBJ_TREND ){
-        price = ObjectGetValueByShift( name, 0 );
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){      
+      price = getClineValueByShift( name );
+      if( price != 0.0 ){
+        ArrayResize( tmp_arr, j + 1 );
+        tmp_arr[j][0] = price;
+        tmp_arr[j][1] = i;
+        j++;
       }else{
-        price = ObjectGet( name, OBJPROP_PRICE1 );
-      }
-      
-      ArrayResize( tmp_arr, j + 1 );
-      tmp_arr[j][0] = price;
-      tmp_arr[j][1] = i;
-      j++;
+        GetLastError();
+      }    
     }
   }
+    
   multiDSort( tmp_arr );
-
-  ArrayResize( CT_CLINES, 0 );
-  len =  ArrayRange( tmp_arr, 0 );
-  ArrayResize( CT_CLINES, len );
-  for( i = 0; i < len; i++ ){
+    
+  ArrayResize( CT_CLINES, j );
+  for( i = 0; i < j; i++ ){
     name = ObjectName( tmp_arr[i][1] );
     CT_CLINES[i][CL_NAME] = name;
     CT_CLINES[i][CL_STATE] = StringSubstr( name, 15, 3 );

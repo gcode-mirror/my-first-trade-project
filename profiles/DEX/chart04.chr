@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=60
-leftpos=5192
+period=30
+leftpos=3272
 digits=5
 scale=4
 graph=1
@@ -68,6 +68,17 @@ value_0=0.000000
 time_1=1333404180
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=0
+object_name=DT_GO_channel_trade_time_limit
+period_flags=0
+create_time=1338364827
+color=4163021
+style=0
+weight=2
+background=1
+time_0=1338278400
 </object>
 <object>
 type=2
@@ -199,43 +210,27 @@ ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1338108475
+object_name=Trendline 1338366370
 period_flags=0
-create_time=1338101275
-description=2012.05.27 08:47:55
-color=255
+create_time=1338359170
+description=2012.05.30 08:26:10
+color=9408444
 style=0
 weight=1
 background=1
-time_0=1337676300
-value_0=1.584805
-time_1=1337904900
-value_1=1.574545
+time_0=1337359500
+value_0=1.578120
+time_1=1337765400
+value_1=1.567860
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338108477
+object_name=Trendline 1338366371
 period_flags=0
-create_time=1338101277
-description=2012.05.27 08:47:57
-color=255
-style=0
-weight=1
-background=1
-time_0=1337590800
-value_0=1.583988
-time_1=1337819400
-value_1=1.573728
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1338108481
-period_flags=0
-create_time=1338101281
-description=2012.05.27 08:48:01
-color=255
+create_time=1338359171
+description=2012.05.30 08:26:11
+color=9408444
 style=0
 weight=1
 background=1
@@ -247,18 +242,65 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1338108483
+object_name=Trendline 1338366373
 period_flags=0
-create_time=1338101283
-description=2012.05.27 08:48:03
-color=255
+create_time=1338359173
+description=2012.05.30 08:26:13
+color=9408444
 style=0
 weight=1
 background=1
-time_0=1337359500
-value_0=1.578120
-time_1=1337765400
-value_1=1.567860
+time_0=1337590800
+value_0=1.583988
+time_1=1337819400
+value_1=1.573728
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338367193
+period_flags=0
+create_time=1338359993
+description=2012.05.30 08:39:53
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337868000
+value_0=1.572693
+time_1=1338363000
+value_1=1.569893
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1338367196
+period_flags=0
+create_time=1338359996
+description=2012.05.30 08:39:56
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337676300
+value_0=1.584805
+time_1=1337904900
+value_1=1.574545
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 47989
+period_flags=0
+create_time=1338358645
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337850000
+value_0=1.563844
+time_1=1338345000
+value_1=1.561059
 ray=1
 </object>
 </indicator>
@@ -313,5 +355,11 @@ period_flags=0
 show_data=1
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 
