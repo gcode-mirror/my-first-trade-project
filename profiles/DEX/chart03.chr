@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=2019
+period=30
+leftpos=3384
 digits=3
 scale=4
 graph=1
@@ -55,6 +55,19 @@ ray=0
 </object>
 <object>
 type=22
+object_name=DT_GO_channel_hist_f100_1338334569
+period_flags=0
+create_time=1338467405
+description=Order type: 2, f100
+color=0
+weight=1
+background=1
+symbol_code=5
+time_0=1338415800
+value_0=78.897000
+</object>
+<object>
+type=22
 object_name=DT_GO_channel_hist_f100_1338334572
 period_flags=0
 create_time=1338380689
@@ -65,6 +78,19 @@ background=1
 symbol_code=5
 time_0=1338177600
 value_0=79.568000
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_op_1338334569
+period_flags=0
+create_time=1338467405
+description=Order type: 2, OP
+color=16711680
+weight=1
+background=1
+symbol_code=5
+time_0=1338469200
+value_0=78.631000
 </object>
 <object>
 type=22
@@ -81,6 +107,19 @@ value_0=79.017000
 </object>
 <object>
 type=22
+object_name=DT_GO_channel_hist_sl_1338334569
+period_flags=0
+create_time=1338467405
+description=Order type: 2, SL
+color=255
+weight=1
+background=1
+symbol_code=5
+time_0=1338469200
+value_0=78.539000
+</object>
+<object>
+type=22
 object_name=DT_GO_channel_hist_sl_1338334572
 period_flags=0
 create_time=1338380689
@@ -91,6 +130,19 @@ background=1
 symbol_code=5
 time_0=1338382800
 value_0=78.841000
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_tp_1338334569
+period_flags=0
+create_time=1338467405
+description=Order type: 2, TP
+color=32768
+weight=1
+background=1
+symbol_code=5
+time_0=1338469200
+value_0=78.685000
 </object>
 <object>
 type=22

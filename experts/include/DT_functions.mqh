@@ -339,6 +339,8 @@ int WindowLastVisibleBar(){
 
 bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
   string name, desc;
+  bool remove_line = false;
+  
   if( group == -1 ){
     group = getCLineProperty( sel_name, "group" );
   }
@@ -351,10 +353,11 @@ bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
   
   if( ObjectFind(name) != -1 ){
     addComment( name+" is already exist!", 1 );
-    return ( false );
+  }else{
+    remove_line = true;
+    ObjectCreate( name, ObjectType(sel_name), 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2) );
   }
   
-  ObjectCreate( name, ObjectType(sel_name), 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2) );
   ObjectSet( name, OBJPROP_STYLE, ObjectGet( sel_name, OBJPROP_STYLE ) );
   ObjectSet( name, OBJPROP_RAY, ObjectGet(sel_name,OBJPROP_RAY) );
   ObjectSet( name, OBJPROP_BACK, true );
@@ -370,7 +373,6 @@ bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
     ObjectSet( name, OBJPROP_COLOR, DeepPink);
     ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group, " \\/ \\/ \\/ \\/ \\/" ));
     
-    
   }else if( state == "sup" ){
     ObjectSet( name, OBJPROP_COLOR, LimeGreen);
     ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group, " /\\ /\\ /\\ /\\ /\\" ));
@@ -384,7 +386,9 @@ bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
     ObjectSetText(name, StringConcatenate(StringSubstr(desc, 0, 19)," G", group));
   }
   
-  ObjectDelete(sel_name);
+  if( remove_line ){
+    ObjectDelete(sel_name);
+  }
   return ( true );
 }
 
