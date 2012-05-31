@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                          DT_pos_fibo100_line.mq4 |
+//|                                             sup_res_cLine_DT.mq4 |
 //|                                                              Dex |
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -14,14 +14,26 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine(WindowTimeOnDropped(), WindowPriceOnDropped());
-  
+  double pod = WindowPriceOnDropped();
+  double tod = WindowTimeOnDropped();
+  string sel_name = getSelectedLine(tod, pod);
   if( sel_name != "" ){
-    if( ObjectGet( sel_name, OBJPROP_STYLE ) == STYLE_SOLID ){
-      ObjectSet( sel_name, OBJPROP_STYLE, STYLE_DASH );
+    double price;
+    if( ObjectType(sel_name) == OBJ_TREND ){
+      price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
     }else{
-      ObjectSet( sel_name, OBJPROP_STYLE, STYLE_SOLID );
+      price = ObjectGet(sel_name,OBJPROP_PRICE1);
     }
+    if( pod > price ){
+      renameChannelLine( sel_name, "sup" );
+    }else{
+      renameChannelLine( sel_name, "res" );
+    }
+    
+    showCLineGroups();
+  }else{
+    addComment("Can not find line!",1);
   }
+  
   return(0);
 }

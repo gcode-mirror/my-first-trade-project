@@ -418,7 +418,7 @@ int createHistoryLine(double p1, color c, string text, string ts, double t1 = 0.
   }
 	ObjectSet(name, OBJPROP_ARROWCODE, 5);
 	ObjectSet(name, OBJPROP_COLOR, c);
-	ObjectSet(name, OBJPROP_BACK, true);
+	ObjectSet(name, OBJPROP_BACK, false);
 	ObjectSet(name, OBJPROP_WIDTH, 1);
 	ObjectSetText(name, text, 8);
 }

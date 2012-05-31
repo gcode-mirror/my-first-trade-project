@@ -392,10 +392,10 @@ bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
   return ( true );
 }
 
-string getSelectedLine( double time_cord, double price_cord, bool search_all = false ){
+string getSelectedLine( double time_cord, double price_cord, bool search_all = false, int accuracy = 10 ){
   int j, obj_total= ObjectsTotal(), type;
   string name, sel_name = "";
-  double price, ts, t1, t2, dif, sel_dif = 999999, max_dist = ( WindowPriceMax(0) - WindowPriceMin(0) ) / 10;
+  double price, ts, t1, t2, dif, sel_dif = 999999, max_dist = ( WindowPriceMax(0) - WindowPriceMin(0) ) / accuracy;
   
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
@@ -444,47 +444,6 @@ bool getFibo100( double fibo_0, double& fibo_100, double& time ){
     time = time2;
   }
   errorCheck("getFibo100");
-}
-
-double getFibo23Dif(double fibo_0, double& fibo_100, double min_time = 0.0, double min_dist = 0.0, double max_dist = 0.0){
-  if( fibo_100 == 0.0 ){
-    double time1, time2;
-    double zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
-    double zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
-    
-    if( MathMax(zz0, zz1) > fibo_0 && MathMin(zz0, zz1) < fibo_0 ){
-      fibo_100 = zz0;
-    }else if( MathAbs( zz0 - fibo_0 ) > MathAbs( zz1 - fibo_0 ) ){
-      fibo_100 = zz0;
-    }else{
-      fibo_100 = zz1;
-      time1 = time2;
-    }
-    
-    if( min_dist != 0.0 ){
-      if( MathAbs( fibo_100 - fibo_0 ) < min_dist ){
-        // Alert(Symbol()+" Fibo DISTANCE is too SMALL! MINDIST: "+min_dist+" DIST:"+(fibo_100 - fibo_0));
-        return (0.0);
-      }
-    }
-    
-    if( max_dist != 0.0 ){
-      if( MathAbs( fibo_100 - fibo_0 ) > max_dist ){
-        Alert(Symbol()+" Fibo DISTANCE is too BIG! MAXDIST: "+max_dist+" DIST:"+(fibo_100 - fibo_0));
-        return ( -1.0 * iBarShift( NULL , 0, time1 ) );
-      }
-    }
-    
-    if( min_time != 0.0 ){
-      if( Time[0] - time1 < min_time ){
-        //Alert(Symbol()+" Fibo TIME is too SMALL! "+(Time[0] - time1));
-        return ( -1.0 * iBarShift( NULL , 0, time1 ) );
-      }
-    }
-  }
-
-  Alert(Symbol()+" time: "+(Time[0] - time1)+" dist:"+(fibo_100 - fibo_0));  
-  return ( (MathMax(fibo_0, fibo_100) - MathMin(fibo_0, fibo_100)) * 0.23 ); // 0.236
 }
 
 int getPositionByDaD(double price_cord, string symb = ""){
@@ -609,4 +568,51 @@ double getClineValueByShift( string name, int shift = 0 ){
   }else{
     return ( ObjectGet( name, OBJPROP_PRICE1 ) );
   }
+}
+
+bool showCLineGroups(){
+  int i, len = ObjectsTotal(), shift, group_id, j = 0;
+  string name, g_name, line_names[];
+  color c = CornflowerBlue;
+  double p1;
+  
+  removeObjects("group_idx");
+  shift = WindowLastVisibleBar() + (WindowBarsPerChart() / 3);
+  for ( i = 0; i < len; i++){
+    name = ObjectName(i);
+    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+      ArrayResize( line_names, j + 1 );
+      line_names[j] = name;
+      j++;
+    }
+  }
+  
+  len = ArraySize(line_names);
+  for ( i = 0; i < len; i++){
+    group_id = getCLineProperty( line_names[i], "group" );
+    if( group_id == 1 ){
+      c = Red;
+    }else if( group_id == 2 ){
+      c = DarkGreen;
+    }
+    g_name = StringConcatenate( "DT_BO_group_idx_", i );
+    p1 = getClineValueByShift( line_names[i], shift );
+    if( p1 == 0.0 ){
+      GetLastError();
+      continue;
+    }
+    
+    if( ObjectFind(g_name) == -1 ){
+      ObjectCreate( g_name, OBJ_TEXT, 0, Time[shift], p1 );
+      ObjectSetText( g_name, "G"+group_id, 11, "Arial", c );
+    }
+  }
+  
+  WindowRedraw();
+  Sleep(3300);
+  
+  removeObjects("group_idx");
+  errorCheck( "showCLineGroups" );
+  
+  return (true);
 }

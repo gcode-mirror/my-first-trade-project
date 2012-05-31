@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                              DT_cLine_groups.mq4 |
+//|                                              groups_cLine_DT.mq4 |
 //|                                                              Dex |
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -39,6 +39,8 @@ int start(){
     }
     
     renameChannelLine( sel_name, "", group );
+    
+    showCLineGroups();
   }
   return( errorCheck("DT_transform") );
 }

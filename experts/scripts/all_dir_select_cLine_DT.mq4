@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                               DT_select_line.mq4 |
+//|                                      all_dir_select_cLine_DT.mq4 |
 //|                                                              Dex |
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -24,6 +24,8 @@ int start(){
       status = "sig";
     }
     renameChannelLine( sel_name, status );
+    
+    showCLineGroups();
   }
   
   return(0);

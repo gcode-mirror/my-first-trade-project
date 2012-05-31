@@ -64,6 +64,8 @@ int start(){
     ObjectSetText( name, desc, 8 );
 
     ObjectDelete( sel_name );
+    
+    showCLineGroups();
   }
 
   return( errorCheck("DT_transform") );
