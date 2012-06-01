@@ -44,8 +44,8 @@ int init(){
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
-  CT_SPREAD = NormalizeDouble( getMySpread() * 1.0, Digits );
-  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.0, Digits );
+  CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
+  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.6, Digits );
   
   CT_TIMER1 = GetTickCount() + 6000;
   setChannelLinesArr();
