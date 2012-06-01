@@ -69,8 +69,8 @@ int start(){
     }
   }
 
-  if( Period() < PERIOD_D1 && ( IsTesting() || GetTickCount() > CT_TIMER2 ) ){
-    CT_TIMER2 = GetTickCount() + 4000;
+  if( Period() < PERIOD_D1 /*&& ( IsTesting() || GetTickCount() > CT_TIMER2 )*/ ){
+    //CT_TIMER2 = GetTickCount() + 1000;
 
     int ticket, o_type;
     string comment, trade_line_group, trade_line_type, trade_line_name = "";
@@ -324,6 +324,8 @@ int start(){
         comment = StringConcatenate( trade_line_group,StringSubstr( trade_line_name, 14, 4 ), " ", trade_line_ts, " ", DoubleToStr( fibo_100, Digits ) );
 
         OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 15, sl, tp, comment, trade_line_ts, TimeCurrent()+5400 );
+        
+        RefreshRates();
 
 /* !! */  Print(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif));
 /* !! */  Alert(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif));

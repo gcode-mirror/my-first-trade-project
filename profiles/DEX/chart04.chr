@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=30
-leftpos=3374
+period=15
+leftpos=5465
 digits=5
 scale=4
 graph=1
@@ -54,6 +54,58 @@ value_1=0.010000
 ray=0
 </object>
 <object>
+type=22
+object_name=DT_GO_channel_hist_f100_1338496434
+period_flags=0
+create_time=1338562777
+description=Order type: 2, f100
+color=0
+weight=1
+background=0
+symbol_code=5
+time_0=1338566400
+value_0=1.543840
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_op_1338496434
+period_flags=0
+create_time=1338562777
+description=Order type: 2, OP
+color=16711680
+weight=1
+background=0
+symbol_code=5
+time_0=1338566400
+value_0=1.533590
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_sl_1338496434
+period_flags=0
+create_time=1338562777
+description=Order type: 2, SL
+color=255
+weight=1
+background=0
+symbol_code=5
+time_0=1338566400
+value_0=1.530140
+</object>
+<object>
+type=22
+object_name=DT_GO_channel_hist_tp_1338496434
+period_flags=0
+create_time=1338562777
+description=Order type: 2, TP
+color=32768
+weight=1
+background=0
+symbol_code=5
+time_0=1338566400
+value_0=1.535720
+</object>
+<object>
 type=2
 object_name=DT_GO_CHANNEL_SWITCH
 period_flags=0
@@ -78,7 +130,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1338557400
+time_0=1338600600
 </object>
 <object>
 type=2
