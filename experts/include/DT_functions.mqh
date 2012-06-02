@@ -351,9 +351,7 @@ bool renameChannelLine( string sel_name, string state = "", int group = -1 ){
   
   name = StringConcatenate( "DT_GO_cLine_g", group , "_", state, "_", StringSubstr(sel_name, StringLen(sel_name)-10, 11) );
   
-  if( ObjectFind(name) != -1 ){
-    addComment( name+" is already exist!", 1 );
-  }else{
+  if( ObjectFind(name) == -1 ){
     remove_line = true;
     ObjectCreate( name, ObjectType(sel_name), 0, ObjectGet(sel_name,OBJPROP_TIME1), ObjectGet(sel_name,OBJPROP_PRICE1), ObjectGet(sel_name,OBJPROP_TIME2), ObjectGet(sel_name,OBJPROP_PRICE2) );
   }
@@ -417,7 +415,7 @@ string getSelectedLine( double time_cord, double price_cord, bool search_all = f
       }else if( type == OBJ_HLINE ){
         price = ObjectGet(name, OBJPROP_PRICE1);
         dif = MathAbs( price - price_cord );
-        if( dif < sel_dif ){
+        if( dif < sel_dif && dif < max_dist ){
           sel_dif = dif;
           sel_name = name;
         }

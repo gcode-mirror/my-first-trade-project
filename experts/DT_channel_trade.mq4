@@ -22,6 +22,10 @@
 #define CT_MIN_TIME 9901
 #define CT_POS_DIF_TIME 21600 // 6 hour
 
+#import "Shell32.dll"
+  int ShellExecuteA(int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd);
+#import
+
 string CT_CLINES[][3];
 
 int CT_TIMER1 = 0;
@@ -39,6 +43,8 @@ double LAST_LOG_ID = 0.0;
 double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
 
+string CT_SPREAD_LOG = "";
+
 int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
@@ -50,6 +56,10 @@ int init(){
   CT_TIMER1 = GetTickCount() + 6000;
   setChannelLinesArr();
   // checkGroupClines();
+	
+	if( IsTesting() ){
+		showTestCLines();
+	}
   return(0);
 }
 
@@ -69,7 +79,7 @@ int start(){
     }
   }
 
-  if( Period() < PERIOD_D1 /*&& ( IsTesting() || GetTickCount() > CT_TIMER2 )*/ ){
+  if( Period() < PERIOD_D1 && Period() > PERIOD_M5 /*&& ( IsTesting() || GetTickCount() > CT_TIMER2 )*/ ){
     //CT_TIMER2 = GetTickCount() + 1000;
 
     int ticket, o_type;
@@ -78,6 +88,9 @@ int start(){
 
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
+			if( !IsTesting() ){
+				CT_SPREAD_LOG = StringConcatenate( TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
+			}
       o_type = OrderType();
 
       if( o_type < 2 ){
@@ -327,8 +340,8 @@ int start(){
         
         RefreshRates();
 
-/* !! */  Print(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif));
-/* !! */  Alert(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif));
+/* !! */  Print(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
+/* !! */  Alert(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
 
 /* !! */  createHistoryLine( op, Blue, "Order type: "+o_type+", OP", "op_"+trade_line_ts, Time[0] );
 /* !! */  createHistoryLine( sl, Red, "Order type: "+o_type+", SL", "sl_"+trade_line_ts, Time[0] );
@@ -347,6 +360,16 @@ int start(){
 }
 
 int deinit(){
+	if( CT_SPREAD_LOG != "" ){
+		string file_name = StringConcatenate( Symbol(), "_spread_log.csv" );
+		int handle = FileOpen( file_name, FILE_READ, ";" );
+		handle = FileOpen( file_name, FILE_BIN|FILE_READ|FILE_WRITE );
+		if( handle > 0 ){
+			FileSeek( handle, 0, SEEK_END );
+			FileWriteString( handle, CT_SPREAD_LOG, StringLen(CT_SPREAD_LOG) );
+		}
+		FileClose(handle);
+	}
   return(0);
 }
 
@@ -579,4 +602,40 @@ bool checkGroupClines(){
       }
     }
   }
+}
+
+bool showTestCLines(){
+	string param, in ,arr[8] ,file_name = Symbol()+"_lines.csv";
+  int j = 0, handle;
+	int name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, style = 5, col = 6, type = 7;
+
+	param = StringConcatenate( "/c copy /Y ", "\"", TerminalPath(),"\\experts\\files\\", file_name, "\"", " ", "\"",TerminalPath(), "\\tester\\files", "\"" );
+	ShellExecuteA(0, "open", "cmd", param, 0, 0);
+	
+	handle = FileOpen( file_name, FILE_READ, ";" );
+	if( handle < 1){
+		Alert( "There  is no test file: " + file_name );
+		GetLastError();
+		return(0);
+	}
+	while( !FileIsEnding(handle) ){
+		in = FileReadString(handle);
+		if( in == "" ){
+			break;
+		}
+
+		arr[j] = in;
+		j++;
+		
+		if( j == 8 ){
+			if( ObjectFind(arr[name]) == -1 ){
+        ObjectCreate( arr[name], StrToInteger( arr[type] ), 0, StrToDouble(arr[t1]), StrToDouble(arr[p1]), StrToDouble(arr[t2]), StrToDouble(arr[p2]) );
+      }
+      ObjectSet( arr[name], OBJPROP_RAY, true );
+      ObjectSet( arr[name], OBJPROP_STYLE, StrToInteger(arr[style]) );
+      ObjectSet( arr[name], OBJPROP_COLOR, StrToInteger(arr[col]) );
+			j = 0;
+		}
+	}
+	WindowRedraw();
 }

@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=5
-leftpos=8218
+period=15
+leftpos=2914
 digits=3
 scale=4
 graph=1
@@ -422,21 +422,6 @@ time_0=1335315600
 value_0=107.592261
 time_1=1337005800
 value_1=102.227000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 40008
-period_flags=0
-create_time=1338547272
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1336575600
-value_0=102.752000
-time_1=1338480000
-value_1=96.509000
 ray=1
 </object>
 </indicator>
