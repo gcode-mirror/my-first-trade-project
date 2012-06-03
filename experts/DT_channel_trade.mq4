@@ -52,10 +52,6 @@ int init(){
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.6, Digits );
-  
-  CT_TIMER1 = GetTickCount() + 6000;
-  setChannelLinesArr();
-  // checkGroupClines();
 	
 	if( IsTesting() ){
 		showTestCLines();
@@ -89,7 +85,7 @@ int start(){
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
 			if( !IsTesting() ){
-				CT_SPREAD_LOG = StringConcatenate( TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
+				CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
 			}
       o_type = OrderType();
 
@@ -536,72 +532,6 @@ bool hasClineHistoryPosition( int magic ){
     }
   }
   return (false);
-}
-
-bool checkGroupClines(){
-  int i, j, len = ArrayRange( CT_CLINES, 0 );
-  double limit, in_time, dif1, dif2, curr, g1_t1 = 0.0, g1_t2 = 9999999999.0, g2_t1 = 0.0, g2_t2 = 9999999999.0;
-  limit = 50/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
-  in_time = 1209600; // 2 weeks
-
-  ////////////////// line rays 2. pont ne legyen hosszabb a time[0] nál
-  
-  for( i = 0; i < len; i++ ){
-    if( CT_CLINES[i][CL_GROUP] == "g1" ){
-      curr = ObjectGet( CT_CLINES[i][CL_NAME], OBJPROP_TIME1 );
-      if( curr > g1_t1 ){
-        g1_t1 = curr;
-      }
-      curr = ObjectGet( CT_CLINES[i][CL_NAME], OBJPROP_TIME2 );
-      if( curr < g1_t2 ){
-        g1_t2 = curr;
-      }
-
-    }else if( CT_CLINES[i][CL_GROUP] == "g2" ){
-      curr = ObjectGet( CT_CLINES[i][CL_NAME], OBJPROP_TIME1 );
-      if( curr > g2_t1 ){
-        g2_t1 = curr;
-      }
-      curr = ObjectGet( CT_CLINES[i][CL_NAME], OBJPROP_TIME2 );
-      if( curr < g2_t2 ){
-        g2_t2 = curr;
-      }
-    }
-  }
-
-  if( g1_t2 - g1_t1 > in_time){
-    g1_t1 = g1_t2 - in_time;
-  }
-
-  if( g2_t2 - g2_t1 > in_time){
-    g2_t1 = g2_t2 - in_time;
-  }
-
-  for( i = 0; i < len; i++ ){
-    if( CT_CLINES[i][CL_GROUP] == "g1" ){
-      for( j = i; j < len; j++ ){
-        if( CT_CLINES[j][CL_GROUP] == "g1" ){
-          dif1 = MathAbs( getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, g1_t1 ) ) - getClineValueByShift( CT_CLINES[j][CL_NAME], iBarShift( NULL, 0, g1_t1 ) ) );
-          dif2 = MathAbs( getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, g1_t2 ) ) - getClineValueByShift( CT_CLINES[j][CL_NAME], iBarShift( NULL, 0, g1_t2 ) ) );
-          if( MathAbs( dif1 - dif2 ) > limit ){
-            addComment( StringConcatenate("G1: between ",getCLineProperty(CT_CLINES[i][CL_NAME], "ts")," <=> ",getCLineProperty(CT_CLINES[j][CL_NAME], "ts")," dif is:", DoubleToStr( MathAbs( dif1 - dif2 ), Digits )," inst:", DoubleToStr( limit, Digits )) ,1 );
-          }
-          break;
-        }
-      }
-    }else if( CT_CLINES[i][CL_GROUP] == "g2" ){
-      for( j = i; j < len; j++ ){
-        if( CT_CLINES[j][CL_GROUP] == "g2" ){
-          dif1 = MathAbs( getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, g2_t1 ) ) - getClineValueByShift( CT_CLINES[j][CL_NAME], iBarShift( NULL, 0, g2_t1 ) ) );
-          dif2 = MathAbs( getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, g2_t2 ) ) - getClineValueByShift( CT_CLINES[j][CL_NAME], iBarShift( NULL, 0, g2_t2 ) ) );
-          if( MathAbs( dif1 - dif2 ) > limit ){
-            addComment( StringConcatenate("G2: between ",getCLineProperty(CT_CLINES[i][CL_NAME], "ts")," <=> ",getCLineProperty(CT_CLINES[j][CL_NAME], "ts")," dif is:", DoubleToStr( MathAbs( dif1 - dif2 ), Digits )," inst:", DoubleToStr( limit, Digits )) ,1 );
-          }
-          break;
-        }
-      }
-    }
-  }
 }
 
 bool showTestCLines(){

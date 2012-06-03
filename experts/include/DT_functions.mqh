@@ -570,9 +570,13 @@ double getClineValueByShift( string name, int shift = 0 ){
 
 bool showCLineGroups(){
   int i, len = ObjectsTotal(), shift, group_id, j = 0;
-  string name, g_name, line_names[];
+  string name, g_name, line_names[], text, g1_max, g2_max;
   color c = CornflowerBlue;
-  double p1;
+  double p1, g1_max_data[5], g2_max_data[5], limit, time_dif;
+	limit = 40 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+	time_dif = 432000; // 5 days
+	g1_max_data[0] = 0.0;
+	g2_max_data[0] = 0.0;
   
   removeObjects("group_idx");
   shift = WindowLastVisibleBar() + (WindowBarsPerChart() / 3);
@@ -582,17 +586,56 @@ bool showCLineGroups(){
       ArrayResize( line_names, j + 1 );
       line_names[j] = name;
       j++;
+			
+			group_id = getCLineProperty( name, "group" );
+			p1 = getLineValAtTime( name, Time[0] );
+			if( group_id == 1 ){
+				if( p1 > g1_max_data[0] ){
+					g1_max_data[0] = p1;
+					g1_max = name;
+				}
+			}else if( group_id == 2 ){
+				if( p1 > g2_max_data[0] ){
+					g2_max_data[0] = p1;
+					g2_max = name;
+				}
+			}
     }
   }
+
+	if( g1_max_data[0] != 0.0 ){
+		g1_max_data[1] = Time[0];
+		g1_max_data[2] = getLineValAtTime( g1_max, Time[0] );
+		g1_max_data[3] = Time[0] - time_dif;
+		g1_max_data[4] = getLineValAtTime( g1_max, g1_max_data[3] );
+	}
+	if( g2_max_data[0] != 0.0 ){
+		g2_max_data[1] = Time[0];
+		g2_max_data[2] = getLineValAtTime( g1_max, Time[0] );
+		g2_max_data[3] = Time[0] - time_dif;
+		g2_max_data[4] = getLineValAtTime( g1_max, g2_max_data[3] );
+	}
   
   len = ArraySize(line_names);
   for ( i = 0; i < len; i++){
     group_id = getCLineProperty( line_names[i], "group" );
+		text = "G"+group_id;
     if( group_id == 1 ){
       c = Red;
+			if( g1_max_data[0] != 0.0 ){
+				if( MathAbs(MathAbs( g1_max_data[2] - getLineValAtTime( line_names[i], g1_max_data[1] ) ) - MathAbs( g1_max_data[4] - getLineValAtTime( line_names[i], g1_max_data[3] ) )) > limit ){
+					text = StringConcatenate( text, " not para!" );
+				}
+			}
     }else if( group_id == 2 ){
       c = DarkGreen;
+			if( g2_max_data[0] != 0.0 ){
+				if( MathAbs( g2_max_data[2] - getLineValAtTime( line_names[i], g2_max_data[1] ) ) - MathAbs( g2_max_data[4] - getLineValAtTime( line_names[i], g2_max_data[3] ) ) > limit ){
+					text = StringConcatenate( text, " not para!" );
+				}
+			}
     }
+		
     g_name = StringConcatenate( "DT_BO_group_idx_", i );
     p1 = getClineValueByShift( line_names[i], shift );
     if( p1 == 0.0 ){
@@ -602,7 +645,7 @@ bool showCLineGroups(){
     
     if( ObjectFind(g_name) == -1 ){
       ObjectCreate( g_name, OBJ_TEXT, 0, Time[shift], p1 );
-      ObjectSetText( g_name, "G"+group_id, 11, "Arial", c );
+      ObjectSetText( g_name, text, 11, "Arial", c );
     }
   }
   
@@ -613,4 +656,33 @@ bool showCLineGroups(){
   errorCheck( "showCLineGroups" );
   
   return (true);
+}
+
+double getLineValAtTime( string name, double time ){
+  if( ObjectType(name) == OBJ_HLINE ){
+    return ( ObjectGet( name, OBJPROP_PRICE1 ) );
+  }
+
+  double t1, t2, p1 ,p2, val;
+  t1 = ObjectGet( name,OBJPROP_TIME1 );
+  p1 = ObjectGet( name,OBJPROP_PRICE1 );
+  t2 = ObjectGet( name,OBJPROP_TIME2 );
+  p2 = ObjectGet( name,OBJPROP_PRICE2 );
+  ObjectSet( name, OBJPROP_RAY, true );
+
+  if( (t1 < t2 && time < t1) || (t1 > t2 && time > t1) ){
+    ObjectSet( name, OBJPROP_TIME1, t2 );
+    ObjectSet( name, OBJPROP_PRICE1, p2 );
+    ObjectSet( name, OBJPROP_TIME2, t1 );
+    ObjectSet( name, OBJPROP_PRICE2, p1 );
+    val = ObjectGetValueByShift( name, iBarShift( NULL, 0, time ) );
+    ObjectSet( name, OBJPROP_TIME1, t1 );
+    ObjectSet( name, OBJPROP_PRICE1, p1 );
+    ObjectSet( name, OBJPROP_TIME2, t2 );
+    ObjectSet( name, OBJPROP_PRICE2, p2 );
+
+    return (val);
+  }else{
+    return (ObjectGetValueByShift( name, iBarShift( NULL, 0, time ) ));
+  }
 }

@@ -13,12 +13,12 @@ bool GetWindowRect(int h, int& pos[4]);
 
 #property indicator_chart_window
 
-#property indicator_buffers 4
+// #property indicator_buffers 4
  
-#property indicator_color1 Black
-#property indicator_color2 Black
-#property indicator_color3 SeaGreen
-#property indicator_color4 Crimson
+// #property indicator_color1 Black
+// #property indicator_color2 Black
+// #property indicator_color3 SeaGreen
+// #property indicator_color4 Crimson
 
 
 //========================================== Defaults ========================================
@@ -74,6 +74,13 @@ int init(){
 
 //========================================== Start ===========================================
 int start(){
+	// int nr_of_try = 1;
+	// while( !IsConnected() || nr_of_try < 10 ){
+		// Alert( StringConcatenate( Symbol()," wait for connection try: ", nr_of_try ) );
+		// nr_of_try++;
+		// Sleep(2000);
+	// }
+
   startHud();
   // startHud(getGlobal("RULER_SWITCH"));	
   startComments();

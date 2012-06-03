@@ -91,34 +91,3 @@ int start(){
     }
   }
 }
-
-double getLineValAtTime( string name, double time ){
-  if( ObjectType(name) == OBJ_HLINE ){
-    return ( ObjectGet( name, OBJPROP_PRICE1 ) );
-  }
-
-  double t1, t2, p1 ,p2, val;
-  t1 = ObjectGet( name,OBJPROP_TIME1 );
-  p1 = ObjectGet( name,OBJPROP_PRICE1 );
-  t2 = ObjectGet( name,OBJPROP_TIME2 );
-  p2 = ObjectGet( name,OBJPROP_PRICE2 );
-  ObjectSet( name, OBJPROP_RAY, true );
-
-  if( (t1 < t2 && time < t1) || (t1 > t2 && time > t1) ){
-    ObjectSet( name, OBJPROP_TIME1, t2 );
-    ObjectSet( name, OBJPROP_PRICE1, p2 );
-    ObjectSet( name, OBJPROP_TIME2, t1 );
-    ObjectSet( name, OBJPROP_PRICE2, p1 );
-    val = ObjectGetValueByShift( name, iBarShift( NULL, 0, time ) );
-
-    ObjectSet( name, OBJPROP_TIME1, t1 );
-    ObjectSet( name, OBJPROP_PRICE1, p1 );
-    ObjectSet( name, OBJPROP_TIME2, t2 );
-    ObjectSet( name, OBJPROP_PRICE2, p2 );
-
-    return (val);
-  }else{
-    return (ObjectGetValueByShift( name, iBarShift( NULL, 0, time ) ));
-  }
-
-}
