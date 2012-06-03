@@ -7,6 +7,7 @@
 #property link      ""
 
 #define FIBO_NR 6
+#define FIBO_LV_NR 7
 
 double FIBO_BASE_X1 = 1, FIBO_BASE_Y1 = 1, FIBO_BASE_X2 = 1, FIBO_BASE_Y2 = 1;
 int FIBO_LINE_VISIBLE_BAR = 0;

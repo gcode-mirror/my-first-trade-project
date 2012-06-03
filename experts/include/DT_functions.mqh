@@ -686,3 +686,10 @@ double getLineValAtTime( string name, double time ){
     return (ObjectGetValueByShift( name, iBarShift( NULL, 0, time ) ));
   }
 }
+
+string PadString(string toBePadded, string paddingChar, int paddingLength){
+  while(StringLen(toBePadded) <  paddingLength){
+    toBePadded = StringConcatenate(paddingChar,toBePadded);
+  }
+  return (toBePadded);
+}

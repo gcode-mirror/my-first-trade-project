@@ -13,7 +13,18 @@ int InternetOpenUrlA(int hInternetSession, string sUrl,string sHeaders = "", int
 int InternetReadFile(int hFile, int& sBuffer[], int lNumBytesToRead, int& lNumberOfBytesRead[]);
 int InternetCloseHandle(int hInet);
 
-string NEWS_FILE_NAME;
+#define NEWS_TIME 0
+#define NEWS_CURRENCY 1
+#define NEWS_DESC 2
+#define NEWS_PRIO  3
+#define NEWS_ACT 4
+#define NEWS_FORC 5
+#define NEWS_PREV 6
+#define NEWS_UNIT 7
+#define NEWS_REL 8
+string NEWS_DATA[1][9];
+
+string NEWS_FILE_NAMES[];
 double MIN_PRICE_NEWS = 0, MAX_PRICE_NEWS = 0, LAST_UPDATE_ID = 0.0;
 int NEWS_DOWNLOAD_TIMER = 0;
 
@@ -24,7 +35,7 @@ bool initNews(string isOn){
     return (false);    
   }
 
-  NEWS_FILE_NAME = newsFileName();
+  newsFileName();
       
   if(doFileDownLoad()){
     downLoadWebPageToFile();
@@ -33,7 +44,15 @@ bool initNews(string isOn){
   }
   NEWS_DOWNLOAD_TIMER = GetTickCount() + 60000;
   
-  csvNewsFileToArray();  
+  csvNewsFileToArray();
+  
+  ObjectCreate( "DT_BO_icon_news_3", OBJ_LABEL, 0, 0, 0);
+  ObjectSet( "DT_BO_icon_news_3", OBJPROP_CORNER, 0);
+  ObjectSet( "DT_BO_icon_news_3", OBJPROP_XDISTANCE, ObjectGet( "DT_BO_icon_news_1", OBJPROP_XDISTANCE) + 15 );
+  ObjectSet( "DT_BO_icon_news_3", OBJPROP_YDISTANCE, ObjectGet( "DT_BO_icon_news_1", OBJPROP_YDISTANCE) + 11 );
+  ObjectSet( "DT_BO_icon_news_3", OBJPROP_BACK, false);
+  ObjectSetText( "DT_BO_icon_news_3", getGlobal("PAST_NEWS"), 8, "Arial Black", Blue );
+  
   return (errorCheck("initNews"));
 }
 
@@ -141,16 +160,28 @@ bool createNewsLine(string name, double t, double p1, double p2, string text, st
 }
 
 bool csvNewsFileToArray(){
-  int handle = FileOpen(NEWS_FILE_NAME,FILE_READ,",");
-  int i = 0, line_idx = 0, col_idx = 0;
+  int handle, i, j, line_idx = 0, col_idx, len = ArraySize( NEWS_FILE_NAMES );
   string data, prio;
   
-  if(handle>0){
-    while(i < 9 && !FileIsEnding(handle)){ //skip first row
-      FileReadString(handle);
-      i++;      
-    } 
+  for( i = 0; i < len; i++ ){
+    handle = FileOpen( NEWS_FILE_NAMES[i], FILE_READ, "," );
+    if( handle < 1 ){
+      if( GetLastError() == 4103 && i != 0 ){
+        addComment( NEWS_FILE_NAMES[i]+" ("+( i + 1 )+") doesn't exist!", 1 );
+        setGlobal( "PAST_NEWS", i );
+        ArrayResize( NEWS_FILE_NAMES, i );
+      }
+      FileClose(handle);
+      return (0);
+    }
     
+    j = 0;
+    while( j < 9 && !FileIsEnding(handle) ){ //skip first row
+      FileReadString(handle);
+      j++;      
+    }
+    
+    col_idx = 0;
     while(!FileIsEnding(handle)){
       data = stringReplaceAll(FileReadString(handle), "¥", "Y");
       data = stringReplaceAll(data, "£", "P");
@@ -160,9 +191,10 @@ bool csvNewsFileToArray(){
           break;
         }           
         line_idx++;
-        ArrayResize(NEWS_DATA, line_idx+1);
+        ArrayResize( NEWS_DATA, line_idx + 1 );
         col_idx = 0;              
       }
+      
       if(col_idx == 0){
         NEWS_DATA[line_idx][NEWS_TIME] = getTSdate(data, FileReadString(handle));
         col_idx++;
@@ -193,20 +225,10 @@ bool csvNewsFileToArray(){
         assortNumbers(data);
         NEWS_DATA[line_idx][NEWS_PREV] = data;
       }
-
       col_idx++; 
-    }      
+    }    
+    FileClose(handle);
   }
- /* string p = "";
-  for(i=0;i<ArrayRange(NEWS_DATA,0);i++){
-    p = "";
-    for(int j=0;j<ArrayRange(NEWS_DATA,1);j++){
-      p = p+StringConcatenate(NEWS_DATA[i][j]," | ");
-    }
-    Alert(p);
-   // Alert(NEWS_DATA[i][NEWS_TIME]+"|"+NEWS_DATA[i][NEWS_CURRENCY]+"|"+NEWS_DATA[i][NEWS_DESC]+"|"+NEWS_DATA[i][NEWS_PRIO]+"|"+NEWS_DATA[i][NEWS_ACT]+"|"+NEWS_DATA[i][NEWS_FORC]+"|"+NEWS_DATA[i][NEWS_PREV]);
-  }*/
-  FileClose(handle);
   return (errorCheck("csvNewsFileToArray"));
 }
 
@@ -276,7 +298,7 @@ string getTSdate(string date, string time){
 }
 
 bool doFileDownLoad(){ 
- int handle=FileOpen(NEWS_FILE_NAME, FILE_READ);
+ int handle=FileOpen(NEWS_FILE_NAMES[0], FILE_READ);
  if(handle>0){
    FileClose(handle);
    return(false);   
@@ -285,20 +307,20 @@ bool doFileDownLoad(){
  return(true); 
 }
 
-string newsFileName(){   
-  datetime date =  TimeLocal() - (TimeDayOfWeek(TimeLocal())  * 86400);
-  return (StringConcatenate("Calendar-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),"-",TimeYear(date),".csv"));  
-}
-
-string PadString(string toBePadded, string paddingChar, int paddingLength){
-   while(StringLen(toBePadded) <  paddingLength){
-      toBePadded = StringConcatenate(paddingChar,toBePadded);
-   }
-   return (toBePadded);
+bool newsFileName(){
+  int i, nr_of_weeks = StrToInteger( getGlobal("PAST_NEWS") );
+  datetime date;
+  
+  ArrayResize( NEWS_FILE_NAMES, nr_of_weeks );
+  for( i = 0; i < nr_of_weeks; i++ ){
+    date = TimeLocal() - (TimeDayOfWeek(TimeLocal()) * 86400 ) - ( i * 604800 );
+    NEWS_FILE_NAMES[i] = StringConcatenate("Calendar-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),"-",TimeYear(date),".csv");
+  }
+  return ( errorCheck("newsFileName") );
 }
 
 bool downLoadWebPageToFile(){
-  string url = StringConcatenate("http://www.dailyfx.com/files/",NEWS_FILE_NAME);  
+  string url = StringConcatenate( "http://www.dailyfx.com/files/", NEWS_FILE_NAMES[0] );  
   if(!IsDllsAllowed())   {
     Alert("Please allow DLL imports");
     return(false);
@@ -346,7 +368,7 @@ bool downLoadWebPageToFile(){
 
   // Save to text file  
   int handle;
-  handle=FileOpen(NEWS_FILE_NAME, FILE_CSV|FILE_WRITE, ';');
+  handle=FileOpen( NEWS_FILE_NAMES[0], FILE_CSV|FILE_WRITE, ';');
   if(handle>0){
    FileWrite(handle, fileContents);
    FileClose(handle);

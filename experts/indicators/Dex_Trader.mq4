@@ -53,7 +53,9 @@ int init(){
   createGlobal("SESSION_SWITCH", "0");
  // createGlobal("ZOOM_SWITCH", "0");
   
-  createGlobal("LOT", "0.1");
+  createGlobal( "LOT", "0.1" );
+  createGlobal( "PAST_NEWS", "1" );
+  
 //=========================================== Init ===========================================
   initIcons();
   initHud();
