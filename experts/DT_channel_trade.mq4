@@ -51,7 +51,7 @@ int init(){
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
-  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.6, Digits );
+  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.7, Digits );
 	
 	if( IsTesting() ){
 		showTestCLines();
@@ -85,7 +85,7 @@ int start(){
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
 			if( !IsTesting() ){
-				CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
+			//	CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
 			}
       o_type = OrderType();
 

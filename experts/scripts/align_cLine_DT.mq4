@@ -43,7 +43,7 @@ int start(){
       ObjectSet( sel_name, OBJPROP_COLOR, c );
 
     }else{
-      para_line = getSelectedLine( tod, pod, false, 20 );
+      para_line = getSelectedLine( tod, pod, false, 40 );
       if( para_line != "" && para_line != sel_name ){
         dif = ObjectGet( sel_name, OBJPROP_PRICE1 ) - getLineValAtTime(para_line, ObjectGet( sel_name, OBJPROP_TIME1 ));
         ObjectSet( sel_name, OBJPROP_PRICE2, getLineValAtTime(para_line, ObjectGet( sel_name, OBJPROP_TIME2 )) + dif );
