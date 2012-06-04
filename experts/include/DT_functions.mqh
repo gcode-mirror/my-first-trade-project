@@ -211,7 +211,7 @@ double getZigZag(double tf, int deph, int dev, int backstep, int nr, double& tim
     tmp = iCustom(Symbol(),tf,"ZigZag",deph,dev,backstep,0,i);
     if( tmp != 0 ){
       if(found == nr){
-        time = Time[i];
+        time = iTime( NULL, tf, i );
         return (tmp);
       }
       found++;

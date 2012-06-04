@@ -58,7 +58,6 @@ int init(){
   
 //=========================================== Init ===========================================
   initIcons();
-  initHud();
   // initHud(getGlobal("RULER_SWITCH"));
   initRuler(getGlobal("RULER_SWITCH"));
   initTradeLines(getGlobal("TRADE_LINES_SWITCH"));	
@@ -70,6 +69,7 @@ int init(){
   initSession(getGlobal("SESSION_SWITCH"));	
   //initZoom(getGlobal("ZOOM_SWITCH"));	
   errorCheck("start");
+  initHud();
   
   return(0);
 }
@@ -83,7 +83,6 @@ int start(){
 		// Sleep(2000);
 	// }
 
-  startHud();
   // startHud(getGlobal("RULER_SWITCH"));	
   startComments();
 	startRuler(getGlobal("RULER_SWITCH"));	
@@ -94,6 +93,7 @@ int start(){
 	startMonitor(getGlobal("MONITOR_SWITCH"));
 	startSession(getGlobal("SESSION_SWITCH"));
 	//startZoom(getGlobal("ZOOM_SWITCH"));
+  startHud();
   
   
 //	Alert(k-GetTickCount());  

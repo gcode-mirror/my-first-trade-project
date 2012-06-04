@@ -18,7 +18,7 @@
 int start(){
   double pod = WindowPriceOnDropped();
   double tod = WindowTimeOnDropped();
-  string out, in, file_name = Symbol()+"_lines.csv";
+  string out, in, file_name = StringSubstr(Symbol(), 0, 6) + "_test_cLines.csv";
   int handle = FileOpen( file_name, FILE_READ, ";" );
 
   if( pod == 0.0 ){
@@ -54,7 +54,7 @@ int start(){
 				return(0);
 			}
       
-      out = StringConcatenate(sel_name,";",DoubleToStr( t1 ,0 ),";",DoubleToStr( p1 ,Digits ),";",DoubleToStr( t2 ,0 ),";",DoubleToStr( p2 ,Digits ),";",ObjectGet( sel_name, OBJPROP_STYLE ),";",ObjectGet( sel_name, OBJPROP_COLOR ),";",ObjectType( sel_name ),"\r\n");
+      out = StringConcatenate(sel_name,";",DoubleToStr( t1 ,0 ),";",DoubleToStr( p1 ,Digits ),";",DoubleToStr( t2 ,0 ),";",DoubleToStr( p2 ,Digits ),";",ObjectGet( sel_name, OBJPROP_COLOR ),";",ObjectType( sel_name ),"\r\n");
 			FileSeek(handle, 0, SEEK_END);
       FileWriteString(handle, out, StringLen(out));
       FileClose(handle);

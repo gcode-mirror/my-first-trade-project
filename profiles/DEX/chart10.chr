@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=15
-leftpos=5556
+leftpos=5530
 digits=5
 scale=4
 graph=2
@@ -39,5 +39,11 @@ height=100
 name=main
 </indicator>
 </window>
+
+<expert>
+name=DT_channel_trade
+flags=343
+window_num=0
+</expert>
 </chart>
 

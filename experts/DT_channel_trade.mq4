@@ -45,6 +45,10 @@ double CT_THRESHOLD = 0.0;
 
 string CT_SPREAD_LOG = "";
 
+string EXP_FILE_NAME;
+string EXP_LAST_MOD_GV;
+double CUR_LAST_MOD = 0.0;
+
 int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
@@ -53,16 +57,28 @@ int init(){
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.7, Digits );
 	
+  string sym = StringSubstr(Symbol(), 0, 6);
+  
 	if( IsTesting() ){
-		showTestCLines();
+    string test_file_name = StringConcatenate( sym , "_test_cLines.csv" );
+    string param = StringConcatenate( "/c copy /Y ", "\"", TerminalPath(),"\\experts\\files\\", test_file_name, "\"", " ", "\"",TerminalPath(), "\\tester\\files", "\"" );
+    ShellExecuteA(0, "open", "cmd", param, 0, 0);
+		setChannelLinesArr( test_file_name );
+    WindowRedraw();
 	}
+  
+  EXP_FILE_NAME = StringConcatenate( sym, "_cLines.csv" );
+  EXP_LAST_MOD_GV = StringConcatenate( sym, "_cLines_lastMod" );
   return(0);
 }
 
 int start(){
   if( GetTickCount() > CT_TIMER1 ){
-    CT_TIMER1 = GetTickCount() + 6000;
-    setChannelLinesArr();
+    CT_TIMER1 = GetTickCount() + 2000;
+    
+    if( !IsTesting() ){
+      setChannelLinesArr( EXP_FILE_NAME );
+    }
 
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
       CT_STOP_TRADE = false;
@@ -164,10 +180,12 @@ int start(){
 /* !! */  Print(StringConcatenate("Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " OP:", new_op, " SL:", new_sl, " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Group:", trade_line_group, " Mag:", OrderMagicNumber()));
 /* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " OP:", new_op, " SL:", new_sl, " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Group:", trade_line_group, " Mag:", OrderMagicNumber()));
 
-/* !! */  ObjectSet( "DT_GO_channel_hist_op_"+trade_line_ts_str, OBJPROP_PRICE1, new_op );
-/* !! */  ObjectSet( "DT_GO_channel_hist_sl_"+trade_line_ts_str, OBJPROP_PRICE1, new_sl );
-/* !! */  ObjectSet( "DT_GO_channel_hist_tp_"+trade_line_ts_str, OBJPROP_PRICE1, new_tp );
-
+          if( IsTesting() ){
+/* !! */    ObjectSet( "DT_GO_channel_hist_op_"+trade_line_ts_str, OBJPROP_PRICE1, new_op );
+/* !! */    ObjectSet( "DT_GO_channel_hist_sl_"+trade_line_ts_str, OBJPROP_PRICE1, new_sl );
+/* !! */    ObjectSet( "DT_GO_channel_hist_tp_"+trade_line_ts_str, OBJPROP_PRICE1, new_tp );
+          }
+          
           if( !errorCheck("Channel trade OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
             return(0);
           }
@@ -186,7 +204,7 @@ int start(){
       for( i = 0; i < len; i++ ){
         if( CT_CLINES[i][CL_STATE] != "sig" ){
           if( ObjectFind( CT_CLINES[i][CL_NAME] ) == -1 ){
-            setChannelLinesArr();
+            setChannelLinesArr( EXP_FILE_NAME );
             return (0);
           }
           trade_line_price = getClineValueByShift( CT_CLINES[i][CL_NAME] );
@@ -339,14 +357,14 @@ int start(){
 /* !! */  Print(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
 /* !! */  Alert(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
 
+        if( IsTesting() ){
 /* !! */  createHistoryLine( op, Blue, "Order type: "+o_type+", OP", "op_"+trade_line_ts, Time[0] );
 /* !! */  createHistoryLine( sl, Red, "Order type: "+o_type+", SL", "sl_"+trade_line_ts, Time[0] );
 /* !! */  createHistoryLine( tp, Green, "Order type: "+o_type+", TP", "tp_"+trade_line_ts, Time[0] );
 /* !! */  createHistoryLine( fibo_100, Black, "Order type: "+o_type+", f100", "f100_"+trade_line_ts, fibo_100_time );
-
+        }
+        
         errorCheck(" Bid:"+ Bid+ " Ask:"+ Ask);
-        // renameChannelLine( trade_line_name, "sig" );
-        setChannelLinesArr();
       }
       errorCheck("Channel trade new position part");
     }
@@ -369,36 +387,31 @@ int deinit(){
   return(0);
 }
 
-void setChannelLinesArr(){
-  double price, tmp_arr[0][2];
-  int i, j = 0, len = ObjectsTotal();
-  string name;
+void setChannelLinesArr( string &file_name ){
+  if( CUR_LAST_MOD != GlobalVariableGet( EXP_LAST_MOD_GV ) ){
+    CUR_LAST_MOD = GlobalVariableGet( EXP_LAST_MOD_GV );
 
-  for( i = 0; i < len; i++ ){
-    name = ObjectName(i);
-    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
-      price = getClineValueByShift( name );
-      if( price != 0.0 ){
-        ArrayResize( tmp_arr, j + 1 );
-        tmp_arr[j][0] = price;
-        tmp_arr[j][1] = i;
-        j++;
-      }else{
-        GetLastError();
-      }
+    double price, tmp_arr[0][2];
+    int i, j = 0, len;
+    string name;
+    
+    len = readCLinesFromFile( file_name, tmp_arr );
+
+    if( len == 0 ){
+      return;
     }
-  }
+    
+    multiDSort( tmp_arr );
 
-  multiDSort( tmp_arr );
-
-  ArrayResize( CT_CLINES, j );
-  for( i = 0; i < j; i++ ){
-    name = ObjectName( tmp_arr[i][1] );
-    CT_CLINES[i][CL_NAME] = name;
-    CT_CLINES[i][CL_STATE] = StringSubstr( name, 15, 3 );
-    CT_CLINES[i][CL_GROUP] = StringSubstr( name, 12, 2 );
+    ArrayResize( CT_CLINES, j );
+    for( i = 0; i < j; i++ ){
+      name = ObjectName( tmp_arr[i][1] );
+      CT_CLINES[i][CL_NAME] = name;
+      CT_CLINES[i][CL_STATE] = StringSubstr( name, 15, 3 );
+      CT_CLINES[i][CL_GROUP] = StringSubstr( name, 12, 2 );
+    }
+    errorCheck( "setChannelLinesArr" );
   }
-  errorCheck( "setChannelLinesArr" );
 }
 
 void multiDSort( double &arr[][] ){
@@ -534,38 +547,45 @@ bool hasClineHistoryPosition( int magic ){
   return (false);
 }
 
-bool showTestCLines(){
-	string param, in ,arr[8] ,file_name = Symbol()+"_lines.csv";
-  int j = 0, handle;
-	int name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, style = 5, col = 6, type = 7;
-
-	param = StringConcatenate( "/c copy /Y ", "\"", TerminalPath(),"\\experts\\files\\", file_name, "\"", " ", "\"",TerminalPath(), "\\tester\\files", "\"" );
-	ShellExecuteA(0, "open", "cmd", param, 0, 0);
+int readCLinesFromFile( string &file_name, double &idx_arr[][] ){
+	string in ,arr[7]; // name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, col = 5, type = 6
+  int i = 0, j = 0, handle;
+  double time_0_p;
 	
+  ObjectsDeleteAll();
+  
 	handle = FileOpen( file_name, FILE_READ, ";" );
 	if( handle < 1){
-		Alert( "There  is no test file: " + file_name );
-		GetLastError();
-		return(0);
+    if( GetLastError() != 4103 ){
+      Alert( "File read fail ("+file_name+")" );
+    }
+		return (0);
 	}
+  
 	while( !FileIsEnding(handle) ){
 		in = FileReadString(handle);
-		if( in == "" ){
-			break;
-		}
+		// if( in == "" ){
+			// break;
+		// }
 
 		arr[j] = in;
 		j++;
 		
-		if( j == 8 ){
-			if( ObjectFind(arr[name]) == -1 ){
-        ObjectCreate( arr[name], StrToInteger( arr[type] ), 0, StrToDouble(arr[t1]), StrToDouble(arr[p1]), StrToDouble(arr[t2]), StrToDouble(arr[p2]) );
-      }
-      ObjectSet( arr[name], OBJPROP_RAY, true );
-      ObjectSet( arr[name], OBJPROP_STYLE, StrToInteger(arr[style]) );
-      ObjectSet( arr[name], OBJPROP_COLOR, StrToInteger(arr[col]) );
+		if( j == 7 ){
+      ObjectCreate( arr[0], StrToInteger( arr[6] ), 0, StrToDouble(arr[1]), StrToDouble(arr[2]), StrToDouble(arr[3]), StrToDouble(arr[4]) );
+      ObjectSet( arr[0], OBJPROP_RAY, true );
+      ObjectSet( arr[0], OBJPROP_COLOR, StrToInteger(arr[5]) );
 			j = 0;
+      
+      if( time_0_p != 0.0 ){
+        ArrayResize( idx_arr, i + 1 );
+        idx_arr[i][0] = time_0_p;
+        idx_arr[i][1] = i;
+        i++;
+      }else{
+        GetLastError();
+      }
 		}
 	}
-	WindowRedraw();
+  return ( i );
 }

@@ -33,6 +33,9 @@ int HUD_OBJ_TOTAL = 0;
 
 double HUD_WINDOW_FADE = 0.0;
 
+string EXP_FILE_NAME;
+string EXP_LAST_MOD_GV;
+
 bool initHud(){
 // bool initHud(string isOn){
 	// setAppStatus(APP_ID_RULER, isOn);
@@ -102,7 +105,7 @@ bool initHud(){
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, -1 );
   
 	// History info bar and data
-	HUD_HISTORY_GLOBAL_NAME = StringConcatenate( sym,"_History");
+	HUD_HISTORY_GLOBAL_NAME = StringConcatenate( sym, "_History" );
   HUD_SELF_HISTORY_GLOBAL_VAL = 1.0;
   GlobalVariableSet( HUD_HISTORY_GLOBAL_NAME, 1.0 );
 
@@ -111,25 +114,17 @@ bool initHud(){
   ObjectSet( "DT_BO_hud_history", OBJPROP_XDISTANCE, pos_x );
   ObjectSet( "DT_BO_hud_history", OBJPROP_YDISTANCE, 15 );
 
+  EXP_FILE_NAME = StringConcatenate( sym, "_cLines.csv" );
+  EXP_LAST_MOD_GV = StringConcatenate( sym, "_cLines_lastMod" );
+  GlobalVariableSet( EXP_LAST_MOD_GV, TimeLocal() );
+  
   updateChannelArray();
-
+  
 	return (errorCheck("initHud"));
 }
 
 bool startHud(){
 	if(delayTimer(APP_ID_HUD, 2000)){return (false);}
-// bool startHud(string isOn){
-	// if(isAppStatusChanged(APP_ID_RULER, isOn)){
-    // if(isOn == "1"){
-      // initHud("1");
-    // }else{
-      // deinitHud();
-      // return (false);
-    // }
-  // }
-	// if(isOn == "0"){return (false);}
-	// if(delayTimer(APP_ID_RULER, 1500)){return (false);}
-
 
 	// main info bar
   double spread = MarketInfo( Symbol(), MODE_SPREAD );
@@ -199,7 +194,6 @@ bool startHud(){
 						has_change = true;
 						j = 3;
 					}
-					// Alert(histroy_len+" "+i+" "+j+" remove "+HUD_HISTORY_LINE_NAMES[i][j]);
 				}
 			}
 		}
@@ -253,7 +247,6 @@ bool startHud(){
 		double real_history_global_val = GlobalVariableGet(HUD_HISTORY_GLOBAL_NAME);
 		if( HUD_SELF_HISTORY_GLOBAL_VAL > real_history_global_val ){
 			for( i = HUD_SELF_HISTORY_GLOBAL_VAL - 1; i >= real_history_global_val - 1; i-- ){
-				// Alert(i);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][UNDO], OBJPROP_TIME1, HUD_HISTORY_LINE_DATA[i][UNDO][T1]);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][UNDO], OBJPROP_PRICE1, HUD_HISTORY_LINE_DATA[i][UNDO][P1]);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][UNDO], OBJPROP_TIME2, HUD_HISTORY_LINE_DATA[i][UNDO][T2]);
@@ -264,7 +257,6 @@ bool startHud(){
 			has_change = true;
 		}else if( HUD_SELF_HISTORY_GLOBAL_VAL < real_history_global_val ){
 			for( i = HUD_SELF_HISTORY_GLOBAL_VAL; i < real_history_global_val; i++ ){
-				// Alert(i);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][REDO], OBJPROP_TIME1, HUD_HISTORY_LINE_DATA[i][REDO][T1]);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][REDO], OBJPROP_PRICE1, HUD_HISTORY_LINE_DATA[i][REDO][P1]);
 				ObjectSet( HUD_HISTORY_LINE_NAMES[i][REDO], OBJPROP_TIME2, HUD_HISTORY_LINE_DATA[i][REDO][T2]);
@@ -297,16 +289,13 @@ bool deinitHud(){
 
 bool removeItemFromArray( string name ){
 	int nr = 0, i, j = -1, len = ArrayRange( HUD_HISTORY_LINE_NAMES, 0 );
-	// printArr();
 	for( i = 0; i < len; i++ ){
 		if( HUD_HISTORY_LINE_NAMES[i][REDO] == name || HUD_HISTORY_LINE_NAMES[i][UNDO] == name ){
 			if( j == -1){
 				j = i;
 			}
-			// Alert(" sel "+HUD_SELF_HISTORY_GLOBAL_VAL+" i:"+i);
 			if( HUD_SELF_HISTORY_GLOBAL_VAL > j ){
 				HUD_SELF_HISTORY_GLOBAL_VAL = HUD_SELF_HISTORY_GLOBAL_VAL - 1.0;
-				// Alert(" del sel "+HUD_SELF_HISTORY_GLOBAL_VAL+" i:"+i);
 			}
 			nr++;
 			continue;
@@ -332,8 +321,6 @@ bool removeItemFromArray( string name ){
 	if( j != -1 ){
 		ArrayResize( HUD_HISTORY_LINE_NAMES, j );
 		ArrayResize( HUD_HISTORY_LINE_DATA, j );
-		// Alert(HUD_SELF_HISTORY_GLOBAL_VAL);
-		// printArr();
 		errorCheck("removeItemFromArray");
 		return (true);
 	}else{
@@ -342,9 +329,9 @@ bool removeItemFromArray( string name ){
 	}
 }
 
-bool updateChannelArray(){
-	int j = 0, i, len;
-  string name;
+void updateChannelArray(){
+	int j = 0, i, len, handle;
+  string name, out = "";
 
   ArrayResize(HUD_CHANNEL_LINE_NAMES, 0);
   ArrayResize(HUD_CHANNEL_LINE_DATA, 0);
@@ -362,9 +349,19 @@ bool updateChannelArray(){
       HUD_CHANNEL_LINE_DATA[j][P1] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE1 ) ,Digits );
       HUD_CHANNEL_LINE_DATA[j][T2] = ObjectGet( name, OBJPROP_TIME2 );
       HUD_CHANNEL_LINE_DATA[j][P2] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ) ,Digits );
+      
+      out = StringConcatenate(out,name,";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T1] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P1] ,Digits ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T2] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P2] ,Digits ),";",ObjectGet( name, OBJPROP_COLOR ),";",ObjectType( name ),"\r\n");
       j++;
     }
   }
+  HUD_OBJ_TOTAL = len;
+  
+  handle = FileOpen( EXP_FILE_NAME, FILE_BIN|FILE_WRITE );
+  if(handle > 0){
+    FileWriteString( handle, out, StringLen(out) );
+    FileClose( handle );
+  }
+  GlobalVariableSet( EXP_LAST_MOD_GV, TimeLocal() );
 }
 
 bool printArr(){
