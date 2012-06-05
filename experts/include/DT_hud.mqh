@@ -36,17 +36,14 @@ double HUD_WINDOW_FADE = 0.0;
 string EXP_FILE_NAME;
 string EXP_LAST_MOD_GV;
 
+int HUD_TIMER1 = 0;
+
 bool initHud(){
-// bool initHud(string isOn){
-	// setAppStatus(APP_ID_RULER, isOn);
-  // if(isOn == "0"){
-    // return (false);
-  // }
 	deinitHud();
 	string sym = StringSubstr(Symbol(), 0, 6);
 	int pos_x = ICONS_X_POS + ( (ICONS_RANGE + ICON_SIZE) * ICON_NR );
 
-	// main info bar
+	// ====================== main info bar ======================
   HUD_MY_SPREAD = getMySpread() * MathPow( 10, Digits );
 	HUD_SPREAD_LIMIT = HUD_MY_SPREAD * 1.5;
 
@@ -63,7 +60,7 @@ bool initHud(){
 	double lot = StrToDouble(getGlobal("LOT"));
   ObjectSetText("DT_BO_hud_info",StringConcatenate( sym ," | ",getPeriodName( Period() )," | Swap (L: "+DoubleToStr((MarketInfo(Symbol(),MODE_SWAPLONG)*lot),2)," / S: ",DoubleToStr((MarketInfo(Symbol(),MODE_SWAPSHORT)*lot),2),") | Lot: ",DoubleToStr(lot, 2)," |"),8,"Arial",Blue);
 
-	// channel_trade info bar
+	// ====================== channel_trade info bar ======================
 	if( ObjectFind("DT_BO_channel_trade_info") == -1 ){
     ObjectCreate( "DT_BO_channel_trade_info", OBJ_LABEL, 0, 0, 0 );
     ObjectSet( "DT_BO_channel_trade_info", OBJPROP_CORNER, 0 );
@@ -73,7 +70,7 @@ bool initHud(){
     ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", DarkOrange );
   }
 
-	// Scale info line
+	// ====================== Scale info line ======================
 	int hWnd = WindowHandle(Symbol(), Period());
   int hDC = GetWindowDC(hWnd);
   int rect[4];
@@ -91,7 +88,7 @@ bool initHud(){
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_YDISTANCE, 60 );
   ObjectSet( "DT_BO_hud_scale_label", OBJPROP_ANGLE, 90 );
 
-  // Window Fade
+  // ====================== Window Fade ======================
   if( !GlobalVariableCheck( "DT_window_fade" ) ){
     GlobalVariableSet( "DT_window_fade", 0.0 );
   }
@@ -104,7 +101,7 @@ bool initHud(){
   ObjectSetText( "DT_BO_w0_hud_fade_main", "g", width, "Webdings", White );
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, -1 );
   
-	// History info bar and data
+	//  ====================== History info bar and data ======================
 	HUD_HISTORY_GLOBAL_NAME = StringConcatenate( sym, "_History" );
   HUD_SELF_HISTORY_GLOBAL_VAL = 1.0;
   GlobalVariableSet( HUD_HISTORY_GLOBAL_NAME, 1.0 );
@@ -126,7 +123,7 @@ bool initHud(){
 bool startHud(){
 	if(delayTimer(APP_ID_HUD, 2000)){return (false);}
 
-	// main info bar
+	// ====================== main info bar ======================
   double spread = MarketInfo( Symbol(), MODE_SPREAD );
   color c;
   if( spread > HUD_SPREAD_LIMIT ){
@@ -136,7 +133,7 @@ bool startHud(){
   }
 	ObjectSetText( "DT_BO_hud_spread", StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
 
-	// channel_trade info bar
+	// ====================== channel_trade info bar ======================
 	if( IsExpertEnabled() && Period() < PERIOD_D1 ){
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
       ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
@@ -151,7 +148,7 @@ bool startHud(){
     ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", Black );
   }
 
-	// Scale info line
+	// ====================== Scale info line ======================
   if( HUD_PRICE_MIN != WindowPriceMin(0) || HUD_PRICE_MAX != WindowPriceMax(0)){
     HUD_PRICE_MIN = WindowPriceMin(0);
     HUD_PRICE_MAX = WindowPriceMax(0);
@@ -180,7 +177,7 @@ bool startHud(){
     }
   }
 
-	// History info bar
+	// ====================== History info bar ======================
 	int tmp, i, j, histroy_len = ArrayRange( HUD_HISTORY_LINE_NAMES, 0 ), c_line_len = ArraySize(HUD_CHANNEL_LINE_NAMES);
 	double t1, p1, t2, p2;
 	bool has_change = false;
@@ -276,7 +273,29 @@ bool startHud(){
 		ObjectSetText( "DT_BO_hud_history",StringConcatenate( "Histrory: ", ArrayRange( HUD_HISTORY_LINE_NAMES, 0 ), "/", HUD_SELF_HISTORY_GLOBAL_VAL ),8,"Arial", Black );
 	}
 	
-
+  // ====================== display trade arrows ======================
+  if( GetTickCount() > HUD_TIMER1 ){
+    HUD_TIMER1 = GetTickCount() + 6000;
+    int ticket = getClineOpenPosition();
+    if( ticket != 0 ){
+      if( OrderType() > 1 ){
+        int magic = OrderMagicNumber(), ot = OrderOpenTime(), idx = TimeMinute( ot );
+        double op = NormalizeDouble( OrderOpenPrice(), Digits );
+        string comment, op_arw = StringConcatenate( "DT_GO_CT_arw_op_", idx, "_", magic );
+        if( ObjectFind(op_arw) != -1 ){
+          if( NormalizeDouble( ObjectGet( op_arw, OBJPROP_PRICE1), Digits ) == op ){
+            return (errorCheck("startHud"));
+          }
+        }
+        channelTradeArrow( op_arw, op, ot, Blue );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_tp_", idx, "_", magic ), OrderTakeProfit(), ot, Red );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_sl_", idx, "_", magic ), OrderStopLoss(), ot, Green );
+        comment = OrderComment(); 
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_f100_", idx, "_", magic ), StrToDouble(StringSubstr(comment, 18, StringLen(comment)-18)), ot, Black );
+      }
+    }
+  }
+  
 	return (errorCheck("startHud"));
 }
 
@@ -285,6 +304,18 @@ bool deinitHud(){
   removeObjects("w_hud");
   removeObjects("w0_hud");
   return (errorCheck("deinitHud"));
+}
+
+bool channelTradeArrow( string name, double p1, datetime t1, color c ){
+  if( ObjectFind( name ) == -1 ){
+    ObjectCreate( name, OBJ_ARROW, 0, t1, p1 );
+  }else{
+    ObjectSet( name, OBJPROP_TIME1, t1 );
+    ObjectSet( name, OBJPROP_PRICE1, p1 );
+  }
+	ObjectSet( name, OBJPROP_ARROWCODE, 5 );
+	ObjectSet( name, OBJPROP_COLOR, c );
+	ObjectSet( name, OBJPROP_BACK, false );
 }
 
 bool removeItemFromArray( string name ){

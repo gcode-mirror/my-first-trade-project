@@ -44,6 +44,7 @@ double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
 
 string CT_SPREAD_LOG = "";
+double CT_LAST_P = 0.0;
 
 string EXP_FILE_NAME;
 string EXP_LAST_MOD_GV;
@@ -77,6 +78,11 @@ int start(){
     CT_TIMER1 = GetTickCount() + 2000;
     
     if( !IsTesting() ){
+      
+      if( Period() != PERIOD_M15 ){
+        log( StringConcatenate( "WARNING! Channel trade line not in M15 period! curr. is", Period(), " (", Symbol(),")" ), 0.01 );
+      }
+      
       setChannelLinesArr( EXP_FILE_NAME );
     }
 
@@ -91,7 +97,7 @@ int start(){
     }
   }
 
-  if( Period() < PERIOD_D1 && Period() > PERIOD_M5 /*&& ( IsTesting() || GetTickCount() > CT_TIMER2 )*/ ){
+  if( Period() > PERIOD_M5 && Period() < PERIOD_D1  /*&& ( IsTesting() || GetTickCount() > CT_TIMER2 )*/ ){
     //CT_TIMER2 = GetTickCount() + 1000;
 
     int ticket, o_type;
@@ -100,9 +106,6 @@ int start(){
 
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
-			if( !IsTesting() ){
-			//	CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
-			}
       o_type = OrderType();
 
       if( o_type < 2 ){
@@ -118,6 +121,28 @@ int start(){
 
         if( CT_STOP_TRADE ){
           return (0);
+        }
+        
+        // ============================== Spread logging ==============================
+        if( !IsTesting() ){
+          if( CT_LAST_P == 0.0 ){
+            if( o_type == OP_BUYLIMIT ){
+              CT_LAST_P = 99999.0;
+            }else{
+              CT_LAST_P = 0.1;
+            }
+          }
+          if( o_type == OP_BUYLIMIT ){
+            if( Ask < CT_LAST_P  ){
+              CT_LAST_P = Ask;
+              CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
+            }
+          }else{
+            if( Bid > CT_LAST_P  ){
+              CT_LAST_P = Bid;
+              CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
+            }
+          }
         }
 
         comment = OrderComment();
@@ -156,7 +181,7 @@ int start(){
           // fibo_100 = StrToDouble(StringSubstr(comment, 14, StringLen(comment)-14));
           fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * 0.23; // 0.236
           if( fibo_23_dif <= 0.0 ){
-            log( StringConcatenate( Symbol()," Something wrong with limit position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket ), fibo_100 + 1.1 );
+            log( StringConcatenate( "Something wrong with limit position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket , " (", Symbol(),")"), fibo_100 + 1.1 );
             return (0);
           }
 
@@ -216,31 +241,31 @@ int start(){
 
               if( fibo_100 > trade_line_price ){
                 if( CT_CLINES[i][CL_STATE] == "res" ){  // Resistance
-                  log( StringConcatenate( Symbol()," Resistance line: ",CT_CLINES[i][CL_NAME]," Curr fibo 100:",fibo_100 ), trade_line_ts + 0.1 );
+                  log( StringConcatenate( "Resistance line: ",CT_CLINES[i][CL_NAME]," Curr fibo 100:",fibo_100, " (", Symbol(), ")" ), trade_line_ts + 0.1 );
                   return (0);
                 }
 
               }else{
                 if( CT_CLINES[i][CL_STATE] == "sup" ){  // Suppress
-                  log( StringConcatenate( Symbol()," Suppress line: ",CT_CLINES[i][CL_NAME]," Curr fibo 100:",fibo_100 ), trade_line_ts + 0.2 );
+                  log( StringConcatenate( "Suppress line: ",CT_CLINES[i][CL_NAME]," Curr fibo 100:",fibo_100, " (", Symbol(), ")" ), trade_line_ts + 0.2 );
                   return (0);
                 }
               }
 
               fibo_time_cross_p = getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, fibo_100_time ) ); //  where fibo100 time cross the cLine
               if( fibo_time_cross_p == 0.0 ){
-                log( StringConcatenate( "Error fibo100 time:", fibo_100_time," not cross current cLine:", CT_CLINES[i][CL_NAME]), trade_line_ts + 0.3 );
+                log( StringConcatenate( "Error fibo100 time:", fibo_100_time," not cross current cLine:", CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.3 );
                 return (0);
               }
 
               dif = MathAbs( fibo_100 - fibo_time_cross_p );
               if( dif < CT_MIN_DIST ){  // Min Distance
-                log( StringConcatenate( Symbol()," Fibo DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",CT_MIN_DIST," Curr distance:", dif ), trade_line_ts + 0.4 );
+                log( StringConcatenate( "Fibo DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",CT_MIN_DIST," Curr distance:", dif, " (", Symbol(), ")" ), trade_line_ts + 0.4 );
                 return (0);
               }
 
               if( hasClineHistoryPosition( trade_line_ts ) ){
-                log( StringConcatenate( Symbol()," In ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!" ), trade_line_ts + 0.5 );
+                log( StringConcatenate( "In ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!", " (", Symbol(), ")" ), trade_line_ts + 0.5 );
                 return (0);
               }
 
@@ -271,7 +296,7 @@ int start(){
                   }
 
                   if( siblings[0] == "" ){
-                    log( StringConcatenate( Symbol()," Error ",CT_CLINES[i][CL_GROUP]," group only have one line: ",CT_CLINES[i][CL_NAME] ), fibo_100 + 0.6 );
+                    log( StringConcatenate( "Error ",CT_CLINES[i][CL_GROUP]," group only have one line: ",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), fibo_100 + 0.6 );
                     return (0);
                   }
                 }
@@ -283,18 +308,18 @@ int start(){
 
                 }else{
                   tmp = MathAbs( getClineValueByShift( siblings[0] ) - trade_line_price) * CL_MID_GROUP_DIST;
-                  log( StringConcatenate( Symbol()," Fibo GROUP DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",tmp," Curr distance:", dif ), fibo_100 + 0.7 );
+                  log( StringConcatenate( "Fibo GROUP DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",tmp," Curr distance:", dif, " (", Symbol(), ")" ), fibo_100 + 0.7 );
                   return (0);
                 }
 
               }else{      // Channel NOT Line in group
                 if( dif > CT_MAX_DIST ){  // Max Distance
-                  log( StringConcatenate( Symbol()," Fibo DISTANCE is too HIGH! Cline: ", CT_CLINES[i][CL_NAME]," Max Distance: ",CT_MAX_DIST," Curr distance:", dif ), fibo_100 + 0.8 );
+                  log( StringConcatenate( "Fibo DISTANCE is too HIGH! Cline: ", CT_CLINES[i][CL_NAME]," Max Distance: ",CT_MAX_DIST," Curr distance:", dif , " (", Symbol(), ")"), fibo_100 + 0.8 );
                   return (0);
                 }
 
                 if( Time[0] - fibo_100_time < (dif / CT_MAX_DIST) * CT_MIN_TIME ){  // Min Time Distance
-                  log( StringConcatenate( Symbol()," Fibo is too QUICK! Cline: ", CT_CLINES[i][CL_NAME]," Min Time: ",(dif / CT_MAX_DIST) * CT_MIN_TIME," sec, Curr time:", dif ), fibo_100 + 0.9 );
+                  log( StringConcatenate( "Fibo is too QUICK! Cline: ", CT_CLINES[i][CL_NAME]," Min Time: ",(dif / CT_MAX_DIST) * CT_MIN_TIME," sec, Curr time:", dif, " (", Symbol(), ")" ), fibo_100 + 0.9 );
                   return (0);
                 }
                 cur_min_dist = CT_MIN_DIST;
@@ -329,7 +354,7 @@ int start(){
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + CT_SPREAD + CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( Symbol()," Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",l  ), fibo_100 + 0.7 );
+            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",l , " (", Symbol(), ")" ), fibo_100 + 0.7 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
@@ -341,7 +366,7 @@ int start(){
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price - CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( Symbol()," Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",h  ), fibo_100 + 0.8 );
+            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",h, " (", Symbol(), ")" ), fibo_100 + 0.8 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + CT_SPREAD, Digits );
@@ -351,6 +376,12 @@ int start(){
         comment = StringConcatenate( trade_line_group,StringSubstr( trade_line_name, 14, 4 ), " ", trade_line_ts, " ", DoubleToStr( fibo_100, Digits ) );
 
         OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 15, sl, tp, comment, trade_line_ts, TimeCurrent()+5400 );
+        
+        if( o_type == OP_BUYLIMIT ){
+          CT_LAST_P = 99999.0;
+        }else{
+          CT_LAST_P = 0.1;
+        }
         
         RefreshRates();
 
@@ -375,7 +406,7 @@ int start(){
 
 int deinit(){
 	if( CT_SPREAD_LOG != "" ){
-		string file_name = StringConcatenate( Symbol(), "_spread_log.csv" );
+		string file_name = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_spread_log.csv" );
 		int handle = FileOpen( file_name, FILE_READ, ";" );
 		handle = FileOpen( file_name, FILE_BIN|FILE_READ|FILE_WRITE );
 		if( handle > 0 ){
@@ -394,15 +425,29 @@ void setChannelLinesArr( string &file_name ){
     double price, tmp_arr[0][2];
     int i, j = 0, len;
     string name;
-    
-    len = readCLinesFromFile( file_name, tmp_arr );
 
-    if( len == 0 ){
+    if( !readCLinesFromFile( file_name ) ){
       return;
     }
     
+    len = ObjectsTotal();
+    for( i = 0; i < len; i++ ){
+      name = ObjectName(i);
+      if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+        price = getClineValueByShift( name );
+        if( price != 0.0 ){
+          ArrayResize( tmp_arr, j + 1 );
+          tmp_arr[j][0] = price;
+          tmp_arr[j][1] = i;
+          j++;
+        }else{
+          GetLastError();
+        }
+      }
+    }
+    
     multiDSort( tmp_arr );
-
+    
     ArrayResize( CT_CLINES, j );
     for( i = 0; i < j; i++ ){
       name = ObjectName( tmp_arr[i][1] );
@@ -453,7 +498,6 @@ int createHistoryLine(double p1, color c, string text, string ts, double t1 = 0.
 	ObjectSet(name, OBJPROP_ARROWCODE, 5);
 	ObjectSet(name, OBJPROP_COLOR, c);
 	ObjectSet(name, OBJPROP_BACK, false);
-	ObjectSet(name, OBJPROP_WIDTH, 1);
 	ObjectSetText(name, text, 8);
 }
 
@@ -502,7 +546,7 @@ double getCLineItercept( string line_name, double& fibo_100_time, bool is_sell )
       }
     }
   }
-  log( StringConcatenate( Symbol()," Error in getCLineItercept not find itercept: ",line_name ), fibo_100_time+3 );
+  log( StringConcatenate( "Error in getCLineItercept not find itercept: ",line_name, " (", Symbol(), ")" ), fibo_100_time+3 );
   return ( 0.0 );
 }
 
@@ -513,21 +557,6 @@ void log( string text, double id ){
     Alert( text );
     LAST_LOG_ID = id;
   }
-}
-
-int getClineOpenPosition(){
-  int i = 0, len = OrdersTotal();
-  string symb = Symbol();
-  for( ; i < len; i++ ) {
-    if( OrderSelect( i, SELECT_BY_POS ) ) {
-      if( OrderSymbol() == symb ) {
-        if( OrderMagicNumber() > 1000 ){
-          return (OrderTicket());
-        }
-      }
-    }
-  }
-  return (0);
 }
 
 bool hasClineHistoryPosition( int magic ){
@@ -547,9 +576,9 @@ bool hasClineHistoryPosition( int magic ){
   return (false);
 }
 
-int readCLinesFromFile( string &file_name, double &idx_arr[][] ){
+bool readCLinesFromFile( string &file_name ){
 	string in ,arr[7]; // name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, col = 5, type = 6
-  int i = 0, j = 0, handle;
+  int j = 0, handle;
   double time_0_p;
 	
   ObjectsDeleteAll();
@@ -559,14 +588,11 @@ int readCLinesFromFile( string &file_name, double &idx_arr[][] ){
     if( GetLastError() != 4103 ){
       Alert( "File read fail ("+file_name+")" );
     }
-		return (0);
+		return ( false );
 	}
   
 	while( !FileIsEnding(handle) ){
 		in = FileReadString(handle);
-		// if( in == "" ){
-			// break;
-		// }
 
 		arr[j] = in;
 		j++;
@@ -576,16 +602,7 @@ int readCLinesFromFile( string &file_name, double &idx_arr[][] ){
       ObjectSet( arr[0], OBJPROP_RAY, true );
       ObjectSet( arr[0], OBJPROP_COLOR, StrToInteger(arr[5]) );
 			j = 0;
-      
-      if( time_0_p != 0.0 ){
-        ArrayResize( idx_arr, i + 1 );
-        idx_arr[i][0] = time_0_p;
-        idx_arr[i][1] = i;
-        i++;
-      }else{
-        GetLastError();
-      }
 		}
 	}
-  return ( i );
+  return ( true );
 }

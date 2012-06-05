@@ -693,3 +693,18 @@ string PadString(string toBePadded, string paddingChar, int paddingLength){
   }
   return (toBePadded);
 }
+
+int getClineOpenPosition(){
+  int i = 0, len = OrdersTotal();
+  string symb = Symbol();
+  for( ; i < len; i++ ) {
+    if( OrderSelect( i, SELECT_BY_POS ) ) {
+      if( OrderSymbol() == symb ) {
+        if( OrderMagicNumber() > 1000 ){
+          return (OrderTicket());
+        }
+      }
+    }
+  }
+  return (0);
+}

@@ -64,6 +64,7 @@ bool startChannel(string isOn){
       }
     }
   }
+  
   if( GlobalVariableGet(CH_NAME) != 0.0){
     GlobalVariableSet(CH_NAME, 0.0);
   }
