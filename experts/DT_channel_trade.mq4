@@ -48,7 +48,7 @@ double CT_LAST_P = 0.0;
 
 string EXP_FILE_NAME;
 string EXP_LAST_MOD_GV;
-double CUR_LAST_MOD = 0.0;
+double CUR_LAST_MOD = 1.0;
 
 int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
@@ -80,7 +80,7 @@ int start(){
     if( !IsTesting() ){
       
       if( Period() != PERIOD_M15 ){
-        log( StringConcatenate( "WARNING! Channel trade line not in M15 period! curr. is", Period(), " (", Symbol(),")" ), 0.01 );
+        log( StringConcatenate( "WARNING! Channel trade line not in M15 period! curr. is ", Period(), " (", Symbol(),")" ), 0.01 );
       }
       
       setChannelLinesArr( EXP_FILE_NAME );
@@ -585,9 +585,11 @@ bool readCLinesFromFile( string &file_name ){
   
 	handle = FileOpen( file_name, FILE_READ, ";" );
 	if( handle < 1){
-    if( GetLastError() != 4103 ){
-      Alert( "File read fail ("+file_name+")" );
+    int e = GetLastError();
+    if( e != 4103 ){
+      Alert( "File read fail ("+file_name+")"+ e );
     }
+    FileClose( handle );
 		return ( false );
 	}
   
@@ -604,5 +606,6 @@ bool readCLinesFromFile( string &file_name ){
 			j = 0;
 		}
 	}
+  FileClose( handle );
   return ( true );
 }

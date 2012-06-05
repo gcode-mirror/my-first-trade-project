@@ -286,17 +286,33 @@ bool startHud(){
           if( NormalizeDouble( ObjectGet( op_arw, OBJPROP_PRICE1), Digits ) == op ){
             return (errorCheck("startHud"));
           }
+        }else{
+          comment = OrderComment(); 
+          double fibo_100_time, fibo_100_val = StrToDouble(StringSubstr(comment, 18, StringLen(comment)-18));
+          fibo_100_time = getF100time( fibo_100_val );
+          if( fibo_100_time == 0.0 ){
+            fibo_100_time = ot;
+          }
+          channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_f100_", idx, "_", magic ), fibo_100_val, Black, fibo_100_time );
         }
-        channelTradeArrow( op_arw, op, ot, Blue );
-        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_tp_", idx, "_", magic ), OrderTakeProfit(), ot, Red );
-        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_sl_", idx, "_", magic ), OrderStopLoss(), ot, Green );
-        comment = OrderComment(); 
-        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_f100_", idx, "_", magic ), StrToDouble(StringSubstr(comment, 18, StringLen(comment)-18)), ot, Black );
+        channelTradeArrow( op_arw, op, Blue, ot );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_tp_", idx, "_", magic ), OrderTakeProfit(), Red, ot );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_sl_", idx, "_", magic ), OrderStopLoss(), Green, ot );
       }
     }
   }
-  
 	return (errorCheck("startHud"));
+}
+
+double getF100time( double price ){
+  int i = 0;
+  double time;
+  for( ; i < 10; i++ ){
+    if( getZigZag( PERIOD_M15, 12, 5, 3, i, time ) == price ){
+      return ( time );
+    }
+  }
+  return ( 0.0 );
 }
 
 bool deinitHud(){
@@ -306,7 +322,7 @@ bool deinitHud(){
   return (errorCheck("deinitHud"));
 }
 
-bool channelTradeArrow( string name, double p1, datetime t1, color c ){
+bool channelTradeArrow( string name, double p1, color c, double t1 = 0.0 ){
   if( ObjectFind( name ) == -1 ){
     ObjectCreate( name, OBJ_ARROW, 0, t1, p1 );
   }else{

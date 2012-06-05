@@ -63,7 +63,7 @@ int init(){
   initTradeLines(getGlobal("TRADE_LINES_SWITCH"));	
   initArchive(getGlobal("ARCHIVE_SWITCH"));	
   initNews(getGlobal("NEWS_SWITCH"));	
-  initChannel(getGlobal("CHANNEL_SWITCH"));	
+  initChannel(/*getGlobal("CHANNEL_SWITCH")*/);	
   errorCheck("mon start");
   initMonitor(getGlobal("MONITOR_SWITCH"));	
   initSession(getGlobal("SESSION_SWITCH"));	
@@ -89,7 +89,7 @@ int start(){
 	startTradeLines(getGlobal("TRADE_LINES_SWITCH"));
 	startArchive(getGlobal("ARCHIVE_SWITCH"));
 	startNews(getGlobal("NEWS_SWITCH"));
-  startChannel(getGlobal("CHANNEL_SWITCH"));
+  startChannel(/*getGlobal("CHANNEL_SWITCH")*/);
 	startMonitor(getGlobal("MONITOR_SWITCH"));
 	startSession(getGlobal("SESSION_SWITCH"));
 	//startZoom(getGlobal("ZOOM_SWITCH"));

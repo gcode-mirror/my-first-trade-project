@@ -18,7 +18,7 @@ bool initIcons(){
   showIcon("DT_BO_icon_round", 3, 1, "G", "Wingdings 3", getGlobal("RULER_SWITCH"));
   showIcon("DT_BO_icon_monitor", 2, 2, "N", "Webdings", getGlobal("MONITOR_SWITCH")); 
   showIcon("DT_BO_icon_trade_lines", 1, 2, "!", "Wingdings", getGlobal("TRADE_LINES_SWITCH"));
-  showIcon("DT_BO_icon_channel", 6, 1, "/", "Wingdings 3", getGlobal("CHANNEL_SWITCH")); 
+  // showIcon("DT_BO_icon_channel", 6, 1, "/", "Wingdings 3", getGlobal("CHANNEL_SWITCH")); 
   showIcon("DT_BO_icon_archive", 2, 1, "Í", "Webdings", getGlobal("ARCHIVE_SWITCH")); 
   showIcon("DT_BO_icon_news", 1, 1, "ü", "Webdings", getGlobal("NEWS_SWITCH")); 
   showIcon("DT_BO_icon_session", 3, 2, "¸", "Wingdings", getGlobal("SESSION_SWITCH")); 

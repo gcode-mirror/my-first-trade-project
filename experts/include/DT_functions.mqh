@@ -267,18 +267,18 @@ bool menuControl(int index){
         addComment("Switch Trade lines to ON.");
       }
     break;    
+    // case 3:
+      // if(getGlobal("CHANNEL_SWITCH") == "1"){
+        // setGlobal("CHANNEL_SWITCH", "0");
+        // changeIcon("DT_BO_icon_channel", "0");
+        // addComment("Switch Channel collision to OFF.");
+      // }else{
+        // setGlobal("CHANNEL_SWITCH", "1");
+        // changeIcon("DT_BO_icon_channel", "1");
+        // addComment("Switch Channel collision to ON.");
+      // }
+    // break;
     case 3:
-      if(getGlobal("CHANNEL_SWITCH") == "1"){
-        setGlobal("CHANNEL_SWITCH", "0");
-        changeIcon("DT_BO_icon_channel", "0");
-        addComment("Switch Channel collision to OFF.");
-      }else{
-        setGlobal("CHANNEL_SWITCH", "1");
-        changeIcon("DT_BO_icon_channel", "1");
-        addComment("Switch Channel collision to ON.");
-      }
-    break;
-    case 4:
       if(getGlobal("ARCHIVE_SWITCH") == "1"){
         setGlobal("ARCHIVE_SWITCH", "0");
         changeIcon("DT_BO_icon_archive", "0");
@@ -289,7 +289,7 @@ bool menuControl(int index){
         addComment("Switch Archive to ON.");
       }
     break; 
-    case 5:
+    case 4:
       if(getGlobal("NEWS_SWITCH") == "1"){
         setGlobal("NEWS_SWITCH", "0");
         changeIcon("DT_BO_icon_news", "0");
@@ -300,7 +300,7 @@ bool menuControl(int index){
         addComment("Switch News to ON.");
       }
     break;
-    case 6:
+    case 5:
       if(getGlobal("SESSION_SWITCH") == "1"){
         setGlobal("SESSION_SWITCH", "0");
         changeIcon("DT_BO_icon_session", "0");
@@ -311,7 +311,7 @@ bool menuControl(int index){
         addComment("Switch sessions to ON.");
       }
     break;
-    case 7:
+    case 6:
       if(getGlobal("ZOOM_SWITCH") != "0"){
         setGlobal("ZOOM_SWITCH", "0");
         changeIcon("DT_BO_icon_zoom", "0");
