@@ -45,7 +45,7 @@ int start(){
     }else{
       double h, l, dif, line_dist, bar_dist, max_dist = ( WindowPriceMax(0) - WindowPriceMin(0) ) / 20;
       int shift, time_magnet;
-      para_line = getSelectedLine( tod, pod, false, 40 );
+      para_line = getSelectedLine( tod, pod, true, 40 );
       
       if( para_line != "" && para_line != sel_name ){
         line_dist = MathAbs( pod - getLineValAtTime( para_line, tod ) );

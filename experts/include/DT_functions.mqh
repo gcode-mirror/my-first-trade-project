@@ -568,7 +568,7 @@ double getClineValueByShift( string name, int shift = 0 ){
   }
 }
 
-bool showCLineGroups(){
+bool showCLineGroups( bool temporary = true ){
   int i, len = ObjectsTotal(), shift, group_id, j = 0;
   string name, g_name, line_names[], text, g1_max, g2_max;
   color c = CornflowerBlue;
@@ -650,9 +650,10 @@ bool showCLineGroups(){
   }
   
   WindowRedraw();
-  Sleep(3300);
-  
-  removeObjects("group_idx");
+  if( temporary ){
+    Sleep(3300);
+    removeObjects("group_idx");
+  }
   errorCheck( "showCLineGroups" );
   
   return (true);

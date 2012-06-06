@@ -19,7 +19,7 @@
 #define CL_MID_GROUP_DIST 0.5
 #define CHANNEL_LOT 0.1
 #define CT_SL_FACTOR 1.3
-#define CT_MIN_TIME 9901
+#define CT_SPEED_LIMIT 140.0
 #define CT_POS_DIF_TIME 21600 // 6 hour
 
 #import "Shell32.dll"
@@ -318,10 +318,6 @@ int start(){
                   return (0);
                 }
 
-                if( Time[0] - fibo_100_time < (dif / CT_MAX_DIST) * CT_MIN_TIME ){  // Min Time Distance
-                  log( StringConcatenate( "Fibo is too QUICK! Cline: ", CT_CLINES[i][CL_NAME]," Min Time: ",(dif / CT_MAX_DIST) * CT_MIN_TIME," sec, Curr time:", dif, " (", Symbol(), ")" ), fibo_100 + 0.9 );
-                  return (0);
-                }
                 cur_min_dist = CT_MIN_DIST;
                 trade_line_name = CT_CLINES[i][CL_NAME];
                 break; // Group 0 line found!
@@ -334,6 +330,12 @@ int start(){
       }
 
       if( trade_line_name != "" ){
+        double speed = barSpeed();
+        if( speed > CT_SPEED_LIMIT ){
+          log( StringConcatenate( "Bar SPEED is too fast! Cline: ", CT_CLINES[i][CL_NAME]," Speed: ", DoubleToStr(speed,2), " (", Symbol(), ")" ), fibo_100 + 0.9 );
+          return (0);
+        }
+      
         if( GetTickCount() < CT_START_TIME ){
           if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want OPEN position in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
             return(0);
@@ -359,7 +361,7 @@ int start(){
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
           tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
-
+          
         }else{  // ================================================ SELL LIMIT ================================================
           double h = iHigh( NULL, PERIOD_H1, 0);
           if( h < trade_line_price ){
@@ -371,6 +373,7 @@ int start(){
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + CT_SPREAD, Digits );
           tp = NormalizeDouble( trade_line_price - fibo_23_dif + CT_SPREAD, Digits );
+          
         }
 
         comment = StringConcatenate( trade_line_group,StringSubstr( trade_line_name, 14, 4 ), " ", trade_line_ts, " ", DoubleToStr( fibo_100, Digits ) );
@@ -385,8 +388,8 @@ int start(){
         
         RefreshRates();
 
-/* !! */  Print(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
-/* !! */  Alert(StringConcatenate(Symbol(), " Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)));
+/* !! */  Print(StringConcatenate("Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)," Sp:",DoubleToStr(speed,2), " (", Symbol(), ")"));
+/* !! */  Alert(StringConcatenate("Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " lStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)," Sp:",DoubleToStr(speed,2), " (", Symbol(), ")"));
 
         if( IsTesting() ){
 /* !! */  createHistoryLine( op, Blue, "Order type: "+o_type+", OP", "op_"+trade_line_ts, Time[0] );
@@ -608,4 +611,32 @@ bool readCLinesFromFile( string &file_name ){
 	}
   FileClose( handle );
   return ( true );
+}
+
+double barSpeed(){
+  double p1 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 0 );
+  double p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 1 );
+  double dist, dif = MathAbs( p1 - p2 ) * 0.4;
+  int i = 2;
+  if( p2 > p1 ){
+    while( p2 > p1 && p2 - p1 > dif ){
+      p1 = p2;
+      p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, i );
+      i++;
+    }
+    dist = ( (iHigh( NULL, PERIOD_M15, i - 2 ) - iLow( NULL, PERIOD_M15, 0 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
+    Alert("++++++++++++++++ "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, i - 2 )+"    "+iLow( NULL, PERIOD_M15, 0 )+"    "+dist+" "+Symbol());
+    return ( dist / (i - 1) );
+  }else{
+    while( p2 < p1 && p1 - p2 > dif ){
+      p1 = p2;
+      p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, i );
+      i++;
+    }
+    dist = ( (iHigh( NULL, PERIOD_M15, 0 ) - iLow( NULL, PERIOD_M15, i - 2 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
+    Alert("++++++++++++++++ "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, 0 )+"    "+iLow( NULL, PERIOD_M15, i - 2 )+"    "+dist+" "+Symbol());
+    return ( dist / (i - 1) );
+  }
+  Alert( "Something wrong with barSpeed "+Symbol() );
+  return ( 9999999 );
 }

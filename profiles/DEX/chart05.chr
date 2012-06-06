@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=3460
+leftpos=4360
 digits=5
 scale=4
 graph=1
