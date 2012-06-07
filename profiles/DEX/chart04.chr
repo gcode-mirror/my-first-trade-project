@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=60
-leftpos=3469
+period=30
+leftpos=6068
 digits=5
 scale=4
 graph=1
@@ -343,10 +343,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1338494400
-value_0=1.529554
+time_0=1338492600
+value_0=1.530920
 time_1=1339074000
-value_1=1.557874
+value_1=1.559366
 ray=1
 </object>
 </indicator>

@@ -115,7 +115,7 @@ int start(){
         if( open_time + 5400 < TimeCurrent() ){
           OrderDelete( ticket );
           errorCheck( StringConcatenate( Symbol(), " Position closed due to timer expired, ticket id:", ticket ) );
-          Alert( StringConcatenate( Symbol(), " Position closed due to timer expired, ticket id:", ticket ) );
+          log( StringConcatenate( Symbol(), " Position closed due to timer expired, ticket id:", ticket ) );
           return (0);
         }
 
@@ -158,7 +158,7 @@ int start(){
         if( ObjectFind(trade_line_name) == -1 ){
           OrderDelete( ticket );
           errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",trade_line_name,"! ticket id :", ticket ) );
-          Alert( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",trade_line_name,"! ticket id :", ticket ) );
+          log( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",trade_line_name,"! ticket id :", ticket ) );
           return (0);
         }
 
@@ -203,7 +203,7 @@ int start(){
           OrderModify( ticket, new_op, new_sl, new_tp, TimeCurrent()+5400 );
 
 /* !! */  Print(StringConcatenate("Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " OP:", new_op, " SL:", new_sl, " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Group:", trade_line_group, " Mag:", OrderMagicNumber()));
-/* !! */  Alert(StringConcatenate("Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " OP:", new_op, " SL:", new_sl, " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Group:", trade_line_group, " Mag:", OrderMagicNumber()));
+/* !! */  log(StringConcatenate("Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " OP:", new_op, " SL:", new_sl, " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Group:", trade_line_group, " Mag:", OrderMagicNumber()), MathRand());
 
           if( IsTesting() ){
 /* !! */    ObjectSet( "DT_GO_channel_hist_op_"+trade_line_ts_str, OBJPROP_PRICE1, new_op );
@@ -265,7 +265,7 @@ int start(){
               }
 
               if( hasClineHistoryPosition( trade_line_ts ) ){
-                log( StringConcatenate( "In ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!", " (", Symbol(), ")" ), trade_line_ts + 0.5 );
+                log( StringConcatenate( "During ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!", " (", Symbol(), ")" ), trade_line_ts + 0.5 );
                 return (0);
               }
 
@@ -322,7 +322,7 @@ int start(){
                 trade_line_name = CT_CLINES[i][CL_NAME];
                 break; // Group 0 line found!
               }
-              Alert( "Error does not handle Cline! name:"+CT_CLINES[i][CL_NAME]+" p:"+trade_line_price+" f100:"+fibo_100 );
+              log( "Error: Cline does not handle! name:"+CT_CLINES[i][CL_NAME]+" p:"+trade_line_price+" f100:"+fibo_100 );
               return (0);
             }
           }
@@ -389,7 +389,7 @@ int start(){
         RefreshRates();
 
 /* !! */  Print(StringConcatenate("Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " \n\tStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)," Sp:",DoubleToStr(speed,2), " (", Symbol(), ")"));
-/* !! */  Alert(StringConcatenate("Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " \n\tStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)," Sp:",DoubleToStr(speed,2), " (", Symbol(), ")"));
+/* !! */  log(StringConcatenate("Ty:", o_type, " Lot:", CHANNEL_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Comm:", comment, " Mag:", trade_line_ts, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " \n\tStat:", trade_line_name, " Gr:", trade_line_group," Min Dist:", cur_min_dist," Dist:", dif," H:", iHigh( NULL, PERIOD_M15, 0)," L:", iLow( NULL, PERIOD_M15, 0)," Sp:",DoubleToStr(speed,2), " (", Symbol(), ")"), 0.02);
 
         if( IsTesting() ){
 /* !! */  createHistoryLine( op, Blue, "Order type: "+o_type+", OP", "op_"+trade_line_ts, Time[0] );
@@ -553,12 +553,13 @@ double getCLineItercept( string line_name, double& fibo_100_time, bool is_sell )
   return ( 0.0 );
 }
 
-void log( string text, double id ){
+void log( string text, double id = 0.0 ){
   if( LAST_LOG_ID == id ){
     return;
   }else{
     Alert( text );
     LAST_LOG_ID = id;
+    GlobalVariableSet( "CT_NR_OF_LOGS", GlobalVariableGet( "CT_NR_OF_LOGS" ) + 1.0 );
   }
 }
 

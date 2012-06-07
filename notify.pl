@@ -14,13 +14,16 @@ our $BASE_WINDOW;
 our $BASE_WINDOW_GEO1 = "-110+-20";
 our $BASE_WINDOW_GEO2 = "-110+-20";
 
-our $NOTIFY_LABEL;
-our $NOTIFY_LABEL_TXT = 0;
+our $LOG_LABEL;
+our $LOG_LABEL_TXT = 0;
 
-our $PROFIT_LABEL;
-our $PROFIT_LABEL_TXT = 0;
+our $PROFIT_SUM_LABEL;
+our $PROFIT_SUM_TXT = 0;
 
 our $FLIP_WINDOW = 0;
+
+our $VISITED_LOG_NR = 0;
+our $LAST_LOG_NR = 0;
 
 our @WIDGETS;
 our @DATA;
@@ -31,11 +34,14 @@ Tkx::ttk__style_configure('sep.TFrame', -background => "CornflowerBlue");
 Tkx::ttk__style_configure('none.TLabel', -background => "#ccc", -foreground => "#555");
 Tkx::ttk__style_configure('has.TLabel', -background => "red", -foreground => "white");
 
-Tkx::ttk__style_configure('basic.TLabel', -background => "white", -foreground => "black");
-Tkx::ttk__style_configure('monitor.TLabel', -background => "white", -foreground => "orange");
+Tkx::ttk__style_configure('basic.TLabel', -background => "white", -foreground => "black" );
 Tkx::ttk__style_configure('alert.TLabel', -background => "red", -foreground => "white");
-Tkx::ttk__style_configure('visited.TLabel', -background => "yellow", -foreground => "black");
-Tkx::ttk__style_configure('disable.TLabel', -background =>'#aaa', -foreground =>'#ddd');
+
+Tkx::ttk__style_configure('warn.TLabel', -background => "Gold", -foreground => "black");
+
+
+Tkx::ttk__style_configure('positive.TLabel', -background => "#CCFDCC", -foreground => "black");
+Tkx::ttk__style_configure('negatíve.TLabel', -background => "#FFE2E6", -foreground => "black");
 
 # ====================================================== FUNCTIONS ================================================================
 sub init{
@@ -53,25 +59,20 @@ sub init{
   $BASE_WINDOW->g_bind("<Enter>", [sub{toggleWindow(1,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
   
-  $BASE_WINDOW->g_bind("<Alt-1>", sub {resetData();});
   $BASE_WINDOW->g_bind("<Alt-3>", sub {flipWindow();});
   
   my $frame = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
   $frame -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
   
-    $NOTIFY_LABEL = $frame->new_ttk__label(-textvariable => \$NOTIFY_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 6 bold", -padding =>"2 -2 2 -2");
-    $NOTIFY_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes");
-    
+    $LOG_LABEL = $frame->new_ttk__label(-textvariable => \$LOG_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"2 -2 2 -2");
+    $LOG_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes");
+    $LOG_LABEL -> g_bind("<1>",sub {$VISITED_LOG_NR = $LOG_LABEL_TXT; $LOG_LABEL_TXT = 0; $LOG_LABEL->configure(-style =>'none.TLabel'); });
+
     @arr = split(/;/, $lines[$#lines]);
-    $PROFIT_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_LABEL_TXT, -background => "white", -foreground => "#333", -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -3 0 -2");
-    $PROFIT_LABEL->g_grid(-row => 1, -column => 0, -sticky => "nwes");
+    $PROFIT_SUM_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_SUM_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -2 0 -2");
+    $PROFIT_SUM_LABEL -> g_grid(-row => 1, -column => 0, -sticky => "nwes");
+    $PROFIT_SUM_LABEL -> g_grid_remove();
     
-    if( $arr[0] == 1){
-      $PROFIT_LABEL_TXT = $arr[1];
-    }else{
-      $PROFIT_LABEL -> g_grid_remove();
-    }
-   
   $frame->g_grid_columnconfigure(0, -weight => 1);
   $frame->g_grid_rowconfigure(0, -weight => 1);
    
@@ -84,20 +85,19 @@ sub init{
     $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 1').' 0 0', -style =>'sep.TFrame');
 		$WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0, -sticky => "nwes");
     
-      $WIDGETS[$i][1] = $WIDGETS[$i][0]->new_ttk__label(-text => getShortName($arr[0]), -font => "verdana 7 bold",  -padding => "-1 -2 -1 -1", -style => 'basic.TLabel');
-      $WIDGETS[$i][1]->g_grid(-row => 0, -column => 0, -sticky => "nwes");
-      $WIDGETS[$i][1]->g_bind("<1>",[sub {changeState($_[0]);},$i]);
-      
-      $WIDGETS[$i][3] = 0;
-      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -anchor=> 'center',-font => "verdana 5 bold", -padding => "-1 -1 -1 -1", -style => 'basic.TLabel');
-      $WIDGETS[$i][2]->g_grid(-row => 0, -column => 1, -sticky => "nwes");
+      $WIDGETS[$i][1] = $arr[2];
+      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][1], -font => "verdana 6 bold", -anchor=> 'center', -padding => '-1 1 -1 -1', -style => 'basic.TLabel');
+      $WIDGETS[$i][2]->g_grid(-row => 0, -column => 0, -sticky => "nwes");
       # $WIDGETS[$i][2]->g_bind("<1>",[sub {changeState($_[0]);},$i]);
+      
+      $WIDGETS[$i][3] = $arr[3];
+      $WIDGETS[$i][4] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -font => "verdana 5 bold", -anchor=> 'center', -padding => '-1 1 -1 -1', -style => 'basic.TLabel');
+      $WIDGETS[$i][4]->g_grid(-row => 0, -column => 1, -sticky => "nwes");
+      $WIDGETS[$i][4] -> g_grid_remove();
       
     $WIDGETS[$i][0]->g_grid_columnconfigure(0, -weight => 1);
     $WIDGETS[$i][0]->g_grid_columnconfigure(1, -weight => 1);
     $WIDGETS[$i][0]->g_grid_remove(); 
-    
-    $DATA[$i] = 0;
   }
   
   start();
@@ -112,121 +112,90 @@ sub start{
   
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
-    $bg = $WIDGETS[$i][1] -> cget(-style);
     
-    if($bg eq 'disable.TLabel'){
-      next;
-      
-    }elsif($bg eq 'monitor.TLabel'){
-      if( $DATA[$i] != $arr[1] && $arr[1] != 0 ){
-        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
-        $DATA[$i] = $arr[1] ;
-        $nr_of_notified++;
-      }
-      
-    }elsif($bg eq 'alert.TLabel'){
-      if( $arr[1] == 0 ){
-        $WIDGETS[$i][1] -> configure(-style =>'visited.TLabel');
-      }
-      $nr_of_notified++;
+    $WIDGETS[$i][1] = $arr[2];
+    $WIDGETS[$i][3] = $arr[3];
     
-    }elsif($bg eq 'visited.TLabel'){
-      if( $arr[1] != 0 ){
-        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
-        $DATA[$i] = $arr[1] ;
-      }
-      $nr_of_notified++;
-    
-    }elsif($bg eq 'basic.TLabel'){
-      if( $arr[1] != 0 ){
-        $WIDGETS[$i][1] -> configure(-style =>'alert.TLabel');
-        $nr_of_notified++;
-      }
-      
+    if( $arr[1] == 0 ){
+      $WIDGETS[$i][2] -> configure(-style =>'basic.TLabel');
+    }else{
+      $WIDGETS[$i][2] -> configure(-style =>'warn.TLabel');
     }
-    
-    $WIDGETS[$i][3] = $arr[2];
   }
   
   @arr = split(/;/, $lines[$#lines]);
-  if( $arr[0] == 1){
-    $PROFIT_LABEL -> g_grid(); 
-    $PROFIT_LABEL_TXT = $arr[1];
+  if( $arr[0] > $VISITED_LOG_NR ){
+    $LOG_LABEL->configure(-style =>'has.TLabel');
   }else{
-    $PROFIT_LABEL->g_grid_remove();
+    $LOG_LABEL->configure(-style =>'none.TLabel');
   }
+  $LOG_LABEL_TXT = $arr[0] - $VISITED_LOG_NR;
   
-  if($nr_of_notified == 0){
-    $NOTIFY_LABEL->configure(-style =>'none.TLabel');
-  }else{
-    $NOTIFY_LABEL->configure(-style =>'has.TLabel');
-  }
-  
-  if($NOTIFY_LABEL_TXT != $nr_of_notified){
-    if($nr_of_notified > $NOTIFY_LABEL_TXT){
-      Win32::Sound::Stop();
-      Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
+  if( $arr[1] == 0 ){
+    if( $PROFIT_SUM_TXT != 0 ){
+      for($j = 0; $j <= $#WIDGETS; $j++){
+        $WIDGETS[$j][4] -> g_grid_remove();
+      }
+      $PROFIT_SUM_LABEL -> g_grid_remove();
+      $PROFIT_SUM_LABEL -> configure(-style =>'none.TLabel');
     }
-    $NOTIFY_LABEL_TXT = $nr_of_notified;
+  }else{
+    if( $arr[1] > 0 ){
+      if( $PROFIT_SUM_TXT < 1 ){
+        $PROFIT_SUM_LABEL -> configure(-style =>'positive.TLabel');
+        for($j = 0; $j <= $#WIDGETS; $j++){
+          $WIDGETS[$j][4] -> g_grid();
+        }
+        $PROFIT_SUM_LABEL -> g_grid();
+      }
+    }else{
+      if( $PROFIT_SUM_TXT > -1 ){
+        $PROFIT_SUM_LABEL -> configure(-style =>'negatíve.TLabel');
+        for($j = 0; $j <= $#WIDGETS; $j++){
+          $WIDGETS[$j][4] -> g_grid();
+        }
+        $PROFIT_SUM_LABEL -> g_grid();
+      }
+    }
   }
-
+  $PROFIT_SUM_TXT = $arr[1];
+  
+  if( $arr[0] > $LAST_LOG_NR ){
+    Win32::Sound::Stop();
+    Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
+    $LAST_LOG_NR = $arr[0];
+  }
 }
 
 sub flipWindow{
   if($FLIP_WINDOW == 0){
     for($i = 0; $i <= $#WIDGETS; $i++){
       $WIDGETS[$i][0]->g_grid(-row => 0, -column => $i+1);
-      $WIDGETS[$i][2]->g_grid(-row => 1, -column => 0);
+      $WIDGETS[$i][4]->g_grid(-row => 1, -column => 0);
       
       $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'2':'1').' 0 0 0');
-      $WIDGETS[$i][1] -> configure(-padding => "0 -3 0 -2");
-      $WIDGETS[$i][2] -> configure(-padding => "0 -3 0 -2");
+      $WIDGETS[$i][2] -> configure(-padding => "0 -2 0 -1");
+      $WIDGETS[$i][4] -> configure(-padding => "0 -2 0 -2");
+      if( $PROFIT_SUM_TXT == 0 ){
+        $WIDGETS[$i][4] -> g_grid_remove();
+      }
     }
-    $NOTIFY_LABEL -> g_grid_remove();
     $FLIP_WINDOW = 1;
   }else{
     for($i = 0; $i <= $#WIDGETS; $i++){
       $WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0);
-      $WIDGETS[$i][2]->g_grid(-row => 0, -column => 1);
+      $WIDGETS[$i][4]->g_grid(-row => 0, -column => 1);
       
       $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'0 2':'0 1').' 0 0');
-      $WIDGETS[$i][1] -> configure(-padding => "-1 -2 -1 -1");
-      $WIDGETS[$i][2] -> configure(-padding => "-1");
+      $WIDGETS[$i][2] -> configure(-padding => '-1 1 -1 -1');
+      $WIDGETS[$i][4] -> configure(-padding => '-1 1 -1 -1');
+      
+      if( $PROFIT_SUM_TXT == 0 ){
+        $WIDGETS[$i][4] -> g_grid_remove();
+      }
     }
-    $NOTIFY_LABEL -> g_grid();
     $FLIP_WINDOW = 0;
   }
-}
-
-sub resetData{
-  for(my $i = 0, $len = $#DATA; $i <= $len; $i++) {
-    $DATA[$i] = 0;
-    setAsVisited($i);
-  }
-  start();
-}
-
-sub changeState{
-  my $bg = $WIDGETS[$_[0]][1] -> cget(-style);
-  
-  if($bg eq 'disable.TLabel'){
-    $WIDGETS[$_[0]][1] -> configure(-style =>'basic.TLabel');
-    
-  }elsif($bg eq 'monitor.TLabel'){
-    $WIDGETS[$_[0]][1] -> configure(-style =>'disable.TLabel');
-    
-  }elsif($bg eq 'alert.TLabel'){
-    $WIDGETS[$_[0]][1] -> configure(-style =>'monitor.TLabel');
-  
-  }elsif($bg eq 'visited.TLabel'){
-    $WIDGETS[$_[0]][1] -> configure(-style =>'basic.TLabel');
-  
-  }elsif($bg eq 'basic.TLabel'){
-    $WIDGETS[$_[0]][1] -> configure(-style =>'monitor.TLabel');
-  }else{
-    return;
-  }
-  start();
 }
 
 sub toggleWindow{
@@ -244,26 +213,6 @@ sub toggleWindow{
       }
       $BASE_WINDOW->g_wm_geometry($BASE_WINDOW_GEO1);
     }
-  }
-}
-
-sub getShortName{
-  if($_[0] eq "EURUSD"){
-    return "EU";
-  }elsif($_[0] eq "USDJPY"){
-    return "UJ";
-  }elsif($_[0] eq "USDCHF"){
-    return "UC";
-  }elsif($_[0] eq "EURJPY"){
-    return "EJ";
-  }elsif($_[0] eq "GBPUSD"){
-    return "GU";
-  }elsif($_[0] eq "AUDUSD"){
-    return "AU";
-  }elsif($_[0] eq "XAGUSD"){
-    return "SI";
-  }elsif($_[0] eq "XAUUSD"){
-    return "GO";
   }
 }
 

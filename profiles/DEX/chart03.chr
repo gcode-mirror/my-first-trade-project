@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=30
-leftpos=3606
+leftpos=3687
 digits=3
 scale=4
 graph=1
@@ -101,7 +101,7 @@ type=2
 object_name=DT_GO_cLine_g0_sig_1338494763
 period_flags=63
 create_time=1338487563
-description=2012.05.31 20:06:03 G0 
+description=2012.05.31 20:06:03 G0
 color=15570276
 style=0
 weight=1
@@ -394,6 +394,36 @@ time_0=1337216400
 value_0=103.421749
 time_1=1338930000
 value_1=97.997440
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 61530
+period_flags=0
+create_time=1339093082
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338510600
+value_0=96.037491
+time_1=1338924600
+value_1=99.075862
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 61577
+period_flags=0
+create_time=1339093129
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338553800
+value_0=94.937293
+time_1=1339027200
+value_1=98.735257
 ray=1
 </object>
 </indicator>
