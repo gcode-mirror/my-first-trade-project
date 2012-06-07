@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=60
-leftpos=5335
+period=30
+leftpos=3606
 digits=3
 scale=4
 graph=1
@@ -345,10 +345,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1338555600
-value_0=95.056000
-time_1=1338987600
-value_1=98.235000
+time_0=1338550200
+value_0=95.205443
+time_1=1339083000
+value_1=99.763000
 ray=1
 </object>
 <object>
@@ -356,14 +356,14 @@ type=2
 object_name=Trendline 23739
 period_flags=0
 create_time=1338989755
-color=33023
+color=9408444
 style=0
 weight=1
 background=1
-time_0=1338465600
-value_0=95.094164
-time_1=1338930000
-value_1=98.678069
+time_0=1338777000
+value_0=96.782000
+time_1=1339077600
+value_1=100.626000
 ray=1
 </object>
 <object>

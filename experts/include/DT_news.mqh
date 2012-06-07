@@ -339,7 +339,7 @@ bool downLoadWebPageToFile(){
   }
   int hURL = InternetOpenUrlA(hInternetSession, url, "", 0, 0, 0);
   if(hURL <= 0){
-    Alert("Cannot open URL ", url, " - InternetOpenUrlA()");
+    Alert("Cannot open URL ", url, " - InternetOpenUrlA() "+Symbol());
     InternetCloseHandle(hInternetSession);
     return(false);         
   }
