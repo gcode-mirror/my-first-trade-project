@@ -28,6 +28,8 @@ our $LAST_LOG_NR = 0;
 our @WIDGETS;
 our @DATA;
 
+our $CONTEXT;
+
 # ======================================================== STYLE ==================================================================
 Tkx::ttk__style_configure('sep.TFrame', -background => "CornflowerBlue");
 
@@ -47,7 +49,7 @@ Tkx::ttk__style_configure('negatíve.TLabel', -background => "#FFE2E6", -foregrou
 sub init{
   my @lines = read_file($INPUT_FILE);
   my @arr;
-  
+
   $BASE_WINDOW = Tkx::widget->new(".");
 	$BASE_WINDOW->g_wm_attributes(-topmost=> 1, -alpha => 1, -toolwindow => 1);
 	$BASE_WINDOW->g_wm_resizable(0,0);
@@ -55,15 +57,15 @@ sub init{
 	$BASE_WINDOW->g_wm_minsize(12,12);
 	$BASE_WINDOW->g_wm_maxsize(200,150);
   $BASE_WINDOW->g_bind("<2>",sub {Tkx::destroy($BASE_WINDOW);});
-  
+
   $BASE_WINDOW->g_bind("<Enter>", [sub{toggleWindow(1,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
-  
+
   $BASE_WINDOW->g_bind("<Alt-3>", sub {flipWindow();});
-  
+
   my $frame = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
   $frame -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
-  
+
     $LOG_LABEL = $frame->new_ttk__label(-textvariable => \$LOG_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"2 -2 2 -2");
     $LOG_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes");
     $LOG_LABEL -> g_bind("<1>",sub {$VISITED_LOG_NR = $LOG_LABEL_TXT; $LOG_LABEL_TXT = 0; $LOG_LABEL->configure(-style =>'none.TLabel'); });
@@ -72,57 +74,62 @@ sub init{
     $PROFIT_SUM_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_SUM_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -2 0 -2");
     $PROFIT_SUM_LABEL -> g_grid(-row => 1, -column => 0, -sticky => "nwes");
     $PROFIT_SUM_LABEL -> g_grid_remove();
-    
+
   $frame->g_grid_columnconfigure(0, -weight => 1);
   $frame->g_grid_rowconfigure(0, -weight => 1);
-   
+
   $BASE_WINDOW->g_grid_columnconfigure(0, -weight => 1);
   $BASE_WINDOW->g_grid_rowconfigure(0, -weight => 1);
+
+  $CONTEXT = $BASE_WINDOW->new_menu( -tearoff => 0 );
   
-  for(my $i = 0, $len = $#lines; $i < $len; $i++) {
+  for( my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
-    
+
     $WIDGETS[$i][0] = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -relief => "flat", -padding =>(($i == 0)?'0 2':'0 1').' 0 0', -style =>'sep.TFrame');
 		$WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0, -sticky => "nwes");
-    
+
       $WIDGETS[$i][1] = $arr[2];
-      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][1], -font => "verdana 6 bold", -anchor=> 'center', -padding => '-1 1 -1 -1', -style => 'basic.TLabel');
+      $WIDGETS[$i][2] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][1], -font => "verdana 5", -anchor=> 'center', -padding => '-2 1 -2 -1', -style => 'basic.TLabel');
       $WIDGETS[$i][2]->g_grid(-row => 0, -column => 0, -sticky => "nwes");
-      # $WIDGETS[$i][2]->g_bind("<1>",[sub {changeState($_[0]);},$i]);
-      
+      $WIDGETS[$i][2] ->g_bind("<ButtonPress-3>", [sub {my($x,$y,$z) = @_; $CONTEXT->delete( 0 ); $CONTEXT->add_command(-label => $z ); $CONTEXT->g_tk___popup($x,$y); }, Tkx::Ev("%X", "%Y"), $arr[0]]);
+      $WIDGETS[$i][2] ->g_bind("<ButtonRelease-3>",sub {$CONTEXT->delete( 0 ); $CONTEXT->g_tk___popup(1,1); $BASE_WINDOW->g_focus;});
+
       $WIDGETS[$i][3] = $arr[3];
       $WIDGETS[$i][4] = $WIDGETS[$i][0]->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -font => "verdana 5 bold", -anchor=> 'center', -padding => '-1 1 -1 -1', -style => 'basic.TLabel');
-      $WIDGETS[$i][4]->g_grid(-row => 0, -column => 1, -sticky => "nwes");
+      $WIDGETS[$i][4] -> g_grid(-row => 0, -column => 1, -sticky => "nwes");
       $WIDGETS[$i][4] -> g_grid_remove();
-      
+
     $WIDGETS[$i][0]->g_grid_columnconfigure(0, -weight => 1);
     $WIDGETS[$i][0]->g_grid_columnconfigure(1, -weight => 1);
-    $WIDGETS[$i][0]->g_grid_remove(); 
+    $WIDGETS[$i][0]->g_grid_remove();
+
   }
   
   start();
 	infiniteLoop();
 }
 
+
 sub start{
   my @lines = read_file($INPUT_FILE);
   my @arr;
   my $nr_of_notified = 0;
   my $bg;
-  
+
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
-    
+
     $WIDGETS[$i][1] = $arr[2];
     $WIDGETS[$i][3] = $arr[3];
-    
+
     if( $arr[1] == 0 ){
       $WIDGETS[$i][2] -> configure(-style =>'basic.TLabel');
     }else{
       $WIDGETS[$i][2] -> configure(-style =>'warn.TLabel');
     }
   }
-  
+
   @arr = split(/;/, $lines[$#lines]);
   if( $arr[0] > $VISITED_LOG_NR ){
     $LOG_LABEL->configure(-style =>'has.TLabel');
@@ -130,7 +137,7 @@ sub start{
     $LOG_LABEL->configure(-style =>'none.TLabel');
   }
   $LOG_LABEL_TXT = $arr[0] - $VISITED_LOG_NR;
-  
+
   if( $arr[1] == 0 ){
     if( $PROFIT_SUM_TXT != 0 ){
       for($j = 0; $j <= $#WIDGETS; $j++){
@@ -159,7 +166,7 @@ sub start{
     }
   }
   $PROFIT_SUM_TXT = $arr[1];
-  
+
   if( $arr[0] > $LAST_LOG_NR ){
     Win32::Sound::Stop();
     Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
@@ -172,7 +179,7 @@ sub flipWindow{
     for($i = 0; $i <= $#WIDGETS; $i++){
       $WIDGETS[$i][0]->g_grid(-row => 0, -column => $i+1);
       $WIDGETS[$i][4]->g_grid(-row => 1, -column => 0);
-      
+
       $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'2':'1').' 0 0 0');
       $WIDGETS[$i][2] -> configure(-padding => "0 -2 0 -1");
       $WIDGETS[$i][4] -> configure(-padding => "0 -2 0 -2");
@@ -185,11 +192,11 @@ sub flipWindow{
     for($i = 0; $i <= $#WIDGETS; $i++){
       $WIDGETS[$i][0]->g_grid(-row => $i+1, -column => 0);
       $WIDGETS[$i][4]->g_grid(-row => 0, -column => 1);
-      
+
       $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'0 2':'0 1').' 0 0');
       $WIDGETS[$i][2] -> configure(-padding => '-1 1 -1 -1');
       $WIDGETS[$i][4] -> configure(-padding => '-1 1 -1 -1');
-      
+
       if( $PROFIT_SUM_TXT == 0 ){
         $WIDGETS[$i][4] -> g_grid_remove();
       }
@@ -205,11 +212,11 @@ sub toggleWindow{
   }else{
     if($_[0] == 1){
       for($i = 0; $i <= $#WIDGETS; $i++){
-        $WIDGETS[$i][0]->g_grid(); 
+        $WIDGETS[$i][0]->g_grid();
       }
     }else{
       for($i = 0; $i <= $#WIDGETS; $i++){
-        $WIDGETS[$i][0]->g_grid_remove(); 
+        $WIDGETS[$i][0]->g_grid_remove();
       }
       $BASE_WINDOW->g_wm_geometry($BASE_WINDOW_GEO1);
     }

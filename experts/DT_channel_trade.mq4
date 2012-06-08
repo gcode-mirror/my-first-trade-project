@@ -57,6 +57,7 @@ int init(){
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.7, Digits );
+  GlobalVariableSet( "CT_NR_OF_LOGS", 0.0 );
 	
   string sym = StringSubstr(Symbol(), 0, 6);
   

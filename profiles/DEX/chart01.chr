@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=30
-leftpos=6020
+leftpos=3698
 digits=5
 scale=4
 graph=1
@@ -213,7 +213,7 @@ type=2
 object_name=DT_GO_MONITOR_SWITCH
 period_flags=0
 create_time=1333402549
-description=0
+description=1
 color=255
 style=0
 weight=1
@@ -361,9 +361,9 @@ style=0
 weight=1
 background=1
 time_0=1338577200
-value_0=1.228144
+value_0=1.227899
 time_1=1339059600
-value_1=1.249094
+value_1=1.248849
 ray=1
 </object>
 </indicator>
