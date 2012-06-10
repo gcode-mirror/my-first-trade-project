@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2158
+leftpos=2174
 digits=3
 scale=4
 graph=1
@@ -42,7 +42,7 @@ type=2
 object_name=DT_GO_ARCHIVE_SWITCH
 period_flags=0
 create_time=1333403056
-description=0
+description=1
 color=255
 style=0
 weight=1
@@ -345,36 +345,6 @@ time_0=1337133600
 value_0=80.433264
 time_1=1337713200
 value_1=80.146000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 40783
-period_flags=0
-create_time=1339072335
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334908800
-value_0=81.892303
-time_1=1339074000
-value_1=79.794000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 9812
-period_flags=0
-create_time=1339106900
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338822000
-value_0=78.373949
-time_1=1339074000
-value_1=79.796949
 ray=1
 </object>
 </indicator>
