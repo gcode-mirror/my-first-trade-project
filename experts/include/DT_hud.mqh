@@ -403,6 +403,8 @@ void updateChannelArray(){
   }
   HUD_OBJ_TOTAL = len;
   
+  out = StringConcatenate(out,"DT_GO_channel_trade_time_limit;",DoubleToStr(ObjectGet("DT_GO_channel_trade_time_limit", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_COLOR ),";",ObjectType( "DT_GO_channel_trade_time_limit" ),"\r\n");
+  
   handle = FileOpen( EXP_FILE_NAME, FILE_BIN|FILE_WRITE );
   if(handle > 0){
     FileWriteString( handle, out, StringLen(out) );
