@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2174
+leftpos=2181
 digits=3
 scale=4
 graph=1
@@ -42,7 +42,7 @@ type=2
 object_name=DT_GO_ARCHIVE_SWITCH
 period_flags=0
 create_time=1333403056
-description=1
+description=0
 color=255
 style=0
 weight=1
