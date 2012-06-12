@@ -627,7 +627,7 @@ double barSpeed(){
       i++;
     }
     dist = ( (iHigh( NULL, PERIOD_M15, i - 2 ) - iLow( NULL, PERIOD_M15, 0 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
-    Alert("++++++++++++++++ "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, i - 2 )+"    "+iLow( NULL, PERIOD_M15, 0 )+"    "+dist+" "+Symbol());
+    Alert("++++++++++++++++ "+TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS)+"    "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, i - 2 )+"    "+iLow( NULL, PERIOD_M15, 0 )+"    "+dist+"      sp:"+( dist / (i - 1) )+"      "+Symbol());
     return ( dist / (i - 1) );
   }else{
     while( p2 < p1 && p1 - p2 > dif ){
@@ -636,7 +636,7 @@ double barSpeed(){
       i++;
     }
     dist = ( (iHigh( NULL, PERIOD_M15, 0 ) - iLow( NULL, PERIOD_M15, i - 2 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
-    Alert("++++++++++++++++ "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, 0 )+"    "+iLow( NULL, PERIOD_M15, i - 2 )+"    "+dist+" "+Symbol());
+    Alert("++++++++++++++++ "+TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS)+"    "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, 0 )+"    "+iLow( NULL, PERIOD_M15, i - 2 )+"    "+dist+"      sp:"+( dist / (i - 1) )+"      "+Symbol());
     return ( dist / (i - 1) );
   }
   Alert( "Something wrong with barSpeed "+Symbol() );
