@@ -50,7 +50,16 @@ string EXP_FILE_NAME;
 string EXP_LAST_MOD_GV;
 double CUR_LAST_MOD = 1.0;
 
+bool CONNECTION_FAIL = true;
+
 int init(){
+  if( MarketInfo(Symbol(),MODE_TICKVALUE) == 0.0 ){
+    CONNECTION_FAIL = true;
+    return (0);
+  }else{
+    CONNECTION_FAIL = false;
+  }
+  
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
@@ -75,6 +84,11 @@ int init(){
 }
 
 int start(){
+  if( CONNECTION_FAIL ){
+    init();
+    return (0);
+  }
+
   if( GetTickCount() > CT_TIMER1 ){
     CT_TIMER1 = GetTickCount() + 2000;
     

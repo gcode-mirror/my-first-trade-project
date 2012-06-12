@@ -68,9 +68,8 @@ sub init{
 
     $LOG_LABEL = $frame->new_ttk__label(-textvariable => \$LOG_LABEL_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"2 -2 2 -2");
     $LOG_LABEL->g_grid(-row => 0, -column => 0, -sticky => "nwes");
-    $LOG_LABEL -> g_bind("<1>",sub {$VISITED_LOG_NR = $LOG_LABEL_TXT; $LOG_LABEL_TXT = 0; $LOG_LABEL->configure(-style =>'none.TLabel'); });
+    $LOG_LABEL -> g_bind("<1>",sub {$VISITED_LOG_NR = $LAST_LOG_NR; $LOG_LABEL_TXT = 0; $LOG_LABEL->configure(-style =>'none.TLabel'); });
 
-    @arr = split(/;/, $lines[$#lines]);
     $PROFIT_SUM_LABEL = $frame->new_ttk__label(-textvariable => \$PROFIT_SUM_TXT, -style =>'none.TLabel', -anchor=> 'center', -font => "verdana 5 bold", -padding =>"0 -2 0 -2");
     $PROFIT_SUM_LABEL -> g_grid(-row => 1, -column => 0, -sticky => "nwes");
     $PROFIT_SUM_LABEL -> g_grid_remove();
@@ -103,8 +102,11 @@ sub init{
     $WIDGETS[$i][0]->g_grid_columnconfigure(0, -weight => 1);
     $WIDGETS[$i][0]->g_grid_columnconfigure(1, -weight => 1);
     $WIDGETS[$i][0]->g_grid_remove();
-
   }
+  
+  @arr = split(/;/, $lines[$#lines]);
+  $VISITED_LOG_NR = $arr[0];
+  $LAST_LOG_NR = $arr[0];
   
   start();
 	infiniteLoop();
@@ -131,12 +133,16 @@ sub start{
   }
 
   @arr = split(/;/, $lines[$#lines]);
-  if( $arr[0] > $VISITED_LOG_NR ){
+  if( $arr[0] == 0 && $LAST_LOG_NR > 0 ){
+    $LAST_LOG_NR = 0;
+    $VISITED_LOG_NR = 0;
+  }elsif( $arr[0] > $LAST_LOG_NR ){
     $LOG_LABEL->configure(-style =>'has.TLabel');
-  }else{
-    $LOG_LABEL->configure(-style =>'none.TLabel');
+    $LAST_LOG_NR = $arr[0];
+    $LOG_LABEL_TXT = $arr[0] - $VISITED_LOG_NR;
+    Win32::Sound::Stop();
+    Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
   }
-  $LOG_LABEL_TXT = $arr[0] - $VISITED_LOG_NR;
 
   if( $arr[1] == 0 ){
     if( $PROFIT_SUM_TXT != 0 ){
@@ -167,11 +173,6 @@ sub start{
   }
   $PROFIT_SUM_TXT = $arr[1];
 
-  if( $arr[0] > $LAST_LOG_NR ){
-    Win32::Sound::Stop();
-    Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
-    $LAST_LOG_NR = $arr[0];
-  }
 }
 
 sub flipWindow{

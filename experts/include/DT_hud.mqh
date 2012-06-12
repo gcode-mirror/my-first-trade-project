@@ -18,7 +18,6 @@ double HUD_MY_SPREAD;
 double HUD_SPREAD_LIMIT;
 
 double HUD_PRICE_MIN = 0.0, HUD_PRICE_MAX = 0.0;
-int HUD_WIDTH;
 
 string HUD_HISTORY_LINE_NAMES[][2];
 double HUD_HISTORY_LINE_DATA[][2][4];
@@ -75,11 +74,11 @@ bool initHud(){
   int hDC = GetWindowDC(hWnd);
   int rect[4];
   GetWindowRect(hWnd, rect);
-  HUD_WIDTH = rect[2] - rect[0] - 47; // Window width
+  int win_width = rect[2] - rect[0] - 47; // Window width
 
   ObjectCreate( "DT_BO_hud_scale_info", OBJ_LABEL, 0, 0, 0 );
   ObjectSet( "DT_BO_hud_scale_info", OBJPROP_CORNER, 2 );
-  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE, HUD_WIDTH - 2 );
+  ObjectSet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE, win_width - 2 );
   ObjectSet( "DT_BO_hud_scale_info", OBJPROP_YDISTANCE, 1 );
   
   ObjectCreate( "DT_BO_hud_scale_label", OBJ_LABEL, 0, 0, 0 );
@@ -97,7 +96,7 @@ bool initHud(){
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_XDISTANCE, 0 );
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_YDISTANCE, 0 );
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_BACK, false );
-  int width = HUD_WIDTH * 0.7;
+  int width = win_width * 0.7;
   ObjectSetText( "DT_BO_w0_hud_fade_main", "g", width, "Webdings", White );
   ObjectSet( "DT_BO_w0_hud_fade_main", OBJPROP_TIMEFRAMES, -1 );
   
@@ -152,9 +151,18 @@ bool startHud(){
   if( HUD_PRICE_MIN != WindowPriceMin(0) || HUD_PRICE_MAX != WindowPriceMax(0)){
     HUD_PRICE_MIN = WindowPriceMin(0);
     HUD_PRICE_MAX = WindowPriceMax(0);
+    
+    int hWnd = WindowHandle(Symbol(), Period());
+    int hDC = GetWindowDC(hWnd);
+    int rect[4];
+    GetWindowRect(hWnd, rect);
+    int win_width = rect[2] - rect[0] - 47; // Window width
 
-		int scale = ( 500 / getScaleNumber(HUD_PRICE_MIN, HUD_PRICE_MAX, Symbol()) ) * HUD_WIDTH;
+		int scale = ( 500 / getScaleNumber(HUD_PRICE_MIN, HUD_PRICE_MAX, Symbol()) ) * win_width;
     ObjectSetText( "DT_BO_hud_scale_info", "g", scale, "Webdings", Black );
+    if( win_width - 2 > ObjectGet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE ) ){
+      ObjectSet( "DT_BO_hud_scale_info", OBJPROP_XDISTANCE, win_width - 2 );
+    }
     ObjectSetText( "DT_BO_hud_scale_label", scale+" px", 7, "Microsoft Sans Serif", Black );
   }
   

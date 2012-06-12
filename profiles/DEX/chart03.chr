@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=5373
+leftpos=5429
 digits=3
 scale=4
 graph=1
@@ -413,6 +413,51 @@ ray=1
 </object>
 <object>
 type=2
+object_name=Trendline 39903
+period_flags=0
+create_time=1339530207
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338379200
+value_0=98.688000
+time_1=1339531200
+value_1=99.756784
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 39984
+period_flags=0
+create_time=1339530288
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337954400
+value_0=99.475000
+time_1=1338994800
+value_1=100.446065
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 40061
+period_flags=0
+create_time=1339530365
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338462000
+value_0=96.691196
+time_1=1339390800
+value_1=97.504654
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 57465
 period_flags=0
 create_time=1338826873
@@ -435,10 +480,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1338462000
-value_0=97.674000
-time_1=1339456200
-value_1=98.708000
+time_0=1338391800
+value_0=97.758000
+time_1=1339513200
+value_1=98.846000
 ray=1
 </object>
 </indicator>

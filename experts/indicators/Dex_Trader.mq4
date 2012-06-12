@@ -39,8 +39,16 @@ bool GetWindowRect(int h, int& pos[4]);
 #include <DT_sessions.mqh>
 //#include <DT_zoom.mqh>
 
+bool CONNECTION_FAIL = true;
+
 //int k;
 int init(){
+  if( MarketInfo(Symbol(),MODE_TICKVALUE) == 0.0 ){
+    CONNECTION_FAIL = true;
+    return (0);
+  }else{
+    CONNECTION_FAIL = false;
+  }
 //k = GetTickCount();
 //========================================== Globals =========================================
   createGlobal("RULER_SWITCH", "1");
@@ -64,11 +72,9 @@ int init(){
   initArchive(getGlobal("ARCHIVE_SWITCH"));	
   initNews(getGlobal("NEWS_SWITCH"));	
   initChannel(/*getGlobal("CHANNEL_SWITCH")*/);	
-  errorCheck("mon start");
   initMonitor(getGlobal("MONITOR_SWITCH"));	
   initSession(getGlobal("SESSION_SWITCH"));	
   //initZoom(getGlobal("ZOOM_SWITCH"));	
-  errorCheck("start");
   initHud();
   
   return(0);
@@ -76,6 +82,10 @@ int init(){
 
 //========================================== Start ===========================================
 int start(){
+  if( CONNECTION_FAIL ){
+    init();
+    return (0);
+  }
 	// int nr_of_try = 1;
 	// while( !IsConnected() || nr_of_try < 10 ){
 		// Alert( StringConcatenate( Symbol()," wait for connection try: ", nr_of_try ) );

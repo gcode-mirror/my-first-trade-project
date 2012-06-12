@@ -19,7 +19,7 @@ int start(){
   
   for ( i = 0; i < len; i++) {
     name = ObjectName(i);
-    if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" ){
+    if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_" ){
       if( ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
         show_obj = true;
         break;
@@ -40,7 +40,7 @@ int start(){
   if( show_obj ){
     for ( i = 0; i < len; i++){
       name = ObjectName(i);
-      if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" ){
+      if( ObjectType(name) == OBJ_TREND || ObjectType(name) == OBJ_HLINE ){
         if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
           if( ObjectGet( name, OBJPROP_WIDTH ) == 2 ){
             ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
@@ -56,7 +56,7 @@ int start(){
     if( all_line == IDYES ){
       for ( i = 0; i < len; i++){
         name = ObjectName(i);
-        if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" ){
+        if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_" ){
           ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
         }
       }
