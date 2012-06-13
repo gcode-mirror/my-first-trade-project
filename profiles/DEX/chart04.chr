@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=3903
+leftpos=5448
 digits=5
 scale=4
 graph=1
@@ -79,6 +79,18 @@ style=0
 weight=2
 background=1
 time_0=1339394400
+</object>
+<object>
+type=1
+object_name=DT_GO_cLine_g0_sig_1339609554
+period_flags=0
+create_time=1339602354
+description=2012.06.13 17:45:54 G0
+color=15570276
+style=0
+weight=2
+background=1
+value_0=1.560230
 </object>
 <object>
 type=2

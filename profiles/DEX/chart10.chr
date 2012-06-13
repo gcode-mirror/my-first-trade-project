@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=15
-leftpos=6204
+leftpos=6174
 digits=5
 scale=4
 graph=2
@@ -20,7 +20,7 @@ window_left=50
 window_top=50
 window_right=1086
 window_bottom=568
-window_type=3
+window_type=1
 background_color=16777215
 foreground_color=0
 barup_color=0
@@ -41,7 +41,7 @@ name=main
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1339595316
+create_time=1339604114
 color=4163021
 style=0
 weight=1
