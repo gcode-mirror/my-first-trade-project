@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=15
-leftpos=6032
+leftpos=6062
 digits=3
 scale=2
 graph=2
@@ -41,7 +41,7 @@ name=main
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1339596602
+create_time=1339654995
 color=4163021
 style=0
 weight=1
@@ -52,7 +52,7 @@ time_0=1339110000
 type=2
 object_name=DT_GO_cLine_g0_sig_1338334763
 period_flags=0
-create_time=1339596602
+create_time=1339654995
 color=15570276
 style=0
 weight=1
