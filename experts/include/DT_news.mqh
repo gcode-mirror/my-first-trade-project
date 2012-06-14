@@ -39,10 +39,10 @@ bool initNews(string isOn){
       
   if(doFileDownLoad()){
     downLoadWebPageToFile();
-  }else if( GlobalVariableGet( "NEWS_update_id" )+60 < TimeCurrent() ){
+  }else if( GlobalVariableGet( "NEWS_update_id" )+600 < TimeCurrent() ){
     downLoadWebPageToFile();
   }
-  NEWS_DOWNLOAD_TIMER = GetTickCount() + 60000;
+  NEWS_DOWNLOAD_TIMER = GetTickCount() + 600000;
   
   csvNewsFileToArray();
   
@@ -70,7 +70,7 @@ bool startNews(string isOn){
 
   if(Symbol() == "EURUSD-Pro"){
     if( GetTickCount() > NEWS_DOWNLOAD_TIMER ){
-      NEWS_DOWNLOAD_TIMER = GetTickCount() + 60000;
+      NEWS_DOWNLOAD_TIMER = GetTickCount() + 600000;
       downLoadWebPageToFile();   
     }
   }
