@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=5475
+leftpos=3579
 digits=5
 scale=4
 graph=1
@@ -333,6 +333,21 @@ ray=1
 </object>
 <object>
 type=2
+object_name=Trendline 63354
+period_flags=0
+create_time=1339750266
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338480000
+value_0=1.537021
+time_1=1339689600
+value_1=1.541657
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 9556
 period_flags=0
 create_time=1339696468
@@ -355,10 +370,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1338390000
-value_0=1.549511
-time_1=1339621200
-value_1=1.554269
+time_0=1338400800
+value_0=1.549939
+time_1=1339754400
+value_1=1.555360
 ray=1
 </object>
 </indicator>

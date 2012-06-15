@@ -6,7 +6,7 @@
 #property copyright "Dex"
 #property link      ""
 
-#define USED_SYM 8
+#define USED_SYM 5
 
 // string SYMBOLS_STR[USED_SYM] = {"EURUSD-Pro","USDJPY-Pro","USDCHF-Pro","EURJPY-Pro","GBPUSD-Pro","AUDUSD-Pro","USDCAD-Pro","EURAUD-Pro","CADJPY-Pro","CHFJPY-Pro","AUDCHF-Pro","NZDUSD-Pro","NZDJPY-Pro","EURGBP-Pro","GBPJPY-Pro","XAGUSD-Pro","XAUUSD-Pro"};
 // string SYMBOLS[USED_SYM] = {"EURUSD","USDJPY","USDCHF","EURJPY","GBPUSD","AUDUSD","USDCAD","EURAUD","CADJPY","CHFJPY","AUDCHF","NZDUSD","NZDJPY","EURGBP","GBPJPY","XAGUSD","XAUUSD"};
