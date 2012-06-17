@@ -14,7 +14,7 @@
 int start(){
   int i, all_line, len = ObjectsTotal();
   string name;
-  bool show_obj = true;
+  bool show_obj = false;
   
   
   for ( i = 0; i < len; i++) {
@@ -23,17 +23,7 @@ int start(){
       if( ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
         show_obj = true;
         break;
-      }else{
-        show_obj = false;
-        break;
       }
-    }
-  }
-  
-  if( !show_obj ){
-    all_line = MessageBox( "Do you want hide the all line?", "Clear chart", MB_YESNOCANCEL|MB_ICONQUESTION );
-    if( all_line == IDCANCEL ){
-      return (0);
     }
   }
   
@@ -52,18 +42,36 @@ int start(){
         }
       }
     }
+    return (0);
+  }
+  
+  all_line = MessageBox( "Do you want hide the all line?", "Clear chart", MB_YESNOCANCEL|MB_ICONQUESTION );
+  if( all_line == IDCANCEL ){
+    return (0);
+  }
+  
+  if( all_line == IDYES ){
+    for ( i = 0; i < len; i++){
+      name = ObjectName(i);
+      if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_" ){
+        ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
+      }
+    }
   }else{
-    if( all_line == IDYES ){
+    int group_line = MessageBox( "Do you want hide GROUP line?", "Clear chart", MB_YESNOCANCEL|MB_ICONQUESTION );
+    if( group_line == IDCANCEL ){
+      return (0);
+    }else if( group_line == IDYES ){
       for ( i = 0; i < len; i++){
         name = ObjectName(i);
-        if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_" ){
+        if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
           ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
         }
       }
     }else{
       for ( i = 0; i < len; i++){
         name = ObjectName(i);
-        if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+        if( StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" ){
           ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
         }
       }

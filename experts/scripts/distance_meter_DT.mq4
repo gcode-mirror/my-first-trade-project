@@ -10,6 +10,8 @@
 #include <DT_icons.mqh>
 #include <DT_functions.mqh>
 #include <DT_comments.mqh>
+
+#include <WinUser32.mqh>
 //+------------------------------------------------------------------+
 //| script program start function                                    |
 //+------------------------------------------------------------------+
@@ -17,7 +19,9 @@ int start(){
   double tod = WindowTimeOnDropped();
   int shift = iBarShift( NULL , 0, tod );
   
-  if( tod == 0.0 ){
+  int mb_id = MessageBox( "Do you want to show distance for all line?", "Distance meter", MB_YESNOCANCEL|MB_ICONQUESTION );
+  
+  if( tod == 0.0 || mb_id == IDCANCEL ){
     removeObjects("distance_meter");
     return( errorCheck("distance_meter") );
   }
@@ -32,7 +36,7 @@ int start(){
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
-    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+    if( ( mb_id == IDYES && (StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_") ) || ( mb_id == IDNO && StringSubstr( name, 5, 7 ) == "_cLine_" ) ){
     
       trade_line_price = getClineValueByShift( name, shift );
       
@@ -45,7 +49,6 @@ int start(){
       }
     }
   }
-  
   
   len = ArraySize(line_price_arr);
   if( len > 1 ){

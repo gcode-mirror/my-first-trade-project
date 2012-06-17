@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2276
+leftpos=2294
 digits=3
 scale=4
 graph=1
@@ -318,47 +318,77 @@ ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 63379
+object_name=Trendline 3031
 period_flags=0
-create_time=1339619219
+create_time=1339952087
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1338904800
-value_0=78.966000
-time_1=1339615800
-value_1=79.301128
+time_0=1335380400
+value_0=81.692000
+time_1=1339146000
+value_1=79.110000
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 63475
+object_name=Trendline 3176
 period_flags=0
-create_time=1339619315
+create_time=1339952232
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1338867000
-value_0=79.210426
-time_1=1339606800
-value_1=79.563608
+time_0=1334275200
+value_0=81.155957
+time_1=1338883200
+value_1=78.107000
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 63506
+object_name=Trendline 3274
 period_flags=0
-create_time=1339619346
+create_time=1339952330
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1338888600
-value_0=79.423703
-time_1=1339588800
-value_1=79.752061
+time_0=1335326400
+value_0=82.353856
+time_1=1339070400
+value_1=79.792457
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 3300
+period_flags=0
+create_time=1339952356
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1334721600
+value_0=81.242497
+time_1=1338433200
+value_1=78.712000
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 3333
+period_flags=0
+create_time=1339952389
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1334736000
+value_0=81.623779
+time_1=1338934200
+value_1=78.798000
 ray=1
 </object>
 </indicator>
