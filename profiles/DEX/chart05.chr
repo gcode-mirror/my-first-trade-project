@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=4526
+leftpos=3554
 digits=5
 scale=4
 graph=1
@@ -79,6 +79,22 @@ style=0
 weight=2
 background=1
 time_0=1340352000
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g0_sig_1340008697
+period_flags=0
+create_time=1340001497
+description=2012.06.18 08:38:17 G0 
+color=15570276
+style=0
+weight=2
+background=1
+time_0=1330509600
+value_0=1.085610
+time_1=1335549600
+value_1=1.047390
+ray=1
 </object>
 <object>
 type=2

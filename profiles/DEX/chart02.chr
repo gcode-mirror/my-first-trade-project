@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2294
+leftpos=2271
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1339840800
+time_0=1340222400
 </object>
 <object>
 type=1
@@ -110,66 +110,82 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_all_1338334574
+object_name=DT_GO_cLine_g1_all_1340026889
 period_flags=63
-create_time=1339442334
-description=2012.05.29 23:36:14 G1 /\ \/ /\ \/ /\
+create_time=1340020518
+description=2012.06.18 13:41:29 G1 /\ \/ /\ \/ /\
 color=16711935
 style=0
 weight=1
 background=1
-time_0=1334811600
-value_0=81.330000
+time_0=1335380400
+value_0=81.692000
 time_1=1339146000
 value_1=79.110000
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_res_1338334572
+object_name=DT_GO_cLine_g1_res_1340026892
 period_flags=63
-create_time=1339442489
-description=2012.05.29 23:36:12 G1 \/ \/ \/ \/ \/
+create_time=1340020498
+description=2012.06.18 13:41:32 G1 \/ \/ \/ \/ \/
 color=9639167
 style=0
 weight=1
 background=1
-time_0=1334538000
-value_0=80.999944
-time_1=1338372000
-value_1=79.012000
+time_0=1335326400
+value_0=82.353856
+time_1=1339070400
+value_1=79.792457
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1339449483
+object_name=DT_GO_cLine_g1_res_1340026998
 period_flags=63
-create_time=1339514919
-description=2012.06.11 21:18:03 G1
+create_time=1340020534
+description=2012.06.18 13:43:18 G1 \/ \/ \/ \/ \/
+color=9639167
+style=0
+weight=1
+background=1
+time_0=1334736000
+value_0=81.623779
+time_1=1338934200
+value_1=78.798000
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1340026900
+period_flags=63
+create_time=1340019836
+description=2012.06.18 13:41:40 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1335380400
-value_0=81.680263
-time_1=1339370100
-value_1=79.708964
+time_0=1334721600
+value_0=81.242497
+time_1=1338433200
+value_1=78.712000
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sup_1338334570
+object_name=DT_GO_cLine_g1_sup_1340026909
 period_flags=63
-create_time=1338327424
-description=2012.05.29 23:36:10 G1 /\ /\ /\ /\ /\
+create_time=1340020664
+description=2012.06.18 13:41:49 G1 /\ /\ /\ /\ /\
 color=3329330
 style=0
 weight=1
 background=1
-time_0=1334589300
-value_0=80.298000
-time_1=1335859800
-value_1=79.640900
+time_0=1334275200
+value_0=81.155957
+time_1=1338883200
+value_1=78.107000
 ray=1
 </object>
 <object>
@@ -318,77 +334,66 @@ ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 3031
-period_flags=0
-create_time=1339952087
+object_name=Trendline 1340026874
+period_flags=-1
+create_time=1340019674
+description=2012.06.18 13:41:14
 color=9408444
 style=0
 weight=1
 background=1
 time_0=1335380400
-value_0=81.692000
+value_0=81.680263
+time_1=1339370100
+value_1=79.708964
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1340026878
+period_flags=-1
+create_time=1340019678
+description=2012.06.18 13:41:18
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1334811600
+value_0=81.330000
 time_1=1339146000
 value_1=79.110000
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 3176
-period_flags=0
-create_time=1339952232
+object_name=Trendline 1340026881
+period_flags=-1
+create_time=1340019681
+description=2012.06.18 13:41:21
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1334275200
-value_0=81.155957
-time_1=1338883200
-value_1=78.107000
+time_0=1334538000
+value_0=80.999944
+time_1=1338372000
+value_1=79.012000
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 3274
-period_flags=0
-create_time=1339952330
+object_name=Trendline 1340026884
+period_flags=-1
+create_time=1340019684
+description=2012.06.18 13:41:24
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1335326400
-value_0=82.353856
-time_1=1339070400
-value_1=79.792457
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 3300
-period_flags=0
-create_time=1339952356
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334721600
-value_0=81.242497
-time_1=1338433200
-value_1=78.712000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 3333
-period_flags=0
-create_time=1339952389
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334736000
-value_0=81.623779
-time_1=1338934200
-value_1=78.798000
+time_0=1334589300
+value_0=80.298000
+time_1=1335859800
+value_1=79.640900
 ray=1
 </object>
 </indicator>
