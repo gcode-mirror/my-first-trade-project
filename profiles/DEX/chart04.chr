@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=60
-leftpos=3595
+period=15
+leftpos=6533
 digits=5
 scale=4
 graph=1
@@ -78,98 +78,86 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1339002000
-</object>
-<object>
-type=1
-object_name=DT_GO_cLine_g0_sig_1339609554
-period_flags=0
-create_time=1339602354
-description=2012.06.13 17:45:54 G0
-color=15570276
-style=0
-weight=2
-background=1
-value_0=1.560230
+time_0=1340208600
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1338421641
+object_name=DT_GO_cLine_g1_all_1340060956
 period_flags=63
-create_time=1338496238
-description=G0 G1 \/ \/ \/ \/ \ G1
-color=15570276
+create_time=1340053927
+description=2012.06.18 23:09:16 G1 /\ \/ /\ \/ /\
+color=16711935
 style=0
 weight=1
 background=1
-time_0=1337618700
-value_0=1.578684
-time_1=1337848200
-value_1=1.568424
+time_0=1338400800
+value_0=1.549613
+time_1=1339754400
+value_1=1.555034
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1338421651
+object_name=DT_GO_cLine_g1_res_1340060830
 period_flags=63
-create_time=1339497131
-description=G0 G1 \/ \/ \/ \/ \ G1
-color=15570276
+create_time=1340053638
+description=2012.06.18 23:07:10 G1 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=1
 background=1
-time_0=1337691600
-value_0=1.578916
-time_1=1337920200
-value_1=1.568656
+time_0=1337882400
+value_0=1.564225
+time_1=1340002800
+value_1=1.571880
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1338421654
+object_name=DT_GO_cLine_g1_res_1340060883
 period_flags=63
-create_time=1338499082
-description=G0 G1 G1 /\ \/ /\ \ G1
-color=15570276
+create_time=1340053910
+description=2012.06.18 23:08:03 G1 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=1
 background=1
-time_0=1337676300
-value_0=1.584805
-time_1=1337904900
-value_1=1.574545
+time_0=1338310800
+value_0=1.560790
+time_1=1340053200
+value_1=1.567362
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1338481468
+object_name=DT_GO_cLine_g1_res_1340060924
 period_flags=63
-create_time=1339497128
-description=G0 G1 G1 /\ \/ /\ \ G1
-color=15570276
+create_time=1340053904
+description=2012.06.18 23:08:44 G1 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=1
 background=1
-time_0=1337359500
-value_0=1.578120
-time_1=1337765400
-value_1=1.567860
+time_0=1338372000
+value_0=1.555040
+time_1=1339779600
+value_1=1.560753
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1338496434
+object_name=DT_GO_cLine_g1_sup_1340060978
 period_flags=63
-create_time=1339497125
-description=G0 G1 /\ /\ /\ /\ / G1
-color=15570276
+create_time=1340053889
+description=2012.06.18 23:09:38 G1 /\ /\ /\ /\ /\
+color=3329330
 style=0
 weight=1
 background=1
-time_0=1337321700
-value_0=1.573246
-time_1=1337728200
-value_1=1.562986
+time_0=1338483600
+value_0=1.542890
+time_1=1339666200
+value_1=1.547370
 ray=1
 </object>
 <object>
@@ -318,6 +306,86 @@ ray=0
 </object>
 <object>
 type=2
+object_name=Trendline 1340060845
+period_flags=0
+create_time=1340053645
+description=2012.06.18 23:07:25
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337676300
+value_0=1.584805
+time_1=1337904900
+value_1=1.574545
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1340060848
+period_flags=0
+create_time=1340053648
+description=2012.06.18 23:07:28
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337691600
+value_0=1.578916
+time_1=1337920200
+value_1=1.568656
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1340060850
+period_flags=0
+create_time=1340053650
+description=2012.06.18 23:07:30
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337618700
+value_0=1.578684
+time_1=1337848200
+value_1=1.568424
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1340060851
+period_flags=0
+create_time=1340053651
+description=2012.06.18 23:07:31
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337359500
+value_0=1.578120
+time_1=1337765400
+value_1=1.567860
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1340060853
+period_flags=0
+create_time=1340053653
+description=2012.06.18 23:07:33
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337321700
+value_0=1.573246
+time_1=1337728200
+value_1=1.562986
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 21995
 period_flags=0
 create_time=1338988011
@@ -333,51 +401,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 26633
-period_flags=0
-create_time=1339779081
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338372000
-value_0=1.555040
-time_1=1339779600
-value_1=1.560753
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 26802
-period_flags=0
-create_time=1339779250
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1337961600
-value_0=1.563050
-time_1=1339642800
-value_1=1.569283
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 51497
-period_flags=0
-create_time=1339869481
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338310800
-value_0=1.558428
-time_1=1339779600
-value_1=1.564473
-ray=1
-</object>
-<object>
-type=2
 object_name=Trendline 63354
 period_flags=0
 create_time=1339750266
@@ -385,40 +408,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1338480000
-value_0=1.537021
-time_1=1339689600
-value_1=1.541657
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 9556
-period_flags=0
-create_time=1339696468
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338483600
-value_0=1.542890
-time_1=1339666200
-value_1=1.547370
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 9731
-period_flags=0
-create_time=1339696643
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338400800
-value_0=1.549939
-time_1=1339754400
-value_1=1.555360
+time_0=1338393600
+value_0=1.535988
+time_1=1339567200
+value_1=1.540429
 ray=1
 </object>
 </indicator>

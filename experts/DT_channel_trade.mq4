@@ -22,10 +22,6 @@
 #define CT_SPEED_LIMIT 140.0
 #define CT_POS_DIF_TIME 21600 // 6 hour
 
-#import "Shell32.dll"
-  int ShellExecuteA(int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd);
-#import
-
 string CT_CLINES[][3];
 
 int CT_TIMER1 = 0;
@@ -70,11 +66,9 @@ int init(){
 	
   string sym = StringSubstr(Symbol(), 0, 6);
   
-	if( IsTesting() ){
-    string test_file_name = StringConcatenate( sym , "_test_cLines.csv" );
-    string param = StringConcatenate( "/c copy /Y ", "\"", TerminalPath(),"\\experts\\files\\", test_file_name, "\"", " ", "\"",TerminalPath(), "\\tester\\files", "\"" );
-    ShellExecuteA(0, "open", "cmd", param, 0, 0);
-		setChannelLinesArr( test_file_name );
+  if( IsTesting() ){
+    string test_file_name = StringConcatenate( StringSubstr(Symbol(), 0, 6) , "_test_cLines.csv" );
+    setChannelLinesArr( test_file_name );
     WindowRedraw();
 	}
   
@@ -93,7 +87,6 @@ int start(){
     CT_TIMER1 = GetTickCount() + 2000;
     
     if( !IsTesting() ){
-      
       if( Period() != PERIOD_M15 ){
         log( StringConcatenate( "WARNING! Channel trade line not in M15 period! curr. is ", Period(), " (", Symbol(),")" ), 0.01 );
       }
@@ -574,7 +567,9 @@ void log( string text, double id = 0.0 ){
   }else{
     Alert( text );
     LAST_LOG_ID = id;
-    GlobalVariableSet( "CT_NR_OF_LOGS", GlobalVariableGet( "CT_NR_OF_LOGS" ) + 1.0 );
+    if( !IsTesting() ){
+      GlobalVariableSet( "CT_NR_OF_LOGS", GlobalVariableGet( "CT_NR_OF_LOGS" ) + 1.0 );
+    }
   }
 }
 

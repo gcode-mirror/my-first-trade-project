@@ -40,6 +40,7 @@ Tkx::ttk__style_configure('basic.TLabel', -background => "white", -foreground =>
 Tkx::ttk__style_configure('alert.TLabel', -background => "red", -foreground => "white");
 
 Tkx::ttk__style_configure('warn.TLabel', -background => "Gold", -foreground => "black");
+Tkx::ttk__style_configure('stopped.TLabel', -background => "#ddd", -foreground => "#666");
 
 
 Tkx::ttk__style_configure('positive.TLabel', -background => "#CCFDCC", -foreground => "black");
@@ -122,13 +123,17 @@ sub start{
   for(my $i = 0, $len = $#lines; $i < $len; $i++) {
     @arr = split(/;/, $lines[$i]);
 
-    $WIDGETS[$i][1] = $arr[2];
     $WIDGETS[$i][3] = $arr[3];
 
     if( $arr[1] == 0 ){
       $WIDGETS[$i][2] -> configure(-style =>'basic.TLabel');
+      $WIDGETS[$i][1] = $arr[2];
+    }elsif( $arr[1] == 333 ){
+      $WIDGETS[$i][2] -> configure(-style =>'stopped.TLabel');
+      $WIDGETS[$i][1] = "--";
     }else{
       $WIDGETS[$i][2] -> configure(-style =>'warn.TLabel');
+      $WIDGETS[$i][1] = $arr[2];
     }
   }
 

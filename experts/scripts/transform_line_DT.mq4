@@ -10,6 +10,7 @@
 #include <DT_icons.mqh>
 #include <DT_functions.mqh>
 #include <DT_comments.mqh>
+#include <WinUser32.mqh>
 //+------------------------------------------------------------------+
 //| script program start function                                    |
 //+------------------------------------------------------------------+
@@ -20,7 +21,7 @@ int start(){
     string name, desc;
     color c;
     int type, time_frames, width;
-    bool ray = ObjectGet(sel_name,OBJPROP_RAY);
+    bool was_cLine = false, ray = ObjectGet(sel_name,OBJPROP_RAY);
     double time = TimeLocal();
 
     if( StringSubstr( sel_name, 5, 7 ) == "_cLine_" ){
@@ -35,6 +36,8 @@ int start(){
       time_frames = 0;
       width = 1;
       desc = TimeToStr( time, TIME_DATE|TIME_SECONDS);
+      was_cLine = true;
+      
     }else{
       name = "DT_GO_cLine_g0_sig_" + DoubleToStr( time, 0 );
       if( ObjectType( sel_name ) == OBJ_TREND ){
@@ -64,6 +67,34 @@ int start(){
     ObjectSetText( name, desc, 8 );
 
     ObjectDelete( sel_name );
+    
+    if( was_cLine ){
+      return (0);
+    }
+    
+// ##############################  GROUPS  ##################################
+    int cur_group = getCLineProperty( name, "group" );
+  
+    int id = MessageBox( "Current Group Id is "+cur_group+", select Group 1 or Group 2 or reset to Group 0", "Select Group", MB_YESNOCANCEL|MB_ICONQUESTION );
+    
+    int group = 0;
+    if( id == IDYES ){
+      group = 1;
+    }else if( id == IDNO ){
+      group = 2;
+    }else if( id == IDCANCEL ){
+      group = 0;
+    }else{
+      return (0);
+    }
+    
+    addComment( "Rename "+getCLineProperty( name, "ts" )+" g"+cur_group+" to g"+group );
+    if( cur_group == group ){
+      return (0);
+    }
+    
+    renameChannelLine( name, "", group );
+// #########################################################################    
     
     showCLineGroups();
   }

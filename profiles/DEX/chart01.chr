@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=15
-leftpos=6355
+period=60
+leftpos=5260
 digits=5
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1340050500
+time_0=1340101800
 </object>
 <object>
 type=2
@@ -98,11 +98,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_all_1340026289
+object_name=DT_GO_cLine_g1_res_1340026289
 period_flags=63
-create_time=1340019202
-description=2012.06.18 13:31:29 G1 /\ \/ /\ \/ /\
-color=16711935
+create_time=1340051188
+description=2012.06.18 13:31:29 G1 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=1
 background=1
@@ -155,9 +155,9 @@ style=0
 weight=1
 background=1
 time_0=1338534000
-value_0=1.231348
-time_1=1339653600
-value_1=1.251908
+value_0=1.230168
+time_1=1340035200
+value_1=1.256230
 ray=1
 </object>
 <object>

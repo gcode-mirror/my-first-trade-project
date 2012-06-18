@@ -11,6 +11,10 @@
 #include <DT_functions.mqh>
 #include <DT_comments.mqh>
 
+#import "Shell32.dll"
+  int ShellExecuteA(int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd);
+#import
+
 //+------------------------------------------------------------------+
 //| script program start function                                    |
 //+------------------------------------------------------------------+
@@ -19,11 +23,10 @@ int start(){
   double pod = WindowPriceOnDropped();
   double tod = WindowTimeOnDropped();
   string out, in, file_name = StringSubstr(Symbol(), 0, 6) + "_test_cLines.csv";
-  int handle = FileOpen( file_name, FILE_READ, ";" );
 
   if( pod == 0.0 ){
-    FileDelete(file_name);
-		GetLastError();
+    FileDelete( file_name );
+		errorCheck( "test_with_cLines" );
 		addComment(file_name+" deleted!", 1);
 		
   }else{
@@ -48,7 +51,7 @@ int start(){
         t2 = ObjectGet( sel_name, OBJPROP_TIME2 );
       }
 			
-			handle = FileOpen( file_name, FILE_BIN|FILE_READ|FILE_WRITE );
+			int handle = FileOpen( file_name, FILE_BIN|FILE_READ|FILE_WRITE );
 			if( handle<1){
 				Alert( "spread write error" );
 				return(0);
@@ -59,6 +62,9 @@ int start(){
       FileWriteString(handle, out, StringLen(out));
       FileClose(handle);
       addComment(sel_name+" line added!");
+      
+      string param = StringConcatenate( "/c copy /Y ", "\"", TerminalPath(),"\\experts\\files\\", file_name, "\"", " ", "\"",TerminalPath(), "\\tester\\files", "\"" );
+      ShellExecuteA(0, "open", "cmd", param, 0, 0);
     }
   }
 
