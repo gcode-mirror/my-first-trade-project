@@ -14,6 +14,8 @@ our $BASE_WINDOW;
 our $BASE_WINDOW_GEO1 = "-110+-20";
 our $BASE_WINDOW_GEO2 = "-110+-20";
 
+our $ZOOM_WIDGET;
+
 our $LOG_LABEL;
 our $LOG_LABEL_TXT = 0;
 
@@ -61,8 +63,8 @@ sub init{
 
   $BASE_WINDOW->g_bind("<Enter>", [sub{toggleWindow(1,$_[0]);},Tkx::Ev("%d")]);
   $BASE_WINDOW->g_bind("<Leave>", [sub{toggleWindow(0,$_[0]);},Tkx::Ev("%d")]);
-
   $BASE_WINDOW->g_bind("<Alt-3>", sub {flipWindow();});
+  $BASE_WINDOW->g_bind("<Control-f>", sub {zoomWidget();});
 
   my $frame = $BASE_WINDOW->new_ttk__frame( -borderwidth => 0, -width => 1, -padding =>"0 0 0 0");
   $frame -> g_grid(-row => 0, -column => 0, -sticky => "nwes");
@@ -227,6 +229,28 @@ sub toggleWindow{
       $BASE_WINDOW->g_wm_geometry($BASE_WINDOW_GEO1);
     }
   }
+}
+
+sub zoomWidget{
+  $ZOOM_WIDGET = $BASE_WINDOW->new_toplevel();
+	$ZOOM_WIDGET->g_wm_title("Profit zoom");
+	# $ZOOM_WIDGET->g_wm_minsize(600, 150);
+  $ZOOM_WIDGET->g_wm_attributes(-topmost=> 1, -alpha => 1, -toolwindow => 1);
+	$ZOOM_WIDGET->g_wm_resizable(0,0);
+	$ZOOM_WIDGET->g_wm_geometry("+700+400");
+  $ZOOM_WIDGET->g_bind("<1>",sub {Tkx::destroy($ZOOM_WIDGET);});
+  
+  my $label;
+  $label = $ZOOM_WIDGET->new_ttk__label(-textvariable => \$PROFIT_SUM_TXT, -font => "verdana 40", -anchor=> 'center', -padding => 5, -background => 'LightBlue' );
+  $label->g_grid(-row => 0, -column => 0, -sticky => "nwes");
+    
+  for($i = 0; $i <= $#WIDGETS; $i++){
+    $label = $ZOOM_WIDGET->new_ttk__label(-textvariable => \$WIDGETS[$i][3], -font => "verdana 40", -anchor=> 'center', -padding => 5);
+    $label->g_grid(-row => 0, -column => $i+1, -sticky => "nwes");
+  }
+  
+  $ZOOM_WIDGET->g_grid_columnconfigure(0, -weight => 1);
+  $ZOOM_WIDGET->g_grid_rowconfigure(0, -weight => 1);
 }
 
 sub read_file{

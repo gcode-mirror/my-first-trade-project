@@ -21,30 +21,23 @@
 #define CT_SL_FACTOR 1.3
 #define CT_SPEED_LIMIT 140.0
 #define CT_POS_DIF_TIME 21600 // 6 hour
+#define CT_TP_FIBO 0.236 // 6 hour
 
 string CT_CLINES[][3];
 
-int CT_TIMER1 = 0;
-int CT_TIMER2 = 0;
 int CT_START_TIME;
 
 double CT_OFFSET = 0.0;
 double CT_MIN_DIST = 0.0;
 double CT_MAX_DIST = 0.0;
 
-bool CT_STOP_TRADE = false;
-
-double LAST_LOG_ID = 0.0;
-
 double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
 
 string CT_SPREAD_LOG = "";
-double CT_LAST_P = 0.0;
 
 string EXP_FILE_NAME;
 string EXP_LAST_MOD_GV;
-double CUR_LAST_MOD = 1.0;
 
 bool CONNECTION_FAIL = true;
 
@@ -82,9 +75,10 @@ int start(){
     init();
     return (0);
   }
-
-  if( GetTickCount() > CT_TIMER1 ){
-    CT_TIMER1 = GetTickCount() + 2000;
+  
+  static int timer1 = 0;
+  if( GetTickCount() > timer1 ){
+    timer1 = GetTickCount() + 2000;
     
     if( !IsTesting() ){
       if( Period() != PERIOD_M15 ){
@@ -94,13 +88,14 @@ int start(){
       setChannelLinesArr( EXP_FILE_NAME );
     }
 
+    static bool stop_trade = false;
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
-      CT_STOP_TRADE = false;
+      stop_trade = false;
     }else{
       if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
-        CT_STOP_TRADE = true;
+        stop_trade = true;
       }else{
-        CT_STOP_TRADE = false;
+        stop_trade = false;
       }
     }
   }
@@ -109,15 +104,74 @@ int start(){
     //CT_TIMER2 = GetTickCount() + 1000;
 
     int ticket, o_type;
-    string comment, trade_line_group, trade_line_type, trade_line_name = "";
+    string comment, trade_line_group, trade_line_type, trade_line_ts_str, trade_line_name = "";
     double fibo_100 = 0.0, fibo_23_dif, trade_line_price, op;
 
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
+      double new_sl, new_tp, new_op;
       o_type = OrderType();
-
+      
       if( o_type < 2 ){
+        static double last_minute = 0.0;
+        if( last_minute == iTime( NULL, PERIOD_M1, 0 ) ){
+          return (0);
+        }else{
+          last_minute = iTime( NULL, PERIOD_M1, 0 );
+        }
+        
+        comment = OrderComment();
+      
+        double peek;
+        op = NormalizeDouble( OrderOpenPrice(), Digits );
+        if( o_type == OP_BUY ){
+          peek = NormalizeDouble( Low[0], Digits );
+          new_op = NormalizeDouble( peek + CT_SPREAD + CT_THRESHOLD, Digits );
+          if( new_op >= op ){
+            return (0);
+          }
+        }else{
+          peek = NormalizeDouble( High[0], Digits );
+          new_op = NormalizeDouble( peek - CT_THRESHOLD, Digits );
+          if( new_op <= op ){
+            return (0);
+          }
+        }
+        
+        fibo_100 = StrToDouble(StringSubstr(comment, 18, StringLen(comment)-18));
+        fibo_23_dif = MathAbs( fibo_100 - peek ) * CT_TP_FIBO;
+        if( fibo_23_dif <= 0.0 ){
+          log( StringConcatenate( "Something wrong with open position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket , " (", Symbol(),")"), fibo_100 + 1.1 );
+          return (0);
+        }
+        
+        if( o_type == OP_BUY ){
+          new_tp = NormalizeDouble( peek + fibo_23_dif, Digits );
+        }else{
+          new_tp = NormalizeDouble( peek - fibo_23_dif + CT_SPREAD, Digits );
+        }
+        
+        if( GetTickCount() < CT_START_TIME ){
+          if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want MODIFY OPEN position(", ticket,") in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
+            return(0);
+          }
+        }
+
+        OrderModify( ticket, op, NormalizeDouble( OrderStopLoss(), Digits ), new_tp, TimeCurrent()+5400 );
+
+/* !! */  Print(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber()));
+/* !! */  log(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " TP:", new_tp, " Exp:", TimeCurrent()+5400, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber()), MathRand());
+
+        if( IsTesting() ){
+/* !! */    ObjectSet( "DT_GO_channel_hist_tp_"+trade_line_ts_str, OBJPROP_PRICE1, new_tp );
+        }
+        
+        if( !errorCheck("Channel trade OPEN OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
+          return(0);
+        }
+        
         return (0);
+        
       }else{
         double open_time = OrderOpenTime();
         if( open_time + 5400 < TimeCurrent() ){
@@ -127,34 +181,34 @@ int start(){
           return (0);
         }
 
-        if( CT_STOP_TRADE ){
+        if( stop_trade ){
           return (0);
         }
         
         // ============================== Spread logging ==============================
+        static double last_peek_price = 0.0;
         if( !IsTesting() ){
-          if( CT_LAST_P == 0.0 ){
+          if( last_peek_price == 0.0 ){
             if( o_type == OP_BUYLIMIT ){
-              CT_LAST_P = 99999.0;
+              last_peek_price = 99999.0;
             }else{
-              CT_LAST_P = 0.1;
+              last_peek_price = 0.1;
             }
           }
           if( o_type == OP_BUYLIMIT ){
-            if( Ask < CT_LAST_P  ){
-              CT_LAST_P = Ask;
+            if( Ask < last_peek_price  ){
+              last_peek_price = Ask;
               CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
             }
           }else{
-            if( Bid > CT_LAST_P  ){
-              CT_LAST_P = Bid;
+            if( Bid > last_peek_price  ){
+              last_peek_price = Bid;
               CT_SPREAD_LOG = StringConcatenate( CT_SPREAD_LOG ,TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS),";",DoubleToStr( High[0], Digits ),";",DoubleToStr( Low[0], Digits ),";",DoubleToStr( Bid, Digits ),";",DoubleToStr( Ask, Digits ),"\r\n" );
             }
           }
         }
 
         comment = OrderComment();
-        string trade_line_ts_str;
         // trade_line_group = StringSubstr(comment, 0, 2);
         // trade_line_ts_str = StringSubstr(comment, 3, 10);
         // trade_line_name = StringConcatenate( "DT_GO_cLine_", trade_line_group, "_sig_", trade_line_ts_str );
@@ -173,7 +227,6 @@ int start(){
         trade_line_price = getClineValueByShift( trade_line_name );
 
         op = NormalizeDouble( OrderOpenPrice(), Digits );
-        double new_op;
 
         if( o_type == OP_BUYLIMIT ){
           new_op = NormalizeDouble( trade_line_price + CT_SPREAD + CT_THRESHOLD, Digits );
@@ -184,10 +237,9 @@ int start(){
         if( new_op == op ){
           return (0);
         }else{
-          double new_sl, new_tp;
           fibo_100 = StrToDouble(StringSubstr(comment, 18, StringLen(comment)-18));
           // fibo_100 = StrToDouble(StringSubstr(comment, 14, StringLen(comment)-14));
-          fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * 0.23; // 0.236
+          fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * CT_TP_FIBO;
           if( fibo_23_dif <= 0.0 ){
             log( StringConcatenate( "Something wrong with limit position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket , " (", Symbol(),")"), fibo_100 + 1.1 );
             return (0);
@@ -203,7 +255,7 @@ int start(){
           }
 
           if( GetTickCount() < CT_START_TIME ){
-            if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want MODIFY position(", ticket,") in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
+            if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want MODIFY LIMIT position(", ticket,") in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
               return(0);
             }
           }
@@ -219,14 +271,14 @@ int start(){
 /* !! */    ObjectSet( "DT_GO_channel_hist_tp_"+trade_line_ts_str, OBJPROP_PRICE1, new_tp );
           }
           
-          if( !errorCheck("Channel trade OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
+          if( !errorCheck("Channel trade LIMIT OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
             return(0);
           }
         }
       }
       errorCheck("Channel trade modify position part");
     }else{
-      if( CT_STOP_TRADE ){
+      if( stop_trade ){
         return (0);
       }
 
@@ -338,9 +390,8 @@ int start(){
       }
 
       if( trade_line_name != "" ){
-        double speed = barSpeed();
-        if( speed > CT_SPEED_LIMIT ){
-          log( StringConcatenate( "Bar SPEED is too fast! Cline: ", CT_CLINES[i][CL_NAME]," Speed: ", DoubleToStr(speed,2), " (", Symbol(), ")" ), fibo_100 + 0.9 );
+        double speed = barSpeed( trade_line_name );
+        if( speed == 0.0 ){
           return (0);
         }
       
@@ -353,7 +404,7 @@ int start(){
         trade_line_group = CT_CLINES[i][CL_GROUP];
         line_state = CT_CLINES[i][CL_STATE];
 
-        fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * 0.23; // 0.236
+        fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * CT_TP_FIBO;
 
         double sl, tp;
 
@@ -389,9 +440,9 @@ int start(){
         OrderSend( Symbol(), o_type, CHANNEL_LOT, op, 15, sl, tp, comment, trade_line_ts, TimeCurrent()+5400 );
         
         if( o_type == OP_BUYLIMIT ){
-          CT_LAST_P = 99999.0;
+          last_peek_price = 99999.0;
         }else{
-          CT_LAST_P = 0.1;
+          last_peek_price = 0.1;
         }
         
         RefreshRates();
@@ -430,8 +481,9 @@ int deinit(){
 }
 
 void setChannelLinesArr( string &file_name ){
-  if( CUR_LAST_MOD != GlobalVariableGet( EXP_LAST_MOD_GV ) ){
-    CUR_LAST_MOD = GlobalVariableGet( EXP_LAST_MOD_GV );
+  static double last_mod = 1.0;
+  if( last_mod != GlobalVariableGet( EXP_LAST_MOD_GV ) ){
+    last_mod = GlobalVariableGet( EXP_LAST_MOD_GV );
 
     double price, tmp_arr[0][2];
     int i, j = 0, len;
@@ -562,11 +614,12 @@ double getCLineItercept( string line_name, double& fibo_100_time, bool is_sell )
 }
 
 void log( string text, double id = 0.0 ){
-  if( LAST_LOG_ID == id ){
+  static double last_log_id = 0.0;
+  if( last_log_id == id ){
     return;
   }else{
     Alert( text );
-    LAST_LOG_ID = id;
+    last_log_id = id;
     if( !IsTesting() ){
       GlobalVariableSet( "CT_NR_OF_LOGS", GlobalVariableGet( "CT_NR_OF_LOGS" ) + 1.0 );
     }
@@ -624,10 +677,10 @@ bool readCLinesFromFile( string &file_name ){
   return ( true );
 }
 
-double barSpeed(){
+double barSpeed( string cLine ){
   double p1 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 0 );
   double p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 1 );
-  double dist, dif = MathAbs( p1 - p2 ) * 0.4;
+  double speed = -1, dist, h, l, dif = MathAbs( p1 - p2 ) * 0.4;
   int i = 2;
   if( p2 > p1 ){
     while( p2 > p1 && p2 - p1 > dif ){
@@ -636,8 +689,9 @@ double barSpeed(){
       i++;
     }
     dist = ( (iHigh( NULL, PERIOD_M15, i - 2 ) - iLow( NULL, PERIOD_M15, 0 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
-    Alert("++++++++++++++++ "+TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS)+"    "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, i - 2 )+"    "+iLow( NULL, PERIOD_M15, 0 )+"    "+dist+"      sp:"+( dist / (i - 1) )+"      "+Symbol());
-    return ( dist / (i - 1) );
+    speed = dist / (i - 1);
+    h = iHigh( NULL, PERIOD_M15, i - 2 );
+    l = iLow( NULL, PERIOD_M15, 0 );
   }else{
     while( p2 < p1 && p1 - p2 > dif ){
       p1 = p2;
@@ -645,9 +699,14 @@ double barSpeed(){
       i++;
     }
     dist = ( (iHigh( NULL, PERIOD_M15, 0 ) - iLow( NULL, PERIOD_M15, i - 2 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
-    Alert("++++++++++++++++ "+TimeToStr( TimeCurrent(), TIME_DATE|TIME_SECONDS)+"    "+(i-1)+"    "+iHigh( NULL, PERIOD_M15, 0 )+"    "+iLow( NULL, PERIOD_M15, i - 2 )+"    "+dist+"      sp:"+( dist / (i - 1) )+"      "+Symbol());
-    return ( dist / (i - 1) );
+    h = iHigh( NULL, PERIOD_M15, 0 );
+    l = iLow( NULL, PERIOD_M15, i - 2 );
+    speed = dist / (i - 1);
   }
-  Alert( "Something wrong with barSpeed "+Symbol() );
-  return ( 9999999 );
+  if( speed > CT_SPEED_LIMIT ){
+    log( StringConcatenate( "Bar SPEED is too fast! Cline: ", cLine," Speed: ", DoubleToStr(speed, 2), " Bar nr:", i-1, " high:", DoubleToStr( h, Digits ), " low:", DoubleToStr( l , Digits ), " (", Symbol(), ")" ), speed );
+    return (0.0);
+  }else{
+    return (speed);
+  }
 }
