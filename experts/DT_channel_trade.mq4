@@ -60,8 +60,8 @@ int init(){
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
-  CT_SPREAD = NormalizeDouble( getMySpread() * 1.3, Digits );
-  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.7, Digits );
+  CT_SPREAD = NormalizeDouble( getMySpread() * 1.1, Digits );
+  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
   GlobalVariableSet( "CT_NR_OF_LOGS", 0.0 );
 	
   string sym = StringSubstr(Symbol(), 0, 6);

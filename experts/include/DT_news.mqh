@@ -44,7 +44,7 @@ bool initNews(string isOn){
   }
   NEWS_DOWNLOAD_TIMER = GetTickCount() + 600000;
   
-  csvNewsFileToArray();
+  // csvNewsFileToArray();
   
   ObjectCreate( "DT_BO_icon_news_3", OBJ_LABEL, 0, 0, 0);
   ObjectSet( "DT_BO_icon_news_3", OBJPROP_CORNER, 0);
