@@ -105,7 +105,7 @@ int start(){
 
     int ticket, o_type;
     string comment, trade_line_group, trade_line_type, trade_line_ts_str, trade_line_name = "";
-    double fibo_100 = 0.0, fibo_23_dif, trade_line_price, op;
+    double fibo_100 = 0.0, fibo_23_dif, trade_line_price, op, tp;
 
     ticket = getClineOpenPosition();
     if( ticket != 0 ){
@@ -113,6 +113,7 @@ int start(){
       o_type = OrderType();
       
       if( o_type < 2 ){
+        return (0);
         static double last_minute = 0.0;
         if( last_minute == iTime( NULL, PERIOD_M1, 0 ) ){
           return (0);
@@ -151,6 +152,11 @@ int start(){
           new_tp = NormalizeDouble( peek - fibo_23_dif + CT_SPREAD, Digits );
         }
         
+        tp = OrderTakeProfit();
+        if( tp == new_tp ){
+          return (0);
+        }
+        
         if( GetTickCount() < CT_START_TIME ){
           if(IDNO == MessageBox(StringConcatenate("Terminal just started, do you want MODIFY OPEN position(", ticket,") in ", Symbol()), "Channel trading", MB_YESNO|MB_ICONQUESTION )){
             return(0);
@@ -166,7 +172,7 @@ int start(){
 /* !! */    ObjectSet( "DT_GO_channel_hist_tp_"+trade_line_ts_str, OBJPROP_PRICE1, new_tp );
         }
         
-        if( !errorCheck("Channel trade OPEN OrderModify Bid:"+ Bid+ " Ask:"+ Ask)){
+        if( !errorCheck("Channel trade OPEN OrderModify Bid:"+ Bid+ " Ask:"+ Ask+" op:"+op+" new op:"+new_op+" tp:"+tp+" new tp:"+new_tp)){
           return(0);
         }
         
@@ -406,7 +412,7 @@ int start(){
 
         fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * CT_TP_FIBO;
 
-        double sl, tp;
+        double sl;
 
         RefreshRates();
         if( fibo_100 > trade_line_price ){ // ================================================ BUY LIMIT ================================================
