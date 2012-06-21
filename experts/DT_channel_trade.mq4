@@ -470,7 +470,7 @@ int start(){
 /* !! */  createHistoryLine( fibo_100, Black, "Order type: "+o_type+", f100", "f100_"+trade_line_ts, fibo_100_time );
         }
 
-        errorCheck(" Bid:"+ Bid+ " Ask:"+ Ask);
+        errorCheck("NEW LIMIT pos Bid:"+ Bid+ " Ask:"+ Ask);
       }
       errorCheck("Channel trade new position part");
     }
