@@ -16,7 +16,7 @@
 //+------------------------------------------------------------------+
 int start(){
   if( ObjectFind( "DT_BO_group_idx_0" ) == -1 ){
-    showCLineGroups( false );
+    showCLineGroups( 0.0, false );
   }else{
     removeObjects("group_idx");
   }

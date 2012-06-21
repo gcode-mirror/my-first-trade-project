@@ -15,7 +15,8 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine( WindowTimeOnDropped(), WindowPriceOnDropped(), true );
+  double tod = WindowTimeOnDropped();
+  string sel_name = getSelectedLine( tod, WindowPriceOnDropped(), true );
 
   if( sel_name != "" ){
     string name, desc;

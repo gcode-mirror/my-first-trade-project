@@ -30,7 +30,7 @@ int start(){
       renameChannelLine( sel_name, "res" );
     }
     
-    showCLineGroups();
+    showCLineGroups( tod );
   }else{
     addComment("Can not find line!",1);
   }

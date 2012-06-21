@@ -16,7 +16,8 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine( WindowTimeOnDropped(), WindowPriceOnDropped() );
+	double tod = WindowTimeOnDropped();
+  string sel_name = getSelectedLine( tod, WindowPriceOnDropped() );
   if( sel_name != "" ){
     int cur_group = getCLineProperty( sel_name, "group" );
   
@@ -40,7 +41,7 @@ int start(){
     
     renameChannelLine( sel_name, "", group );
     
-    showCLineGroups();
+    showCLineGroups( tod );
   }
   return( errorCheck("DT_transform") );
 }

@@ -256,7 +256,7 @@ int start(){
           // fibo_100 = StrToDouble(StringSubstr(comment, 14, StringLen(comment)-14));
           fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * CT_TP_FIBO;
           if( fibo_23_dif <= 0.0 ){
-            log( StringConcatenate( "Something wrong with limit position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket , " (", Symbol(),")"), fibo_100 + 1.1 );
+            log( StringConcatenate( "Something wrong with limit position fibo 23 number: ",fibo_23_dif,"! ticket id :", ticket , " (", Symbol(),")"), fibo_100 + 1.2 );
             return (0);
           }
           
@@ -433,7 +433,7 @@ int start(){
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + CT_SPREAD + CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 0.7 );
+            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 0.9 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
@@ -445,12 +445,17 @@ int start(){
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price - CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 0.8 );
+            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 1.0 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + CT_SPREAD, Digits );
           tp = NormalizeDouble( trade_line_price - fibo_23_dif + CT_SPREAD, Digits );
         }
+				
+				if( crashToCLine( trade_line_name, MathMax( op, sl ), MathMin( op, sl ) ) ){
+					return (0);
+				}
+				
         peek_for_open_pos = op;
         peek_for_spread_log = peek;
 
@@ -722,4 +727,20 @@ double barSpeed( string cLine ){
   }else{
     return (speed);
   }
+}
+
+bool crashToCLine( string name, double max, double min ){
+	int i, len = ArrayRange( CT_CLINES, 0 );
+	double price;
+	
+	for( i = 0; i < len; i++ ){
+		if( CT_CLINES[i][CL_NAME] != name ){
+			price = getClineValueByShift( CT_CLINES[i][CL_NAME] );
+			if( max > price && min < price ){
+				log( StringConcatenate( name, " CRASH to ", CT_CLINES[i][CL_NAME]," Min: ",min," Max:", max, " Price:", price, " (", Symbol(), ")" ), 1.3 );
+				return ( true );
+			}
+		}
+	}
+	return ( false );
 }

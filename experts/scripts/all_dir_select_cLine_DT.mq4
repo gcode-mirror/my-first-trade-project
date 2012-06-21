@@ -14,7 +14,8 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  string sel_name = getSelectedLine(WindowTimeOnDropped(), WindowPriceOnDropped());
+	double tod = WindowTimeOnDropped();
+  string sel_name = getSelectedLine( tod, WindowPriceOnDropped() );
   
   if( sel_name != "" ){
     string status = "";
@@ -25,7 +26,7 @@ int start(){
     }
     renameChannelLine( sel_name, status );
     
-    showCLineGroups();
+    showCLineGroups( tod );
   }
   
   return(0);

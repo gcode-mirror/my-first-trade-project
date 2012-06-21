@@ -568,8 +568,8 @@ double getClineValueByShift( string name, int shift = 0 ){
   }
 }
 
-bool showCLineGroups( bool temporary = true ){
-  int i, len = ObjectsTotal(), shift, group_id, j = 0;
+bool showCLineGroups( double tod = 0.0, bool temporary = true ){
+  int i, shift, len = ObjectsTotal(), group_id, j = 0;
   string name, g_name, line_names[], text, g1_max, g2_max;
   color c = CornflowerBlue;
   double p1, g1_max_data[5], g2_max_data[5], limit, time_dif;
@@ -579,7 +579,12 @@ bool showCLineGroups( bool temporary = true ){
 	g2_max_data[0] = 0.0;
   
   removeObjects("group_idx");
-  shift = WindowLastVisibleBar() + (WindowBarsPerChart() / 3);
+	if( tod == 0.0 ){
+		shift = WindowLastVisibleBar() + (WindowBarsPerChart() / 3);
+	}else{
+		shift = iBarShift( NULL, 0, tod );
+	}
+	
   for ( i = 0; i < len; i++){
     name = ObjectName(i);
     if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
@@ -644,7 +649,7 @@ bool showCLineGroups( bool temporary = true ){
     }
     
     if( ObjectFind(g_name) == -1 ){
-      ObjectCreate( g_name, OBJ_TEXT, 0, Time[shift], p1 );
+      ObjectCreate( g_name, OBJ_TEXT, 0, tod, p1 );
       ObjectSetText( g_name, text, 11, "Arial", c );
     }
   }
