@@ -1,9 +1,9 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=3124
+period=15
+leftpos=6942
 digits=5
-scale=4
+scale=8
 graph=1
 fore=0
 grid=0
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1340385000
+time_0=1340380080
 </object>
 <object>
 type=2
@@ -462,6 +462,21 @@ time_0=1336140000
 value_0=1.292737
 time_1=1338841800
 value_1=1.225107
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 9923
+period_flags=0
+create_time=1340352195
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338555600
+value_0=1.228800
+time_1=1340082000
+value_1=1.247013
 ray=1
 </object>
 </indicator>
