@@ -698,7 +698,7 @@ bool readCLinesFromFile( string &file_name ){
 double barSpeed( string cLine ){
   double p1 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 0 );
   double p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 1 );
-  double speed = -1, dist, h, l, dif = MathAbs( p1 - p2 ) * 0.4;
+  double peri, speed, dist, h, l, dif = MathAbs( p1 - p2 ) * 0.4;
   int i = 2;
   if( p2 > p1 ){
     while( p2 > p1 && p2 - p1 > dif ){
@@ -707,7 +707,6 @@ double barSpeed( string cLine ){
       i++;
     }
     dist = ( (iHigh( NULL, PERIOD_M15, i - 2 ) - iLow( NULL, PERIOD_M15, 0 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
-    speed = dist / (i - 1);
     h = iHigh( NULL, PERIOD_M15, i - 2 );
     l = iLow( NULL, PERIOD_M15, 0 );
   }else{
@@ -719,10 +718,11 @@ double barSpeed( string cLine ){
     dist = ( (iHigh( NULL, PERIOD_M15, 0 ) - iLow( NULL, PERIOD_M15, i - 2 )) / MarketInfo( Symbol(), MODE_POINT ) ) * MarketInfo( Symbol(), MODE_TICKVALUE );
     h = iHigh( NULL, PERIOD_M15, 0 );
     l = iLow( NULL, PERIOD_M15, i - 2 );
-    speed = dist / (i - 1);
   }
+	peri = (i - 2) + ( MathMod( Minute(), PERIOD_M15 ) / PERIOD_M15 );
+	speed = dist / peri;
   if( speed > CT_SPEED_LIMIT ){
-    log( StringConcatenate( "Bar SPEED is too fast! Cline: ", cLine," Speed: ", DoubleToStr(speed, 2), " Bar nr:", i-1, " high:", DoubleToStr( h, Digits ), " low:", DoubleToStr( l , Digits ), " (", Symbol(), ")" ), speed );
+    log( StringConcatenate( "Bar SPEED is too fast! Cline: ", cLine," Speed: ", DoubleToStr(speed, 2), " Bar nr:", i-1, " (", DoubleToStr( peri, 2 ),") high:", DoubleToStr( h, Digits ), " low:", DoubleToStr( l , Digits ), " (", Symbol(), ")" ), speed );
     return (0.0);
   }else{
     return (speed);
