@@ -61,24 +61,99 @@ int start(){
 	setZigZagArr( PERIOD_H4, from, to, H4_FACTOR );
 	setZigZagArr( PERIOD_D1, from, to, D1_FACTOR );
 	setZigZagArr( PERIOD_W1, from, to, W1_FACTOR );
-                                 
-	int i = 0, j, nr = 0, len = WindowFirstVisibleBar(), zz_len = ArrayRange( ZIGZAG, 0 );
-	double h, l, offset = 2.5 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+       
+  string name = "DT_GO_tf";
+  ObjectCreate(name, OBJ_TREND, 0, 0, 0, 0, 0);
+  ObjectSet(name, OBJPROP_RAY, true);
+       
+  int nr = 0, i, j, k, m, prop1_from = WindowFirstVisibleBar(), prop2_to = 0, zz_len = ArrayRange( ZIGZAG, 0 );
+  int prop1_to = prop1_from - (prop1_from / 3), prop2_from = prop1_from / 3;
+  bool prop1_low = false, prop2_low = false;
+  double res[][7], p1, p2, price, hl_offset = 0.5 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = 0.5 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+  
+  for( i = prop1_from; i > prop1_to; i-- ){
+    if( prop1_low ){
+      p1 = Low[j];
+      prop1_low = false;
+    }else{
+      p1 = High[j];
+      prop1_low = true;
+    }
+      
+    for( j = prop2_from; j > prop2_to; j-- ){
+      if( prop2_low ){
+        p2 = Low[j];
+        prop2_low = false;
+      }else{
+        p2 = High[j];
+        prop2_low = true;
+      }
+  
+      ArrayResize( res, nr + 1 );
+      res[nr][0] = Time[i];
+      res[nr][1] = p1;
+      res[nr][2] = Time[j];
+      res[nr][3] = p2;
+      res[nr][4] = 0;
+      res[nr][5] = 0;
+      res[nr][6] = 0;
+      
+      ObjectSet( name, OBJPROP_TIME1, Time[i] );
+      ObjectSet( name, OBJPROP_PRICE1, p1 );
+      ObjectSet( name, OBJPROP_TIME2, Time[j] );
+      ObjectSet( name, OBJPROP_PRICE2, p2 );
+      
+      for( k = i; k > prop2_to; k-- ){
+        price = ObjectGetValueByShift( name, k );
+        if( MathAbs( price - Low[j] ) < hl_offset ){
+          res[nr][4] = res[nr][4] + 1;
+        }
+        
+        if( MathAbs( price - High[j] ) < hl_offset ){
+          res[nr][4] = res[nr][4] + 1;
+        }
+        
+        for( m = 0; m < zz_len; m++ ){
+          if( Time[i] == ZIGZAG[m][0] ){
+            if( MathAbs( price - ZIGZAG[m][1] ) < zz_offset ){
+              if( ZIGZAG[m][3] == 1 ){
+                res[nr][5] = res[nr][5] + ZIGZAG[m][2];
+              }else{
+                res[nr][6] = res[nr][6] + ZIGZAG[m][2];
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+	
+  int len = ArrayRange( res, 0 ), hl_max_id, zz_max_id;
+  double tmp, hl_max = 0, zz_max = 0;
+  
+	for( i = 0; i < len; i++ ){
+    if( res[nr][4] > hl_max ){
+      hl_max = res[nr][4];
+      hl_max_id = i;
+    }
+    
+    tmp = res[nr][5] + res[nr][6];
+    if( tmp > zz_max ){
+      zz_max = tmp;
+      zz_max_id = i;
+    }
+  }
+  
+  ObjectSet( name, OBJPROP_TIME1, res[hl_max_id][0] );
+  ObjectSet( name, OBJPROP_PRICE1, res[hl_max_id][1] );
+  ObjectSet( name, OBJPROP_TIME2, res[hl_max_id][2] );
+  ObjectSet( name, OBJPROP_PRICE2, res[hl_max_id][3] );
 
-	for( ; i < len; i++ ){
-		h = High[i];
-		l = Low[i];
-		for( j = 0; j < zz_len; j++ ){
-			if( Time[i] == ZIGZAG[j][0] ){
-				if( MathAbs( h - ZIGZAG[j][1] ) < offset ){
-					ArrayResize( tmp_arr, nr + 1 );
-
-				}
-			}
-		}
-	}
-
-	Alert(ArrayRange( ZIGZAG, 0 ));
+  ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
+  ObjectSet(name+"_zz", OBJPROP_RAY, true);
+  
+  Alert("HL max:"+hl_max+" ZZ max:"+zz_max);
+  
   return (0);
 }
 
