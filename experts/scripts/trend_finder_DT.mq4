@@ -53,8 +53,16 @@ int start(){
     // h = High[idx];
     // l = Low[idx];
   // }
-	double from = Time[0];
-	double to = Time[WindowFirstVisibleBar()];
+  
+  ObjectCreate( "DT_BO_trend_finder_hud", OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_CORNER, 0 );
+  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_XDISTANCE, 600 );
+  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_YDISTANCE, 0 );
+  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_BACK, true);
+  ObjectSetText( "DT_BO_trend_finder_hud", "0%", 11, "Arial", Red );
+  
+	double from = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 ) );
+	double to = 0;
 
 	setZigZagArr( PERIOD_M15, from, to, M15_FACTOR );
 	setZigZagArr( PERIOD_H1, from, to, H1_FACTOR );
@@ -66,17 +74,17 @@ int start(){
   ObjectCreate(name, OBJ_TREND, 0, 0, 0, 0, 0);
   ObjectSet(name, OBJPROP_RAY, true);
        
-  int nr = 0, i, j, k, m, prop1_from = WindowFirstVisibleBar(), prop2_to = 0, zz_len = ArrayRange( ZIGZAG, 0 );
+  int nr = -1, i, j, k, m, prop1_from = from, prop2_to = 0, zz_len = ArrayRange( ZIGZAG, 0 );
   int prop1_to = prop1_from - (prop1_from / 3), prop2_from = prop1_from / 3;
   bool prop1_low = false, prop2_low = false;
-  double res[][7], p1, p2, price, hl_offset = 0.5 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = 0.5 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+  double percent, res[][7], p1, p2, price, hl_offset = 20 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = 60 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
   
   for( i = prop1_from; i > prop1_to; i-- ){
     if( prop1_low ){
-      p1 = Low[j];
+      p1 = Low[i];
       prop1_low = false;
     }else{
-      p1 = High[j];
+      p1 = High[i];
       prop1_low = true;
     }
       
@@ -88,33 +96,37 @@ int start(){
         p2 = High[j];
         prop2_low = true;
       }
-  
+      
+      nr++;
       ArrayResize( res, nr + 1 );
       res[nr][0] = Time[i];
       res[nr][1] = p1;
       res[nr][2] = Time[j];
       res[nr][3] = p2;
-      res[nr][4] = 0;
-      res[nr][5] = 0;
-      res[nr][6] = 0;
+      res[nr][4] = 0.0;
+      res[nr][5] = 0.0;
+      res[nr][6] = 0.0;
       
       ObjectSet( name, OBJPROP_TIME1, Time[i] );
       ObjectSet( name, OBJPROP_PRICE1, p1 );
       ObjectSet( name, OBJPROP_TIME2, Time[j] );
       ObjectSet( name, OBJPROP_PRICE2, p2 );
-      
+
       for( k = i; k > prop2_to; k-- ){
         price = ObjectGetValueByShift( name, k );
-        if( MathAbs( price - Low[j] ) < hl_offset ){
+        if( MathAbs( price - Low[k] ) < hl_offset ){
           res[nr][4] = res[nr][4] + 1;
         }
         
-        if( MathAbs( price - High[j] ) < hl_offset ){
+        if( MathAbs( price - High[k] ) < hl_offset ){
           res[nr][4] = res[nr][4] + 1;
         }
-        
+// Alert( k+" "+MathAbs( price - Low[k] )+" "+(MathAbs( price - Low[k] ) < hl_offset)+" "+ MathAbs( price - High[k] )+" "+(MathAbs( price - High[k] ) < hl_offset));
+// Sleep(1000);
+// continue;
+
         for( m = 0; m < zz_len; m++ ){
-          if( Time[i] == ZIGZAG[m][0] ){
+          if( Time[k] == ZIGZAG[m][0] ){
             if( MathAbs( price - ZIGZAG[m][1] ) < zz_offset ){
               if( ZIGZAG[m][3] == 1 ){
                 res[nr][5] = res[nr][5] + ZIGZAG[m][2];
@@ -126,6 +138,9 @@ int start(){
         }
       }
     }
+    percent = prop1_from - i;
+    percent = ( percent / (prop1_from - prop1_to) ) * 100;
+    ObjectSetText( "DT_BO_trend_finder_hud", StringConcatenate( DoubleToStr( percent, 0), "%" ), 11 );
   }
 	
   int len = ArrayRange( res, 0 ), hl_max_id, zz_max_id;
@@ -149,16 +164,16 @@ int start(){
   ObjectSet( name, OBJPROP_TIME2, res[hl_max_id][2] );
   ObjectSet( name, OBJPROP_PRICE2, res[hl_max_id][3] );
 
-  ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
-  ObjectSet(name+"_zz", OBJPROP_RAY, true);
+  // ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
+  // ObjectSet(name+"_zz", OBJPROP_RAY, true);
   
   Alert("HL max:"+hl_max+" ZZ max:"+zz_max);
   
   return (0);
 }
 
-void setZigZagArr( int tf, double from, double to, double factor ){
-  int i = iBarShift( NULL, tf, MathMax(from, to) ), limit = iBarShift( NULL, tf, MathMin(from, to) ), len = ArrayRange( ZIGZAG, 0 );
+void setZigZagArr( int tf, int from, int to, double factor ){
+  int i = MathMax( from, to ), limit = MathMin( from, to) , len = ArrayRange( ZIGZAG, 0 );
 	double prev, price = 0.0, tmp;
 	string sym = Symbol();
 
