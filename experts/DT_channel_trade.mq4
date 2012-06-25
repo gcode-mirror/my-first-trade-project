@@ -21,7 +21,7 @@
 #define CT_SL_FACTOR 1.3
 #define CT_SPEED_LIMIT 140.0
 #define CT_POS_DIF_TIME 21600 // 6 hour
-#define CT_TP_FIBO 0.236 // 6 hour
+#define CT_TP_FIBO 0.232 // 0.236
 
 string CT_CLINES[][3];
 
