@@ -64,12 +64,17 @@ int start(){
 	double from = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 ) );
 	double to = 0;
 
-	setZigZagArr( PERIOD_M15, from, to, M15_FACTOR );
-	setZigZagArr( PERIOD_H1, from, to, H1_FACTOR );
-	setZigZagArr( PERIOD_H4, from, to, H4_FACTOR );
-	setZigZagArr( PERIOD_D1, from, to, D1_FACTOR );
-	setZigZagArr( PERIOD_W1, from, to, W1_FACTOR );
-       
+  ArrayResize( ZIGZAG, from + 1 );
+  ArrayInitialize( ZIGZAG, 0.0 );
+  
+	setZigZagArr( PERIOD_M15, iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, M15_FACTOR );
+	setZigZagArr( PERIOD_H1, iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, H1_FACTOR );
+	// setZigZagArr( PERIOD_H4, iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, H4_FACTOR );
+	// setZigZagArr( PERIOD_D1, iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, D1_FACTOR );
+	// setZigZagArr( PERIOD_W1, iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, W1_FACTOR );
+  
+  
+  
   string name = "DT_GO_tf";
   ObjectCreate(name, OBJ_TREND, 0, 0, 0, 0, 0);
   ObjectSet(name, OBJPROP_RAY, true);
@@ -78,8 +83,12 @@ int start(){
   int prop1_to = prop1_from - (prop1_from / 3), prop2_from = prop1_from / 3;
   bool prop1_low = false, prop2_low = false;
   double percent, res[][7], p1, p2, price, hl_offset = 20 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = 60 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
-  
-  for( i = prop1_from; i > prop1_to; i-- ){
+
+  // for( i = 0; i < from; i++ ){
+    // Alert(i+" "+ZIGZAG[i][0]+" "+ZIGZAG[i][1]+" "+ZIGZAG[i][2]+" "+ZIGZAG[i][3]);
+  // }
+    // return (0);
+  for( i = prop1_from; i >= prop1_to; i-- ){
     if( prop1_low ){
       p1 = Low[i];
       prop1_low = false;
@@ -88,7 +97,7 @@ int start(){
       prop1_low = true;
     }
       
-    for( j = prop2_from; j > prop2_to; j-- ){
+    for( j = prop2_from; j >= prop2_to; j-- ){
       if( prop2_low ){
         p2 = Low[j];
         prop2_low = false;
@@ -112,7 +121,7 @@ int start(){
       ObjectSet( name, OBJPROP_TIME2, Time[j] );
       ObjectSet( name, OBJPROP_PRICE2, p2 );
 
-      for( k = i; k > prop2_to; k-- ){
+      for( k = i; k >= prop2_to; k-- ){
         price = ObjectGetValueByShift( name, k );
         if( MathAbs( price - Low[k] ) < hl_offset ){
           res[nr][4] = res[nr][4] + 1;
@@ -124,15 +133,13 @@ int start(){
 // Alert( k+" "+MathAbs( price - Low[k] )+" "+(MathAbs( price - Low[k] ) < hl_offset)+" "+ MathAbs( price - High[k] )+" "+(MathAbs( price - High[k] ) < hl_offset));
 // Sleep(1000);
 // continue;
-
-        for( m = 0; m < zz_len; m++ ){
-          if( Time[k] == ZIGZAG[m][0] ){
-            if( MathAbs( price - ZIGZAG[m][1] ) < zz_offset ){
-              if( ZIGZAG[m][3] == 1 ){
-                res[nr][5] = res[nr][5] + ZIGZAG[m][2];
-              }else{
-                res[nr][6] = res[nr][6] + ZIGZAG[m][2];
-              }
+        if( ZIGZAG[k][0] != 0.0 ){
+        // Alert(k+" || "+ZIGZAG[k][2]);
+          if( MathAbs( price - ZIGZAG[k][1] ) < zz_offset ){
+            if( ZIGZAG[k][3] == 1 ){
+              res[nr][5] = res[nr][5] + ZIGZAG[k][2];
+            }else{
+              res[nr][6] = res[nr][6] + ZIGZAG[k][2];
             }
           }
         }
@@ -147,12 +154,12 @@ int start(){
   double tmp, hl_max = 0, zz_max = 0;
   
 	for( i = 0; i < len; i++ ){
-    if( res[nr][4] > hl_max ){
-      hl_max = res[nr][4];
+    if( res[i][4] > hl_max ){
+      hl_max = res[i][4];
       hl_max_id = i;
     }
     
-    tmp = res[nr][5] + res[nr][6];
+    tmp = res[i][5] + res[i][6] + res[i][4];
     if( tmp > zz_max ){
       zz_max = tmp;
       zz_max_id = i;
@@ -164,35 +171,44 @@ int start(){
   ObjectSet( name, OBJPROP_TIME2, res[hl_max_id][2] );
   ObjectSet( name, OBJPROP_PRICE2, res[hl_max_id][3] );
 
-  // ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
-  // ObjectSet(name+"_zz", OBJPROP_RAY, true);
+  ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
+  ObjectSet( name+"_zz", OBJPROP_TIME1, res[zz_max_id][0] );
+  ObjectSet( name+"_zz", OBJPROP_PRICE1, res[zz_max_id][1] );
+  ObjectSet( name+"_zz", OBJPROP_TIME2, res[zz_max_id][2] );
+  ObjectSet( name+"_zz", OBJPROP_PRICE2, res[zz_max_id][3] );
+  ObjectSet(name+"_zz", OBJPROP_RAY, true);
   
-  Alert("HL max:"+hl_max+" ZZ max:"+zz_max);
+  Alert("HL max:"+hl_max+"/"+hl_max_id+" ZZ max:"+zz_max+"/"+zz_max_id);
   
   return (0);
 }
 
 void setZigZagArr( int tf, int from, int to, double factor ){
-  int i = MathMax( from, to ), limit = MathMin( from, to) , len = ArrayRange( ZIGZAG, 0 );
-	double prev, price = 0.0, tmp;
-	string sym = Symbol();
-
-	prev = getZigZag( tf, ZZ_DEPH, ZZ_DEV, ZZ_BACKSTEP, i + 1, tmp );
-  while( i < limit ){
-		price = iCustom( sym, tf, "ZigZag", ZZ_DEPH, ZZ_DEV, ZZ_BACKSTEP, 0, i );
-		if( price != 0.0 ){
-			ArrayResize( ZIGZAG, len + 1 );
-			ZIGZAG[len][0] = iTime( NULL, tf, i );
-			ZIGZAG[len][1] = price;
-			ZIGZAG[len][2] = factor;
-			if( prev < price ){
-				ZIGZAG[len][3] = 1;
-			}else{
-				ZIGZAG[len][3] = -1;
-			}
-			prev = price;
-			len++;
-		}
-		i++;
-	}
+  int i = from, j, step;
+  string sym = Symbol();
+  double price;
+  
+  for( ;i >= to; i-- ){
+    price = iCustom( sym, tf, "ZigZag", ZZ_DEPH, ZZ_DEV, ZZ_BACKSTEP, 0, i );
+    if( price != 0.0 ){
+      if( tf != PERIOD_M15 ){
+        j = iBarShift( NULL , PERIOD_M15, iTime( NULL, tf, i ) );
+        step = j - (tf / PERIOD_M15);
+        for( ;j >= step; j-- ){
+          if( ZIGZAG[j][1] == price ){
+            ZIGZAG[j][2] = ZIGZAG[j][2] + factor;
+          }
+        }
+      }else{
+        ZIGZAG[i][0] = iTime( NULL, tf, i );
+        ZIGZAG[i][1] = price;
+        ZIGZAG[i][2] = factor;
+        if( iHigh( NULL, PERIOD_M15, i ) == price ){
+          ZIGZAG[i][3] = 1;
+        }else{
+          ZIGZAG[i][3] = -1;
+        }
+      }
+    }
+  }
 }

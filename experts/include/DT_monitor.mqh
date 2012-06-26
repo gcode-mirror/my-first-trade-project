@@ -64,7 +64,13 @@ bool startMonitor(string isOn){
     log_nr = DoubleToStr( GlobalVariableGet( "CT_NR_OF_LOGS" ), 0 );
   }
   
-  out = StringConcatenate( out, log_nr, ";", DoubleToStr( profit_sum, 0 ), ";\r\n" );
+  if( profit_sum == 0 ){
+    profit_txt = "0.001";
+  }else{
+    profit_txt = DoubleToStr( profit_sum, 0 );
+  }
+  
+  out = StringConcatenate( out, log_nr, ";", profit_txt, ";\r\n" );
   
   int handle;   
   handle=FileOpen("notify.bin", FILE_BIN|FILE_WRITE);

@@ -20,7 +20,7 @@ our $LOG_LABEL;
 our $LOG_LABEL_TXT = 0;
 
 our $PROFIT_SUM_LABEL;
-our $PROFIT_SUM_TXT = 0;
+our $PROFIT_SUM_TXT = 0.001;
 
 our $FLIP_WINDOW = 0;
 
@@ -151,8 +151,8 @@ sub start{
     Win32::Sound::Play($ALERT_SOUND,SND_ASYNC);
   }
 
-  if( $arr[1] == 0 ){
-    if( $PROFIT_SUM_TXT != 0 ){
+  if( $arr[1] == 0.001 ){
+    if( $PROFIT_SUM_TXT != 0.001 ){
       for($j = 0; $j <= $#WIDGETS; $j++){
         $WIDGETS[$j][4] -> g_grid_remove();
       }

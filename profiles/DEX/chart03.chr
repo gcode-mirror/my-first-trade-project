@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=60
-leftpos=5609
+period=15
+leftpos=6969
 digits=3
 scale=4
 graph=1
@@ -73,12 +73,12 @@ ray=0
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1335211402
+create_time=1340730888
 color=4163021
 style=0
 weight=2
 background=1
-time_0=1340745300
+time_0=1340881200
 </object>
 <object>
 type=2
@@ -465,17 +465,17 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 56759
+object_name=Trendline 3679
 period_flags=0
-create_time=1340661175
-color=9408444
+create_time=1340739167
+color=255
 style=0
 weight=1
 background=1
-time_0=1338419400
-value_0=97.909000
-time_1=1340654400
-value_1=99.621000
+time_0=1340207100
+value_0=100.990500
+time_1=1340686800
+value_1=99.363962
 ray=1
 </object>
 <object>
