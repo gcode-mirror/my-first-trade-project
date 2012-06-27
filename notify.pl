@@ -191,7 +191,7 @@ sub flipWindow{
       $WIDGETS[$i][0] -> configure(-padding =>(($i == 0)?'2':'1').' 0 0 0');
       $WIDGETS[$i][2] -> configure(-padding => "0 -2 0 -1");
       $WIDGETS[$i][4] -> configure(-padding => "0 -2 0 -2");
-      if( $PROFIT_SUM_TXT == 0 ){
+      if( $PROFIT_SUM_TXT == 0.001 ){
         $WIDGETS[$i][4] -> g_grid_remove();
       }
     }
@@ -205,7 +205,7 @@ sub flipWindow{
       $WIDGETS[$i][2] -> configure(-padding => '-1 1 -1 -1');
       $WIDGETS[$i][4] -> configure(-padding => '-1 1 -1 -1');
 
-      if( $PROFIT_SUM_TXT == 0 ){
+      if( $PROFIT_SUM_TXT == 0.001 ){
         $WIDGETS[$i][4] -> g_grid_remove();
       }
     }
