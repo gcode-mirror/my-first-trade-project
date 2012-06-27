@@ -22,165 +22,185 @@
 #define D1_FACTOR 6.0
 #define W1_FACTOR 8.0
 
+#define HI_LOW_OFFSET 20
+#define ZIGZAG_OFFSET 60
+
+#define TOP_NR 10
+
 double ZIGZAG[0][4];
 
 int start(){
-  // double tod = WindowTimeOnDropped();
-  // int mb_id == IDCANCEL;
-
-  // if( ObjectFind( "DT_GO_trend_finder_limit" ) == -1 ){
-    // mb_id = MessageBox( "Search trend from Forward(D&D => Time[0]) or Backward(Line <= D&D)?", "Trend finder", MB_YESNOCANCEL|MB_ICONQUESTION );
-    // if( mb_id == IDCANCEL ){
-      // return (0);
-    // }
-  // }
-
-  // if( mb_id == IDNO ){
-    // ObjectCreate( "DT_GO_trend_finder_limit", OBJ_VLINE, 0, tod, 0 );
-    // ObjectSet( "DT_GO_trend_finder_limit", OBJPROP_COLOR, Red );
-    // ObjectSet( "DT_GO_trend_finder_limit", OBJPROP_BACK, true );
-    // ObjectSet( "DT_GO_trend_finder_limit", OBJPROP_WIDTH, 2 );
-    // return (0);
-  // }
-
-  // double start_time, end_time;
-  // if( ObjectFind( "DT_GO_trend_finder_limit" ) == -1 ){
-    // start_time = tod;
-    // end_time = Time[0];
-  // }else{
-    // double h, l;
-    // int idx = iBarShift( NULL , 0, tod );
-    // h = High[idx];
-    // l = Low[idx];
-  // }
-  
-  ObjectCreate( "DT_BO_trend_finder_hud", OBJ_LABEL, 0, 0, 0 );
-  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_CORNER, 0 );
-  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_XDISTANCE, 600 );
-  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_YDISTANCE, 0 );
-  ObjectSet( "DT_BO_trend_finder_hud", OBJPROP_BACK, true);
-  ObjectSetText( "DT_BO_trend_finder_hud", "0%", 11, "Arial", Red );
-  
-	double from = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 ) );
-	double to = 0;
-
-  ArrayResize( ZIGZAG, from + 1 );
-  ArrayInitialize( ZIGZAG, 0.0 );
-  
-	setZigZagArr( PERIOD_M15, iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, M15_FACTOR );
-	setZigZagArr( PERIOD_H1, iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, H1_FACTOR );
-	// setZigZagArr( PERIOD_H4, iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, H4_FACTOR );
-	// setZigZagArr( PERIOD_D1, iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, D1_FACTOR );
-	// setZigZagArr( PERIOD_W1, iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_trend_finder_limit", OBJPROP_TIME1 )), to, W1_FACTOR );
-  
-  
-  
-  string name = "DT_GO_tf";
-  ObjectCreate(name, OBJ_TREND, 0, 0, 0, 0, 0);
-  ObjectSet(name, OBJPROP_RAY, true);
-       
-  int nr = -1, i, j, k, m, prop1_from = from, prop2_to = 0, zz_len = ArrayRange( ZIGZAG, 0 );
-  int prop1_to = prop1_from - (prop1_from / 3), prop2_from = prop1_from / 3;
-  bool prop1_low = false, prop2_low = false;
-  double percent, res[][7], p1, p2, price, hl_offset = 20 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = 60 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
-
-  // for( i = 0; i < from; i++ ){
-    // Alert(i+" "+ZIGZAG[i][0]+" "+ZIGZAG[i][1]+" "+ZIGZAG[i][2]+" "+ZIGZAG[i][3]);
-  // }
-    // return (0);
-  for( i = prop1_from; i >= prop1_to; i-- ){
-    if( prop1_low ){
-      p1 = Low[i];
-      prop1_low = false;
-    }else{
-      p1 = High[i];
-      prop1_low = true;
+  double pod = WindowPriceOnDropped();
+  if( pod == 0.0 ){
+    if( IDNO == MessageBox(StringConcatenate("Do you really want to remove Trend Finder? ", Symbol()), "Warning delete confirmation!", MB_YESNO|MB_ICONQUESTION ) ){
+      return(0);
     }
-      
-    for( j = prop2_from; j >= prop2_to; j-- ){
-      if( prop2_low ){
-        p2 = Low[j];
-        prop2_low = false;
-      }else{
-        p2 = High[j];
-        prop2_low = true;
+    removeObjects( "trend_finder" );
+    removeObjects( "trend_finder", "GO" );
+    addComment( "Trend finder removed..." );
+    
+  }else{
+    if( Period() != PERIOD_M15 ){
+      MessageBox( StringConcatenate("You try to run Trend Finder in the wrong period! ", Symbol()), "Warning!", MB_OK );
+      return(0);
+    }
+    
+    int time_unit = WindowBarsPerChart() / 10;
+    if( setVline( "DT_GO_trend_finder_from", WindowFirstVisibleBar() - time_unit, Blue , 0 ) ||
+        setVline( "DT_GO_trend_finder_from_limit", WindowFirstVisibleBar() - (time_unit * 3), Blue , 1 ) ||
+        setVline( "DT_GO_trend_finder_to_limit", WindowFirstVisibleBar() - ( time_unit * 7 ), Red , 1 ) ||
+        setVline( "DT_GO_trend_finder_to", WindowFirstVisibleBar() - ( time_unit * 9 ), Red , 0 ) ){
+        addComment( "Trend finder prepared..." );
+        return (0);
+    }
+    
+    if( ObjectFind( "DT_GO_trend_finder_hud" ) != -1 ){
+      if( IDNO == MessageBox(StringConcatenate("Do you want to overwrite the exist list? ", Symbol()), "Warning exist list!", MB_YESNO|MB_ICONQUESTION ) ){
+        return(0);
       }
-      
-      nr++;
-      ArrayResize( res, nr + 1 );
-      res[nr][0] = Time[i];
-      res[nr][1] = p1;
-      res[nr][2] = Time[j];
-      res[nr][3] = p2;
-      res[nr][4] = 0.0;
-      res[nr][5] = 0.0;
-      res[nr][6] = 0.0;
-      
-      ObjectSet( name, OBJPROP_TIME1, Time[i] );
-      ObjectSet( name, OBJPROP_PRICE1, p1 );
-      ObjectSet( name, OBJPROP_TIME2, Time[j] );
-      ObjectSet( name, OBJPROP_PRICE2, p2 );
-
-      for( k = i; k >= prop2_to; k-- ){
-        price = ObjectGetValueByShift( name, k );
-        if( MathAbs( price - Low[k] ) < hl_offset ){
-          res[nr][4] = res[nr][4] + 1;
+    }
+    
+    removeObjects( "trend_finder_res", "GO" );
+    
+    if( ObjectFind( "DT_GO_trend_finder_hud" ) == -1 ){    
+      ObjectCreate( "DT_GO_trend_finder_hud", OBJ_LABEL, 0, 0, 0 );
+      ObjectSet( "DT_GO_trend_finder_hud", OBJPROP_CORNER, 0 );
+      ObjectSet( "DT_GO_trend_finder_hud", OBJPROP_XDISTANCE, 600 );
+      ObjectSet( "DT_GO_trend_finder_hud", OBJPROP_YDISTANCE, 0 );
+      ObjectSet( "DT_GO_trend_finder_hud", OBJPROP_BACK, true);
+      ObjectSetText( "DT_GO_trend_finder_hud", "0%", 11, "Arial", Red );
+    }
+    
+    string helper = "DT_GO_trend_finder_helper";
+    if( ObjectFind( helper ) == -1 ){
+      ObjectCreate( helper, OBJ_TREND, 0, 0, 0, 0, 0);
+      ObjectSet( helper, OBJPROP_COLOR, Black );
+      ObjectSet( helper, OBJPROP_RAY, true );
+    }
+    
+    int from_shift, from_limit_shift, to_limit_shift, to_shift;
+    from_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_from", OBJPROP_TIME1 ) );
+    from_limit_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_from_limit", OBJPROP_TIME1 ) );
+    to_limit_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_to_limit", OBJPROP_TIME1 ) );
+    to_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_trend_finder_to", OBJPROP_TIME1 ) );
+    
+    ArrayResize( ZIGZAG, from_shift + 1 );
+    ArrayInitialize( ZIGZAG, 0.0 );
+    
+    setZigZagArr( PERIOD_M15, from_shift,to_shift, M15_FACTOR );
+    setZigZagArr( PERIOD_H1, iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_trend_finder_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_trend_finder_to", OBJPROP_TIME1 )), H1_FACTOR );
+    // setZigZagArr( PERIOD_H4, iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_trend_finder_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_trend_finder_to", OBJPROP_TIME1 )), H4_FACTOR );
+    // setZigZagArr( PERIOD_D1, iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_trend_finder_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_trend_finder_to", OBJPROP_TIME1 )), D1_FACTOR );
+    // setZigZagArr( PERIOD_W1, iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_trend_finder_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_trend_finder_to", OBJPROP_TIME1 )), W1_FACTOR );
+    
+    int nr = -1, i, j, k, l, m;
+    double percent, res[][7], p1, p2, price, hl_offset = HI_LOW_OFFSET / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = ZIGZAG_OFFSET / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+    
+    for( i = from_shift; i >= from_limit_shift; i-- ){ // FROM area helper left side
+    
+      for( j = 2; j > 0; j-- ){
+        if( j == 2 ){
+          p1 = Low[i];
+        }else{
+          p1 = High[i];
         }
         
-        if( MathAbs( price - High[k] ) < hl_offset ){
-          res[nr][4] = res[nr][4] + 1;
-        }
-// Alert( k+" "+MathAbs( price - Low[k] )+" "+(MathAbs( price - Low[k] ) < hl_offset)+" "+ MathAbs( price - High[k] )+" "+(MathAbs( price - High[k] ) < hl_offset));
-// Sleep(1000);
-// continue;
-        if( ZIGZAG[k][0] != 0.0 ){
-        // Alert(k+" || "+ZIGZAG[k][2]);
-          if( MathAbs( price - ZIGZAG[k][1] ) < zz_offset ){
-            if( ZIGZAG[k][3] == 1 ){
-              res[nr][5] = res[nr][5] + ZIGZAG[k][2];
+        for( k = to_limit_shift; k >= to_shift; k-- ){  // TO area helper right side
+        
+          for( l = 2; l > 0; l-- ){
+            if( l == 2 ){
+              p2 = Low[k];
             }else{
-              res[nr][6] = res[nr][6] + ZIGZAG[k][2];
+              p2 = High[k];
+            }
+            
+            nr++;
+            ArrayResize( res, nr + 1 );
+            res[nr][0] = Time[i];
+            res[nr][1] = p1;
+            res[nr][2] = Time[k];
+            res[nr][3] = p2;
+            res[nr][4] = 0.0;
+            res[nr][5] = 0.0;
+            res[nr][6] = 0.0;
+            
+            ObjectSet( helper, OBJPROP_TIME1, Time[i] );
+            ObjectSet( helper, OBJPROP_PRICE1, p1 );
+            ObjectSet( helper, OBJPROP_TIME2, Time[k] );
+            ObjectSet( helper, OBJPROP_PRICE2, p2 );
+            
+            for( m = i; m >= to_shift; m-- ){
+              price = ObjectGetValueByShift( helper, m );
+              if( MathAbs( price - Low[m] ) < hl_offset ){
+                res[nr][4] = res[nr][4] + 1;
+              }
+              
+              if( MathAbs( price - High[m] ) < hl_offset ){
+                res[nr][4] = res[nr][4] + 1;
+              }
+              
+              if( ZIGZAG[m][0] != 0.0 ){
+                if( MathAbs( price - ZIGZAG[m][0] ) < zz_offset ){
+                  if( ZIGZAG[m][2] == 1 ){
+                    res[nr][5] = res[nr][5] + ZIGZAG[m][1];
+                  }else{
+                    res[nr][6] = res[nr][6] + ZIGZAG[m][1];
+                  }
+                }
+              }
+              
             }
           }
         }
       }
+      percent = from_shift - i;
+      ObjectSetText( "DT_GO_trend_finder_hud", StringConcatenate( DoubleToStr( ( percent / (from_shift - from_limit_shift) ) * 100, 0), "%" ), 11 );
+      WindowRedraw();
     }
-    percent = prop1_from - i;
-    percent = ( percent / (prop1_from - prop1_to) ) * 100;
-    ObjectSetText( "DT_BO_trend_finder_hud", StringConcatenate( DoubleToStr( percent, 0), "%" ), 11 );
-  }
-	
-  int len = ArrayRange( res, 0 ), hl_max_id, zz_max_id;
-  double tmp, hl_max = 0, zz_max = 0;
-  
-	for( i = 0; i < len; i++ ){
-    if( res[i][4] > hl_max ){
-      hl_max = res[i][4];
-      hl_max_id = i;
+    ObjectSetText( "DT_GO_trend_finder_hud", "Done", 11 );
+    ObjectDelete( helper );
+    
+    // ============================ TOP 10 ============================
+    int len = ArrayRange( res, 0 ), top_id = 0;
+    double tmp, top_val = 0.0;
+    for( i = 0; i < TOP_NR; i++ ){
+      for( j = 0; j < len; j++ ){
+        tmp = res[j][4] + res[j][5] + res[j][6];
+        if( tmp > top_val ){
+          top_id = j;
+        }
+      }
+      setResult( res[top_id][0], res[top_id][1], res[top_id][2], res[top_id][3], res[top_id][4], res[top_id][5], res[top_id][6] );
+      res[top_id][4] = 0.0;
+      res[top_id][5] = 0.0;
+      res[top_id][6] = 0.0;
+      top_val = 0.0;
+      top_id = 0;
     }
     
-    tmp = res[i][5] + res[i][6] + res[i][4];
-    if( tmp > zz_max ){
-      zz_max = tmp;
-      zz_max_id = i;
-    }
   }
-  
-  ObjectSet( name, OBJPROP_TIME1, res[hl_max_id][0] );
-  ObjectSet( name, OBJPROP_PRICE1, res[hl_max_id][1] );
-  ObjectSet( name, OBJPROP_TIME2, res[hl_max_id][2] );
-  ObjectSet( name, OBJPROP_PRICE2, res[hl_max_id][3] );
+}
 
-  ObjectCreate(name+"_zz", OBJ_TREND, 0, res[zz_max_id][0], res[zz_max_id][1], res[zz_max_id][2], res[zz_max_id][3]);
-  ObjectSet( name+"_zz", OBJPROP_TIME1, res[zz_max_id][0] );
-  ObjectSet( name+"_zz", OBJPROP_PRICE1, res[zz_max_id][1] );
-  ObjectSet( name+"_zz", OBJPROP_TIME2, res[zz_max_id][2] );
-  ObjectSet( name+"_zz", OBJPROP_PRICE2, res[zz_max_id][3] );
-  ObjectSet(name+"_zz", OBJPROP_RAY, true);
+void setResult( double t1, double p1, double t2, double p2, double hl_val, double zz_up_val, double zz_down_val ){
+  static int idx = 0;
+  string name = "DT_GO_trend_finder_res_" + idx, txt = StringConcatenate( idx, ". H-L:", DoubleToStr( hl_val, 0 ), "  ZZ Up:", DoubleToStr( zz_up_val, 0 ), "  ZZ Down:", DoubleToStr( zz_down_val, 0 ), "  Sum:", DoubleToStr( hl_val + zz_up_val + zz_down_val, 0 ) );
+  ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( name, OBJPROP_CORNER, 0 );
+  ObjectSet( name, OBJPROP_XDISTANCE, 7 );
+  ObjectSet( name, OBJPROP_YDISTANCE, 100 + (idx * 18) );
+  ObjectSet( name, OBJPROP_BACK, false );
+  ObjectSet( name, OBJPROP_COLOR, RoyalBlue );
+  ObjectSetText( name, txt, 10, "Arial", Red );
   
-  Alert("HL max:"+hl_max+"/"+hl_max_id+" ZZ max:"+zz_max+"/"+zz_max_id);
-  
-  return (0);
+  name = "DT_GO_trend_finder_res_line_" + idx;
+  ObjectCreate( name, OBJ_TREND, 0, t1, p1, t2, p2);
+  ObjectSet( name, OBJPROP_COLOR, Magenta );
+  ObjectSet( name, OBJPROP_RAY, true );
+  ObjectSetText( name, txt, 11, "Arial", Red );
+  // if( idx > 0 ){
+    // ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
+  // }
+  idx++;
 }
 
 void setZigZagArr( int tf, int from, int to, double factor ){
@@ -195,20 +215,30 @@ void setZigZagArr( int tf, int from, int to, double factor ){
         j = iBarShift( NULL , PERIOD_M15, iTime( NULL, tf, i ) );
         step = j - (tf / PERIOD_M15);
         for( ;j >= step; j-- ){
-          if( ZIGZAG[j][1] == price ){
-            ZIGZAG[j][2] = ZIGZAG[j][2] + factor;
+          if( ZIGZAG[j][0] == price ){
+            ZIGZAG[j][1] = ZIGZAG[j][1] + factor;
           }
         }
       }else{
-        ZIGZAG[i][0] = iTime( NULL, tf, i );
-        ZIGZAG[i][1] = price;
-        ZIGZAG[i][2] = factor;
+        ZIGZAG[i][0] = price;
+        ZIGZAG[i][1] = factor;
         if( iHigh( NULL, PERIOD_M15, i ) == price ){
-          ZIGZAG[i][3] = 1;
+          ZIGZAG[i][2] = 1;
         }else{
-          ZIGZAG[i][3] = -1;
+          ZIGZAG[i][2] = -1;
         }
       }
     }
+  }
+}
+
+bool setVline( string name, int shift, color c = Blue , int style = 1 ){
+  if( ObjectFind( name ) == -1 ){
+    ObjectCreate( name, OBJ_VLINE, 0, Time[shift], 0 );
+    ObjectSet( name, OBJPROP_COLOR, c );
+    ObjectSet( name, OBJPROP_STYLE, style );
+    return (true);
+  }else{
+    return (false);
   }
 }
