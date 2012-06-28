@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=60
-leftpos=4714
+period=15
+leftpos=7128
 digits=5
 scale=4
 graph=1
@@ -20,7 +20,7 @@ window_left=0
 window_top=0
 window_right=1036
 window_bottom=478
-window_type=2
+window_type=1
 background_color=16777215
 foreground_color=0
 barup_color=0
@@ -78,15 +78,15 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1340899200
+time_0=1340946600
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g0_all_1340008697
+object_name=DT_GO_cLine_g0_res_1340008697
 period_flags=0
-create_time=1340568521
-description=2012.06.18 08:38:17 G0 /\ \/ /\ \/ /\
-color=16711935
+create_time=1340870618
+description=2012.06.18 08:38:17 G0 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=2
 background=1
@@ -381,6 +381,21 @@ time_0=1338516000
 value_0=0.964880
 time_1=1340096400
 value_1=1.010588
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 63008
+period_flags=0
+create_time=1340864032
+color=33023
+style=0
+weight=1
+background=1
+time_0=1340125200
+value_0=1.023365
+time_1=1340856000
+value_1=1.012600
 ray=1
 </object>
 </indicator>

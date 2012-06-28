@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=5688
+leftpos=5629
 digits=3
 scale=4
 graph=1
@@ -20,7 +20,7 @@ window_left=88
 window_top=116
 window_right=1124
 window_bottom=594
-window_type=2
+window_type=1
 background_color=16777215
 foreground_color=0
 barup_color=0
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1340881200
+time_0=1340928600
 </object>
 <object>
 type=2
@@ -162,11 +162,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sup_1340653216
+object_name=DT_GO_cLine_g1_sig_1340653216
 period_flags=63
-create_time=1340646070
-description=2012.06.25 19:40:16 G1 /\ /\ /\ /\ /\
-color=3329330
+create_time=1340866006
+description=2012.06.25 19:40:16 G1
+color=15570276
 style=0
 weight=1
 background=1
@@ -353,6 +353,46 @@ value_1=0.010000
 ray=0
 </object>
 <object>
+type=10
+object_name=Fibo 24636
+period_flags=0
+create_time=1340891196
+color=255
+style=2
+weight=1
+background=0
+color2=7346457
+style2=0
+weight2=1
+time_0=1340859600
+value_0=99.472000
+time_1=1340892000
+value_1=98.322033
+levels_ray=0
+level_0=0.0000
+description_0=0.0
+level_1=0.2360
+description_1=23.6
+level_2=0.3820
+description_2=38.2
+level_3=0.5000
+description_3=50.0
+level_4=0.6180
+description_4=61.8
+level_5=1.0000
+description_5=100.0
+level_6=1.6180
+description_6=161.8
+level_7=2.6180
+description_7=261.8
+level_8=4.2360
+description_8=423.6
+level_9=-0.2360
+description_9=-23
+level_10=-0.3060
+description_10=-306
+</object>
+<object>
 type=2
 object_name=Trendline 1338495250
 period_flags=0
@@ -461,21 +501,6 @@ time_0=1334826000
 value_0=107.348000
 time_1=1338577200
 value_1=95.028840
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 3679
-period_flags=0
-create_time=1340739167
-color=255
-style=0
-weight=1
-background=1
-time_0=1340207100
-value_0=100.990500
-time_1=1340686800
-value_1=99.363962
 ray=1
 </object>
 <object>
