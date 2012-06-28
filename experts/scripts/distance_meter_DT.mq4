@@ -36,7 +36,7 @@ int start(){
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
-    if( ( mb_id == IDYES && (StringSubstr( name, 0, 5 ) == "Trend" || StringSubstr( name, 0, 5 ) == "Horiz" || StringSubstr( name, 5, 7 ) == "_cLine_") ) || ( mb_id == IDNO && StringSubstr( name, 5, 7 ) == "_cLine_" ) ){
+    if( ( mb_id == IDYES && (ObjectType( name ) == OBJ_TREND || ObjectType( name ) == OBJ_HLINE || StringSubstr( name, 5, 7 ) == "_cLine_") ) || ( mb_id == IDNO && StringSubstr( name, 5, 7 ) == "_cLine_" ) && ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
     
       trade_line_price = getClineValueByShift( name, shift );
       

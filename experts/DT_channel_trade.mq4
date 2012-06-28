@@ -662,7 +662,7 @@ bool hasClineHistoryPosition( int magic ){
 }
 
 bool readCLinesFromFile( string &file_name ){
-	string in ,arr[7]; // name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, col = 5, type = 6
+	string in, arr[7]; // name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, col = 5, type = 6
   int j = 0, handle;
   double time_0_p;
 

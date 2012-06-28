@@ -23,7 +23,7 @@
 #define W1_FACTOR 8.0
 
 #define HI_LOW_OFFSET 20
-#define ZIGZAG_OFFSET 60
+#define ZIGZAG_OFFSET 50
 
 #define TOP_NR 10
 
@@ -35,16 +35,11 @@ int start(){
     if( IDNO == MessageBox(StringConcatenate("Do you really want to remove Trend Finder? ", Symbol()), "Warning delete confirmation!", MB_YESNO|MB_ICONQUESTION ) ){
       return(0);
     }
-    removeObjects( "trend_finder" );
-    removeObjects( "trend_finder", "GO" );
+    removeObjects( "TF_" );
+    removeObjects( "TF_", "GO" );
     addComment( "Trend finder removed..." );
     
   }else{
-    if( Period() != PERIOD_M15 ){
-      MessageBox( StringConcatenate("You try to run Trend Finder in the wrong period! ", Symbol()), "Warning!", MB_OK );
-      return(0);
-    }
-    
     int time_unit = WindowBarsPerChart() / 10;
     if( setVline( "DT_GO_TF_from", WindowFirstVisibleBar() - time_unit, Blue , 0 ) ||
         setVline( "DT_GO_TF_from_limit", WindowFirstVisibleBar() - (time_unit * 3), Blue , 1 ) ||
@@ -54,13 +49,19 @@ int start(){
         return (0);
     }
     
+    if( Period() != PERIOD_M15 ){
+      MessageBox( StringConcatenate("You try to run Trend Finder in the wrong period! ", Symbol()), "Warning!", MB_OK );
+      return(0);
+    }
+    
     if( ObjectFind( "DT_GO_TF_hud" ) != -1 ){
       if( IDNO == MessageBox(StringConcatenate("Do you want to overwrite the exist list? ", Symbol()), "Warning exist list!", MB_YESNO|MB_ICONQUESTION ) ){
         return(0);
       }
     }
     
-    removeObjects( "trend_finder_res", "GO" );
+    removeObjects( "TF_cLine", "GO" );
+    removeObjects( "TF_list", "GO" );
     
     if( ObjectFind( "DT_GO_TF_hud" ) == -1 ){    
       ObjectCreate( "DT_GO_TF_hud", OBJ_LABEL, 0, 0, 0 );
@@ -113,7 +114,7 @@ int start(){
             }else{
               p2 = High[k];
             }
-            
+
             nr++;
             ArrayResize( res, nr + 1 );
             res[nr][0] = Time[i];
@@ -155,7 +156,7 @@ int start(){
       }
       percent = from_shift - i;
       ObjectSetText( "DT_GO_TF_hud", StringConcatenate( DoubleToStr( ( percent / (from_shift - from_limit_shift) ) * 100, 0), "%" ), 11 );
-      WindowRedraw();
+      // WindowRedraw();
     }
     ObjectSetText( "DT_GO_TF_hud", "Done", 11 );
     ObjectDelete( helper );
@@ -167,6 +168,7 @@ int start(){
       for( j = 0; j < len; j++ ){
         tmp = res[j][4] + res[j][5] + res[j][6];
         if( tmp > top_val ){
+          top_val = tmp;
           top_id = j;
         }
       }
@@ -182,24 +184,29 @@ int start(){
 }
 
 void setResult( double t1, double p1, double t2, double p2, double hl_val, double zz_up_val, double zz_down_val ){
-  static int idx = 0;
-  string name = "DT_GO_TF_list_" + idx, txt = StringConcatenate( idx, ". H-L:", DoubleToStr( hl_val, 0 ), "  ZZ Up:", DoubleToStr( zz_up_val, 0 ), "  ZZ Down:", DoubleToStr( zz_down_val, 0 ), "  Sum:", DoubleToStr( hl_val + zz_up_val + zz_down_val, 0 ) );
+  static int idx = 10;
+  string name = "DT_GO_TF_list_" + idx, txt = StringConcatenate( (idx - 10), ". HL:", DoubleToStr( hl_val, 0 ), "  ZZ Up:", DoubleToStr( zz_up_val, 0 ), "  ZZ Down:", DoubleToStr( zz_down_val, 0 ), "  Sum:", DoubleToStr( hl_val + zz_up_val + zz_down_val, 0 ) );
   ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
   ObjectSet( name, OBJPROP_CORNER, 0 );
   ObjectSet( name, OBJPROP_XDISTANCE, 7 );
-  ObjectSet( name, OBJPROP_YDISTANCE, 100 + (idx * 18) );
+  ObjectSet( name, OBJPROP_YDISTANCE, 100 + ((idx - 10) * 18) );
   ObjectSet( name, OBJPROP_BACK, false );
-  ObjectSet( name, OBJPROP_COLOR, RoyalBlue );
   ObjectSetText( name, txt, 10, "Arial", Red );
+  if( idx > 10 ){
+    ObjectSet( name, OBJPROP_COLOR, RoyalBlue );
+  }else{
+    ObjectSet( name, OBJPROP_COLOR, OrangeRed );
+  }
+  
   
   name = "DT_GO_TF_cLine_" + idx;
   ObjectCreate( name, OBJ_TREND, 0, t1, p1, t2, p2);
   ObjectSet( name, OBJPROP_COLOR, Magenta );
   ObjectSet( name, OBJPROP_RAY, true );
   ObjectSetText( name, txt, 11, "Arial", Red );
-  // if( idx > 0 ){
-    // ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
-  // }
+  if( idx > 10 ){
+    ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
+  }
   idx++;
 }
 
