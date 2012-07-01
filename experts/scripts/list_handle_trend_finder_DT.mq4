@@ -33,36 +33,35 @@ int start(){
     }
     
     if( list_name != "" && StringSubstr( name, 5, 9 ) == "_TF_list_" ){
-      int tf_id;
-      string list_id = StringSubstr( list_name, 14, 2 );
       if( ObjectGet( list_name, OBJPROP_COLOR ) == OrangeRed ){
-        ObjectSet( list_name, OBJPROP_COLOR, RoyalBlue );
-        tf_id = -1;
+				selectItem( list_name, -1 );
       }else{
-        ObjectSet( list_name, OBJPROP_COLOR, OrangeRed );
-        tf_id = 0;
+				selectItem( list_name, 0 );
       }
       
-      ObjectSet( "DT_GO_TF_cLine_" + list_id , OBJPROP_TIMEFRAMES, tf_id );
-      for( i = 0; i< obj_total; i++ ) {
-        name = ObjectName(i);
-        if( StringSubstr( name, 0, 21 ) == "DT_GO_TF_cLine_sub_" + list_id ){
-          ObjectSet( name, OBJPROP_TIMEFRAMES, tf_id );
-        }
-      }
       
     }else{
       addComment("Can not find line!",1);
     }
   }else{
+		int select_nr = 0, visibility = 0;
     for( i = 0; i < obj_total; i++ ) {
       name = ObjectName(i);
       if( StringSubstr( name, 5, 9 ) == "_TF_list_" ){
-        if( ObjectGet( name, OBJPROP_TIMEFRAMES ) == 0 ){
-          ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
-        }else{
-          ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
+        if( ObjectGet( name, OBJPROP_COLOR ) == OrangeRed ){
+          select_nr++;
         }
+      }
+    }
+		
+		if( select_nr > 1 ){
+			visibility = -1;
+		}
+		
+		for( i = 0; i < obj_total; i++ ) {
+      name = ObjectName(i);
+      if( StringSubstr( name, 5, 9 ) == "_TF_list_" ){
+				selectItem( name, visibility );
       }
     }
   }
@@ -70,3 +69,23 @@ int start(){
   return(0);
 }
 
+bool selectItem( string list_name, int visibility ){
+	string name;
+  int i, obj_total = ObjectsTotal();
+	string list_id = StringSubstr( list_name, 14, 2 );
+	
+	if( visibility == -1 ){
+		ObjectSet( list_name, OBJPROP_COLOR, RoyalBlue );
+	}else{
+		ObjectSet( list_name, OBJPROP_COLOR, OrangeRed );
+	}
+	
+	ObjectSet( "DT_GO_TF_cLine_" + list_id , OBJPROP_TIMEFRAMES, visibility );
+	for( i = 0; i < obj_total; i++ ) {
+		name = ObjectName(i);
+		if( StringSubstr( name, 0, 21 ) == "DT_GO_TF_cLine_sub_" + list_id ){
+			ObjectSet( name, OBJPROP_TIMEFRAMES, visibility );
+		}
+	}
+
+}

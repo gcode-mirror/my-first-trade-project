@@ -25,6 +25,8 @@
 #define HI_LOW_OFFSET 20
 #define ZIGZAG_OFFSET 50
 
+#define RES_CLOSENESS 70
+
 #define TOP_NR 10
 
 double ZIGZAG[0][4];
@@ -42,11 +44,11 @@ int start(){
   }else{
     int time_unit = WindowBarsPerChart() / 10;
     if( setVline( "DT_GO_TF_from", WindowFirstVisibleBar() - time_unit, Blue , 0 ) ||
-        setVline( "DT_GO_TF_from_limit", WindowFirstVisibleBar() - (time_unit * 3), Blue , 1 ) ||
-        setVline( "DT_GO_TF_to_limit", WindowFirstVisibleBar() - ( time_unit * 7 ), Red , 1 ) ||
-        setVline( "DT_GO_TF_to", WindowFirstVisibleBar() - ( time_unit * 9 ), Red , 0 ) ){
-        addComment( "Trend finder prepared..." );
-        return (0);
+			setVline( "DT_GO_TF_from_limit", WindowFirstVisibleBar() - (time_unit * 3), Blue , 1 ) ||
+			setVline( "DT_GO_TF_to_limit", WindowFirstVisibleBar() - ( time_unit * 7 ), Red , 1 ) ||
+			setVline( "DT_GO_TF_to", WindowFirstVisibleBar() - ( time_unit * 9 ), Red , 0 ) ){
+			addComment( "Trend finder prepared..." );
+			return (0);
     }
     
     if( Period() != PERIOD_M15 ){
@@ -84,20 +86,25 @@ int start(){
     from_limit_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_TF_from_limit", OBJPROP_TIME1 ) );
     to_limit_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_TF_to_limit", OBJPROP_TIME1 ) );
     to_shift = iBarShift( NULL , PERIOD_M15, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 ) );
-    
+		
     ArrayResize( ZIGZAG, from_shift + 1 );
     ArrayInitialize( ZIGZAG, 0.0 );
     
     setZigZagArr( PERIOD_M15, from_shift,to_shift, M15_FACTOR );
     setZigZagArr( PERIOD_H1, iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_H1, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), H1_FACTOR );
-    // setZigZagArr( PERIOD_H4, iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), H4_FACTOR );
-    // setZigZagArr( PERIOD_D1, iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), D1_FACTOR );
-    // setZigZagArr( PERIOD_W1, iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), W1_FACTOR );
+    setZigZagArr( PERIOD_H4, iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_H4, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), H4_FACTOR );
+    setZigZagArr( PERIOD_D1, iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_D1, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), D1_FACTOR );
+    setZigZagArr( PERIOD_W1, iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_TF_from", OBJPROP_TIME1 )), iBarShift( NULL , PERIOD_W1, ObjectGet( "DT_GO_TF_to", OBJPROP_TIME1 )), W1_FACTOR );
     
-    int nr = -1, i, j, k, l, m;
+    int nr = 0, i, j, k, l, m, close_p1_shift = 200;
     double percent, res[][7], p1, p2, price, hl_offset = HI_LOW_OFFSET / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, zz_offset = ZIGZAG_OFFSET / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
-    
-    for( i = from_shift; i >= from_limit_shift; i-- ){ // FROM area helper left side
+		if( from_limit_shift < 200 ){
+			close_p1_shift = from_limit_shift;
+		}
+
+// int t = GetTickCount();
+		ArrayResize( res, 2 * (to_limit_shift - to_shift ) * 2 * (from_shift - from_limit_shift) );
+    for( i = from_shift; i > from_limit_shift; i-- ){ // FROM area helper left side
     
       for( j = 2; j > 0; j-- ){
         if( j == 2 ){
@@ -106,7 +113,7 @@ int start(){
           p1 = High[i];
         }
         
-        for( k = to_limit_shift; k >= to_shift; k-- ){  // TO area helper right side
+        for( k = to_limit_shift; k > to_shift; k-- ){  // TO area helper right side
         
           for( l = 2; l > 0; l-- ){
             if( l == 2 ){
@@ -115,22 +122,20 @@ int start(){
               p2 = High[k];
             }
 
-            nr++;
-            ArrayResize( res, nr + 1 );
+						ObjectSet( helper, OBJPROP_TIME1, Time[i] );
+            ObjectSet( helper, OBJPROP_PRICE1, p1 );
+            ObjectSet( helper, OBJPROP_TIME2, Time[k] );
+            ObjectSet( helper, OBJPROP_PRICE2, p2 );
+						
             res[nr][0] = Time[i];
             res[nr][1] = p1;
-            res[nr][2] = Time[k];
-            res[nr][3] = p2;
+            res[nr][2] = ObjectGetValueByShift( helper, close_p1_shift );
+            res[nr][3] = ObjectGetValueByShift( helper, 0 );
             res[nr][4] = 0.0;
             res[nr][5] = 0.0;
             res[nr][6] = 0.0;
             
-            ObjectSet( helper, OBJPROP_TIME1, Time[i] );
-            ObjectSet( helper, OBJPROP_PRICE1, p1 );
-            ObjectSet( helper, OBJPROP_TIME2, Time[k] );
-            ObjectSet( helper, OBJPROP_PRICE2, p2 );
-            
-            for( m = i; m >= to_shift; m-- ){
+            for( m = i; m > to_shift; m-- ){
               price = ObjectGetValueByShift( helper, m );
               if( MathAbs( price - Low[m] ) < hl_offset ){
                 res[nr][4] = res[nr][4] + 1;
@@ -151,6 +156,7 @@ int start(){
               }
               
             }
+						nr++;
           }
         }
       }
@@ -158,28 +164,66 @@ int start(){
       ObjectSetText( "DT_GO_TF_hud", StringConcatenate( DoubleToStr( ( percent / (from_shift - from_limit_shift) ) * 100, 0), "%" ), 11 );
       // WindowRedraw();
     }
-    ObjectSetText( "DT_GO_TF_hud", "Done", 11 );
+    ObjectSetText( "DT_GO_TF_hud", "Ready", 11 );
     ObjectDelete( helper );
+// Alert((GetTickCount() - t)+" "+nr);
     
     // ============================ TOP 10 ============================
     int len = ArrayRange( res, 0 ), top_id = 0;
-    double tmp, top_val = 0.0;
-    for( i = 0; i < TOP_NR; i++ ){
+		bool not_close;
+    double sum, top_val = 0.0, closeness = RES_CLOSENESS / MarketInfo(Symbol(),MODE_TICKVALUE) * Point, top_arr[TOP_NR][2];
+		nr = 0;
+		
+    for( i = 0; ( i < len && nr < TOP_NR ); i++ ){
       for( j = 0; j < len; j++ ){
-        tmp = res[j][4] + res[j][5] + res[j][6];
-        if( tmp > top_val ){
-          top_val = tmp;
-          top_id = j;
-        }
+        sum = res[j][4] + res[j][5] + res[j][6];
+				
+        if( sum < top_val ){
+					continue;
+				}
+				
+				if( sum == 0.0 ){
+					continue;
+				}
+			
+				if( nr > 0 ){
+					if( sum == top_val ){
+						if( res[top_id][5] + res[top_id][6] > res[j][5] + res[j][6] ){
+							continue;
+						}
+					}
+				}
+				
+				not_close = true;
+				for( k = 0; k < nr; k++ ){
+					if( MathAbs( top_arr[k][0] - res[j][2] ) < closeness && MathAbs( top_arr[k][1] - res[j][3] ) < closeness ){
+						not_close = false;
+						break;
+					}
+				}
+				if( not_close ){
+					top_val = sum;
+					top_id = j;
+				}
       }
-      setResult( res[top_id][0], res[top_id][1], res[top_id][2], res[top_id][3], res[top_id][4], res[top_id][5], res[top_id][6] );
+			
+			if( top_val == 0.0 ){
+				break;
+			}
+			
+			setResult( res[top_id][0], res[top_id][1], Time[0], res[top_id][3], res[top_id][4], res[top_id][5], res[top_id][6] );
       res[top_id][4] = 0.0;
       res[top_id][5] = 0.0;
       res[top_id][6] = 0.0;
       top_val = 0.0;
-      top_id = 0;
+			
+			top_arr[nr][0] = res[top_id][2];
+			top_arr[nr][1] = res[top_id][3];
+			nr++;
+      
     }
-    
+    ObjectSetText( "DT_GO_TF_hud", "Done", 11 );
+		errorCheck("TF");
   }
 }
 
