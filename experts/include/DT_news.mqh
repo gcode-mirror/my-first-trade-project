@@ -236,17 +236,20 @@ string setNewsRelevance(string act, string forc){
   if(act == "-" || forc == "-"){
     return ("1");
   }  
-  double max = MathMax(StrToDouble(act),StrToDouble(forc)), min = MathMin(StrToDouble(act),StrToDouble(forc));
-  double dif = max-min, multi;
-  min = MathAbs(min);
+  double dif = MathAbs(StrToDouble(forc) - StrToDouble(act)), multi;
+  double min = MathAbs(MathMin(StrToDouble(act),StrToDouble(forc)));
   if(min == 0.0){
-    multi = MathAbs(max);
+    multi = min;
   }else{
     multi = dif/min;
   }
-// Alert("act:"+StrToDouble(act)+" forc:"+StrToDouble(forc)+" dif:"+dif+" multi:"+multi+" iii:"+min);
+  // if(Symbol() == "EURUSD-Pro"){
+    // if( act == "7" && forc == "3" ){
+      // Alert(dif+" "+multi);
+    // }
+  // }
   
-  if(multi>3){
+  if(multi > 3){
     return ("3");
   }else if(multi < 1){
     return ("1");
