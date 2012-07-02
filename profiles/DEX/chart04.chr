@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=5759
+leftpos=5763
 digits=5
 scale=4
 graph=1
@@ -79,54 +79,6 @@ style=0
 weight=2
 background=1
 time_0=1341054000
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1340653614
-period_flags=63
-create_time=1340729630
-description=2012.06.25 19:46:54 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1339754400
-value_0=1.572368
-time_1=1340685000
-value_1=1.558780
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1340653619
-period_flags=63
-create_time=1340729633
-description=2012.06.25 19:46:59 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1339786800
-value_0=1.577954
-time_1=1340368200
-value_1=1.568430
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1340653596
-period_flags=63
-create_time=1340730085
-description=2012.06.25 19:46:36 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1339768800
-value_0=1.565901
-time_1=1340625600
-value_1=1.554049
-ray=1
 </object>
 <object>
 type=2
@@ -334,6 +286,54 @@ time_0=1338480000
 value_0=1.537423
 time_1=1340193600
 value_1=1.577740
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271656
+period_flags=0
+create_time=1341264456
+description=2012.07.02 23:27:36
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339786800
+value_0=1.577954
+time_1=1340368200
+value_1=1.568430
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271660
+period_flags=0
+create_time=1341264460
+description=2012.07.02 23:27:40
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339754400
+value_0=1.572368
+time_1=1340685000
+value_1=1.558780
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271662
+period_flags=0
+create_time=1341264462
+description=2012.07.02 23:27:42
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339768800
+value_0=1.565901
+time_1=1340625600
+value_1=1.554049
 ray=1
 </object>
 <object>

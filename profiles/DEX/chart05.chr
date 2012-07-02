@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=2281
+leftpos=2283
 digits=5
 scale=4
 graph=1
@@ -79,86 +79,6 @@ style=0
 weight=2
 background=1
 time_0=1340946600
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g0_res_1340008697
-period_flags=0
-create_time=1340870618
-description=2012.06.18 08:38:17 G0 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=2
-background=1
-time_0=1330509600
-value_0=1.085610
-time_1=1335553200
-value_1=1.047340
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_res_1340737173
-period_flags=63
-create_time=1340730001
-description=2012.06.26 18:59:33 G1 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1340064000
-value_0=1.023449
-time_1=1340647200
-value_1=1.015550
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1340737178
-period_flags=63
-create_time=1340729979
-description=2012.06.26 18:59:38 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1339995600
-value_0=1.017529
-time_1=1340730000
-value_1=1.006695
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1340737183
-period_flags=63
-create_time=1340729984
-description=2012.06.26 18:59:43 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1339973100
-value_0=1.013624
-time_1=1340677800
-value_1=1.003350
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1340737188
-period_flags=63
-create_time=1340730005
-description=2012.06.26 18:59:48 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1339747200
-value_0=1.007454
-time_1=1340634600
-value_1=0.997074
-ray=1
 </object>
 <object>
 type=2
@@ -385,10 +305,43 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 63008
+object_name=Trendline 1341271684
 period_flags=0
-create_time=1340864032
-color=33023
+create_time=1341264484
+description=2012.07.02 23:28:04
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1330509600
+value_0=1.085610
+time_1=1335553200
+value_1=1.047340
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271688
+period_flags=0
+create_time=1341264488
+description=2012.07.02 23:28:08
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1340064000
+value_0=1.023449
+time_1=1340647200
+value_1=1.015550
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271696
+period_flags=0
+create_time=1341264496
+description=2012.07.02 23:28:16
+color=9408444
 style=0
 weight=1
 background=1
@@ -396,6 +349,54 @@ time_0=1340125200
 value_0=1.023365
 time_1=1340856000
 value_1=1.012600
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271698
+period_flags=0
+create_time=1341264498
+description=2012.07.02 23:28:18
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339995600
+value_0=1.017529
+time_1=1340730000
+value_1=1.006695
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271701
+period_flags=0
+create_time=1341264501
+description=2012.07.02 23:28:21
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339973100
+value_0=1.013624
+time_1=1340677800
+value_1=1.003350
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271703
+period_flags=0
+create_time=1341264503
+description=2012.07.02 23:28:23
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339747200
+value_0=1.007454
+time_1=1340634600
+value_1=0.997074
 ray=1
 </object>
 </indicator>

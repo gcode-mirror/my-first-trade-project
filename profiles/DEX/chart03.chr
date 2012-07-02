@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=240
-leftpos=4048
+period=60
+leftpos=5763
 digits=3
 scale=4
 graph=1
@@ -94,118 +94,6 @@ time_0=1256558400
 value_0=138.450000
 time_1=1333324800
 value_1=111.141000
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_all_1340653221
-period_flags=63
-create_time=1340646093
-description=2012.06.25 19:40:21 G1 /\ \/ /\ \/ /\
-color=16711935
-style=0
-weight=1
-background=1
-time_0=1338271200
-value_0=98.368148
-time_1=1340168400
-value_1=99.874074
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_all_1340653224
-period_flags=63
-create_time=1340646101
-description=2012.06.25 19:40:24 G1 /\ \/ /\ \/ /\
-color=16711935
-style=0
-weight=1
-background=1
-time_0=1338310800
-value_0=98.882481
-time_1=1340121600
-value_1=100.293296
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_res_1340653226
-period_flags=63
-create_time=1340646107
-description=2012.06.25 19:40:26 G1 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1338264000
-value_0=99.483296
-time_1=1340377200
-value_1=101.227000
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_res_1340653230
-period_flags=63
-create_time=1340646110
-description=2012.06.25 19:40:30 G1 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1338278400
-value_0=99.934000
-time_1=1339142400
-value_1=100.690926
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1340653216
-period_flags=63
-create_time=1340866006
-description=2012.06.25 19:40:16 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1338343200
-value_0=97.276222
-time_1=1340337600
-value_1=98.889148
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1340653219
-period_flags=63
-create_time=1340690715
-description=2012.06.25 19:40:19 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1338458400
-value_0=98.029000
-time_1=1340618400
-value_1=99.630037
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1340653261
-period_flags=63
-create_time=1340646067
-description=2012.06.25 19:41:01 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1338422400
-value_0=96.610037
-time_1=1340092800
-value_1=97.866296
 ray=1
 </object>
 <object>
@@ -446,6 +334,118 @@ time_0=1335222180
 value_0=106.805657
 time_1=1337349600
 value_1=99.516657
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271633
+period_flags=0
+create_time=1341264433
+description=2012.07.02 23:27:13
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338343200
+value_0=97.276222
+time_1=1340337600
+value_1=98.889148
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271636
+period_flags=0
+create_time=1341264436
+description=2012.07.02 23:27:16
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338422400
+value_0=96.610037
+time_1=1340092800
+value_1=97.866296
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271639
+period_flags=0
+create_time=1341264439
+description=2012.07.02 23:27:19
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338458400
+value_0=98.029000
+time_1=1340618400
+value_1=99.630037
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271641
+period_flags=0
+create_time=1341264441
+description=2012.07.02 23:27:21
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338271200
+value_0=98.368148
+time_1=1340168400
+value_1=99.874074
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271643
+period_flags=0
+create_time=1341264443
+description=2012.07.02 23:27:23
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338310800
+value_0=98.882481
+time_1=1340121600
+value_1=100.293296
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271646
+period_flags=0
+create_time=1341264446
+description=2012.07.02 23:27:26
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338264000
+value_0=99.483296
+time_1=1340377200
+value_1=101.227000
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341271649
+period_flags=0
+create_time=1341264449
+description=2012.07.02 23:27:29
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338278400
+value_0=99.934000
+time_1=1339142400
+value_1=100.690926
 ray=1
 </object>
 <object>
