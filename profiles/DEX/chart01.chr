@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=3282
+period=240
+leftpos=4053
 digits=5
 scale=4
 graph=1
@@ -446,6 +446,21 @@ time_0=1338555600
 value_0=1.228800
 time_1=1340082000
 value_1=1.247013
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 55246
+period_flags=0
+create_time=1341249486
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1340128800
+value_0=1.243323
+time_1=1341252000
+value_1=1.257394
 ray=1
 </object>
 </indicator>
