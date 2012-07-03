@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=60
-leftpos=3892
+period=240
+leftpos=4060
 digits=5
 scale=4
 graph=1
@@ -79,6 +79,54 @@ style=0
 weight=2
 background=1
 time_0=1341054000
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341353210
+period_flags=63
+create_time=1341346011
+description=2012.07.03 22:06:50 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1339779600
+value_0=1.554948
+time_1=1340845200
+value_1=1.567486
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341353214
+period_flags=63
+create_time=1341346015
+description=2012.07.03 22:06:54 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1339747200
+value_0=1.547638
+time_1=1341327600
+value_1=1.566128
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341353218
+period_flags=63
+create_time=1341346019
+description=2012.07.03 22:06:58 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1339736400
+value_0=1.542382
+time_1=1341349200
+value_1=1.561009
+ray=1
 </object>
 <object>
 type=2
@@ -322,22 +370,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1341271662
-period_flags=0
-create_time=1341264462
-description=2012.07.02 23:27:42
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1339768800
-value_0=1.565901
-time_1=1340625600
-value_1=1.554049
-ray=1
-</object>
-<object>
-type=2
 object_name=Trendline 41896
 period_flags=0
 create_time=1340646312
@@ -346,9 +378,9 @@ style=0
 weight=1
 background=1
 time_0=1339986600
-value_0=1.582650
+value_0=1.582219
 time_1=1340364600
-value_1=1.573761
+value_1=1.574110
 ray=1
 </object>
 <object>
@@ -364,36 +396,6 @@ time_0=1338472800
 value_0=1.545487
 time_1=1339783200
 value_1=1.578084
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 55349
-period_flags=0
-create_time=1341249589
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340298000
-value_0=1.560480
-time_1=1341237600
-value_1=1.572170
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 55370
-period_flags=0
-create_time=1341249610
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340265600
-value_0=1.553206
-time_1=1341291600
-value_1=1.566406
 ray=1
 </object>
 </indicator>

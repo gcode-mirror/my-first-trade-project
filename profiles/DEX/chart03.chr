@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=60
-leftpos=5728
+period=240
+leftpos=4060
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1340733600
+time_0=1341604800
 </object>
 <object>
 type=2
@@ -94,6 +94,86 @@ time_0=1256558400
 value_0=138.450000
 time_1=1333324800
 value_1=111.141000
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_all_1341351687
+period_flags=63
+create_time=1341344519
+description=2012.07.03 21:41:27 G1 /\ \/ /\ \/ /\
+color=16711935
+style=0
+weight=1
+background=1
+time_0=1338271200
+value_0=98.344370
+time_1=1340956800
+value_1=100.524000
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341351696
+period_flags=63
+create_time=1341344496
+description=2012.07.03 21:41:36 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1338310800
+value_0=98.882481
+time_1=1340121600
+value_1=100.293296
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341351780
+period_flags=63
+create_time=1341344582
+description=2012.07.03 21:43:00 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1338343200
+value_0=97.276222
+time_1=1340337600
+value_1=98.889148
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sup_1341351691
+period_flags=63
+create_time=1341344512
+description=2012.07.03 21:41:31 G1 /\ /\ /\ /\ /\
+color=3329330
+style=0
+weight=1
+background=1
+time_0=1338458400
+value_0=98.029000
+time_1=1340618400
+value_1=99.630037
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sup_1341351785
+period_flags=63
+create_time=1341344590
+description=2012.07.03 21:43:05 G1 /\ /\ /\ /\ /\
+color=3329330
+style=0
+weight=1
+background=1
+time_0=1338422400
+value_0=96.564185
+time_1=1340895600
+value_1=98.510000
 ray=1
 </object>
 <object>
@@ -334,86 +414,6 @@ time_0=1335222180
 value_0=106.805657
 time_1=1337349600
 value_1=99.516657
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271633
-period_flags=0
-create_time=1341264433
-description=2012.07.02 23:27:13
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338343200
-value_0=97.276222
-time_1=1340337600
-value_1=98.889148
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271636
-period_flags=0
-create_time=1341264436
-description=2012.07.02 23:27:16
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338422400
-value_0=96.610037
-time_1=1340092800
-value_1=97.866296
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271639
-period_flags=0
-create_time=1341264439
-description=2012.07.02 23:27:19
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338458400
-value_0=98.029000
-time_1=1340618400
-value_1=99.630037
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271641
-period_flags=0
-create_time=1341264441
-description=2012.07.02 23:27:21
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338271200
-value_0=98.344370
-time_1=1340956800
-value_1=100.524000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271643
-period_flags=0
-create_time=1341264443
-description=2012.07.02 23:27:23
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338310800
-value_0=98.882481
-time_1=1340121600
-value_1=100.293296
 ray=1
 </object>
 <object>
