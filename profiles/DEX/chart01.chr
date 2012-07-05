@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=240
-leftpos=4060
+period=60
+leftpos=3355
 digits=5
 scale=4
 graph=1
@@ -117,7 +117,7 @@ type=2
 object_name=DT_GO_MONITOR_SWITCH
 period_flags=0
 create_time=1333402549
-description=1
+description=0
 color=255
 style=0
 weight=1
@@ -506,6 +506,36 @@ time_0=1340262000
 value_0=1.248506
 time_1=1340974800
 value_1=1.269250
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 46937
+period_flags=0
+create_time=1341437785
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1340942400
+value_0=1.262728
+time_1=1341345600
+value_1=1.253648
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 46970
+period_flags=0
+create_time=1341437818
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1340982000
+value_0=1.269130
+time_1=1341403200
+value_1=1.259329
 ray=1
 </object>
 <object>
