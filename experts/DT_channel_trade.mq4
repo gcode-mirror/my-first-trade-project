@@ -332,18 +332,23 @@ int start(){
 
               fibo_time_cross_p = getClineValueByShift( CT_CLINES[i][CL_NAME], iBarShift( NULL, 0, fibo_100_time ) ); //  where fibo100 time cross the cLine
               if( fibo_time_cross_p == 0.0 ){
-                log( StringConcatenate( "Error fibo100 time:", fibo_100_time," not cross current cLine:", CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.3 );
+                log( StringConcatenate( "Error fibo100 time:", fibo_100_time," not cross current cLine:", CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.4 );
                 return (0);
               }
 
               dif = MathAbs( fibo_100 - fibo_time_cross_p );
               if( dif < CT_MIN_DIST ){  // Min Distance
-                log( StringConcatenate( "Fibo DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",CT_MIN_DIST," Curr distance:", dif, " (", Symbol(), ")" ), trade_line_ts + 0.4 );
+                log( StringConcatenate( "Fibo DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",CT_MIN_DIST," Curr distance:", dif, " (", Symbol(), ")" ), trade_line_ts + 0.5 );
                 return (0);
               }
 
               if( hasClineHistoryPosition( trade_line_ts ) ){
-                log( StringConcatenate( "During ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!", " (", Symbol(), ")" ), trade_line_ts + 0.5 );
+                log( StringConcatenate( "During ",TimeToStr( CT_POS_DIF_TIME, TIME_MINUTES)," hours at ", CT_CLINES[i][CL_NAME]," line we have Opened Position!", " (", Symbol(), ")" ), trade_line_ts + 0.6 );
+                return (0);
+              }
+              
+              if( alreadyBelowCLine( trade_line_price ,fibo_100, fibo_100_time ) ){
+                log( StringConcatenate( "Price is already below trade_line: ",CT_CLINES[i][CL_NAME]," Curr fibo 100:",fibo_100, " (", Symbol(), ")" ), trade_line_ts + 0.3 );
                 return (0);
               }
 
@@ -374,7 +379,7 @@ int start(){
                   }
 
                   if( siblings[0] == "" ){
-                    log( StringConcatenate( "Error ",CT_CLINES[i][CL_GROUP]," group only have one line: ",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), fibo_100 + 0.6 );
+                    log( StringConcatenate( "Error ",CT_CLINES[i][CL_GROUP]," group only have one line: ",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), fibo_100 + 0.7 );
                     return (0);
                   }
                 }
@@ -386,13 +391,13 @@ int start(){
 
                 }else{
                   tmp = MathAbs( getClineValueByShift( siblings[0] ) - trade_line_price) * CL_MID_GROUP_DIST;
-                  log( StringConcatenate( "Fibo GROUP DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",tmp," Curr distance:", dif, " (", Symbol(), ")" ), fibo_100 + 0.7 );
+                  log( StringConcatenate( "Fibo GROUP DISTANCE is too SMALL! Cline: ", CT_CLINES[i][CL_NAME]," Min Distance: ",tmp," Curr distance:", dif, " (", Symbol(), ")" ), fibo_100 + 0.8 );
                   return (0);
                 }
 
               }else{      // Channel NOT Line in group
                 if( dif > CT_MAX_DIST ){  // Max Distance
-                  log( StringConcatenate( "Fibo DISTANCE is too HIGH! Cline: ", CT_CLINES[i][CL_NAME]," Max Distance: ",CT_MAX_DIST," Curr distance:", dif , " (", Symbol(), ")"), fibo_100 + 0.8 );
+                  log( StringConcatenate( "Fibo DISTANCE is too HIGH! Cline: ", CT_CLINES[i][CL_NAME]," Max Distance: ",CT_MAX_DIST," Curr distance:", dif , " (", Symbol(), ")"), fibo_100 + 0.9 );
                   return (0);
                 }
 
@@ -433,7 +438,7 @@ int start(){
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + CT_SPREAD + CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 0.9 );
+            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 1.0 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
@@ -445,7 +450,7 @@ int start(){
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price - CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 1.0 );
+            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 1.1 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + CT_SPREAD, Digits );
@@ -743,4 +748,22 @@ bool crashToCLine( string name, double max, double min ){
 		}
 	}
 	return ( false );
+}
+
+bool alreadyBelowCLine( double trade_line_price ,double fibo_100, double fibo_100_time ){
+  int i = 0, len = iBarShift( NULL, 0, fibo_100_time );
+  if( fibo_100 > trade_line_price ){
+    for( ; i < len; i++ ){
+      if( Low[i] < trade_line_price ){
+        return ( true );
+      }
+    }
+  }else{
+    for( ; i < len; i++ ){
+      if( High[i] > trade_line_price ){
+        return ( true );
+      }
+    }
+  }
+  return ( false );
 }

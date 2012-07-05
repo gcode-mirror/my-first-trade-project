@@ -176,7 +176,8 @@ int start(){
 		
     for( i = 0; ( i < len && nr < TOP_NR ); i++ ){
       for( j = 0; j < len; j++ ){
-        sum = res[j][4] + res[j][5] + res[j][6];
+        // sum = res[j][4] + res[j][5] + res[j][6];
+        sum = res[j][5] + res[j][6];
 				
         if( sum < top_val ){
 					continue;
@@ -188,7 +189,8 @@ int start(){
 			
 				if( nr > 0 ){
 					if( sum == top_val ){
-						if( res[top_id][5] + res[top_id][6] > res[j][5] + res[j][6] ){
+						// if( res[top_id][5] + res[top_id][6] > res[j][5] + res[j][6] ){
+            if( res[top_id][4] > res[j][4] ){
 							continue;
 						}
 					}
@@ -222,6 +224,7 @@ int start(){
 			nr++;
       
     }
+    
     ObjectSetText( "DT_GO_TF_hud", "Done", 11 );
 		errorCheck("TF");
   }
