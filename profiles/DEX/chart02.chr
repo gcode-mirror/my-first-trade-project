@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2618
+leftpos=2646
 digits=3
 scale=4
 graph=1
@@ -110,6 +110,38 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_cLine_g1_res_1341561474
+period_flags=63
+create_time=1341554279
+description=2012.07.06 07:57:54 G1 \/ \/ \/ \/ \/
+color=9639167
+style=0
+weight=1
+background=1
+time_0=1338310800
+value_0=79.321761
+time_1=1340579700
+value_1=80.579134
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341352615
+period_flags=63
+create_time=1341554248
+description=2012.07.03 21:56:55 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1338415800
+value_0=78.231627
+time_1=1340128800
+value_1=79.184797
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_cLine_g1_sig_1341352622
 period_flags=63
 create_time=1341345423
@@ -142,6 +174,22 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_cLine_g1_sig_1341561483
+period_flags=63
+create_time=1341554284
+description=2012.07.06 07:58:03 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1338379200
+value_0=79.127188
+time_1=1340596800
+value_1=80.344000
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_cLine_g1_sup_1341352610
 period_flags=63
 create_time=1341345433
@@ -154,22 +202,6 @@ time_0=1338800400
 value_0=77.986000
 time_1=1340161200
 value_1=78.797208
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1341352615
-period_flags=63
-create_time=1341345429
-description=2012.07.03 21:56:55 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1338415800
-value_0=78.231627
-time_1=1340128800
-value_1=79.184797
 ray=1
 </object>
 <object>
@@ -410,38 +442,6 @@ time_0=1334822400
 value_0=81.937988
 time_1=1339617600
 value_1=79.712588
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271608
-period_flags=0
-create_time=1341264408
-description=2012.07.02 23:26:48
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338379200
-value_0=79.127188
-time_1=1340596800
-value_1=80.344000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1341271613
-period_flags=0
-create_time=1341264413
-description=2012.07.02 23:26:53
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338310800
-value_0=79.321761
-time_1=1340579700
-value_1=80.579134
 ray=1
 </object>
 <object>
