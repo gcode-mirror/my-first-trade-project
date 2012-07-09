@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=240
-leftpos=2133
+leftpos=4085
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1341388800
+time_0=1341813600
 </object>
 <object>
 type=1
@@ -122,6 +122,22 @@ time_0=1338310800
 value_0=79.321761
 time_1=1340579700
 value_1=80.579134
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1341352610
+period_flags=63
+create_time=1341861485
+description=2012.07.03 21:56:50 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1338800400
+value_0=77.986000
+time_1=1340161200
+value_1=78.797208
 ray=1
 </object>
 <object>
@@ -190,18 +206,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sup_1341352610
+object_name=DT_GO_cLine_g1_sig_1341868677
 period_flags=63
-create_time=1341345433
-description=2012.07.03 21:56:50 G1 /\ /\ /\ /\ /\
-color=3329330
+create_time=1341861500
+description=2012.07.09 21:17:57 G1
+color=15570276
 style=0
 weight=1
 background=1
-time_0=1338800400
-value_0=77.986000
-time_1=1340161200
-value_1=78.797208
+time_0=1338552000
+value_0=77.660000
+time_1=1340395200
+value_1=78.730344
 ray=1
 </object>
 <object>
@@ -347,21 +363,6 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=2
-object_name=Trendline 33291
-period_flags=0
-create_time=1341686283
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338552000
-value_0=77.660000
-time_1=1340395200
-value_1=78.730344
-ray=1
 </object>
 <object>
 type=2
