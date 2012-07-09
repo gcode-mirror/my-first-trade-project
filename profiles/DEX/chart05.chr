@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=2308
+leftpos=2127
 digits=5
 scale=4
 graph=1
@@ -46,8 +46,8 @@ color=16711680
 weight=1
 background=0
 symbol_code=241
-time_0=1341748800
-value_0=1.036032
+time_0=1341907200
+value_0=1.035680
 </object>
 <object>
 type=22
@@ -58,8 +58,8 @@ color=16711680
 weight=1
 background=0
 symbol_code=242
-time_0=1341806400
-value_0=1.012513
+time_0=1341936000
+value_0=1.012704
 </object>
 <object>
 type=2
