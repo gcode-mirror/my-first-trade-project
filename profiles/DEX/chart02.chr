@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=2646
+leftpos=4054
 digits=3
 scale=4
 graph=1
@@ -37,6 +37,18 @@ stops_color=17919
 height=328
 <indicator>
 name=main
+<object>
+type=22
+object_name=Arrow 31848
+period_flags=0
+create_time=1341750376
+color=16711680
+weight=1
+background=0
+symbol_code=242
+time_0=1341633600
+value_0=78.946735
+</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
@@ -78,7 +90,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1341619200
+time_0=1341820800
 </object>
 <object>
 type=1
@@ -350,98 +362,17 @@ ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1340574098
+object_name=Trendline 33291
 period_flags=0
-create_time=1340566898
-description=2012.06.24 21:41:38
+create_time=1341686283
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1334563200
-value_0=80.135902
-time_1=1339732800
-value_1=77.664288
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1340574099
-period_flags=0
-create_time=1340566899
-description=2012.06.24 21:41:39
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1333987200
-value_0=80.754402
-time_1=1338876000
-value_1=78.464000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1340574101
-period_flags=0
-create_time=1340566901
-description=2012.06.24 21:41:41
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334692800
-value_0=80.743442
-time_1=1339488000
-value_1=78.518042
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1340574103
-period_flags=0
-create_time=1340566903
-description=2012.06.24 21:41:43
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334721600
-value_0=81.186057
-time_1=1339459200
-value_1=78.998537
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1340574104
-period_flags=0
-create_time=1340566904
-description=2012.06.24 21:41:44
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334743200
-value_0=81.562000
-time_1=1340115300
-value_1=79.074306
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1340574106
-period_flags=0
-create_time=1340566906
-description=2012.06.24 21:41:46
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1334822400
-value_0=81.937988
-time_1=1339617600
-value_1=79.712588
+time_0=1338552000
+value_0=77.660000
+time_1=1340395200
+value_1=78.730344
 ray=1
 </object>
 <object>
