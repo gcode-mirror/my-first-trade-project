@@ -19,7 +19,10 @@
 #define CL_MID_GROUP_DIST 0.5
 #define CHANNEL_LOT 0.1
 #define CT_SL_FACTOR 1.3
-#define CT_SPEED_LIMIT 140.0
+
+#define CT_MID_SPEED_LIMIT 140.0
+#define CT_BOUND_SPEED_LIMIT 220.0
+
 #define CT_POS_DIF_TIME 21600 // 6 hour
 #define CT_TP_FIBO 0.232 // 0.236
 
@@ -141,6 +144,9 @@ int start(){
       double new_tp;
 // #############################################################  Modify OPEN position  ################################################################
       if( o_type < 2 ){
+      
+/* !!! */ return (0);
+      
         static double last_bar_minute = 0.0;
         if( last_bar_minute == iTime( NULL, PERIOD_M1, 0 ) ){
           return (0);
@@ -214,6 +220,9 @@ int start(){
 
       }else{
 // ###############################################################  Modify LIMIT Position  ################################################################
+
+/* !!! */ return (0);
+
         double open_time = OrderOpenTime();
         if( open_time + 5400 < TimeCurrent() ){
           OrderDelete( ticket );
@@ -413,9 +422,26 @@ int start(){
       }
 
       if( trade_line_name != "" ){
-        double speed = barSpeed( trade_line_name );
-        if( speed == 0.0 ){
-          return (0);
+        string speed_log = "";
+        double speed = barSpeed( trade_line_name, speed_log );
+        double is_boundary_cLine = isBoundaryCLine( fibo_100, trade_line_price, i, CT_CLINES[i][CL_GROUP] );
+        
+        if( is_boundary_cLine == true ){
+          if( speed > CT_BOUND_SPEED_LIMIT ){
+            log( StringConcatenate( "Bar SPEED is too fast in Boundary cLine!", speed_log ), speed );
+            return (0);
+          }
+          
+          if( siblings[0] == "" ){
+            log( StringConcatenate( "Middle cLine is missing! ", CT_CLINES[i][CL_NAME] ), fibo_100 + 1.0 );
+            return (0);
+          }
+          
+        }else{
+          if( speed > CT_MID_SPEED_LIMIT ){
+            log( StringConcatenate( "Bar SPEED is too fast in midlle cLine!", speed_log ), speed );
+            return (0);
+          }
         }
 
         if( GetTickCount() < CT_START_TIME ){
@@ -426,8 +452,8 @@ int start(){
 
         trade_line_group = CT_CLINES[i][CL_GROUP];
         line_state = CT_CLINES[i][CL_STATE];
-
         fibo_23_dif = MathAbs( fibo_100 - trade_line_price ) * CT_TP_FIBO;
+
 
         double sl, peek;
 
@@ -438,11 +464,15 @@ int start(){
             o_type = OP_BUYLIMIT;
             op = NormalizeDouble( trade_line_price + CT_SPREAD + CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 1.0 );
+            log( StringConcatenate( "Warning you are late from BUY LIMIT trade line price:",trade_line_price," bar low: ",peek , " (", Symbol(), ")" ), fibo_100 + 1.1 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price - (fibo_23_dif * CT_SL_FACTOR), Digits );
-          tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
+          if( is_boundary_cLine == true ){
+            tp = NormalizeDouble( getClineValueByShift( siblings[0] ), Digits );
+          }else{
+            tp = NormalizeDouble( trade_line_price + fibo_23_dif, Digits );
+          }
 
         }else{  // ================================================ SELL LIMIT ================================================
           peek = iHigh( NULL, PERIOD_H1, 0);
@@ -450,11 +480,16 @@ int start(){
             o_type = OP_SELLLIMIT;
             op = NormalizeDouble( trade_line_price - CT_THRESHOLD, Digits );
           }else{
-            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 1.1 );
+            log( StringConcatenate( "Warning you are late from SELL LIMIT trade line price:",trade_line_price," bar high: ",peek, " (", Symbol(), ")" ), fibo_100 + 1.2 );
             return (0);
           }
           sl = NormalizeDouble( trade_line_price + (fibo_23_dif * CT_SL_FACTOR) + CT_SPREAD, Digits );
-          tp = NormalizeDouble( trade_line_price - fibo_23_dif + CT_SPREAD, Digits );
+          if( is_boundary_cLine == true ){
+            tp = NormalizeDouble( getClineValueByShift( siblings[0] ) + CT_SPREAD, Digits );
+          }else{
+            tp = NormalizeDouble( trade_line_price - fibo_23_dif + CT_SPREAD, Digits );
+          }
+
         }
 				
 				if( crashToCLine( trade_line_name, MathMax( op, sl ), MathMin( op, sl ) ) ){
@@ -587,6 +622,25 @@ int createHistoryLine(double p1, color c, string text, string ts, double t1 = 0.
 	ObjectSetText(name, text, 8);
 }
 
+bool isBoundaryCLine( double& fibo_100, double& trade_line_price, int& from, string group ){
+  int to = 0, i;
+  if( fibo_100 < trade_line_price ){
+    to = ArrayRange( CT_CLINES, 0 );
+    for( i = from + 1; i < to; i++ ){
+      if( CT_CLINES[i][CL_GROUP] == group ){
+        return (false);
+      }
+    }
+  }else{
+    for( i = from - 1 ; i >= to; i-- ){
+      if( CT_CLINES[i][CL_GROUP] == group ){
+        return (false);
+      }
+    }
+  }
+  return (true);
+}
+
 void getSiblingLines( string& siblings[], int from, int to, string group, int nr_result ){
   if( from == to ){
     return;
@@ -700,10 +754,10 @@ bool readCLinesFromFile( string &file_name ){
   return ( true );
 }
 
-double barSpeed( string cLine ){
+double barSpeed( string cLine, string& log ){
   double p1 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 0 );
   double p2 = iMA( NULL, PERIOD_M15, 3, 0, MODE_LWMA, PRICE_MEDIAN, 1 );
-  double peri, speed, dist, h, l, dif = MathAbs( p1 - p2 ) * 0.4;
+  double peri, speed = 9999.9, dist, h, l, dif = MathAbs( p1 - p2 ) * 0.4;
   int i = 2;
   if( p2 > p1 ){
     while( p2 > p1 && p2 - p1 > dif ){
@@ -726,12 +780,8 @@ double barSpeed( string cLine ){
   }
 	peri = (i - 2) + ( MathMod( Minute(), PERIOD_M15 ) / PERIOD_M15 );
 	speed = dist / peri;
-  if( speed > CT_SPEED_LIMIT ){
-    log( StringConcatenate( "Bar SPEED is too fast! Cline: ", cLine," Speed: ", DoubleToStr(speed, 2), " Bar nr:", i-1, " (", DoubleToStr( peri, 2 ),") high:", DoubleToStr( h, Digits ), " low:", DoubleToStr( l , Digits ), " (", Symbol(), ")" ), speed );
-    return (0.0);
-  }else{
-    return (speed);
-  }
+  log = StringConcatenate( " Cline: ", cLine," Speed: ", DoubleToStr(speed, 2), " Bar nr:", i-1, " (", DoubleToStr( peri, 2 ),") high:", DoubleToStr( h, Digits ), " low:", DoubleToStr( l , Digits ), " (", Symbol(), ")" );
+  return (speed);
 }
 
 bool crashToCLine( string name, double max, double min ){

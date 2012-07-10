@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=3831
+leftpos=5642
 digits=5
 scale=4
 graph=1
@@ -148,7 +148,7 @@ ray=1
 type=2
 object_name=DT_GO_cLine_g1_sig_1341868526
 period_flags=63
-create_time=1341861327
+create_time=1341940619
 description=2012.07.09 21:15:26 G1
 color=15570276
 style=0
@@ -309,7 +309,7 @@ type=2
 object_name=DT_GO_TRADE_LINES_SWITCH
 period_flags=0
 create_time=1333402549
-description=0
+description=1
 color=255
 style=0
 weight=1
@@ -319,6 +319,84 @@ value_0=0.000000
 time_1=1333404180
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_OP
+period_flags=0
+create_time=1341945938
+description=0.1 lot
+color=16711680
+style=1
+weight=1
+background=0
+value_0=1.224720
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_OP_label
+period_flags=0
+create_time=1341945938
+description=0.1 lot
+color=16711680
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1340766000
+value_0=1.224720
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_SL
+period_flags=0
+create_time=1341945938
+description=236 pip  23.6 USD  5559 HUF  23.6 unit
+color=255
+style=1
+weight=1
+background=0
+value_0=1.227553
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_SL_label
+period_flags=0
+create_time=1341945938
+description=283 pip  28.3 USD  6673 HUF  28.3 unit
+color=255
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1340766000
+value_0=1.227553
+</object>
+<object>
+type=1
+object_name=DT_GO_TradeLines_TP
+period_flags=0
+create_time=1341945938
+description=282 pip  28.2 USD  6646 HUF  28.2 unit
+color=32768
+style=1
+weight=1
+background=0
+value_0=1.221898
+</object>
+<object>
+type=21
+object_name=DT_GO_TradeLines_TP_label
+period_flags=0
+create_time=1341945938
+description=282 pip  28.2 USD  6646 HUF  28.2 unit
+color=32768
+font=Arial
+fontsize=7
+angle=0
+background=0
+time_0=1340766000
+value_0=1.221898
 </object>
 <object>
 type=2

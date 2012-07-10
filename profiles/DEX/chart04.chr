@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=240
-leftpos=2137
+period=60
+leftpos=5904
 digits=5
 scale=4
 graph=1
@@ -91,38 +91,6 @@ style=0
 weight=2
 background=1
 value_0=1.564441
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sig_1341757327
-period_flags=63
-create_time=1341750128
-description=2012.07.08 14:22:07 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1339971300
-value_0=1.574138
-time_1=1341604800
-value_1=1.546809
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1341757323
-period_flags=63
-create_time=1341750139
-description=2012.07.08 14:22:03 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1339786800
-value_0=1.565141
-time_1=1340852400
-value_1=1.549941
-ray=1
 </object>
 <object>
 type=2
@@ -270,6 +238,38 @@ ray=0
 </object>
 <object>
 type=2
+object_name=Trendline 1341953483
+period_flags=0
+create_time=1341946283
+description=2012.07.10 20:51:23
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339574400
+value_0=1.559840
+time_1=1340625600
+value_1=1.553890
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1341953485
+period_flags=0
+create_time=1341946285
+description=2012.07.10 20:51:25
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339971300
+value_0=1.572044
+time_1=1341604800
+value_1=1.561125
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 31199
 period_flags=0
 create_time=1341749727
@@ -322,10 +322,40 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1340190000
-value_0=1.576836
-time_1=1341572400
-value_1=1.554880
+time_0=1339971300
+value_0=1.566414
+time_1=1341554400
+value_1=1.556262
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 31288
+period_flags=0
+create_time=1341946424
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339768800
+value_0=1.562788
+time_1=1341529800
+value_1=1.552299
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 31308
+period_flags=0
+create_time=1341946444
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339992000
+value_0=1.575336
+time_1=1341396000
+value_1=1.566380
 ray=1
 </object>
 <object>
@@ -337,10 +367,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1340362800
-value_0=1.578381
-time_1=1341471600
-value_1=1.562304
+time_0=1339560000
+value_0=1.581590
+time_1=1341849600
+value_1=1.568173
 ray=1
 </object>
 </indicator>
