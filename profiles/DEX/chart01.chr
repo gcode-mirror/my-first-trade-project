@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=5642
+leftpos=3855
 digits=5
 scale=4
 graph=1
@@ -324,7 +324,7 @@ ray=0
 type=1
 object_name=DT_GO_TradeLines_OP
 period_flags=0
-create_time=1341945938
+create_time=1341991610
 description=0.1 lot
 color=16711680
 style=1
@@ -336,67 +336,67 @@ value_0=1.224720
 type=21
 object_name=DT_GO_TradeLines_OP_label
 period_flags=0
-create_time=1341945938
+create_time=1341991610
 description=0.1 lot
 color=16711680
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1340766000
+time_0=1341500400
 value_0=1.224720
 </object>
 <object>
 type=1
 object_name=DT_GO_TradeLines_SL
 period_flags=0
-create_time=1341945938
-description=236 pip  23.6 USD  5559 HUF  23.6 unit
+create_time=1341991610
+description=365 pip  36.5 USD  8551 HUF  36.5 unit
 color=255
 style=1
 weight=1
 background=0
-value_0=1.227553
+value_0=1.228372
 </object>
 <object>
 type=21
 object_name=DT_GO_TradeLines_SL_label
 period_flags=0
-create_time=1341945938
-description=283 pip  28.3 USD  6673 HUF  28.3 unit
+create_time=1341991610
+description=365 pip  36.5 USD  8551 HUF  36.5 unit
 color=255
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1340766000
-value_0=1.227553
+time_0=1341500400
+value_0=1.228372
 </object>
 <object>
 type=1
 object_name=DT_GO_TradeLines_TP
 period_flags=0
-create_time=1341945938
-description=282 pip  28.2 USD  6646 HUF  28.2 unit
+create_time=1341991610
+description=415 pip  41.5 USD  9716 HUF  41.5 unit
 color=32768
 style=1
 weight=1
 background=0
-value_0=1.221898
+value_0=1.220571
 </object>
 <object>
 type=21
 object_name=DT_GO_TradeLines_TP_label
 period_flags=0
-create_time=1341945938
-description=282 pip  28.2 USD  6646 HUF  28.2 unit
+create_time=1341991610
+description=415 pip  41.5 USD  9716 HUF  41.5 unit
 color=32768
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1340766000
-value_0=1.221898
+time_0=1341500400
+value_0=1.220571
 </object>
 <object>
 type=2
