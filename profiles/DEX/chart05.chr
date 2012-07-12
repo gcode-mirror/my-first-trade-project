@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=60
-leftpos=4954
+period=1440
+leftpos=1710
 digits=5
 scale=4
 graph=1
@@ -34,7 +34,7 @@ askline_color=17919
 stops_color=17919
 
 <window>
-height=166
+height=181
 <indicator>
 name=main
 <object>
@@ -366,6 +366,27 @@ draw_0=0
 color_0=0
 style_0=0
 weight_0=0
+period_flags=0
+show_data=1
+</indicator>
+</window>
+
+<window>
+height=35
+<indicator>
+name=Relative Strength Index
+period=14
+apply=0
+color=16748574
+style=0
+weight=1
+min=0.000000
+max=100.000000
+levels_color=12632256
+levels_style=2
+levels_weight=1
+level_0=30.0000
+level_1=70.0000
 period_flags=0
 show_data=1
 </indicator>
