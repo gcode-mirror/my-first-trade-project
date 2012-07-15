@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=15
-leftpos=8181
+leftpos=6786
 digits=5
 scale=2
 graph=2
@@ -61,11 +61,5 @@ value_0=1.564440
 </object>
 </indicator>
 </window>
-
-<expert>
-name=DT_channel_trade
-flags=343
-window_num=0
-</expert>
 </chart>
 

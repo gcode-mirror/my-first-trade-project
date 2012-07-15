@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=15
-leftpos=7592
+leftpos=4897
 digits=5
 scale=4
 graph=2
@@ -155,11 +155,5 @@ ray=1
 </object>
 </indicator>
 </window>
-
-<expert>
-name=DT_channel_trade
-flags=343
-window_num=0
-</expert>
 </chart>
 

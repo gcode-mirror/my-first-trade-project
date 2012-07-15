@@ -426,10 +426,10 @@ string getSelectedLine( double time_cord, double price_cord, bool search_all = f
   return (sel_name);
 }
 
-bool getFibo100( double fibo_0, double& fibo_100, double& time ){
+bool getFibo100( int peri, double fibo_0, double& fibo_100, double& time ){
   double time1, time2, zz0, zz1;
-  zz0 = getZigZag( PERIOD_M15, 12, 5, 3, 0, time1 );
-  zz1 = getZigZag( PERIOD_M15, 12, 5, 3, 1, time2 );
+  zz0 = getZigZag( peri, 12, 5, 3, 0, time1 );
+  zz1 = getZigZag( peri, 12, 5, 3, 1, time2 );
   
   if( MathMax(zz0, zz1) > fibo_0 && MathMin(zz0, zz1) < fibo_0 ){
     fibo_100 = zz0;

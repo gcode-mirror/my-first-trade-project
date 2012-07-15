@@ -297,7 +297,7 @@ string getTSdate(string date, string time){
   }else{
     date = "";
   } 
-  return (StrToTime(date+time));
+  return ( StrToTime(date+time) + 3600 );
 }
 
 bool doFileDownLoad(){ 
