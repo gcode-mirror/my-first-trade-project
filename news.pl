@@ -2,44 +2,148 @@
 
 use LWP::Simple;
 
+our @IN;
+our $ERR;
+our $TIMEZONE = 5;
 
-
-sub start{
+sub process{
 	# my $url = get 'http://www.forexfactory.com/calendar.php';
 	# my @lines = split(/\n/, $url);
 	my @lines = read_file("c:\\mt4\\experts\\files\\xxx.html");
 	
 	my @csv;
-	for( my $i = 0, $len = $#lines; $i < $len; $i++) {
+	my $date;
+	my $tmp;
+	my $nr = 0;
+	my $i;
 	
-	
-		if( $lines[$i] =~ /^\s+<span class="smallfont">([a-zA-Z0-9: ]+)<\/span>\s*$/ || $lines[$i] =~ /alt="Up Next".*>(.*)<\/span/ ){
-			print $1." ";
+	for( $i = 0, $len = $#lines; $i < $len; $i++) {
+		if( $lines[$i] =~ /^\s+(\S+ \d+)\s*$/ ){
+			$date = $1;
+			
+		}elsif( $lines[$i] =~ /^\s+<span class="smallfont">([a-zA-Z0-9: ]+)<\/span>\s*$/ || $lines[$i] =~ /alt="Up Next".*>(.*)<\/span/ ){
+			# month and day
+			$IN[$nr][0] = $date;
+			
+			# hour and time
+			$tmp = $1;
+			if( $tmp =~ /\s*(\d+):(\d+)(am|pm)\s*/ ){
+				if( $3 eq 'pm' ){
+					$IN[$nr][1] = ($1+12).':'.$2;
+				}else{
+					$IN[$nr][1] = $1.':'.$2;
+				}
+			}elsif( $tmp =~ /\s*(All Day|Tentative)\s*/ ){
+				$IN[$nr][1] = $1;
+			}else{
+				$ERR = 'Wrong hour or time '.$tmp.' ('.$lines[$i].')';
+				return -1;
+			}
 			
 		}elsif( $lines[$i] =~ /<span class="smallfont">([A-Z ]+)<\/span><\/td>\s*$/){
-			print $1." ";	
+			# currency
+			$IN[$nr][2] = $1;
 			
 		}elsif( $lines[$i] =~ /title="(Medium|High|Low) Impact Expected"/){
-			print $1." ";
+			# priority
+			$IN[$nr][3] = $1;
 			
-		}elsif( $lines[$i] =~ /id="title_.*>(.*)</){
-			print $1." ";
+		}elsif( $lines[$i] =~ /id="title_.*>\s*(.*)\s*</){
+			# description
+			$IN[$nr][4] = $1;
 			
-		}elsif( $lines[$i] =~ /<div class="smallfont"><span class="(.*)">(.*)<\/span><\/div>\s*$/){
+		}elsif( $lines[$i] =~ /<div class="smallfont"><span class="\s*(.*)\s*">\s*(.*)\s*<\/span><\/div>\s*$/){
+			# impact
+			$IN[$nr][5] = $1;
 			
-			print $1." ".$2." ";
+			# Actual data and unit
+			$tmp = $2;
+			if( $tmp eq '' ){
+				$IN[$nr][6] = '';
+				$IN[$nr][7] = '';
+			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
+				$IN[$nr][6] = $2;
+				$IN[$nr][7] = $1;
+			}else{
+				$ERR = 'Unknown actual data '.$tmp.' ('.$IN[$nr][4].')';
+				return -1;
+			}
 			
 		}elsif( $lines[$i] =~ /calhigh.*<span class="smallfont">(.*)<\/span><\/td>\s*$/){
-			
-			print $1." ";
+			# Forecast data
+			$tmp = $1;
+			if( $tmp eq '' ){
+				$IN[$nr][8] = '';
+			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
+				if( $IN[$nr][6] eq '' ){
+					$IN[$nr][6] = $2;
+				}elsif( $2 ne $IN[$nr][6] ){
+					$ERR = 'Wrong Forecast unit '.$tmp.' ('.$IN[$nr][4].')';
+					return -1;
+				}
+				$IN[$nr][8] = $1;
+			}else{
+				$ERR = 'Unknown forecast data '.$tmp.' ('.$IN[$nr][4].')';
+				return -1;
+			}
 			
 		}elsif( $lines[$i] =~ /calhigh.*<div class="smallfont">(.*)<\/div><\/span><\/td>\s*$/){
-			
-			print $1."\n";
+			# Previous data
+			$tmp = $1;
+			if( $tmp eq '' ){
+				$IN[$nr][9] = '';
+			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
+				if( $IN[$nr][6] eq '' ){
+					$IN[$nr][6] = $2;
+				}elsif( $2 ne $IN[$nr][6] ){
+					$ERR = 'Wrong Previous unit: '.$tmp.' current unit:'.$IN[$nr][6].' ('.$IN[$nr][4].')';
+					return -1;
+				}
+				$IN[$nr][9] = $1;
+			}else{
+				$ERR = 'Unknown Previous data '.$tmp.' ('.$IN[$nr][4].')';
+				return -1;
+			}
+			$nr++;
 		}
+	}
 	
+	my $mon;
+	my $hour;
+	my $min;
+	my $ts;
+	for( $i = 0, $len = $#IN; $i < $len; $i++ ){
+	
+		if( $IN[$i][0] =~ /\s*(\S+) (\d+)\s*/ ){
+			$mon = getMonthId($1);
+		}else{
+			$ERR = 'Wrong month and day '.$IN[$i][0].' ('.$IN[$i][4].')';
+			return -1;
+		}
+		
+		if( $IN[$i][1] =~ /(\d+):(\d+)/ ){
+			$hour = $1;
+			$min = $2;
+			$ts = sprintf( "%04d%02d%02d%02d%02d%02d", (localtime)[5]+1900, $mon, $1 - 1, $2, 0, 0);
+			$ts = $ts + ( $TIMEZONE * 3600 );
+		}else{
+			$ts = sprintf( "%04d%02d%02d%02d%02d%02d", (localtime)[5]+1900, $mon, 0, 0, 0, 0);
+		}
+		
+		print scalar localtime ($ts)."\n";
+		
 	}
 
+}
+
+our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+sub getMonthId{
+	for( my $i = 0; $i < $#months; $i++ ){
+		if( $months[$i] eq $_[0] ){
+			return $i;
+		}
+	}
+	return -1;
 }
 
 sub read_file{
@@ -49,6 +153,11 @@ sub read_file{
   return @lines;
 }
 
-start();
+if( process() == -1 ){
+	print $ERR;
+}else{
+
+}
+
 
 

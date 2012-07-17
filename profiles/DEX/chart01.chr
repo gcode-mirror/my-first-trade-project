@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=3949
+leftpos=5762
 digits=5
 scale=4
 graph=1
@@ -37,6 +37,20 @@ stops_color=17919
 height=242
 <indicator>
 name=main
+<object>
+type=21
+object_name=1dsfsdf
+period_flags=0
+create_time=1342552971
+description=}
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342533600
+value_0=1.216205
+</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
@@ -213,7 +227,7 @@ type=2
 object_name=DT_GO_MONITOR_SWITCH
 period_flags=0
 create_time=1333402549
-description=1
+description=0
 color=255
 style=0
 weight=1
@@ -351,6 +365,104 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=21
+object_name=Text 43130
+period_flags=0
+create_time=1342548090
+description=#
+color=0
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342531800
+value_0=1.217324
+</object>
+<object>
+type=21
+object_name=Text 43600
+period_flags=0
+create_time=1342548560
+description=“
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342531800
+value_0=1.217705
+</object>
+<object>
+type=21
+object_name=Text 43675
+period_flags=0
+create_time=1342548635
+description=$
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342532100
+value_0=1.217348
+</object>
+<object>
+type=21
+object_name=Text 44112
+period_flags=0
+create_time=1342549072
+description=—
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342531800
+value_0=1.218039
+</object>
+<object>
+type=21
+object_name=Text 44670
+period_flags=0
+create_time=1342549630
+description=”
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342532100
+value_0=1.217658
+</object>
+<object>
+type=21
+object_name=Text 44701
+period_flags=0
+create_time=1342549661
+description=¤
+color=255
+font=Wingdings 3
+fontsize=10
+angle=0
+background=1
+time_0=1342532100
+value_0=1.218015
+</object>
+<object>
+type=21
+object_name=Text 48628
+period_flags=0
+create_time=1342553588
+description=?
+color=255
+font=Tahoma
+fontsize=10
+angle=0
+background=1
+time_0=1342533600
+value_0=1.216515
 </object>
 <object>
 type=2

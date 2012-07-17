@@ -51,7 +51,7 @@ bool addComment(string text, int prio = 2){
   }
   
   ObjectCreate(curr_name, OBJ_LABEL, 0, 0, 0);
-  ObjectSet(curr_name, OBJPROP_CORNER, 2);
+  ObjectSet(curr_name, OBJPROP_CORNER, 1);
   ObjectSet(curr_name, OBJPROP_XDISTANCE, 5);
   ObjectSet(curr_name, OBJPROP_YDISTANCE, 1);
   ObjectSet(curr_name, OBJPROP_BACK, true);  

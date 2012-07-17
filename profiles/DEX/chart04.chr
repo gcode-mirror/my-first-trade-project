@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=15
-leftpos=8546
+period=60
+leftpos=6026
 digits=5
 scale=4
 graph=1
@@ -82,11 +82,11 @@ time_0=1342713600
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1342513536
+object_name=DT_GO_cLine_g1_res_1342513536
 period_flags=63
-create_time=1342506337
-description=2012.07.17 08:25:36 G1
-color=15570276
+create_time=1342542767
+description=2012.07.17 08:25:36 G1 \/ \/ \/ \/ \/
+color=9639167
 style=0
 weight=1
 background=1
@@ -122,10 +122,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1342078200
-value_0=1.545895
-time_1=1342492200
-value_1=1.553584
+time_0=1342076400
+value_0=1.546207
+time_1=1342490400
+value_1=1.553896
 ray=1
 </object>
 <object>
@@ -134,14 +134,14 @@ object_name=DT_GO_cLine_g1_sup_1342513541
 period_flags=63
 create_time=1342506436
 description=2012.07.17 08:25:41 G1 /\ /\ /\ /\ /\
-color=3329330
+color=33023
 style=0
 weight=1
 background=1
 time_0=1342105200
-value_0=1.539290
+value_0=1.539388
 time_1=1342490400
-value_1=1.546086
+value_1=1.546184
 ray=1
 </object>
 <object>
