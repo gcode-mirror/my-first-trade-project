@@ -12,14 +12,10 @@ int ReleaseDC(int h, int dc);
 bool GetWindowRect(int h, int& pos[4]);
 
 #property indicator_chart_window
+#property indicator_buffers 1
+#property indicator_color1 Red
 
-// #property indicator_buffers 4
- 
-// #property indicator_color1 Black
-// #property indicator_color2 Black
-// #property indicator_color3 SeaGreen
-// #property indicator_color4 Crimson
-
+double ZIGZAG_BUF_1[];
 
 //========================================== Defaults ========================================
 #include <DT_defaults.mqh>
@@ -37,12 +33,18 @@ bool GetWindowRect(int h, int& pos[4]);
 #include <DT_functions.mqh>
 #include <DT_channel.mqh>
 #include <DT_sessions.mqh>
+#include <DT_zigzag.mqh>
 //#include <DT_zoom.mqh>
 
 bool CONNECTION_FAIL = true;
 
 //int k;
 int init(){
+	IndicatorBuffers(1);
+	SetIndexStyle( 0, DRAW_SECTION );
+	SetIndexBuffer( 0, ZIGZAG_BUF_1 );
+	SetIndexEmptyValue( 0, 0.0 );
+	 
   if( MarketInfo(Symbol(),MODE_TICKVALUE) == 0.0 ){
     CONNECTION_FAIL = true;
     return (0);
@@ -59,6 +61,7 @@ int init(){
   createGlobal("NEWS_SWITCH", "1");
   createGlobal("CHANNEL_SWITCH", "1");
   createGlobal("SESSION_SWITCH", "0");
+  createGlobal("ZIGZAG_SWITCH", "0");
  // createGlobal("ZOOM_SWITCH", "0");
   
   createGlobal( "LOT", "0.1" );
@@ -102,6 +105,7 @@ int start(){
   startChannel(/*getGlobal("CHANNEL_SWITCH")*/);
 	startMonitor(getGlobal("MONITOR_SWITCH"));
 	startSession(getGlobal("SESSION_SWITCH"));
+	startZigZag(getGlobal("ZIGZAG_SWITCH"));
 	//startZoom(getGlobal("ZOOM_SWITCH"));
   startHud();
   

@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=1084
+leftpos=5022
 digits=5
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1341446400
+time_0=1342756800
 </object>
 <object>
 type=2
@@ -274,6 +274,22 @@ ray=0
 </object>
 <object>
 type=2
+object_name=DT_GO_ZIGZAG_SWITCH
+period_flags=0
+create_time=1342447851
+description=0 15
+color=255
+style=0
+weight=1
+background=0
+time_0=0
+value_0=0.000000
+time_1=1342450800
+value_1=0.010000
+ray=0
+</object>
+<object>
+type=2
 object_name=Trendline 1342283669
 period_flags=0
 create_time=1342276469
@@ -382,33 +398,13 @@ ray=1
 <indicator>
 name=Custom Indicator
 <expert>
-name=ZigZag
-flags=339
-window_num=0
-<inputs>
-ExtDepth=12
-ExtDeviation=5
-ExtBackstep=3
-</inputs>
-</expert>
-shift_0=0
-draw_0=1
-color_0=255
-style_0=0
-weight_0=0
-period_flags=20
-show_data=1
-</indicator>
-<indicator>
-name=Custom Indicator
-<expert>
 name=Dex_Trader
 flags=339
 window_num=0
 </expert>
 shift_0=0
-draw_0=0
-color_0=0
+draw_0=1
+color_0=255
 style_0=0
 weight_0=0
 period_flags=0

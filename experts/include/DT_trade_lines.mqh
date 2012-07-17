@@ -18,12 +18,31 @@ bool initTradeLines(string isOn){
     return (false);
   }
   
+	double min_distance = 70 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+	
   double tp_price, sl_price, open_price;
   if( selectFirstOpenPosition(Symbol())){
     //if( OrderMagicNumber() == 555 ){
+      open_price = OrderOpenPrice();
       tp_price = OrderTakeProfit();
       sl_price = OrderStopLoss();
-      open_price = OrderOpenPrice();
+			int o_type = OrderType();
+			
+			if( tp_price == 0.0 ){
+				if( o_type == OP_BUY || o_type == OP_BUYLIMIT || o_type == OP_BUYSTOP ){
+					tp_price = open_price + min_distance;
+				}else{
+					tp_price = open_price - min_distance;
+				}
+			}
+			
+			if( sl_price == 0.0 ){
+				if( o_type == OP_BUY || o_type == OP_BUYLIMIT || o_type == OP_BUYSTOP ){
+					sl_price = open_price - min_distance;
+				}else{
+					sl_price = open_price + min_distance;
+				}
+			}
     //}  
   }else{
     string near_line_name = getSelectedLine( Time[0], Bid, true );
@@ -31,18 +50,24 @@ bool initTradeLines(string isOn){
     if( near_line_name != "" ){
       open_price = NormalizeDouble( getClineValueByShift( near_line_name, 0 ), Digits );
       double fibo_23_dif, fibo_100_time, fibo_100, spread;
-      getFibo100( open_price ,fibo_100, fibo_100_time );
-      spread = getMySpread();
-      fibo_23_dif = MathAbs( fibo_100 - open_price ) * 0.23; // 0.236
-      
-      if( fibo_100 > open_price ){
-        open_price = open_price + spread;
-        sl_price = open_price - fibo_23_dif;
-        tp_price = open_price + fibo_23_dif;
-      }else{
-        sl_price = open_price + fibo_23_dif + spread;
-        tp_price = open_price - fibo_23_dif + spread;
-      }
+      getFibo100( PERIOD_H1, open_price ,fibo_100, fibo_100_time );
+			
+			if( MathAbs(fibo_100 - open_price) < 200 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point ){
+        tp_price = open_price + min_distance;
+				sl_price = open_price - min_distance;
+			}else{
+				spread = getMySpread();
+				fibo_23_dif = MathAbs( fibo_100 - open_price ) * 0.23; // 0.236
+				
+				if( fibo_100 > open_price ){
+					open_price = open_price + spread;
+					sl_price = open_price - fibo_23_dif;
+					tp_price = open_price + fibo_23_dif;
+				}else{
+					sl_price = open_price + fibo_23_dif + spread;
+					tp_price = open_price - fibo_23_dif + spread;
+				}
+			}
       
     }else{
       double time1, time2;

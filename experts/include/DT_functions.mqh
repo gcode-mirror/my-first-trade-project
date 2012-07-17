@@ -209,10 +209,10 @@ double getZigZag(double tf, int deph, int dev, int backstep, int nr, double& tim
   double tmp=0;
   while(i < 100){
     tmp = iCustom(Symbol(),tf,"ZigZag",deph,dev,backstep,0,i);
-    if( tmp != 0 ){
-      if(found == nr){
+    if( tmp != 0.0 ){
+      if( found == nr ){
         time = iTime( NULL, tf, i );
-        return (tmp);
+        return ( tmp );
       }
       found++;
     }
@@ -312,14 +312,14 @@ bool menuControl(int index){
       }
     break;
     case 6:
-      if(getGlobal("ZOOM_SWITCH") != "0"){
-        setGlobal("ZOOM_SWITCH", "0");
-        changeIcon("DT_BO_icon_zoom", "0");
-        addComment("Switch zoom to OFF.");
+      if( isVisibleThisTimeframe( getGlobal("ZIGZAG_SWITCH") ) == "1" ){
+        setGlobal( "ZIGZAG_SWITCH", removeTimeframeFromStr( getGlobal("ZIGZAG_SWITCH"), Period() ) );
+        changeIcon( "DT_BO_icon_zigzag", "0" );
+        addComment( "Switch OFF ZigZag at "+getPeriodName( Period() )+" period." );
       }else{
-        setGlobal("ZOOM_SWITCH", Period());
-        changeIcon("DT_BO_icon_zoom", "1");
-        addComment("Switch zoom to ON.");
+        setGlobal( "ZIGZAG_SWITCH", getGlobal("ZIGZAG_SWITCH")+" "+Period() );
+        changeIcon( "DT_BO_icon_zigzag", "1" );
+        addComment( "Switch ON ZigZag at "+getPeriodName( Period() )+" period." );
       }
     break;
     default:
@@ -713,4 +713,54 @@ int getClineOpenPosition(){
     }
   }
   return (0);
+}
+
+bool splitStr( string str, string sep, string &arr[] ){
+	if( str == "" || str == sep ){
+		return (false);
+	}
+	str = str + sep;
+	int nr = 0, i = 0, len = StringLen( str ), sep_len = StringLen( sep ), last_i = 0;
+	string part;
+	for( ; i < len; i++ ){
+		if( StringSubstr( str, i, sep_len ) == sep ){
+			part = StringSubstr( str, last_i, i - last_i );
+			if( i == last_i || part == "" || part == sep ){
+				continue;
+			}
+			ArrayResize( arr, nr + 1 );
+			arr[nr] = part;
+			nr++;
+			last_i = i + sep_len;
+			i = i + sep_len - 1;
+		}
+	}
+	return (true);
+}
+
+string isVisibleThisTimeframe( string appIsOn ){
+	string arr[0], peri = Period();
+	splitStr( appIsOn, " ", arr );
+	int len = ArraySize(arr);
+	for( int i = 0; i < len; i++){
+		if( arr[i] == peri ){
+			return ("1");
+		}
+	}
+	return ("0");
+}
+
+string removeTimeframeFromStr( string tf, string peri ){
+	string arr[0], res = "0";
+	splitStr( tf, " ", arr );
+	int len = ArraySize(arr);
+	
+	for( int i = 0; i < len; i++){
+		if( arr[i] == peri || arr[i] == "0" ){
+			continue;
+		}else{
+			res = res + " " + arr[i];
+		}
+	}
+	return ( res );
 }

@@ -30,4 +30,4 @@ double SPREAD[USED_SYM] =  { 0.00008,  0.009 ,   0.014, 0.00014, 0.00015 };
 #define APP_ID_VOICE 8
 #define APP_ID_CHANNEL 9
 #define APP_ID_SESSION 10
-#define APP_ID_ZOOM 11
+#define APP_ID_ZIGZAG 11

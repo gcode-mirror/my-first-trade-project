@@ -22,6 +22,7 @@ bool initIcons(){
   showIcon("DT_BO_icon_archive", 2, 1, "Í", "Webdings", getGlobal("ARCHIVE_SWITCH")); 
   showIcon("DT_BO_icon_news", 1, 1, "ü", "Webdings", getGlobal("NEWS_SWITCH")); 
   showIcon("DT_BO_icon_session", 3, 2, "¸", "Wingdings", getGlobal("SESSION_SWITCH")); 
+  showIcon("DT_BO_icon_zigzag", 2, 2, "Zz", "Times New Roman", isVisibleThisTimeframe( getGlobal("ZIGZAG_SWITCH") )); 
   // showIcon("DT_BO_icon_zoom", 1, 1, "L", "Webdings", getGlobal("ZOOM_SWITCH")); 
   // showIcon("DT_BO_icon_fibo_lines", 7, -2, "f", "Comic Sans MS", getGlobal("FIBO_LINES_SWITCH"));
   // showIcon("DT_BO_icon_boundary", 4, 1, ".", "Wingdings 3", getGlobal("BOUNDARY_SWITCH")); 
