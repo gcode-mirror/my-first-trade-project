@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=5994
+leftpos=6052
 digits=3
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1342703400
+time_0=1342886400
 </object>
 <object>
 type=2
@@ -98,82 +98,66 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_res_1342378327
+object_name=DT_GO_cLine_g1_res_1342655084
 period_flags=63
-create_time=1342529424
-description=2012.07.15 18:52:07 G1 \/ \/ \/ \/ \/
+create_time=1342647916
+description=2012.07.18 23:44:44 G1 \/ \/ \/ \/ \/
 color=9639167
 style=0
 weight=1
 background=1
 time_0=1340985600
 value_0=101.391000
-time_1=1341453600
-value_1=100.341000
+time_1=1342191600
+value_1=99.614329
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1342378318
+object_name=DT_GO_cLine_g1_sig_1342655009
 period_flags=63
-create_time=1342371171
-description=2012.07.15 18:51:58 G1
+create_time=1342647810
+description=2012.07.18 23:43:29 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1340895600
-value_0=99.522111
-time_1=1341595800
-value_1=97.636000
+time_0=1340827200
+value_0=99.491000
+time_1=1341882000
+value_1=98.029182
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1342378321
+object_name=DT_GO_cLine_g1_sig_1342655052
 period_flags=63
-create_time=1342371122
-description=2012.07.15 18:52:01 G1
+create_time=1342647853
+description=2012.07.18 23:44:12 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1340852400
-value_0=100.242741
-time_1=1342148400
-value_1=96.846444
+time_0=1340956800
+value_0=100.374727
+time_1=1342530000
+value_1=98.200741
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1342378324
+object_name=DT_GO_cLine_g1_sup_1342655005
 period_flags=63
-create_time=1342371125
-description=2012.07.15 18:52:04 G1
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1340910000
-value_0=100.769741
-time_1=1342065600
-value_1=97.879000
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1342378392
-period_flags=63
-create_time=1342371197
-description=2012.07.15 18:53:12 G1 /\ /\ /\ /\ /\
+create_time=1342647911
+description=2012.07.18 23:43:25 G1 /\ /\ /\ /\ /\
 color=3329330
 style=0
 weight=1
 background=1
-time_0=1340640000
-value_0=99.168593
-time_1=1341860400
-value_1=96.044519
+time_0=1340874000
+value_0=98.326000
+time_1=1342432800
+value_1=96.182000
 ray=1
 </object>
 <object>
@@ -309,7 +293,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0 15
+description=0 15 60
 color=255
 style=0
 weight=1
