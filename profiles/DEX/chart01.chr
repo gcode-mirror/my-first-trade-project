@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=5787
+leftpos=3971
 digits=5
 scale=4
 graph=1
@@ -377,8 +377,8 @@ font=Wingdings 3
 fontsize=10
 angle=0
 background=1
-time_0=1342531800
-value_0=1.217324
+time_0=1342534500
+value_0=1.217295
 </object>
 <object>
 type=21
@@ -391,8 +391,8 @@ font=Wingdings 3
 fontsize=10
 angle=0
 background=1
-time_0=1342531800
-value_0=1.217705
+time_0=1342534500
+value_0=1.217665
 </object>
 <object>
 type=21
@@ -419,8 +419,8 @@ font=Wingdings 3
 fontsize=10
 angle=0
 background=1
-time_0=1342531800
-value_0=1.218039
+time_0=1342534500
+value_0=1.218061
 </object>
 <object>
 type=21
