@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=2818
+period=15
+leftpos=9350
 digits=3
 scale=4
 graph=1
@@ -369,7 +369,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0 15 60
+description=0 15
 color=255
 style=0
 weight=1

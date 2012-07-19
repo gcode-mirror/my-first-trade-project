@@ -1,11 +1,15 @@
 #!/usr/bin/perl
 
 use LWP::Simple;
+use Time::Local;
 
 our @IN;
 our $ERR;
-our $TIMEZONE = 5;
+our $TIMEZONE = 5 * 3600; #5 hour
 
+getstore("http://www.forexfactory.com/calendar.php#details=40989", "ppp.html");
+
+exit;
 sub process{
 	# my $url = get 'http://www.forexfactory.com/calendar.php';
 	# my @lines = split(/\n/, $url);
@@ -44,13 +48,23 @@ sub process{
 			# currency
 			$IN[$nr][2] = $1;
 			
-		}elsif( $lines[$i] =~ /title="(Medium|High|Low) Impact Expected"/){
+		}elsif( $lines[$i] =~ /title="(Medium|High|Low|Non-Economic).*/){
 			# priority
-			$IN[$nr][3] = $1;
+			$tmp = $1;
+			if( $tmp eq 'High' ){
+				$IN[$nr][3] = 3;
+			}elsif( $tmp eq 'Medium' ){
+				$IN[$nr][3] = 2;
+			}elsif( $tmp eq 'Low' ){
+				$IN[$nr][3] = 1;
+			}else{
+				$IN[$nr][3] = 0;
+			}
 			
 		}elsif( $lines[$i] =~ /id="title_.*>\s*(.*)\s*</){
 			# description
 			$IN[$nr][4] = $1;
+			$IN[$nr][4] =~ s/;/:/g;
 			
 		}elsif( $lines[$i] =~ /<div class="smallfont"><span class="\s*(.*)\s*">\s*(.*)\s*<\/span><\/div>\s*$/){
 			# impact
@@ -60,7 +74,7 @@ sub process{
 			$tmp = $2;
 			if( $tmp eq '' ){
 				$IN[$nr][6] = '';
-				$IN[$nr][7] = '';
+				$IN[$nr][7] = '-';
 			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
 				$IN[$nr][6] = $2;
 				$IN[$nr][7] = $1;
@@ -73,7 +87,7 @@ sub process{
 			# Forecast data
 			$tmp = $1;
 			if( $tmp eq '' ){
-				$IN[$nr][8] = '';
+				$IN[$nr][8] = '-';
 			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
 				if( $IN[$nr][6] eq '' ){
 					$IN[$nr][6] = $2;
@@ -91,7 +105,7 @@ sub process{
 			# Previous data
 			$tmp = $1;
 			if( $tmp eq '' ){
-				$IN[$nr][9] = '';
+				$IN[$nr][9] = '-';
 			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
 				if( $IN[$nr][6] eq '' ){
 					$IN[$nr][6] = $2;
@@ -108,32 +122,40 @@ sub process{
 		}
 	}
 	
+	my $year = ((localtime)[5])+1900;
 	my $mon;
-	my $hour;
-	my $min;
+	my $day;
+	my $server_time;
+	my $local_time;
 	my $ts;
+	my $prior;
+	my $out = '';
 	for( $i = 0, $len = $#IN; $i < $len; $i++ ){
 	
 		if( $IN[$i][0] =~ /\s*(\S+) (\d+)\s*/ ){
 			$mon = getMonthId($1);
+			$day = $2;
+			
 		}else{
 			$ERR = 'Wrong month and day '.$IN[$i][0].' ('.$IN[$i][4].')';
 			return -1;
 		}
 		
 		if( $IN[$i][1] =~ /(\d+):(\d+)/ ){
-			$hour = $1;
-			$min = $2;
-			$ts = sprintf( "%04d%02d%02d%02d%02d%02d", (localtime)[5]+1900, $mon, $1 - 1, $2, 0, 0);
-			$ts = $ts + ( $TIMEZONE * 3600 );
+			$ts = timelocal( 0, $2, $1, $day, $mon, $year ) + $TIMEZONE;
+			$server_time = sprintf("%02d:%02d", (localtime($ts))[2], (localtime($ts))[1]);
+			$tmp = $ts + 3600;
+			$local_time = sprintf("%02d:%02d", (localtime($tmp))[2], (localtime($tmp))[1]);
 		}else{
-			$ts = sprintf( "%04d%02d%02d%02d%02d%02d", (localtime)[5]+1900, $mon, 0, 0, 0, 0);
+			$ts = timelocal( 0, 0, 0, $day, $mon, $year );
+			$hour = '00';
+			$min = '00';
 		}
 		
-		print scalar localtime ($ts)."\n";
-		
-	}
 
+		#  timestamp     actual         forcast         prevous         unit       description     server_time      local_time        prio
+		$out = $ts.';('.$IN[$i][7].'|'.$IN[$i][8].'|'.$IN[$i][9].')'.$IN[$i][6].' '.$IN[$i][4].';'.$server_time.';'.$local_time.';'.$IN[$i][3].';';
+	}
 }
 
 our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
