@@ -188,6 +188,16 @@ int start(){
 				}
 				
         tp = NormalizeDouble( OrderTakeProfit(), Digits );
+				if( o_type == OP_BUY ){
+					if( new_tp > tp ){
+						return (0);
+					}
+				}else{
+					if( new_tp < tp ){
+						return (0);
+					}
+				}
+				
         if( tp == new_tp ){
           return (0);
         }
