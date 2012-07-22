@@ -2,160 +2,218 @@
 
 use LWP::Simple;
 use Time::Local;
-
-our @IN;
+use FindBin qw($Bin);
+our $BASE_DIR = $Bin;
 our $ERR;
 our $TIMEZONE = 5 * 3600; #5 hour
 
-getstore("http://www.forexfactory.com/calendar.php#details=40989", "ppp.html");
+# getstore("http://www.forexfactory.com/calendar.php?week=jul16.2012", "ppp.html");
+# getstore("http://www.forexfactory.com/calendar.php?week=jul23.2012", "ppp2.html");
+# exit;
 
-exit;
+require $BASE_DIR.'\history.pl';
+
 sub process{
-	# my $url = get 'http://www.forexfactory.com/calendar.php';
-	# my @lines = split(/\n/, $url);
-	my @lines = read_file("c:\\mt4\\experts\\files\\xxx.html");
-	
-	my @csv;
-	my $date;
+	my $out = 'ok;';
 	my $tmp;
-	my $nr = 0;
 	my $i;
+	my $len;
+	my $skip = 1;
+	my $unknown;
+	my $save_file = 0;
+	my $save_data;
+	my $year = ((localtime)[5])+1900;
+	my ($month, $day, $date, $currency, $prio, $desc, $act, $forc, $prev, $unit, $ts, $avarage, $goodeffect, $max);
+	my @months = qw(jan feb mar apr may jun jul aug sep oct nov dec);
 	
-	for( $i = 0, $len = $#lines; $i < $len; $i++) {
-		if( $lines[$i] =~ /^\s+(\S+ \d+)\s*$/ ){
-			$date = $1;
-			
-		}elsif( $lines[$i] =~ /^\s+<span class="smallfont">([a-zA-Z0-9: ]+)<\/span>\s*$/ || $lines[$i] =~ /alt="Up Next".*>(.*)<\/span/ ){
-			# month and day
-			$IN[$nr][0] = $date;
-			
-			# hour and time
-			$tmp = $1;
-			if( $tmp =~ /\s*(\d+):(\d+)(am|pm)\s*/ ){
-				if( $3 eq 'pm' ){
-					$IN[$nr][1] = ($1+12).':'.$2;
-				}else{
-					$IN[$nr][1] = $1.':'.$2;
-				}
-			}elsif( $tmp =~ /\s*(All Day|Tentative)\s*/ ){
-				$IN[$nr][1] = $1;
-			}else{
-				$ERR = 'Wrong hour or time '.$tmp.' ('.$lines[$i].')';
-				return -1;
+	$tmp = (localtime(time))[6];
+	if( $tmp == 6 ){
+		$tmp = -2;
+	}elsif( $tmp == 0 ){
+		$tmp = -1;
+	}else{
+		$tmp--;
+	}
+	$ts = time - ($tmp * 86400);
+	$day = (localtime($ts))[3];
+	$month = (localtime($ts))[4] + 1;
+	# my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, (+1), $day).'.csv';
+	
+	# my $html = get 'http://www.forexfactory.com/calendar.php?week='.$day.'16.'.$year;
+	# $html = split(/\n/, $html);
+	
+	my @blocks = read_file("c:\\mt4\\ppp.html");
+	my $html = '';
+	for(@blocks){
+		$html .= $_;
+	}
+	
+	
+	$html = substr ($html, index( $html, '<tr class="calendar_row' ));
+	$tmp = index( $html, '<tr class="calendar_row" data-eventid="">' );
+	if( $tmp == -1 ){
+		$tmp = index( $html, '</table>' );
+	}
+	$html = substr ($html, 0, $tmp);
+	$html =~ s/\s*\n\s*//g;
+	$html =~ s/\s{2,}/ /g;
+		
+	my @blocks = split(/<\/tr><tr class="calendar_row" data-eventid="\d+">/, $html);
+	
+	# print $blocks[$#blocks - 1]."\n\n";
+	# my @arr = split(/<\/td>/, $blocks[0]);
+	# for(@arr){
+		# print $_."\n\n";
+	# }
+	# exit;
+	
+	$month = $day = $date = $currency = $prio = $desc = $act = $forc = $prev = $unit = $ts = '';
+	my @currencies = qw(EUR AUD GBP JPY USD);
+	my @lines;
+	for(@blocks){
+		@lines = split(/<\/td>/, $_);
+		
+		if( $lines[2] =~ />([A-Z]{3})$/ ){
+			$currency =  $1;
+			if( !grep $_ eq $currency, @currencies ){
+				next;
 			}
-			
-		}elsif( $lines[$i] =~ /<span class="smallfont">([A-Z ]+)<\/span><\/td>\s*$/){
-			# currency
-			$IN[$nr][2] = $1;
-			
-		}elsif( $lines[$i] =~ /title="(Medium|High|Low|Non-Economic).*/){
-			# priority
+		}else{
+			$out = 'Wrong currency '.$lines[2];
+			last;
+		}
+		
+		if( $lines[0] =~ />(\S{3}) (\d+)\s*<\/div>/ ){
+			$day = $2;
+			$date = $1.' '.$day.', '.$year;
+			$month = getMonthId($1);
+		}
+		
+		if( $lines[1] =~ />(\d+):(\d+)(am|pm)$/ ){
+			$tmp = $1;
+			if( $3 eq 'pm' ){
+				$tmp += 12;
+			}
+			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
+		
+		}elsif( $lines[1] =~ />(All Day|Tentative)$/ ){
+			$ts = timelocal( 0, 0, 0, $day, $month, $year );
+		}else{
+			$out = 'Wrong time '.$lines[1];
+			last;
+		}
+		
+		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic).*/ ){
 			$tmp = $1;
 			if( $tmp eq 'High' ){
-				$IN[$nr][3] = 3;
+				$prio = 3;
 			}elsif( $tmp eq 'Medium' ){
-				$IN[$nr][3] = 2;
+				$prio = 2;
 			}elsif( $tmp eq 'Low' ){
-				$IN[$nr][3] = 1;
-			}else{
-				$IN[$nr][3] = 0;
+				$prio = 1;
+			}elsif( $tmp eq 'Non-Economic' ){
+				$prio = 0;
 			}
-			
-		}elsif( $lines[$i] =~ /id="title_.*>\s*(.*)\s*</){
-			# description
-			$IN[$nr][4] = $1;
-			$IN[$nr][4] =~ s/;/:/g;
-			
-		}elsif( $lines[$i] =~ /<div class="smallfont"><span class="\s*(.*)\s*">\s*(.*)\s*<\/span><\/div>\s*$/){
-			# impact
-			$IN[$nr][5] = $1;
-			
-			# Actual data and unit
-			$tmp = $2;
-			if( $tmp eq '' ){
-				$IN[$nr][6] = '';
-				$IN[$nr][7] = '-';
-			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
-				$IN[$nr][6] = $2;
-				$IN[$nr][7] = $1;
-			}else{
-				$ERR = 'Unknown actual data '.$tmp.' ('.$IN[$nr][4].')';
-				return -1;
-			}
-			
-		}elsif( $lines[$i] =~ /calhigh.*<span class="smallfont">(.*)<\/span><\/td>\s*$/){
-			# Forecast data
-			$tmp = $1;
-			if( $tmp eq '' ){
-				$IN[$nr][8] = '-';
-			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
-				if( $IN[$nr][6] eq '' ){
-					$IN[$nr][6] = $2;
-				}elsif( $2 ne $IN[$nr][6] ){
-					$ERR = 'Wrong Forecast unit '.$tmp.' ('.$IN[$nr][4].')';
-					return -1;
-				}
-				$IN[$nr][8] = $1;
-			}else{
-				$ERR = 'Unknown forecast data '.$tmp.' ('.$IN[$nr][4].')';
-				return -1;
-			}
-			
-		}elsif( $lines[$i] =~ /calhigh.*<div class="smallfont">(.*)<\/div><\/span><\/td>\s*$/){
-			# Previous data
-			$tmp = $1;
-			if( $tmp eq '' ){
-				$IN[$nr][9] = '-';
-			}elsif( $tmp =~ /([\d\.\+\-]+)(.*)/ ){
-				if( $IN[$nr][6] eq '' ){
-					$IN[$nr][6] = $2;
-				}elsif( $2 ne $IN[$nr][6] ){
-					$ERR = 'Wrong Previous unit: '.$tmp.' current unit:'.$IN[$nr][6].' ('.$IN[$nr][4].')';
-					return -1;
-				}
-				$IN[$nr][9] = $1;
-			}else{
-				$ERR = 'Unknown Previous data '.$tmp.' ('.$IN[$nr][4].')';
-				return -1;
-			}
-			$nr++;
-		}
-	}
-	
-	my $year = ((localtime)[5])+1900;
-	my $mon;
-	my $day;
-	my $server_time;
-	my $local_time;
-	my $ts;
-	my $prior;
-	my $out = '';
-	for( $i = 0, $len = $#IN; $i < $len; $i++ ){
-	
-		if( $IN[$i][0] =~ /\s*(\S+) (\d+)\s*/ ){
-			$mon = getMonthId($1);
-			$day = $2;
-			
 		}else{
-			$ERR = 'Wrong month and day '.$IN[$i][0].' ('.$IN[$i][4].')';
-			return -1;
+			$out = 'Wrong priority '.$lines[3];
+			last;
 		}
-		
-		if( $IN[$i][1] =~ /(\d+):(\d+)/ ){
-			$ts = timelocal( 0, $2, $1, $day, $mon, $year ) + $TIMEZONE;
-			$server_time = sprintf("%02d:%02d", (localtime($ts))[2], (localtime($ts))[1]);
-			$tmp = $ts + 3600;
-			$local_time = sprintf("%02d:%02d", (localtime($tmp))[2], (localtime($tmp))[1]);
-		}else{
-			$ts = timelocal( 0, 0, 0, $day, $mon, $year );
-			$hour = '00';
-			$min = '00';
-		}
-		
 
-		#  timestamp     actual         forcast         prevous         unit       description     server_time      local_time        prio
-		$out = $ts.';('.$IN[$i][7].'|'.$IN[$i][8].'|'.$IN[$i][9].')'.$IN[$i][6].' '.$IN[$i][4].';'.$server_time.';'.$local_time.';'.$IN[$i][3].';';
+		if( $lines[4] =~ /<div>\s*(.*)\s*<\/div>$/ ){
+			$desc = $1;
+			$desc =~ s/;/:/g;
+			$desc =~ s/\\/\//g;
+			$desc =~ s/'/\\'/g;
+		}else{
+			$out = 'Missing description '.$lines[4];
+			last;
+		}
+		
+		
+		$lines[6] =~ s/<\/span>$//;
+		if( $lines[6] =~ />([\d\.\+\-]*)([^<]*)$/ ){
+			$unit = $2;
+			$act = $1;
+			if( $act eq '' ){
+				$act = '-';
+			}
+		}else{
+			$out = 'wrong actual data '.$lines[6];
+			last;
+		}
+		
+		$lines[7] =~ s/<\/span>$//;
+		if( $lines[7] =~ />([\d\.\+\-]*)[^<]*$/ ){
+			$forc = $1;
+			if( $forc eq '' ){
+				$forc = '-';
+			}
+		}else{
+			$out = 'wrong actual data '.$lines[7];
+			last;
+		}
+		
+		$lines[8] =~ s/<\/span>$//;
+		if( $lines[8] =~ />([\d\.\+\-]*)[^<]*$/ ){
+			$prev = $1;
+			if( $prev eq '' ){
+				$prev = '-';
+			}
+		}else{
+			$out = 'wrong actual data '.$lines[8];
+			last;
+		}
+		
+		$goodeffect = '-';
+		if( $act ne '' && $forc ne '' ){
+			$avarage = abs( $act - $forc );
+			$max = abs( $act - $forc );
+			$save_data = $unknown = 1;
+			for my $k1 ( keys %$HISTORY_DATA ){
+				if( $HISTORY_DATA->{ $k1 }->{ CURRENCY } eq $currency ){
+					if( $HISTORY_DATA->{ $k1 }->{ DESC } eq $desc ){
+						$goodeffect = $HISTORY_DATA->{ $k1 }->{ GOODEFFECT };
+						$unknown = 0;
+						for my $k2 ( keys %{$HISTORY_DATA->{ $k1 }->{ HISTORY }} ){
+							if( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { DATE } eq $date ){
+								$save_data = 0;
+							}
+							$tmp = abs( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { ACT } - $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { FORC } );
+							$avarage += $tmp;
+							if( $tmp > $max ){
+								$max = $tmp;
+							}
+						}
+						$len = scalar keys %{$HISTORY_DATA -> { $k1 } -> { HISTORY }};
+						$avarage = sprintf("%.2f", $avarage / $len );
+						
+						if( $save_data == 1 ){
+							$HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $len } -> { DATE => $date, ACT => $act, FORC => $forc, PREV => $prev };
+							$save_file = 1;
+						}
+						last;
+					}
+				}
+			}
+			if( $unknown == 1 ){
+				$max = $avarage = 0;
+			}
+		}else{
+			$avarage = $max = $unknown = 0;
+		}
+		#       currency  timestamp   actual   forcast   prevous   unit     descript   prio        effect        avarage       max     is_unknown
+		$out .= $currency.';'.$ts.';'.$act.';'.$forc.';'.$prev.';'.$unit.';'.$desc.';'.$prio.';'.$goodeffect.';'.$avarage.';'.$max.';'.$unknown."\n";
 	}
+	
+	if( $save_file == 1 ){
+		# saveHistoryData();
+	}
+	
+	print $out;
+
+	# open(DAT,' > '.$BASE_DIR.'/experts/files/'.$filename) || die("Cannot Open File");
+		# print DAT $out;
+	# close(DAT);
 }
 
 our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
@@ -175,11 +233,43 @@ sub read_file{
   return @lines;
 }
 
-if( process() == -1 ){
-	print $ERR;
-}else{
-
+sub saveHistoryData{
+	my $out = '';
+	my $idx = 0;
+	$out .= 'our $X = 0;'."\n";
+	$out .= 'our $HISTORY_DATA = {'."\n";
+	for my $k1 ( sort keys %$HISTORY_DATA ){
+		$out .= '  $X++ => { '."\n";
+		
+		for my $k2 ( sort keys %{$HISTORY_DATA->{ $k1 }} ){
+				if( $k2 eq 'HISTORY' ){
+					$out .= '    '.$k2.'=> {'."\n";
+					
+					for my $k3 ( sort keys %{$HISTORY_DATA->{ $k1 }->{ $k2 }} ){
+						$out .= '      '.$k3.'=> {'."\n";
+						
+						for my $k4 ( keys %{$HISTORY_DATA->{ $k1 }->{ $k2 } ->{ $k3 }} ){
+							$out .= '        '.$k4.'=> \''.$HISTORY_DATA->{ $k1 }{ $k2 }{ $k3}{ $k4 }."',\n";
+						}
+						$out .= '      '.'},'."\n";
+						
+					}
+					$out .= '    '.'},'."\n";
+					
+				}else{
+					$out .= '    '.$k2.'=> \''.$HISTORY_DATA->{ $k1 }{ $k2 }."',\n";
+				}
+		}
+		$out .= "  },\n";
+	}
+	$out .= "};\n";
+	$out .= '1;';
+	
+	open(DAT," > history.pl") || die("Cannot Open File");
+		print DAT $out;
+	close(DAT);
 }
 
+process();
 
 

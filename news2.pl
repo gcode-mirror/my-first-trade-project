@@ -20,8 +20,9 @@ use constant {
 };
 
 # =for comment
+my $x = 0;
 my $config = {
-  0 =>{
+  $x++ =>{
     NAME => 'John Doe',
     ADDRESS => '123 Main St./',
     PHONE => {
@@ -33,9 +34,10 @@ my $config = {
         DATE => 'zzzz',
         FORC => 'jjjjj',
         PREV => 'pppp',
-      }
-    }
-  },1 => {
+      },
+    },
+  },
+	$x++ => {
     NAME => 'John Doe2',
     ADDRESS => '123 Main St.2',
     PHONE => {
@@ -72,10 +74,10 @@ print  $config -> {1} -> {PHONE} -> {$i} -> {DATE}, "\n\n";
 
 print "=================== add ==============\n";
 $config -> {1} -> {PHONE} -> {2} = {
-                                                            DATE => 'vvvvvv',
-                                                            FORC => 'uuuóóü',
-                                                            PREV => 'ééééééé',
-                                                          };
+																			DATE => 'vvvvvv',
+																			FORC => 'uuuóóü',
+																			PREV => 'ééééééé',
+																		};
                                                           
 print  Dump($config -> {1} -> {PHONE} -> {2}), "\n\n";
 
@@ -84,7 +86,7 @@ print  scalar keys %$config , "\n\n";
 my $p = $config -> {1} -> {PHONE};
 print  scalar keys %$p, "\n\n";
 print  scalar keys %{$config -> {1} -> {PHONE}}, "\n\n";
-
+=for comment
 print "=================== for ==============\n";
 open(DAT," >test.yml") || die("Cannot Open File");
 for my $k1 ( keys %$config ) {
@@ -112,7 +114,7 @@ for my $k1 ( keys %$config ) {
   print DAT "  },\n";
 }
 close(DAT);
-
+=cut
 print "=================== save ==============\n";
 # open(DAT," >test.yml") || die("Cannot Open File");
   # print DAT Dump( $config ); 
@@ -122,7 +124,6 @@ print "=================== delete ==============\n";
 print Dump( $config -> {1} -> {PHONE} ), "\n\n";
 delete $config -> {1} -> {PHONE} -> {2};
 print Dump( $config -> {1} -> {PHONE} ), "\n\n";
-
 
 
 
