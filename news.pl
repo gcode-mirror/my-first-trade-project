@@ -16,15 +16,11 @@ require $BASE_DIR.'\history.pl';
 sub process{
 	my $out = 'ok;';
 	my $tmp;
-	my $i;
-	my $len;
-	my $skip = 1;
-	my $unknown;
 	my $save_file = 0;
-	my $save_data;
 	my $year = ((localtime)[5])+1900;
-	my ($month, $day, $date, $currency, $prio, $desc, $act, $forc, $prev, $unit, $ts, $avarage, $goodeffect, $max);
+	my ($month, $day, $date, $currency, $prio, $desc, $act, $forc, $prev, $unit, $ts, $avarage, $goodeffect, $max, $power, $desc2, $dif, $len, $unknown, $save_data);
 	my @months = qw(jan feb mar apr may jun jul aug sep oct nov dec);
+	my @blocks;
 	
 	$tmp = (localtime(time))[6];
 	if( $tmp == 6 ){
@@ -37,12 +33,10 @@ sub process{
 	$ts = time - ($tmp * 86400);
 	$day = (localtime($ts))[3];
 	$month = (localtime($ts))[4] + 1;
-	# my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, (+1), $day).'.csv';
-	
+	# my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, $month, $day).'.csv';
 	# my $html = get 'http://www.forexfactory.com/calendar.php?week='.$day.'16.'.$year;
-	# $html = split(/\n/, $html);
 	
-	my @blocks = read_file("c:\\mt4\\ppp.html");
+	@blocks = read_file("c:\\mt4\\ppp.html");
 	my $html = '';
 	for(@blocks){
 		$html .= $_;
@@ -58,7 +52,7 @@ sub process{
 	$html =~ s/\s*\n\s*//g;
 	$html =~ s/\s{2,}/ /g;
 		
-	my @blocks = split(/<\/tr><tr class="calendar_row" data-eventid="\d+">/, $html);
+	@blocks = split(/<\/tr><tr class="calendar_row" data-eventid="\d+">/, $html);
 	
 	# print $blocks[$#blocks - 1]."\n\n";
 	# my @arr = split(/<\/td>/, $blocks[0]);
@@ -67,7 +61,7 @@ sub process{
 	# }
 	# exit;
 	
-	$month = $day = $date = $currency = $prio = $desc = $act = $forc = $prev = $unit = $ts = '';
+	$month = $day = $date = $prio = $desc = $ts = '';
 	my @currencies = qw(EUR AUD GBP JPY USD);
 	my @lines;
 	for(@blocks){
@@ -129,7 +123,6 @@ sub process{
 			last;
 		}
 		
-		
 		$lines[6] =~ s/<\/span>$//;
 		if( $lines[6] =~ />([\d\.\+\-]*)([^<]*)$/ ){
 			$unit = $2;
@@ -165,44 +158,69 @@ sub process{
 		}
 		
 		$goodeffect = '-';
-		if( $act ne '' && $forc ne '' ){
-			$avarage = abs( $act - $forc );
-			$max = abs( $act - $forc );
+		if( $act ne '-' && $forc ne '-' && $act =~ /^-?[0-9]+\.[0-9]*$/ ){
+			$avarage = 0;
+			$dif = abs( $act - $forc );
+			$max = $dif;
 			$save_data = $unknown = 1;
+			
 			for my $k1 ( keys %$HISTORY_DATA ){
-				if( $HISTORY_DATA->{ $k1 }->{ CURRENCY } eq $currency ){
-					if( $HISTORY_DATA->{ $k1 }->{ DESC } eq $desc ){
-						$goodeffect = $HISTORY_DATA->{ $k1 }->{ GOODEFFECT };
-						$unknown = 0;
-						for my $k2 ( keys %{$HISTORY_DATA->{ $k1 }->{ HISTORY }} ){
-							if( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { DATE } eq $date ){
-								$save_data = 0;
-							}
-							$tmp = abs( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { ACT } - $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { FORC } );
-							$avarage += $tmp;
-							if( $tmp > $max ){
-								$max = $tmp;
-							}
+				if( $HISTORY_DATA->{ $k1 }->{ CURRENCY } eq $currency && $HISTORY_DATA->{ $k1 }->{ DESC } eq $desc ){
+					$unknown = 0;
+					$goodeffect = $HISTORY_DATA->{ $k1 }->{ GOODEFFECT };
+					$len = scalar keys %{$HISTORY_DATA -> { $k1 } -> { HISTORY }};
+					
+					for my $k2 ( keys %{$HISTORY_DATA->{ $k1 }->{ HISTORY }} ){
+						if( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { DATE } eq $date ){
+							$save_data = 0;
 						}
-						$len = scalar keys %{$HISTORY_DATA -> { $k1 } -> { HISTORY }};
-						$avarage = sprintf("%.2f", $avarage / $len );
-						
-						if( $save_data == 1 ){
-							$HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $len } -> { DATE => $date, ACT => $act, FORC => $forc, PREV => $prev };
-							$save_file = 1;
+						$tmp = abs( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { ACT } - $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { FORC } );
+						$avarage += $tmp;
+						if( $tmp > $max ){
+							$max = $tmp;
 						}
-						last;
 					}
+					
+					if( $save_data == 1 ){
+						$HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $len } -> { DATE => $date, ACT => $act, FORC => $forc, PREV => $prev };
+						$save_file = 1;
+						$avarage += $dif;
+						$len++;
+					}
+					
+					$avarage = $avarage / $len;
+					
+					if( $dif > $max * 0.7 ){
+						$power = 3;
+					}elsif( $dif > $avarage ){
+						$power = 2;
+					}else{
+						$power = 1;
+					}
+					last;
 				}
 			}
+			
 			if( $unknown == 1 ){
 				$max = $avarage = 0;
+				$power = 0;
 			}
+			
 		}else{
+			$power = 1;
 			$avarage = $max = $unknown = 0;
 		}
+		
+		if( $avarage == 0 ){
+			$desc2 = '-';
+		}else{
+			$desc2 = '('.sprintf("%.2g", $dif ).'|'.sprintf("%.2g", $avarage ).'|'.$max.')'.$unit;
+		}
 		#       currency  timestamp   actual   forcast   prevous   unit     descript   prio        effect        avarage       max     is_unknown
-		$out .= $currency.';'.$ts.';'.$act.';'.$forc.';'.$prev.';'.$unit.';'.$desc.';'.$prio.';'.$goodeffect.';'.$avarage.';'.$max.';'.$unknown."\n";
+		# $out .= $currency.';'.$ts.';'.$act.';'.$forc.';'.$prev.';'.$unit.';'.$desc.';'.$prio.';'.$goodeffect.';'.$avarage.';'.$max.';'.$unknown."\n";
+		
+		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$desc;
+		$out .= $currency.';'.$ts.';'.$desc.';'.$prio.';'.$goodeffect.';'.$power.';'.$desc2."\n";
 	}
 	
 	if( $save_file == 1 ){

@@ -113,7 +113,7 @@ void downloadCalendar(){
 
 void loadCSVfile( string& news_data[][] ){
 	int i, handle, len = ArraySize( NEWS_FILE_NAMES ), col, nr = 0;
-	string header;
+	string header, tmp;
 	ArrayResize( news_data, 0 );
 	
 	
@@ -141,7 +141,52 @@ void loadCSVfile( string& news_data[][] ){
         ArrayResize( news_data, nr + 1 );
         col = 0; 
 			}
-			
+			#define NEWS_TIME 0
+#define NEWS_CURRENCY 1
+#define NEWS_DESC1 2
+#define NEWS_DESC2 3
+#define NEWS_PRIO 4
+#define NEWS_TYPE 5
+#define NEWS_POWER 6
+			switch( col ){
+				case 0: 
+					news_data[nr][NEWS_CURRENCY] = FileReadString(handle);
+					break;
+				case 1: 
+					news_data[nr][NEWS_TIME] = FileReadString(handle);
+					break;
+				case 2: 
+					news_data[nr][NEWS_DESC1] = StringConcatenate( "(", FileReadString(handle) );
+					break;
+				case 3: 
+					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], "|",FileReadString(handle) );
+					break;
+				case 4: 
+					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], "|",FileReadString(handle), ")" );
+					break;
+				case 5: 
+					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], FileReadString(handle), " " );
+					break;
+				case 6: 
+					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], FileReadString(handle), " " );
+					break;
+				case 7: 
+					news_data[nr][NEWS_PRIO] = FileReadString(handle);
+					break;
+				case 8: 
+					err = "Object does not exist."; 
+					break;	
+				case 9: 
+					news_data[nr][NEWS_PRIO] = FileReadString(handle);
+					break;
+				case 10: 
+					news_data[nr][NEWS_PRIO] = FileReadString(handle);
+					break;
+				case 11: 
+					news_data[nr][NEWS_PRIO] = FileReadString(handle);
+					break;
+			}
+
 			
 			
 			

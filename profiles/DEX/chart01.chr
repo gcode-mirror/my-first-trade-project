@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=4013
+period=15
+leftpos=12012
 digits=5
 scale=4
 graph=1
@@ -43,13 +43,13 @@ object_name=1dsfsdf
 period_flags=0
 create_time=1342552971
 description=}
-color=255
+color=32768
 font=Wingdings 3
 fontsize=10
 angle=0
 background=1
-time_0=1342533600
-value_0=1.216205
+time_0=1342513800
+value_0=1.217710
 </object>
 <object>
 type=2
@@ -169,9 +169,9 @@ style=0
 weight=1
 background=1
 time_0=1339790400
-value_0=1.269506
+value_0=1.269510
 time_1=1341226800
-value_1=1.244939
+value_1=1.244940
 ray=1
 </object>
 <object>
@@ -275,7 +275,7 @@ type=2
 object_name=DT_GO_PAST_NEWS
 period_flags=0
 create_time=1338760228
-description=1
+description=3
 color=255
 style=0
 weight=1
@@ -365,6 +365,76 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=21
+object_name=Text 38905
+period_flags=0
+create_time=1343068153
+description=I
+color=0
+font=GulimChe
+fontsize=10
+angle=0
+background=1
+time_0=1342522800
+value_0=1.217323
+</object>
+<object>
+type=21
+object_name=Text 39161
+period_flags=0
+create_time=1343068409
+description=|
+color=255
+font=Arial Black
+fontsize=10
+angle=0
+background=1
+time_0=1342510200
+value_0=1.217195
+</object>
+<object>
+type=21
+object_name=Text 39186
+period_flags=0
+create_time=1343068434
+description=I
+color=55295
+font=Franklin Gothic Medium
+fontsize=10
+angle=0
+background=1
+time_0=1342519200
+value_0=1.217323
+</object>
+<object>
+type=21
+object_name=Text 39214
+period_flags=0
+create_time=1343068462
+description=I
+color=255
+font=Arial Black
+fontsize=10
+angle=0
+background=1
+time_0=1342522800
+value_0=1.217903
+</object>
+<object>
+type=21
+object_name=Text 40384
+period_flags=0
+create_time=1343069632
+description=I
+color=255
+font=Franklin Gothic Medium
+fontsize=10
+angle=0
+background=1
+time_0=1342522800
+value_0=1.217645
 </object>
 <object>
 type=21
