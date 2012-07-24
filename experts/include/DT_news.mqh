@@ -6,13 +6,13 @@
 #property copyright "Dex"
 #property link      ""
 
-#define NEWS_TIME 0
 #define NEWS_CURRENCY 1
+#define NEWS_TIME 1
 #define NEWS_DESC1 2
-#define NEWS_DESC2 3
-#define NEWS_PRIO 4
-#define NEWS_TYPE 5
-#define NEWS_POWER 6
+#define NEWS_PRIO 3
+#define NEWS_GOODEF 4
+#define NEWS_POWER 5
+#define NEWS_DESC2 6
 
 string NEWS_FILE_NAMES[];
 
@@ -80,6 +80,8 @@ bool startNews(string isOn){
 		}
 	}
 	
+  
+  
   if( Symbol() == "EURUSD-Pro" ){
     if( GetTickCount() > NEWS_DOWNLOAD_TIMER ){
       NEWS_DOWNLOAD_TIMER = GetTickCount() + 600000;
@@ -102,6 +104,11 @@ bool deinitNews(){
   removeObjects("news");
   return (errorCheck("deinitNews"));
 }
+
+void displayNews(){
+  
+}
+
 
 void downloadCalendar(){
 	if( Symbol() != "EURUSD-Pro" ){
@@ -137,92 +144,27 @@ void loadCSVfile( string& news_data[][] ){
 		}
 		col = 0;
 		while( !FileIsEnding(handle) ){
-			if( col == 12 ){
-        ArrayResize( news_data, nr + 1 );
-        col = 0; 
-			}
-			#define NEWS_TIME 0
-#define NEWS_CURRENCY 1
-#define NEWS_DESC1 2
-#define NEWS_DESC2 3
-#define NEWS_PRIO 4
-#define NEWS_TYPE 5
-#define NEWS_POWER 6
 			switch( col ){
 				case 0: 
-					news_data[nr][NEWS_CURRENCY] = FileReadString(handle);
-					break;
+     ArrayResize( news_data, nr + 1 );    
+					news_data[nr][NEWS_CURRENCY] = FileReadString(handle); break;
 				case 1: 
-					news_data[nr][NEWS_TIME] = FileReadString(handle);
-					break;
+					news_data[nr][NEWS_TIME] = FileReadString(handle); break;
 				case 2: 
-					news_data[nr][NEWS_DESC1] = StringConcatenate( "(", FileReadString(handle) );
-					break;
+					news_data[nr][NEWS_DESC1] = FileReadString(handle); break;
 				case 3: 
-					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], "|",FileReadString(handle) );
-					break;
+					news_data[nr][NEWS_PRIO] = FileReadString(handle);	break;
 				case 4: 
-					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], "|",FileReadString(handle), ")" );
-					break;
+					news_data[nr][NEWS_GOODEF] = FileReadString(handle); break;
 				case 5: 
-					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], FileReadString(handle), " " );
-					break;
+					news_data[nr][NEWS_POWER] = FileReadString(handle); break;
 				case 6: 
-					news_data[nr][NEWS_DESC1] = StringConcatenate( news_data[nr][NEWS_DESC1], FileReadString(handle), " " );
-					break;
-				case 7: 
-					news_data[nr][NEWS_PRIO] = FileReadString(handle);
-					break;
-				case 8: 
-					err = "Object does not exist."; 
-					break;	
-				case 9: 
-					news_data[nr][NEWS_PRIO] = FileReadString(handle);
-					break;
-				case 10: 
-					news_data[nr][NEWS_PRIO] = FileReadString(handle);
-					break;
-				case 11: 
-					news_data[nr][NEWS_PRIO] = FileReadString(handle);
-					break;
+					news_data[nr][NEWS_DESC2] = FileReadString(handle); col = -1; nr++; break;
 			}
-
-			
-			
-			
-			????
-			
-			
-			
-			
-			
+			col++;
 		}
 		FileClose(handle);
 	}
-	
-	if( handle < 1){
-    int e = GetLastError();
-    if( e != 4103 ){
-      Alert( "File read fail ("+file_name+")"+ e );
-    }
-    FileClose( handle );
-		return ( false );
-	}
-
-	while( !FileIsEnding(handle) ){
-		in = FileReadString(handle);
-
-		arr[j] = in;
-		j++;
-
-		if( j == 7 ){
-      ObjectCreate( arr[0], StrToInteger( arr[6] ), 0, StrToDouble(arr[1]), StrToDouble(arr[2]), StrToDouble(arr[3]), StrToDouble(arr[4]) );
-      ObjectSet( arr[0], OBJPROP_RAY, true );
-      ObjectSet( arr[0], OBJPROP_COLOR, StrToInteger(arr[5]) );
-			j = 0;
-		}
-	}
-  FileClose( handle );
 
 }
 
