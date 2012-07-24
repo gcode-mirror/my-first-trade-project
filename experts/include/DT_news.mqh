@@ -14,6 +14,10 @@
 #define NEWS_POWER 5
 #define NEWS_DESC2 6
 
+#import "Shell32.dll"
+  int ShellExecuteA( int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd );
+#import
+
 string NEWS_FILE_NAMES[];
 
 bool initNews(string isOn){
@@ -34,11 +38,10 @@ bool initNews(string isOn){
   return (errorCheck("initNews"));
 }
 
-bool startNews(string isOn){
+bool startNews(string isOn){ return (0);
 	static double win_min = 0.0;
 	static double win_max = 0.0;
 	static string news_data[0][7];
-	static double last_perl_exec = 0.0;
 	static int last_file_size = 0;
 	
   if(isAppStatusChanged(APP_ID_NEWS, isOn)){
@@ -58,45 +61,41 @@ bool startNews(string isOn){
     if( handle < 1 ){
       if( GetLastError() == 4103 ){
 				FileClose(handle);
-				downloadCalendar();
-				
+				// downloadCalendar();
       }
 			errorCheck("startNews file noe exist");
       return (0);
     }else{
 			FileClose(handle);
-			loadCSVfile();
+			loadCSVfile( news_data );
+			displayNews( news_data );
 		}
 	}else{
 		if( hasRecentNews() ){
-			downloadCalendar();
+			// downloadCalendar();
 			handle = FileOpen( NEWS_FILE_NAMES[0], FILE_READ );
 			int size = FileSize(handle);
+			
+			if( Symbol() == "EURUSD-Pro" ){
+		Alert("sds: "+size);
+	}
 			FileClose(handle);
 			if( last_file_size != size ){
 				last_file_size = size;
-				loadCSVfile();
+				loadCSVfile( news_data );
+				displayNews( news_data );
+				return (0);
 			}
+		} 
+		
+		if( win_min != WindowPriceMin(0) || win_max != WindowPriceMax(0)){
+			win_min = WindowPriceMin(0);
+			win_max = WindowPriceMax(0);
+			displayNews( news_data );
+			
 		}
 	}
-	
   
-  
-  if( Symbol() == "EURUSD-Pro" ){
-    if( GetTickCount() > NEWS_DOWNLOAD_TIMER ){
-      NEWS_DOWNLOAD_TIMER = GetTickCount() + 600000;
-      downLoadWebPageToFile();   
-    }
-  }
-  
-  if( LAST_UPDATE_ID != GlobalVariableGet( "NEWS_update_id" ) ){
-    LAST_UPDATE_ID = GlobalVariableGet( "NEWS_update_id" );
-    csvNewsFileToArray();
-    displayNews();
-  
-  }else if(MIN_PRICE_NEWS != WindowPriceMin(0) || MAX_PRICE_NEWS != WindowPriceMax(0)){
-    displayNews();
-  }
   return (true);
 }
 
@@ -105,24 +104,69 @@ bool deinitNews(){
   return (errorCheck("deinitNews"));
 }
 
-void displayNews(){
-  
+void displayNews( string& news_data[][] ){
+if( Symbol() == "EURUSD-Pro" ){
+		Alert("sds");
+	}
+
+	double max = WindowPriceMax(0), min = WindowPriceMin(0);
+  int i, item_size = GlobalVariableGet("DT_window_width") * (10 / (max - min));
+	int position, len = ArrayRange( news_data,0 ), time_shift, prev_top_price, prev_bottom_price, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
+	string sym = Symbol(), name;
+	double time, chart_time, p1;
+	min = min + item_size;
+	
+	for( i = 0; i < len; i++ ){
+		position = StringFind( Symbol(), news_data[i][NEWS_CURRENCY]);
+		if( position != -1 ){
+			time = StrToDouble( news_data[i][NEWS_TIME] );
+			chart_time = time - MathMod( time, (Period() * 60) );
+			time_shift = iBarShift( NULL, 0, chart_time - 604800 );
+			
+			if( position == 0 ){
+        if( prev_top_time_shift == time_shift ){
+          p1 = prev_top_price - item_size;
+        }else{
+          p1 = max;
+        }
+        prev_top_price = p1;
+        prev_top_time_shift = time_shift;
+      }else{
+        if( prev_bottom_time_shift == time_shift ){
+          p1 = prev_bottom_price + item_size;
+        }else{
+          p1 = min;
+        }
+        prev_bottom_price = p1;
+        prev_bottom_time_shift = time_shift;
+      }
+			name = StringConcatenate("DT_BO_n_",news_data[i][NEWS_DESC1]);
+			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
+      ObjectSetText( name, "I", 10, "GulimChe", Red );
+		
+		}
+	}
 }
 
+bool hasRecentNews(){
+	return (true);
+}
 
 void downloadCalendar(){
 	if( Symbol() != "EURUSD-Pro" ){
 		return;
 	}
-	
-	
+	if( GlobalVariableGet( "NEWS_update_id" ) > TimeCurrent() ){
+		return;
+	}
+	ShellExecuteA(0, "Open", "dnews.bat", "", "", 0);
+	GlobalVariableSet( "NEWS_update_id", TimeCurrent() + 30 );
 }
 
 void loadCSVfile( string& news_data[][] ){
 	int i, handle, len = ArraySize( NEWS_FILE_NAMES ), col, nr = 0;
 	string header, tmp;
 	ArrayResize( news_data, 0 );
-	
 	
 	for( i = 0; i < len; i++ ){
 		handle = FileOpen( NEWS_FILE_NAMES[i], FILE_READ, ";" );
@@ -146,7 +190,7 @@ void loadCSVfile( string& news_data[][] ){
 		while( !FileIsEnding(handle) ){
 			switch( col ){
 				case 0: 
-     ArrayResize( news_data, nr + 1 );    
+					ArrayResize( news_data, nr + 1 );    
 					news_data[nr][NEWS_CURRENCY] = FileReadString(handle); break;
 				case 1: 
 					news_data[nr][NEWS_TIME] = FileReadString(handle); break;
@@ -180,282 +224,3 @@ void newsFileName(){
   errorCheck("newsFileName");
 }
 
-
-bool displayNews(){
-  removeObjects("news");
-  MAX_PRICE_NEWS = WindowPriceMax(0);
-  MIN_PRICE_NEWS = WindowPriceMin(0);
-  
-  double pip, item_size, gap, p1 ,p2, time, prev_top_price, prev_bottom_price;
-  int position, i, len = ArrayRange(NEWS_DATA,0), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
-  string desc;
-
-  pip = 1 / MathPow(10,Digits);
-  item_size = NormalizeDouble( (MAX_PRICE_NEWS-MIN_PRICE_NEWS)/80, Digits );
-  if( item_size < pip ){
-    item_size = 6 * pip;
-  }
-  
-  gap = NormalizeDouble( (MAX_PRICE_NEWS-MIN_PRICE_NEWS)/300, Digits );
-  if( gap < pip ){
-    gap = 2 * pip;
-  }
-  
-  for( i=0; i < len; i++){
-    position = StringFind( Symbol(), NEWS_DATA[i][NEWS_CURRENCY]);
-    if(position != -1){
-      time = StrToDouble(NEWS_DATA[i][NEWS_TIME]);
-      time = time - MathMod( time, (Period() * 60) );
-      desc = StringConcatenate("[",NEWS_DATA[i][NEWS_ACT],"|",NEWS_DATA[i][NEWS_FORC],"|",NEWS_DATA[i][NEWS_PREV],"]",NEWS_DATA[i][NEWS_UNIT]," ",NEWS_DATA[i][NEWS_DESC]," ",TimeHour(time),":",TimeMinute(time));
-      time_shift = iBarShift( NULL, 0, time - 604800 );
-      
-      if(position == 0){
-        if( prev_top_time_shift == time_shift ){
-          p1 = prev_top_price - gap;
-        }else{
-          p1 = MAX_PRICE_NEWS;
-        }
-        p2 = p1 - item_size;
-        prev_top_price = p2;
-        prev_top_time_shift = time_shift;
-      }else{
-        if( prev_bottom_time_shift == time_shift ){
-          p2 = prev_bottom_price + gap;
-        }else{
-          p2 = MIN_PRICE_NEWS;
-        }
-        p1 = p2 + item_size;
-        prev_bottom_price = p1;
-        prev_bottom_time_shift = time_shift;
-      }
-      createNewsLine(StringConcatenate("DT_BO_news_",NEWS_DATA[i][NEWS_CURRENCY],"_",i), time, p1, p2, desc, NEWS_DATA[i][NEWS_PRIO],StrToDouble(NEWS_DATA[i][NEWS_REL]));
-    }
-  }
-  
-  return (errorCheck("displayNews"));
-}
-
-bool createNewsLine(string name, double t, double p1, double p2, string text, string prio, double width){
-  color c = Green;
-  if(prio == "HIGH"){ c = Red;
-  }else if(prio == "MEDIUM"){c = Orange;
-  }else if(prio == "LOW"){c = Blue; }
-  
-	ObjectCreate(name, OBJ_TREND, 0, t, p1, t, p2);
-	ObjectSet(name, OBJPROP_COLOR, c);             
-	ObjectSet(name, OBJPROP_RAY, false);
-	ObjectSet(name, OBJPROP_STYLE, STYLE_SOLID);
-	ObjectSet(name, OBJPROP_WIDTH, width);
-	ObjectSetText(name, text, 8);
-}
-
-bool csvNewsFileToArray(){
-  int handle, i, j, line_idx = 0, col_idx, len = ArraySize( NEWS_FILE_NAMES );
-  string data, prio;
-  
-  for( i = 0; i < len; i++ ){
-    handle = FileOpen( NEWS_FILE_NAMES[i], FILE_READ, "," );
-    if( handle < 1 ){
-      if( GetLastError() == 4103 && i != 0 ){
-        addComment( NEWS_FILE_NAMES[i]+" ("+( i + 1 )+") doesn't exist!", 1 );
-        setGlobal( "PAST_NEWS", i );
-        ArrayResize( NEWS_FILE_NAMES, i );
-      }
-      FileClose(handle);
-      return (0);
-    }
-    
-    j = 0;
-    while( j < 9 && !FileIsEnding(handle) ){ //skip first row
-      FileReadString(handle);
-      j++;      
-    }
-    
-    col_idx = 0;
-    while(!FileIsEnding(handle)){
-      data = stringReplaceAll(FileReadString(handle), "¥", "Y");
-      data = stringReplaceAll(data, "£", "P");
-            
-      if(col_idx == 9){
-        if(data == ""){
-          break;
-        }           
-        line_idx++;
-        ArrayResize( NEWS_DATA, line_idx + 1 );
-        col_idx = 0;              
-      }
-      
-      if(col_idx == 0){
-        NEWS_DATA[line_idx][NEWS_TIME] = getTSdate(data, FileReadString(handle));
-        col_idx++;
-      }else if(col_idx == 3){
-        NEWS_DATA[line_idx][NEWS_CURRENCY] = toUpper(data);
-      }else if(col_idx == 4){
-        NEWS_DATA[line_idx][NEWS_DESC] = StringSubstr( data, 4, StringLen(data)-4 );
-      }else if(col_idx == 5){
-        prio = toUpper(StringTrimRight(StringTrimLeft(data)));       
-        if(prio == "HIGH" || prio == "MEDIUM" || prio == "LOW"){
-          NEWS_DATA[line_idx][NEWS_PRIO] = prio;         
-        }else{        
-          NEWS_DATA[line_idx][NEWS_DESC] = NEWS_DATA[line_idx][NEWS_DESC] + ","+data;
-          col_idx--;
-        }        
-        NEWS_DATA[line_idx][NEWS_PRIO] = prio;
-      }else if(col_idx == 6){
-        if(data == ""){data = "-";}      
-        assortNumbers(data);
-        NEWS_DATA[line_idx][NEWS_ACT] = data;
-      }else if(col_idx == 7){
-        if(data == ""){data = "-";}
-        NEWS_DATA[line_idx][NEWS_UNIT] = assortNumbers(data);
-        NEWS_DATA[line_idx][NEWS_FORC] = data;
-        NEWS_DATA[line_idx][NEWS_REL] = setNewsRelevance(NEWS_DATA[line_idx][NEWS_ACT], NEWS_DATA[line_idx][NEWS_FORC]);
-      }else if(col_idx == 8){        
-        if(data == ""){data = "-";}
-        assortNumbers(data);
-        NEWS_DATA[line_idx][NEWS_PREV] = data;
-      }
-      col_idx++; 
-    }    
-    FileClose(handle);
-  }
-  return (errorCheck("csvNewsFileToArray"));
-}
-
-string setNewsRelevance(string act, string forc){
-  if(act == "-" || forc == "-"){
-    return ("1");
-  }  
-  double dif = MathAbs(StrToDouble(forc) - StrToDouble(act)), multi;
-  double min = MathAbs(MathMin(StrToDouble(act),StrToDouble(forc)));
-  if(min == 0.0){
-    multi = min;
-  }else{
-    multi = dif/min;
-  }
-  // if(Symbol() == "EURUSD-Pro"){
-    // if( act == "7" && forc == "3" ){
-      // Alert(dif+" "+multi);
-    // }
-  // }
-  
-  if(multi > 3){
-    return ("3");
-  }else if(multi < 1){
-    return ("1");
-  }else{    
-    return (DoubleToStr(MathRound(multi),0));
-  }  
-  return ("1");
-}
-
-string assortNumbers(string& str){
-  int code;
-  string tmp = "", tmp2 = "";
-  for (int i = 0; i < StringLen(str); i++) {
-    code= StringGetChar(str, i);
-    if ((code >= 48 && code <= 57) || code == 45 || code == 46) {
-      tmp = tmp + StringSetChar(" ", 0, code);
-    }else{    
-      tmp2 = tmp2 + StringSetChar(" ", 0, code);
-    }
-  }
-  str = tmp;
-  return (tmp2);
-}
-
-string getTSdate(string date, string time){
-  string tmp[3], mon;    
-  Explode(date, " ", tmp);
-  
-  if(tmp[1] == "Jan"){mon = "1";
-  }else if(tmp[1] == "Feb"){mon = "2";
-  }else if(tmp[1] == "Mar"){mon = "3";
-  }else if(tmp[1] == "Apr"){mon = "4";
-  }else if(tmp[1] == "May"){mon = "5";
-  }else if(tmp[1] == "Jun"){mon = "6";
-  }else if(tmp[1] == "Jul"){mon = "7";
-  }else if(tmp[1] == "Aug"){mon = "8";
-  }else if(tmp[1] == "Sep"){mon = "9";
-  }else if(tmp[1] == "Oct"){mon = "10";
-  }else if(tmp[1] == "Nov"){mon = "11";
-  }else if(tmp[1] == "Dec"){mon = "12";
-  }else{ mon = "";}
-    
-  if(mon != ""){
-    date = Year()+"."+mon+"."+tmp[2]+" ";
-  }else{
-    date = "";
-  } 
-  return ( StrToTime(date+time) + 3600 );
-}
-
-bool doFileDownLoad(){ 
- int handle=FileOpen(NEWS_FILE_NAMES[0], FILE_READ);
- if(handle>0){
-   FileClose(handle);
-   return(false);   
- }
- GetLastError(); // File does not exist if FileOpen return -1 or if GetLastError = ERR_CANNOT_OPEN_FILE (4103) 
- return(true); 
-}
-
-
-
-bool downLoadWebPageToFile(){
-  string url = StringConcatenate( "http://www.dailyfx.com/files/", NEWS_FILE_NAMES[0] );  
-  if(!IsDllsAllowed())   {
-    Alert("Please allow DLL imports");
-    return(false);
-  }
-
-  int result = InternetAttemptConnect(0);
-  if(result != 0){
-    Alert("Cannot connect to internet - InternetAttemptConnect()");
-    return(false);
-  }
-
-  int hInternetSession = InternetOpenA("Microsoft Internet Explorer", 0, "", "", 0);
-  if(hInternetSession <= 0){
-    Alert("Cannot open internet session - InternetOpenA()");
-    return(false);         
-  }
-  int hURL = InternetOpenUrlA(hInternetSession, url, "", 0, 0, 0);
-  if(hURL <= 0){
-    Alert("Cannot open URL ", url, " - InternetOpenUrlA() "+Symbol());
-    InternetCloseHandle(hInternetSession);
-    return(false);         
-  }
-       
-  int cBuffer[256];
-  int dwBytesRead[1]; 
-  string fileContents = "";
-  while(!IsStopped()){
-    for(int i = 0; i<256; i++) cBuffer[i] = 0;
-    bool bResult = InternetReadFile(hURL, cBuffer, 1024, dwBytesRead);
-    if(dwBytesRead[0] == 0) break;
-    string text = "";   
-    for(i = 0; i < 256; i++){
-       text = text + CharToStr(cBuffer[i] & 0x000000FF);
-       if(StringLen(text) == dwBytesRead[0]) break;
-       text = text + CharToStr(cBuffer[i] >> 8 & 0x000000FF);
-       if(StringLen(text) == dwBytesRead[0]) break;
-       text = text + CharToStr(cBuffer[i] >> 16 & 0x000000FF);
-       if(StringLen(text) == dwBytesRead[0]) break;
-       text = text + CharToStr(cBuffer[i] >> 24 & 0x000000FF);   
-    }
-    fileContents = fileContents + text;
-    //Sleep(1);
-  }
-  InternetCloseHandle(hInternetSession);
-
-  // Save to text file  
-  int handle;
-  handle=FileOpen( NEWS_FILE_NAMES[0], FILE_CSV|FILE_WRITE, ';');
-  if(handle>0){
-   FileWrite(handle, fileContents);
-   FileClose(handle);
-  }
-  GlobalVariableSet( "NEWS_update_id", TimeCurrent() );
-  return (errorCheck("downLoadWebPageToFile"));
-}

@@ -46,9 +46,23 @@ int init(){
 	SetIndexEmptyValue( 0, 0.0 );
 	 
   if( MarketInfo(Symbol(),MODE_TICKVALUE) == 0.0 ){
+		GlobalVariableSet( "DT_window_width", 0.0 );
+		GlobalVariableSet( "DT_window_height", 0.0 );
     CONNECTION_FAIL = true;
     return (0);
   }else{
+		int WindowDims[4];
+		GetWindowRect(WindowHandle(Symbol(), Period()), WindowDims);
+		int SizeX = WindowDims[2] - WindowDims[0] - 47;
+		int SizeY = WindowDims[3] - WindowDims[1] - 25;
+		
+		if( GlobalVariableGet("DT_window_width") < SizeX ){
+			GlobalVariableSet( "DT_window_width", SizeX );
+		}
+		if( GlobalVariableGet("DT_window_height") < SizeY ){
+			GlobalVariableSet( "DT_window_height", SizeY );
+		}
+	
     CONNECTION_FAIL = false;
   }
 //k = GetTickCount();

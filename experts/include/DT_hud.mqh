@@ -70,11 +70,7 @@ bool initHud(){
   }
 
 	// ====================== Scale info line ======================
-	int hWnd = WindowHandle(Symbol(), Period());
-  int hDC = GetWindowDC(hWnd);
-  int rect[4];
-  GetWindowRect(hWnd, rect);
-  int win_width = rect[2] - rect[0] - 47; // Window width
+  int win_width = GlobalVariableGet("DT_window_width");
 
   ObjectCreate( "DT_BO_hud_scale_info", OBJ_LABEL, 0, 0, 0 );
   ObjectSet( "DT_BO_hud_scale_info", OBJPROP_CORNER, 2 );
@@ -152,11 +148,7 @@ bool startHud(){
     HUD_PRICE_MIN = WindowPriceMin(0);
     HUD_PRICE_MAX = WindowPriceMax(0);
     
-    int hWnd = WindowHandle(Symbol(), Period());
-    int hDC = GetWindowDC(hWnd);
-    int rect[4];
-    GetWindowRect(hWnd, rect);
-    int win_width = rect[2] - rect[0] - 47; // Window width
+    int win_width = GlobalVariableGet("DT_window_width");
 
 		int scale = ( 500 / getScaleNumber(HUD_PRICE_MIN, HUD_PRICE_MAX, Symbol()) ) * win_width;
     ObjectSetText( "DT_BO_hud_scale_info", "g", scale, "Webdings", Black );

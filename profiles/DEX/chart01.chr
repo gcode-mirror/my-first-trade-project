@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=15
-leftpos=8834
+period=30
+leftpos=7589
 digits=5
 scale=4
 graph=1
@@ -92,7 +92,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1343168100
+time_0=1343304000
 </object>
 <object>
 type=2
@@ -275,7 +275,7 @@ type=2
 object_name=DT_GO_PAST_NEWS
 period_flags=0
 create_time=1338760228
-description=3
+description=1
 color=255
 style=0
 weight=1

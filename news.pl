@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+BEGIN {
+	Win32::SetChildShowWindow(0) if defined &Win32::SetChildShowWindow
+};
+
 use LWP::Simple;
 use Time::Local;
 use FindBin qw($Bin);
@@ -9,9 +13,10 @@ our $TIMEZONE = 5 * 3600; #5 hour
 
 # getstore("http://www.forexfactory.com/calendar.php?week=jul16.2012", "ppp.html");
 # getstore("http://www.forexfactory.com/calendar.php?week=jul23.2012", "ppp2.html");
-# exit;
 
 require $BASE_DIR.'\history.pl';
+
+our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 
 sub process{
 	my $out = 'ok;';
@@ -19,28 +24,30 @@ sub process{
 	my $save_file = 0;
 	my $year = ((localtime)[5])+1900;
 	my ($month, $day, $date, $currency, $prio, $desc, $act, $forc, $prev, $unit, $ts, $avarage, $goodeffect, $max, $power, $desc2, $dif, $len, $unknown, $save_data);
-	my @months = qw(jan feb mar apr may jun jul aug sep oct nov dec);
 	my @blocks;
 	
 	$tmp = (localtime(time))[6];
-	if( $tmp == 6 ){
-		$tmp = -2;
-	}elsif( $tmp == 0 ){
-		$tmp = -1;
-	}else{
-		$tmp--;
-	}
+	# if( $tmp == 6 ){
+		# $tmp = -2;
+	# }elsif( $tmp == 0 ){
+		# $tmp = -1;
+	# }else{
+		# $tmp--;
+	# }
 	$ts = time - ($tmp * 86400);
 	$day = (localtime($ts))[3];
-	$month = (localtime($ts))[4] + 1;
-	# my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, $month, $day).'.csv';
-	# my $html = get 'http://www.forexfactory.com/calendar.php?week='.$day.'16.'.$year;
+	$month = (localtime($ts))[4];
+	my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, $month + 1, $day).'.csv';
+	$month = lc($months[$month]);
+	# print $filename;
+	# exit;
+	my $html = get 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year;
 	
-	@blocks = read_file("c:\\mt4\\ppp.html");
-	my $html = '';
-	for(@blocks){
-		$html .= $_;
-	}
+	# @blocks = read_file("c:\\mt4\\ppp.html");
+	# my $html = '';
+	# for(@blocks){
+		# $html .= $_;
+	# }
 	
 	
 	$html = substr ($html, index( $html, '<tr class="calendar_row' ));
@@ -90,12 +97,14 @@ sub process{
 			}
 			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
 		
-		}elsif( $lines[1] =~ />(All Day|Tentative)$/ ){
-			$ts = timelocal( 0, 0, 0, $day, $month, $year );
+		# }elsif( $lines[1] =~ />(All Day|Tentative)$/ ){
 		}else{
-			$out = 'Wrong time '.$lines[1];
-			last;
+			$ts = timelocal( 0, 0, 0, $day, $month, $year );
 		}
+		# else{
+			# $out = 'Wrong time '.$lines[1];
+			# last;
+		# }
 		
 		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic).*/ ){
 			$tmp = $1;
@@ -216,8 +225,6 @@ sub process{
 		}else{
 			$desc2 = '('.sprintf("%.2g", $dif ).'|'.sprintf("%.2g", $avarage ).'|'.$max.')'.$unit;
 		}
-		#       currency  timestamp   actual   forcast   prevous   unit     descript   prio        effect        avarage       max     is_unknown
-		# $out .= $currency.';'.$ts.';'.$act.';'.$forc.';'.$prev.';'.$unit.';'.$desc.';'.$prio.';'.$goodeffect.';'.$avarage.';'.$max.';'.$unknown."\n";
 		
 		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$desc;
 		$out .= $currency.';'.$ts.';'.$desc.';'.$prio.';'.$goodeffect.';'.$power.';'.$desc2."\n";
@@ -227,14 +234,13 @@ sub process{
 		# saveHistoryData();
 	}
 	
-	print $out;
+	# print $out;
 
-	# open(DAT,' > '.$BASE_DIR.'/experts/files/'.$filename) || die("Cannot Open File");
-		# print DAT $out;
-	# close(DAT);
+	open(DAT,' > '.$BASE_DIR.'/experts/files/'.$filename) || die("Cannot Open File");
+		print DAT $out;
+	close(DAT);
 }
 
-our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 sub getMonthId{
 	for( my $i = 0; $i < $#months; $i++ ){
 		if( $months[$i] eq $_[0] ){
