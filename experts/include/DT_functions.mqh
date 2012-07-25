@@ -94,7 +94,7 @@ bool removeObjects(string filter = "", string type = "BO"){
        }
     }  
   }else{    
-    filter = type+"_"+filter;   
+    filter = StringConcatenate( type, "_" ,filter, "_" );   
     int len = StringLen(filter);
     for (j= obj_total-1; j>=0; j--) {
       name= ObjectName(j);

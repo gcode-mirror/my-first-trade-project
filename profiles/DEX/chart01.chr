@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=30
-leftpos=5258
+period=60
+leftpos=5904
 digits=5
 scale=4
 graph=1
@@ -37,20 +37,6 @@ stops_color=17919
 height=242
 <indicator>
 name=main
-<object>
-type=21
-object_name=1dsfsdf
-period_flags=0
-create_time=1342552971
-description=}
-color=32768
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342513800
-value_0=1.217710
-</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
@@ -92,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1343304000
+time_0=1343387400
 </object>
 <object>
 type=2
@@ -365,174 +351,6 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=21
-object_name=Text 38905
-period_flags=0
-create_time=1343068153
-description=I
-color=0
-font=GulimChe
-fontsize=10
-angle=0
-background=1
-time_0=1342522800
-value_0=1.217323
-</object>
-<object>
-type=21
-object_name=Text 39161
-period_flags=0
-create_time=1343068409
-description=|
-color=255
-font=Arial Black
-fontsize=10
-angle=0
-background=1
-time_0=1342510200
-value_0=1.217195
-</object>
-<object>
-type=21
-object_name=Text 39186
-period_flags=0
-create_time=1343068434
-description=I
-color=55295
-font=Franklin Gothic Medium
-fontsize=10
-angle=0
-background=1
-time_0=1342519200
-value_0=1.217323
-</object>
-<object>
-type=21
-object_name=Text 39214
-period_flags=0
-create_time=1343068462
-description=I
-color=255
-font=Arial Black
-fontsize=10
-angle=0
-background=1
-time_0=1342522800
-value_0=1.217903
-</object>
-<object>
-type=21
-object_name=Text 40384
-period_flags=0
-create_time=1343069632
-description=I
-color=255
-font=Franklin Gothic Medium
-fontsize=10
-angle=0
-background=1
-time_0=1342522800
-value_0=1.217645
-</object>
-<object>
-type=21
-object_name=Text 43130
-period_flags=0
-create_time=1342548090
-description=#
-color=0
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342534500
-value_0=1.217295
-</object>
-<object>
-type=21
-object_name=Text 43600
-period_flags=0
-create_time=1342548560
-description=“
-color=255
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342534500
-value_0=1.217665
-</object>
-<object>
-type=21
-object_name=Text 43675
-period_flags=0
-create_time=1342548635
-description=$
-color=255
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342532100
-value_0=1.217348
-</object>
-<object>
-type=21
-object_name=Text 44112
-period_flags=0
-create_time=1342549072
-description=—
-color=255
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342534500
-value_0=1.218061
-</object>
-<object>
-type=21
-object_name=Text 44670
-period_flags=0
-create_time=1342549630
-description=”
-color=255
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342532100
-value_0=1.217658
-</object>
-<object>
-type=21
-object_name=Text 44701
-period_flags=0
-create_time=1342549661
-description=¤
-color=255
-font=Wingdings 3
-fontsize=10
-angle=0
-background=1
-time_0=1342532100
-value_0=1.218015
-</object>
-<object>
-type=21
-object_name=Text 48628
-period_flags=0
-create_time=1342553588
-description=?
-color=255
-font=Tahoma
-fontsize=10
-angle=0
-background=1
-time_0=1342533600
-value_0=1.216515
 </object>
 <object>
 type=2

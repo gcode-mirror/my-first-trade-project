@@ -7,9 +7,14 @@
 #property link      ""
 
 #import "user32.dll"
-int GetWindowDC(int dc);
-int ReleaseDC(int h, int dc);
-bool GetWindowRect(int h, int& pos[4]);
+	int GetWindowDC(int dc);
+	int ReleaseDC(int h, int dc);
+	bool GetWindowRect(int h, int& pos[4]);
+#import
+
+#import "Shell32.dll"
+  int ShellExecuteA( int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd );
+#import
 
 #property indicator_chart_window
 #property indicator_buffers 1
@@ -131,6 +136,7 @@ int start(){
 //========================================= DeInit ===========================================
 int deinit(){
   removeObjects();
+	deleteNewsItems();
   if(getGlobal("TRADE_LINES_SWITCH") == "0"){
     deInitTradeLines();
   }

@@ -825,17 +825,19 @@ bool alreadyBelowCLine( double trade_line_price ,double fibo_100, double fibo_10
 void setPosData( double& tp, double& sl, string pos, double fibo_100, double trade_line_price ){
 	if( pos == "bound" ){
 		if( fibo_100 > trade_line_price ){ // BUY
-			sl = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * 0.236), Digits );
 			tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_38), Digits );
-    if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
-      sl = NormalizeDouble( trade_line_price - CT_MAX_LOSE, Digits );
-    }
+			if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
+				sl = NormalizeDouble( trade_line_price - CT_MAX_LOSE, Digits );
+			}else{
+				sl = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * 0.236), Digits );
+			}
 		}else{ // SELL
-			sl = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * 0.236) + CT_SPREAD, Digits );
 			tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_61) + CT_SPREAD, Digits );
-    if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
-      sl = NormalizeDouble( trade_line_price + CT_MAX_LOSE, Digits );
-    }
+			if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
+				sl = NormalizeDouble( trade_line_price + CT_MAX_LOSE, Digits );
+			}else{
+				sl = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * 0.236) + CT_SPREAD, Digits );
+			}
 		}
 	}else{
 		if( fibo_100 > trade_line_price ){ // BUY

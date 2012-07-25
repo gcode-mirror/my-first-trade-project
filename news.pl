@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-BEGIN {
-	Win32::SetChildShowWindow(0) if defined &Win32::SetChildShowWindow
-};
+# BEGIN {
+	# Win32::SetChildShowWindow(0) if defined &Win32::SetChildShowWindow
+# };
 
 use LWP::Simple;
 use Time::Local;
@@ -48,7 +48,6 @@ sub process{
 	# for(@blocks){
 		# $html .= $_;
 	# }
-	
 	
 	$html = substr ($html, index( $html, '<tr class="calendar_row' ));
 	$tmp = index( $html, '<tr class="calendar_row" data-eventid="">' );
@@ -226,7 +225,7 @@ sub process{
 			$desc2 = '('.sprintf("%.2g", $dif ).'|'.sprintf("%.2g", $avarage ).'|'.$max.')'.$unit;
 		}
 		
-		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$desc;
+		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$power.'x '.$desc;
 		$out .= $currency.';'.$ts.';'.$desc.';'.$prio.';'.$goodeffect.';'.$power.';'.$desc2."\n";
 	}
 	
