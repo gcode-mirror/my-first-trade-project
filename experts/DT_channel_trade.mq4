@@ -37,6 +37,7 @@ int CT_START_TIME;
 double CT_OFFSET = 0.0;
 double CT_MIN_DIST = 0.0;
 double CT_MAX_DIST = 0.0;
+double CT_MAX_LOSE = 0.0;
 
 double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
@@ -59,6 +60,7 @@ int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_MAX_LOSE = 260/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.1, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
@@ -825,9 +827,15 @@ void setPosData( double& tp, double& sl, string pos, double fibo_100, double tra
 		if( fibo_100 > trade_line_price ){ // BUY
 			sl = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * 0.236), Digits );
 			tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_38), Digits );
+    if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
+      sl = NormalizeDouble( trade_line_price - CT_MAX_LOSE, Digits );
+    }
 		}else{ // SELL
 			sl = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * 0.236) + CT_SPREAD, Digits );
 			tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_61) + CT_SPREAD, Digits );
+    if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
+      sl = NormalizeDouble( trade_line_price + CT_MAX_LOSE, Digits );
+    }
 		}
 	}else{
 		if( fibo_100 > trade_line_price ){ // BUY
