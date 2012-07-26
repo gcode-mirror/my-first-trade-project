@@ -15,6 +15,7 @@
 #define NEWS_DESC2 6
 
 #define NEWS_UPDATE_ZONE 900 // 15 min
+#define NEWS_DISPLAY_ZONE 18000 // 5 hour
 
 string NEWS_FILE_NAMES[];
 
@@ -79,10 +80,12 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	deleteNewsItems();
 	win_max = WindowPriceMax(0);
 	win_min = WindowPriceMin(0);
-  int i, peri = Period();
+  int i, peri = Period(), offset = 3;
 	int position, len = ArrayRange( news_data,0 ), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
 	string sym = Symbol(), name, icon = "", font = "";
-	double prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") );
+	double prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") ), disp_max, disp_min;
+	disp_min = TimeCurrent() - NEWS_DISPLAY_ZONE;
+	disp_max = TimeCurrent() + NEWS_DISPLAY_ZONE;
 	color c;
 	min = win_min + (item_size * 1.3);
 	
@@ -126,16 +129,41 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				}
 			}
 			
-			name = StringConcatenate( news_data[i][NEWS_DESC1], " #", news_data[i][NEWS_CURRENCY], " ",TimeToStr( time, TIME_MINUTES ));
+			name = StringConcatenate( news_data[i][NEWS_DESC1], " ", news_data[i][NEWS_DESC2], " ",TimeMinute( time ));
 			if( ObjectFind(name) != -1 ){
-				name = StringConcatenate( news_data[i][NEWS_DESC1], " #", news_data[i][NEWS_CURRENCY], i, " ",TimeToStr( time, TIME_MINUTES ));
+				name = StringConcatenate( news_data[i][NEWS_DESC1], i, " ", news_data[i][NEWS_DESC2], " ",TimeMinute( time ));
 			}
+			if( StringLen( name ) > 61 ){
+				name = StringSubstr( name, 0, 61 );
+			}
+			
 			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
       ObjectSetText( name, icon, 8, font, c );
 			errorCheck("displayNews "+name);
+			
+			if( time > disp_min && time < disp_max ){
+			// p(news_data[i][NEWS_DESC1]);
+				name = StringSubstr( StringConcatenate( news_data[i][NEWS_DESC1], " icon_",i ), 0, 61 );
+				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
+				ObjectSet( name, OBJPROP_CORNER, 2 );
+				ObjectSet( name, OBJPROP_XDISTANCE, 5 );
+				ObjectSet( name, OBJPROP_YDISTANCE, offset );
+				ObjectSet( name, OBJPROP_BACK, true );  
+				ObjectSetText( name, icon, 10, font, c );
+				
+				name = StringSubstr( StringConcatenate( "(desc", i ,") | ",news_data[i][NEWS_DESC2] ), 0, 61 );
+				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
+				ObjectSet( name, OBJPROP_CORNER, 2 );
+				ObjectSet( name, OBJPROP_XDISTANCE, 20 );
+				ObjectSet( name, OBJPROP_YDISTANCE, offset );
+				ObjectSet( name, OBJPROP_BACK, true );  
+				ObjectSetText( name, StringConcatenate( TimeToStr( time + 3600, TIME_MINUTES ), " ", news_data[i][NEWS_CURRENCY], " ", news_data[i][NEWS_DESC1], " ", news_data[i][NEWS_DESC2]), 8, "Arial", Black );
+				
+				offset = offset + 16;
+			}
 		}
 	}
-			// p("oo");
+	// p(TimeToStr(disp_min,TIME_DATE|TIME_SECONDS));
 	errorCheck("displayNews");
 }
 
@@ -240,7 +268,7 @@ void downloadCalendar(){
 		return;
 	}
 	Alert("download");
-	ShellExecuteA(0, "Open", "dnews.bat", "", 0, 0);
+	ShellExecuteA(0, "Open", TerminalPath()+"\script\dnews.bat", "", 0, 0);
 	GlobalVariableSet( "NEWS_update_id", TimeCurrent() + 30 );
 	errorCheck("downloadCalendar");
 }
@@ -253,17 +281,17 @@ bool loadCSVfile( string& news_data[][] ){
 	
 	for( i = 0; i < len; i++ ){
 		handle = FileOpen( NEWS_FILE_NAMES[i], FILE_READ, ";" );
+		if( i == 0 ){
+			downloadCalendar();
+		}
 		if( handle < 1 ){
 			if( GetLastError() == 4103 ){
-				if( i == 0 ){
-					downloadCalendar();
-				}else{
+				if( i > 0 ){
 					addComment( NEWS_FILE_NAMES[i]+" ("+( i + 1 )+") doesn't exist!", 1 );
 					setGlobal( "PAST_NEWS", i );
 					ArrayResize( NEWS_FILE_NAMES, i );
 				}
       }
-      // FileClose(handle);
       return (false);
 		}
 		

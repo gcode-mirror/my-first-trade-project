@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=2093
+period=240
+leftpos=4163
 digits=3
 scale=4
 graph=1
@@ -110,18 +110,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_res_1343000365
+object_name=DT_GO_cLine_g1_sig_1343000365
 period_flags=63
-create_time=1342993231
-description=2012.07.22 23:39:25 G1 \/ \/ \/ \/ \/
-color=9639167
+create_time=1343314428
+description=2012.07.22 23:39:25 G1
+color=15570276
 style=0
 weight=1
 background=1
 time_0=1342065600
 value_0=79.958000
 time_1=1342638000
-value_1=79.270658
+value_1=79.325086
 ray=1
 </object>
 <object>
@@ -134,10 +134,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1342011600
-value_0=79.133000
-time_1=1342450800
-value_1=78.685000
+time_0=1341496800
+value_0=80.087079
+time_1=1343048400
+value_1=78.470888
 ray=1
 </object>
 <object>
@@ -150,10 +150,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1341984600
-value_0=79.419808
-time_1=1342651200
-value_1=78.582110
+time_0=1341475200
+value_0=79.557191
+time_1=1343026800
+value_1=77.941000
 ray=1
 </object>
 <object>
@@ -166,10 +166,26 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1342022400
-value_0=79.753700
-time_1=1342747800
-value_1=78.801000
+time_0=1341831600
+value_0=79.520784
+time_1=1342562400
+value_1=78.650527
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g1_sig_1343333332
+period_flags=63
+create_time=1343326133
+description=2012.07.26 20:08:52 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1341954000
+value_0=79.890840
+time_1=1342688400
+value_1=79.003631
 ray=1
 </object>
 <object>
@@ -442,85 +458,6 @@ time_0=1338512400
 value_0=78.602889
 time_1=1340672400
 value_1=79.773347
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1343000355
-period_flags=0
-create_time=1342993155
-description=2012.07.22 23:39:15
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340254800
-value_0=79.679796
-time_1=1342490400
-value_1=78.992000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1343000357
-period_flags=0
-create_time=1342993157
-description=2012.07.22 23:39:17
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340715600
-value_0=79.879021
-time_1=1342429200
-value_1=79.346586
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1343000359
-period_flags=0
-create_time=1342993159
-description=2012.07.22 23:39:19
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340280000
-value_0=80.221518
-time_1=1342137600
-value_1=79.624349
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1343000362
-period_flags=0
-create_time=1342993162
-description=2012.07.22 23:39:22
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340579700
-value_0=80.467778
-time_1=1342065600
-value_1=79.958000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 58160
-period_flags=0
-create_time=1342694192
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1340704800
-value_0=79.232000
-time_1=1342450800
-value_1=78.685000
 ray=1
 </object>
 <object>

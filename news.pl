@@ -222,10 +222,10 @@ sub process{
 		if( $avarage == 0 ){
 			$desc2 = '-';
 		}else{
-			$desc2 = '('.sprintf("%.2g", $dif ).'|'.sprintf("%.2g", $avarage ).'|'.$max.')'.$unit;
+			$desc2 = '('.sprintf("%.2g", $max ).'|'.sprintf("%.2g", $avarage ).'|'.sprintf("%.2g", $dif ).')'.$unit;
 		}
 		
-		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$power.'x '.$desc;
+		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$desc;
 		$out .= $currency.';'.$ts.';'.$desc.';'.$prio.';'.$goodeffect.';'.$power.';'.$desc2."\n";
 	}
 	
