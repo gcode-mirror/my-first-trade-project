@@ -7,7 +7,7 @@
 use LWP::Simple;
 use Time::Local;
 use FindBin qw($Bin);
-our $MT4_PATH = $Bin ;
+our $MT4_PATH = $Bin;
 $MT4_PATH =~ s/script//;
 our $ERR;
 our $TIMEZONE = 5 * 3600; #5 hour

@@ -1,13 +1,16 @@
 #!/usr/bin/perl -w
 #use strict;
 use Tkx;
-use Cwd;
 use Win32::Sound;
 Win32::Sound::Volume('100%');
+use FindBin qw($Bin);
+our $MT4_PATH = $Bin;
 
 # ======================================================= GLOBALS =================================================================
-our $INPUT_FILE = getcwd."/experts/files/notify.bin";
-our $ALERT_SOUND = getcwd."/Sounds/alert2.wav";
+$MT4_PATH =~ s/script//;
+
+our $INPUT_FILE = $MT4_PATH."experts/files/notify.bin";
+our $ALERT_SOUND = $MT4_PATH."Sounds/alert2.wav";
 our $LAST_MOD = 0;
 
 our $BASE_WINDOW;
