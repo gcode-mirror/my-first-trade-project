@@ -4,7 +4,11 @@
 	# Win32::SetChildShowWindow(0) if defined &Win32::SetChildShowWindow
 # };
 
-use LWP::Simple;
+# use YAML::XS;
+# use Data::Dumper;
+
+use LWP::UserAgent;
+use HTTP::Request::Common qw(GET);
 use Time::Local;
 use FindBin qw($Bin);
 our $MT4_PATH = $Bin;
@@ -12,10 +16,9 @@ $MT4_PATH =~ s/script//;
 our $ERR;
 our $TIMEZONE = 5 * 3600; #5 hour
 
-# getstore("http://www.forexfactory.com/calendar.php?week=jul16.2012", "ppp.html");
-# getstore("http://www.forexfactory.com/calendar.php?week=jul23.2012", "ppp2.html");
+# exit;
 
-require 'history.pl';
+require $Bin.'/history.pl';
 our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 
 sub process{
@@ -27,22 +30,22 @@ sub process{
 	my @blocks;
 	
 	$tmp = (localtime(time))[6];
-	# if( $tmp == 6 ){
-		# $tmp = -2;
-	# }elsif( $tmp == 0 ){
-		# $tmp = -1;
-	# }else{
-		# $tmp--;
-	# }
 	$ts = time - ($tmp * 86400);
 	$day = (localtime($ts))[3];
 	$month = (localtime($ts))[4];
 	my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, $month + 1, $day).'.csv';
 	$month = lc($months[$month]);
-	# print $filename;
+  
+  my $ua = LWP::UserAgent->new;
+  if( $MT4_PATH =~ /MetaTrader/ ){
+    $ua->proxy('http', 'http://10.144.1.10:8080/');
+  }
+	my $res = $ua->request(GET 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year);
+	my $html = $res->{ _content };
+  
+  # print $html;
 	# exit;
-	my $html = get 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year;
-	
+  
 	# @blocks = read_file("c:\\mt4\\ppp.html");
 	# my $html = '';
 	# for(@blocks){
