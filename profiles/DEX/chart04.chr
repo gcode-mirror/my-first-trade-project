@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=240
-leftpos=4168
+period=60
+leftpos=2962
 digits=5
 scale=4
 graph=1
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1341259200
+time_0=1337299200
 </object>
 <object>
 type=2
@@ -213,7 +213,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0  15 15 60
+description=0  15 15
 color=255
 style=0
 weight=1
@@ -226,172 +226,182 @@ ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1342513520
+object_name=Trendline 21597
 period_flags=0
-create_time=1342506320
-description=2012.07.17 08:25:20
+create_time=1343509597
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338451200
+value_0=1.540484
+time_1=1339070400
+value_1=1.554064
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 21621
+period_flags=0
+create_time=1343509621
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1338537600
+value_0=1.526830
+time_1=1339156800
+value_1=1.540410
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 21633
+period_flags=0
+create_time=1343509633
 color=9408444
 style=0
 weight=1
 background=1
 time_0=1340193600
-value_0=1.577740
-time_1=1341230400
-value_1=1.571423
-ray=1
+value_0=1.577571
+time_1=1340956800
+value_1=1.565180
+ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1342513522
+object_name=Trendline 21658
 period_flags=0
-create_time=1342506322
-description=2012.07.17 08:25:22
+create_time=1343509658
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1340020800
-value_0=1.569555
-time_1=1341820800
-value_1=1.557819
-ray=1
+time_0=1340024400
+value_0=1.563756
+time_1=1340902800
+value_1=1.548556
+ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1342513524
+object_name=Trendline 21882
 period_flags=0
-create_time=1342506324
-description=2012.07.17 08:25:24
+create_time=1343509882
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1339971300
-value_0=1.574150
-time_1=1342209600
-value_1=1.558489
-ray=1
+time_0=1341000000
+value_0=1.566030
+time_1=1341789300
+value_1=1.545389
+ray=0
 </object>
 <object>
 type=2
-object_name=Trendline 1342513526
+object_name=Trendline 21918
 period_flags=0
-create_time=1342506326
-description=2012.07.17 08:25:26
+create_time=1343509918
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1339632000
-value_0=1.564275
-time_1=1341392400
-value_1=1.552904
+time_0=1341277200
+value_0=1.573318
+time_1=1341900000
+value_1=1.552165
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1342513528
+object_name=Trendline 22005
 period_flags=0
-create_time=1342506328
-description=2012.07.17 08:25:28
+create_time=1343510005
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1339704000
-value_0=1.556370
-time_1=1342172700
-value_1=1.540095
+time_0=1342166400
+value_0=1.541380
+time_1=1342558800
+value_1=1.560827
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 32163
+object_name=Trendline 22033
 period_flags=0
-create_time=1342274979
+create_time=1343510033
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1338544800
-value_0=1.526829
-time_1=1339146000
-value_1=1.540539
+time_0=1342087200
+value_0=1.547670
+time_1=1342490400
+value_1=1.567790
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 32173
+object_name=Trendline 22103
 period_flags=0
-create_time=1342274989
+create_time=1343510103
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1338426000
-value_0=1.546303
-time_1=1339128000
-value_1=1.563266
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 32468
-period_flags=0
-create_time=1342275284
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338480000
-value_0=1.536114
-time_1=1339030800
-value_1=1.548197
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 32555
-period_flags=0
-create_time=1342275371
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1338502200
-value_0=1.531334
-time_1=1338940800
-value_1=1.539816
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 40091
-period_flags=0
-create_time=1343397019
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1341216000
-value_0=1.564170
-time_1=1342717200
-value_1=1.573750
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 42057
-period_flags=0
-create_time=1343398985
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1342105200
-value_0=1.539394
+time_0=1342605600
+value_0=1.558110
 time_1=1343228400
-value_1=1.545840
+value_1=1.542175
+ray=0
+</object>
+<object>
+type=2
+object_name=Trendline 22126
+period_flags=0
+create_time=1343510126
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1342702800
+value_0=1.573298
+time_1=1343332800
+value_1=1.557107
+ray=0
+</object>
+<object>
+type=2
+object_name=Trendline 22387
+period_flags=0
+create_time=1343510387
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1339614000
+value_0=1.543525
+time_1=1340114400
+value_1=1.553486
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 22525
+period_flags=0
+create_time=1343510525
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1342015200
+value_0=1.557711
+time_1=1342184400
+value_1=1.549267
 ray=1
 </object>
 </indicator>

@@ -14,10 +14,11 @@ use FindBin qw($Bin);
 our $MT4_PATH = $Bin;
 $MT4_PATH =~ s/script//;
 our $ERR;
-our $TIMEZONE = 5 * 3600; #5 hour
+our $TIMEZONE = 7 * 3600; #hour
 
 # exit;
 
+require $Bin.'/config.pl';
 require $Bin.'/history.pl';
 our @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 
@@ -37,7 +38,7 @@ sub process{
 	$month = lc($months[$month]);
   
   my $ua = LWP::UserAgent->new;
-  if( $MT4_PATH =~ /MetaTrader/ ){
+  if( $PROXY ){
     $ua->proxy('http', 'http://10.144.1.10:8080/');
   }
 	my $res = $ua->request(GET 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year);
