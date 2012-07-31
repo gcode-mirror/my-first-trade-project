@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=240
-leftpos=916
+period=60
+leftpos=4431
 digits=3
 scale=4
 graph=1
@@ -73,12 +73,12 @@ ray=0
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1338183748
+create_time=1343631402
 color=4163021
 style=0
 weight=2
 background=1
-time_0=1343952000
+time_0=1343210400
 </object>
 <object>
 type=1

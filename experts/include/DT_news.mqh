@@ -281,7 +281,7 @@ void downloadCalendar(){
 	if( GlobalVariableGet( "NEWS_update_id" ) > TimeCurrent() ){
 		return;
 	}
-	Alert("download");
+	// Alert("download "+Symbol());
 	ShellExecuteA(0, "Open", TerminalPath()+"\script\dnews.bat", "", 0, 0);
 	GlobalVariableSet( "NEWS_update_id", TimeCurrent() + 30 );
 	errorCheck("downloadCalendar");

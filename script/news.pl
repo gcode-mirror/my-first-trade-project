@@ -45,6 +45,7 @@ sub process{
 	my $html = $res->{ _content };
   
   # print $html;
+  # print 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year;
 	# exit;
   
 	# @blocks = read_file("c:\\mt4\\ppp.html");
@@ -52,6 +53,11 @@ sub process{
 	# for(@blocks){
 		# $html .= $_;
 	# }
+	
+	# open(DAT,' > ppp.html') || die("Cannot Open File");
+		# print DAT $html;
+	# close(DAT);
+	# exit;
 	
 	$html = substr ($html, index( $html, '<tr class="calendar_row' ));
 	$tmp = index( $html, '<tr class="calendar_row" data-eventid="">' );
@@ -65,7 +71,7 @@ sub process{
 	@blocks = split(/<\/tr><tr class="calendar_row" data-eventid="\d+">/, $html);
 	
 	# print $blocks[$#blocks - 1]."\n\n";
-	# my @arr = split(/<\/td>/, $blocks[0]);
+	# my @arr = split(/<\/td>/, $blocks[3]);
 	# for(@arr){
 		# print $_."\n\n";
 	# }
@@ -77,6 +83,12 @@ sub process{
 	for(@blocks){
 		@lines = split(/<\/td>/, $_);
 		
+		if( $lines[0] =~ />(\S{3}) (\d+)\s*<\/div>/ ){
+			$day = $2;
+			$date = $1.' '.$day.', '.$year;
+			$month = getMonthId($1);
+		}
+		
 		if( $lines[2] =~ />([A-Z]{3})$/ ){
 			$currency =  $1;
 			if( !grep $_ eq $currency, @currencies ){
@@ -87,27 +99,21 @@ sub process{
 			last;
 		}
 		
-		if( $lines[0] =~ />(\S{3}) (\d+)\s*<\/div>/ ){
-			$day = $2;
-			$date = $1.' '.$day.', '.$year;
-			$month = getMonthId($1);
-		}
-		
-		if( $lines[1] =~ />(\d+):(\d+)(am|pm)$/ ){
+		if( $lines[1] =~ />(\d+):(\d+)(am|pm)/ ){
 			$tmp = $1;
 			if( $3 eq 'pm' ){
 				$tmp += 12;
 			}
 			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
 		
-		# }elsif( $lines[1] =~ />(All Day|Tentative)$/ ){
-		}else{
+		}elsif( $lines[1] =~ />(All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
+		# }else{
 			$ts = timelocal( 0, 0, 0, $day, $month, $year );
-		}
-		# else{
-			# $out = 'Wrong time '.$lines[1];
-			# last;
 		# }
+		}else{
+			$out = 'Wrong time '.$lines[0].$lines[1].$lines[2];
+			last;
+		}
 		
 		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic).*/ ){
 			$tmp = $1;
