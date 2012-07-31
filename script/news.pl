@@ -39,7 +39,7 @@ sub process{
   
   my $ua = LWP::UserAgent->new;
   if( $PROXY ){
-    $ua->proxy('http', 'http://10.144.1.10:8080/');
+    $ua->proxy('http', $PROXY);
   }
 	my $res = $ua->request(GET 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year);
 	my $html = $res->{ _content };
