@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=6261
+leftpos=6232
 digits=3
 scale=4
 graph=1
@@ -98,11 +98,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_res_1343492112
+object_name=DT_GO_cLine_g1_sig_1343492112
 period_flags=63
-create_time=1343676437
-description=2012.07.28 16:15:12 G1 \/ \/ \/ \/ \/
-color=9639167
+create_time=1343801491
+description=2012.07.28 16:15:12 G1
+color=15570276
 style=0
 weight=1
 background=1

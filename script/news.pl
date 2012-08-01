@@ -176,7 +176,7 @@ sub process{
 		}
 		
 		$goodeffect = '-';
-		if( $act ne '-' && $forc ne '-' && $act =~ /^-?[0-9]+\.[0-9]*$/ ){
+		if( $act ne '-' && $forc ne '-' && $act =~ /^-?\d+\.?\d*$/ ){
 			$avarage = 0;
 			$dif = abs( $act - $forc );
 			$max = $dif;
@@ -232,7 +232,14 @@ sub process{
 		if( $avarage == 0 ){
 			$desc2 = '-';
 		}else{
-			$desc2 = '('.sprintf("%.2g", $max ).'|'.sprintf("%.2g", $avarage ).'|'.sprintf("%.2g", $dif ).')'.$unit;
+   $max = sprintf("%.2f", $max );
+   $max =~ s/\.00$//g;
+   $avarage = sprintf("%.2f", $avarage );
+   $avarage =~ s/\.00$//g;
+   $dif = sprintf("%.2f", $dif );
+   $dif =~ s/\.00$//g;
+   
+			$desc2 = '('.$max.'|'.$avarage.'|'.$dif.')'.$unit;
 		}
 		
 		$desc = '('.$act.'|'.$forc.'|'.$prev.')'.$unit.' '.$desc;
