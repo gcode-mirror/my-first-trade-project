@@ -89,6 +89,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	int position, len = ArrayRange( news_data,0 ), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
 	string sym = Symbol(), name, icon = "", font = "";
 	double prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") ), disp_max, disp_min;
+	bool no_separator = true;
 	disp_min = TimeCurrent() - NEWS_DISPLAY_ZONE;
 	disp_max = TimeCurrent() + NEWS_DISPLAY_ZONE;
 	color c;
@@ -147,6 +148,18 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			errorCheck("displayNews "+name);
 
 			if( time > disp_min && time < disp_max ){
+				if( offset > 3 && time > TimeCurrent() && no_separator ){
+					name = "(news separator)";
+					ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
+					ObjectSet( name, OBJPROP_CORNER, 2 );
+					ObjectSet( name, OBJPROP_XDISTANCE, 5 );
+					ObjectSet( name, OBJPROP_YDISTANCE, offset - 4 );
+					ObjectSet( name, OBJPROP_BACK, true );
+					ObjectSetText( name, "=============================================", 8, "Arial", Black );
+					offset = offset + 7;
+					no_separator = false;
+				}
+			
 			// p(news_data[i][NEWS_DESC1]);
 				name = StringSubstr( StringConcatenate( news_data[i][NEWS_DESC1], " icon_",i ), 0, 61 );
 				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);

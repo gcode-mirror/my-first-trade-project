@@ -141,35 +141,35 @@ sub process{
 			last;
 		}
 		
-		$lines[6] =~ s/<\/span>$//;
-		if( $lines[6] =~ />([\d\.\+\-]*)([^<]*)$/ ){
+		$lines[6] =~ s/<\/.*$//;
+		$lines[6] =~ s/<.*">//;
+		if( $lines[6] eq '' ){
+			$act = '-';
+		}elsif( $lines[6] =~ /(-?\d+\.?\d*)(\D*)$/ ){
 			$unit = $2;
 			$act = $1;
-			if( $act eq '' ){
-				$act = '-';
-			}
 		}else{
 			$out = 'wrong actual data '.$lines[6];
 			last;
 		}
 		
-		$lines[7] =~ s/<\/span>$//;
-		if( $lines[7] =~ />([\d\.\+\-]*)[^<]*$/ ){
+		$lines[7] =~ s/<\/.*$//;
+		$lines[7] =~ s/<.*">//;
+		if( $lines[7] eq '' ){
+			$forc = '-';
+		}elsif( $lines[7] =~ /(-?\d+\.?\d*)(\D*)$/ ){
 			$forc = $1;
-			if( $forc eq '' ){
-				$forc = '-';
-			}
 		}else{
 			$out = 'wrong actual data '.$lines[7];
 			last;
 		}
 		
-		$lines[8] =~ s/<\/span>$//;
-		if( $lines[8] =~ />([\d\.\+\-]*)[^<]*$/ ){
+		$lines[8] =~ s/<\/.*$//;
+		$lines[8] =~ s/<.*">//;
+		if( $lines[8] eq '' ){
+			$prev = '-';
+		}elsif( $lines[8] =~ /(-?\d+\.?\d*)(\D*)$/ ){
 			$prev = $1;
-			if( $prev eq '' ){
-				$prev = '-';
-			}
 		}else{
 			$out = 'wrong actual data '.$lines[8];
 			last;
