@@ -144,7 +144,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			}
 
 			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
-      ObjectSetText( name, icon, 8, font, c );
+   ObjectSetText( name, icon, 8, font, c );
 			errorCheck("displayNews "+name);
 
 			if( time > disp_min && time < disp_max ){
@@ -169,7 +169,12 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				ObjectSet( name, OBJPROP_BACK, true );
 				ObjectSetText( name, icon, 10, font, c );
 
-				name = StringSubstr( StringConcatenate( "(desc", i ,") | ",news_data[i][NEWS_DESC2] ), 0, 61 );
+				name = StringConcatenate( "(desc", i , ") | ", news_data[i][NEWS_DESC2] );
+    if( news_data[i][NEWS_GOODEF] != "-" ){
+      name = StringConcatenate( name, news_data[i][NEWS_GOODEF] );
+    }
+    StringSubstr( name, 0, 61 );
+    
 				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
 				ObjectSet( name, OBJPROP_CORNER, 2 );
 				ObjectSet( name, OBJPROP_XDISTANCE, 20 );
@@ -186,71 +191,49 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 }
 
 bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font ){
-	if( power == "0" ){
-		icon = "?";
-		font = "Arial";
-	}else{
-		if( good_effect == "A>F" ){
-			if( position == 0 ){
-				if( power == "3" ){
-					icon = "q";
-					font = "Wingdings 3";
-				}else if( power == "2" ){
-					icon = "¤";
-					font = "Wingdings 3";
-				}else{
-					icon = "i";
-					font = "Wingdings 3";
-				}
-			}else{
-				if( power == "3" ){
-					icon = "p";
-					font = "Wingdings 3";
-				}else if( power == "2" ){
-					icon = "—";
-					font = "Wingdings 3";
-				}else{
-					icon = "h";
-					font = "Wingdings 3";
-				}
-			}
-		}else if( good_effect == "A<F" ){
-			if( position == 0 ){
-				if( power == "3" ){
-					icon = "p";
-					font = "Wingdings 3";
-				}else if( power == "2" ){
-					icon = "—";
-					font = "Wingdings 3";
-				}else{
-					icon = "h";
-					font = "Wingdings 3";
-				}
-			}else{
-				if( power == "3" ){
-					icon = "q";
-					font = "Wingdings 3";
-				}else if( power == "2" ){
-					icon = "¤";
-					font = "Wingdings 3";
-				}else{
-					icon = "i";
-					font = "Wingdings 3";
-				}
-			}
-		}else{
-			if( power == "3" ){
+ if( power == "" ){
+  icon = "?";
+  font = "Arial";
+ }else{
+  int pow = StrToInteger( power );
+  
+  if( position != 0 ){
+   pow = pow * (-1);
+  }
+  
+  if( good_effect == "A>F" || good_effect == "A<F" ){
+    if( pow == 3 ){
+      icon = "p";
+      font = "Wingdings 3";
+    }else if( pow == 2 ){
+      icon = "—";
+      font = "Wingdings 3";
+    }else if( pow == 1 ){
+      icon = "h";
+      font = "Wingdings 3";
+    }else if( pow == -3 ){
+      icon = "q";
+      font = "Wingdings 3";
+    }else if( pow == -2 ){
+      icon = "¤";
+      font = "Wingdings 3";
+    }else if( pow == -1 ){
+      icon = "i";
+      font = "Wingdings 3";
+    }
+  }else{
+   if( pow == 3 ){
 				icon = "I";
 				font = "Arial Black";
-			}else if( power == "2" ){
+			}else if( pow == 2 ){
 				icon = "ó";
 				font = "Wingdings 3";
 			}else{
 				icon = "I";
 				font = "Arial";
 			}
-		}
-	}
+  }
+ }
 }
 
 bool deleteNewsItems(){

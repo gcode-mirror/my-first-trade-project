@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=15
-leftpos=9607
+leftpos=9683
 digits=5
 scale=2
 graph=2
@@ -41,7 +41,7 @@ name=main
 type=0
 object_name=DT_GO_channel_trade_time_limit
 period_flags=0
-create_time=1343856170
+create_time=1344002573
 color=4163021
 style=0
 weight=1

@@ -99,35 +99,32 @@ sub process{
 			last;
 		}
 		
-		if( $lines[1] =~ />(\d+):(\d+)(am|pm)/ ){
-			$tmp = $1;
-			if( $3 eq 'pm' ){
-				$tmp += 12;
-			}
-			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
-		
-		}elsif( $lines[1] =~ />(All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
-		# }else{
-			$ts = timelocal( 0, 0, 0, $day, $month, $year );
-		# }
-		}else{
-			$out = 'Wrong time '.$lines[0].$lines[1].$lines[2];
-			last;
-		}
-		
 		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic).*/ ){
 			$tmp = $1;
 			if( $tmp eq 'High' ){
 				$prio = 3;
 			}elsif( $tmp eq 'Medium' ){
 				$prio = 2;
-			}elsif( $tmp eq 'Low' ){
+			}else{
 				$prio = 1;
-			}elsif( $tmp eq 'Non-Economic' ){
-				$prio = 0;
 			}
 		}else{
 			$out = 'Wrong priority '.$lines[3];
+			last;
+		}
+    
+		if( $lines[1] =~ />(\d+):(\d+)(am|pm)/ ){
+			$tmp = $1;
+			if( $3 eq 'pm' ){
+				$tmp += 12;
+			}
+			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
+      
+		}elsif( $lines[1] =~ />(All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
+			$ts = timelocal( 0, 0, 0, $day, $month, $year );
+      $prio = 0;
+		}else{
+			$out = 'Wrong time '.$lines[0].$lines[1].$lines[2];
 			last;
 		}
 
@@ -176,18 +173,18 @@ sub process{
 		}
 		
 		$goodeffect = '-';
+    $power = 0;
 		if( $act ne '-' && $forc ne '-' && $act =~ /^-?\d+\.?\d*$/ ){
 			$avarage = 0;
 			$dif = abs( $act - $forc );
 			$max = $dif;
-			$save_data = $unknown = 1;
+			$save_data = 1;
 			
 			for my $k1 ( keys %$HISTORY_DATA ){
 				if( $HISTORY_DATA->{ $k1 }->{ CURRENCY } eq $currency && $HISTORY_DATA->{ $k1 }->{ DESC } eq $desc ){
-					$unknown = 0;
 					$goodeffect = $HISTORY_DATA->{ $k1 }->{ GOODEFFECT };
 					$len = scalar keys %{$HISTORY_DATA -> { $k1 } -> { HISTORY }};
-					
+          
 					for my $k2 ( keys %{$HISTORY_DATA->{ $k1 }->{ HISTORY }} ){
 						if( $HISTORY_DATA->{ $k1 }->{ HISTORY } -> { $k2 } -> { DATE } eq $date ){
 							$save_data = 0;
@@ -205,39 +202,51 @@ sub process{
 						$avarage += $dif;
 						$len++;
 					}
-					
-					$avarage = $avarage / $len;
-					
-					if( $dif > $max * 0.7 ){
-						$power = 3;
-					}elsif( $dif > $avarage ){
-						$power = 2;
-					}else{
-						$power = 1;
-					}
-					last;
+          
+          if( $act == $forc ){
+            $goodeffect = $goodeffect.'!';
+						$power = 0;
+            last; # break loop no need more iteration
+            
+          }else{
+            $avarage = $avarage / $len;
+            if( $dif > $max * 0.7 ){
+              $power = 3;
+            }elsif( $dif > $avarage ){
+              $power = 2;
+            }else{
+              $power = 1;
+            }
+            
+            if( ($goodeffect eq 'A>F' && $act < $forc) || ($goodeffect eq 'A<F' && $act > $forc) ){
+              $power = $power * -1;
+            }
+          }
+          
+					last; # break loop no need more iteration
 				}
 			}
 			
-			if( $unknown == 1 ){
-				$max = $avarage = 0;
-				$power = 0;
-			}
+			# if( $unknown == 1 ){
+				# $max = $avarage = 0;
+				# $power = 0;
+			# }
 			
-		}else{
-			$power = 1;
-			$avarage = $max = $unknown = 0;
 		}
+    # else{
+			# $power = 0;
+			# $avarage = $max = $unknown = 0;
+		# }
 		
-		if( $avarage == 0 ){
+		if( $power == 0 ){
 			$desc2 = '-';
 		}else{
-   $max = sprintf("%.2f", $max );
-   $max =~ s/\.00$//g;
-   $avarage = sprintf("%.2f", $avarage );
-   $avarage =~ s/\.00$//g;
-   $dif = sprintf("%.2f", $dif );
-   $dif =~ s/\.00$//g;
+      $max = sprintf("%.2f", $max );
+      $max =~ s/\.0*$//g;
+      $avarage = sprintf("%.2f", $avarage );
+      $avarage =~ s/\.0*$//g;
+      $dif = sprintf("%.2f", $dif );
+      $dif =~ s/\.0*$//g;
    
 			$desc2 = '('.$max.'|'.$avarage.'|'.$dif.')'.$unit;
 		}
