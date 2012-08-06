@@ -17,15 +17,15 @@ bool errorCheck(string text = "unknown function"){
     string err = "unknown ";
     switch(e){
       case 4202: err = "Object does not exist."; break;
-      case 4066: err = "Requested history data in updating state."; return (0); break;
-      case 4099: err = "End of file."; return (0); break;
+      case 4066: err = "Requested history data in updating state."; return (true);
+      case 4099: err = "End of file."; return (true);
       case 4107: err = "Invalid price."; break;
       case 4054: err = "Incorrect series array using."; break;
       case 4055: err = "Custom indicator error."; break;
       case 4200: err = "Object exists already."; break;
       case 4009: err = "Not initialized string in array."; break;
       case 4002: err = "Array index is out of range."; break;
-      case 4058: err = "Global variable not found."; return (0); break;
+      case 4058: err = "Global variable not found."; break;
       case 130: err = "Invalid stops."; break;
       default: err = err+e; break;      
     }

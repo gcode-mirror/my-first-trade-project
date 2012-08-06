@@ -22,7 +22,7 @@ int start(){
     ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_BACK, true );
     ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_WIDTH, 2 );
   }else{
-    ObjectDelete( "DT_GO_channel_trade_time_limit" );
+		ObjectSet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1, tod );
   }
   return(0);
 }

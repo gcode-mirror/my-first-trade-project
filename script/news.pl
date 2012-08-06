@@ -34,7 +34,7 @@ sub process{
 	$ts = time - ($tmp * 86400);
 	$day = (localtime($ts))[3];
 	$month = (localtime($ts))[4];
-	my $filename = 'Calendar-'.sprintf ("%4d-%02d-%2d", $year, $month + 1, $day).'.csv';
+	my $filename = 'Calendar-'.sprintf ("%4d-%02d-%02d", $year, $month + 1, $day).'.csv';
 	$month = lc($months[$month]);
   
   my $ua = LWP::UserAgent->new;
@@ -242,11 +242,11 @@ sub process{
 			$desc2 = '-';
 		}else{
       $max = sprintf("%.2f", $max );
-      $max =~ s/\.0*$//g;
+      $max += 0;
       $avarage = sprintf("%.2f", $avarage );
-      $avarage =~ s/\.0*$//g;
+      $avarage += 0;
       $dif = sprintf("%.2f", $dif );
-      $dif =~ s/\.0*$//g;
+      $dif += 0;
    
 			$desc2 = '('.$max.'|'.$avarage.'|'.$dif.')'.$unit;
 		}

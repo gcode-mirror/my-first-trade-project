@@ -123,6 +123,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			if( news_data[i][NEWS_PRIO] == "0" ){
 				c = Green;
 				icon = "}";
+				font = "Wingdings 3";
 			}else{
 				getIconAndFont( news_data[i][NEWS_POWER], news_data[i][NEWS_GOODEF], position, icon, font );
 
@@ -313,28 +314,28 @@ bool loadCSVfile( string& news_data[][] ){
 		}
 		col = 0;
 		while( !FileIsEnding(handle) ){
-			switch( col ){
-				case 0:
-					tmp = FileReadString(handle);
-					if( tmp != "" ){
-						ArrayResize( news_data, nr + 1 );
-						news_data[nr][NEWS_CURRENCY] = tmp; break;
-					}else{
-						FileClose(handle);
-						return (true);
-					}
-				case 1:
-					news_data[nr][NEWS_TIME] = FileReadString(handle); break;
-				case 2:
-					news_data[nr][NEWS_DESC1] = FileReadString(handle); break;
-				case 3:
-					news_data[nr][NEWS_PRIO] = FileReadString(handle);	break;
-				case 4:
-					news_data[nr][NEWS_GOODEF] = FileReadString(handle); break;
-				case 5:
-					news_data[nr][NEWS_POWER] = FileReadString(handle); break;
-				case 6:
-					news_data[nr][NEWS_DESC2] = FileReadString(handle); col = -1; nr++; break;
+			if( col == 0 ){
+				tmp = FileReadString(handle);
+				if( tmp == "" ){
+					break;
+				}else{
+					ArrayResize( news_data, nr + 1 );
+					news_data[nr][NEWS_CURRENCY] = tmp;
+				}
+			}else if( col == 1 ){
+				news_data[nr][NEWS_TIME] = FileReadString(handle);
+			}else if( col == 2 ){
+				news_data[nr][NEWS_DESC1] = FileReadString(handle);
+			}else if( col == 3 ){
+				news_data[nr][NEWS_PRIO] = FileReadString(handle);
+			}else if( col == 4 ){
+				news_data[nr][NEWS_GOODEF] = FileReadString(handle);
+			}else if( col == 5 ){
+				news_data[nr][NEWS_POWER] = FileReadString(handle);
+			}else if( col == 6 ){
+				news_data[nr][NEWS_DESC2] = FileReadString(handle); 
+				col = -1;
+				nr++;
 			}
 			col++;
 		}
