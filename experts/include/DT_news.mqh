@@ -41,6 +41,7 @@ bool startNews(string isOn){ //return (0);
 	static double win_min = 0.0;
 	static double win_max = 0.0;
 	static string news_data[0][7];
+	
 
   if(isAppStatusChanged(APP_ID_NEWS, isOn)){
     if(isOn == "1"){
@@ -85,15 +86,16 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	deleteNewsItems();
 	win_max = WindowPriceMax(0);
 	win_min = WindowPriceMin(0);
-  int i, peri = Period(), offset = 3;
+  int trade_power, i, peri = Period(), offset = 3;
 	int position, len = ArrayRange( news_data,0 ), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
 	string sym = Symbol(), name, icon = "", font = "";
-	double prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") ), disp_max, disp_min;
+	double trade_val, prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") ), disp_max, disp_min;
 	bool no_separator = true;
 	disp_min = TimeCurrent() - NEWS_DISPLAY_ZONE;
 	disp_max = TimeCurrent() + NEWS_DISPLAY_ZONE;
 	color c;
 	min = win_min + (item_size * 1.3);
+	static string NEWS_TRADE = StringConcatenate( StringSubstr( sym, 0, 6 ), "_news_trade" );
 
 	for( i = 0; i < len; i++ ){
 		position = StringFind( sym, news_data[i][NEWS_CURRENCY]);
@@ -126,6 +128,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				font = "Wingdings 3";
 			}else{
 				getIconAndFont( news_data[i][NEWS_POWER], news_data[i][NEWS_GOODEF], position, icon, font );
+				// getIconAndFont( news_data[i][NEWS_POWER], news_data[i][NEWS_GOODEF], position, icon, font, trade_power );
 
 				if( news_data[i][NEWS_PRIO] == "3" ){
 					c = Red;
@@ -145,7 +148,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			}
 
 			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
-   ObjectSetText( name, icon, 8, font, c );
+			ObjectSetText( name, icon, 8, font, c );
 			errorCheck("displayNews "+name);
 
 			if( time > disp_min && time < disp_max ){
@@ -161,7 +164,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 					no_separator = false;
 				}
 			
-			// p(news_data[i][NEWS_DESC1]);
+				// p(news_data[i][NEWS_DESC1]);
 				name = StringSubstr( StringConcatenate( news_data[i][NEWS_DESC1], " icon_",i ), 0, 61 );
 				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
 				ObjectSet( name, OBJPROP_CORNER, 2 );
@@ -171,10 +174,10 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				ObjectSetText( name, icon, 10, font, c );
 
 				name = StringConcatenate( "(desc", i , ") | ", news_data[i][NEWS_DESC2] );
-    if( news_data[i][NEWS_GOODEF] != "-" ){
-      name = StringConcatenate( name, news_data[i][NEWS_GOODEF] );
-    }
-    StringSubstr( name, 0, 61 );
+				if( news_data[i][NEWS_GOODEF] != "-" ){
+					name = StringConcatenate( name, news_data[i][NEWS_GOODEF] );
+				}
+				StringSubstr( name, 0, 61 );
     
 				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
 				ObjectSet( name, OBJPROP_CORNER, 2 );
@@ -191,49 +194,51 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	errorCheck("displayNews");
 }
 
-bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font ){
- if( power == "" ){
-  icon = "?";
-  font = "Arial";
- }else{
-  int pow = StrToInteger( power );
-  
-  if( position != 0 ){
-   pow = pow * (-1);
-  }
-  
-  if( good_effect == "A>F" || good_effect == "A<F" ){
-    if( pow == 3 ){
-      icon = "p";
-      font = "Wingdings 3";
-    }else if( pow == 2 ){
-      icon = "—";
-      font = "Wingdings 3";
-    }else if( pow == 1 ){
-      icon = "h";
-      font = "Wingdings 3";
-    }else if( pow == -3 ){
-      icon = "q";
-      font = "Wingdings 3";
-    }else if( pow == -2 ){
-      icon = "¤";
-      font = "Wingdings 3";
-    }else if( pow == -1 ){
-      icon = "i";
-      font = "Wingdings 3";
-    }
-  }else{
-   if( pow == 3 ){
-				icon = "I";
-				font = "Arial Black";
-			}else if( pow == 2 ){
-				icon = "ó";
+bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font, int& trade_power ){
+	// trade_power = 0;
+	if( power == "" ){
+		icon = "?";
+		font = "Arial";
+	}else{
+		pow = StrToInteger( power );
+
+		if( position != 0 ){
+		 pow = pow * (-1);
+		}
+
+		if( good_effect == "A>F" || good_effect == "A<F" ){
+			if( pow == 3 ){
+				icon = "p";
 				font = "Wingdings 3";
-			}else{
-				icon = "I";
-				font = "Arial";
+			}else if( pow == 2 ){
+				icon = "—";
+				font = "Wingdings 3";
+			}else if( pow == 1 ){
+				icon = "h";
+				font = "Wingdings 3";
+			}else if( pow == -3 ){
+				icon = "q";
+				font = "Wingdings 3";
+			}else if( pow == -2 ){
+				icon = "¤";
+				font = "Wingdings 3";
+			}else if( pow == -1 ){
+				icon = "i";
+				font = "Wingdings 3";
 			}
-  }
+			// trade_power = pow;
+		}else{
+		 if( pow == 3 ){
+					icon = "I";
+					font = "Arial Black";
+				}else if( pow == 2 ){
+					icon = "ó";
+					font = "Wingdings 3";
+				}else{
+					icon = "I";
+					font = "Arial";
+				}
+		}
  }
 }
 

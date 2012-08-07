@@ -210,10 +210,12 @@ sub process{
             
           }else{
             $avarage = $avarage / $len;
-            if( $dif > $max * 0.7 ){
-              $power = 3;
-            }elsif( $dif > $avarage ){
-              $power = 2;
+            if( $dif > $avarage ){
+							if( $dif > $max * 0.75 ){
+								$power = 3;
+							}else{
+								$power = 2;
+							}
             }else{
               $power = 1;
             }

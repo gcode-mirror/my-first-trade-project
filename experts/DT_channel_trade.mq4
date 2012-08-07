@@ -115,7 +115,6 @@ int start(){
     static bool STOP_NEWS_TRADE = false;
     static string NEWS_SWITCH = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_switch" );
     static string NEWS_TRADE = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_trade" );
-    static string NEWS_TRADE = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_trade" );
     if( GlobalVariableCheck(NEWS_SWITCH) ){
       if( GlobalVariableGet( NEWS_SWITCH ) == 1.0 ){
         STOP_NEWS_TRADE = true;
