@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=4461
+leftpos=6215
 digits=5
 scale=4
 graph=1
@@ -14,7 +14,7 @@ ohlc=0
 askline=0
 days=0
 descriptions=0
-shift_size=24
+shift_size=11
 fixed_pos=0
 window_left=0
 window_top=0
@@ -498,7 +498,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1345104000
+time_0=1345896000
 </object>
 <object>
 type=2
@@ -755,28 +755,6 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=1
-object_name=Horizontal Line 44782
-period_flags=0
-create_time=1344515822
-color=15570276
-style=0
-weight=1
-background=1
-value_0=1.230483
-</object>
-<object>
-type=1
-object_name=Horizontal Line 44928
-period_flags=0
-create_time=1344515968
-color=15570276
-style=0
-weight=1
-background=1
-value_0=1.231108
 </object>
 <object>
 type=2

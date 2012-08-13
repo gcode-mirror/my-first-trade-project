@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=15
-leftpos=10054
+leftpos=10123
 digits=3
 scale=2
 graph=2
@@ -20,7 +20,7 @@ window_left=0
 window_top=0
 window_right=1036
 window_bottom=518
-window_type=2
+window_type=1
 background_color=16777215
 foreground_color=0
 barup_color=0

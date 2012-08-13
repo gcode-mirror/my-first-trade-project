@@ -262,7 +262,7 @@ sub process{
 	}
 	
 	# print $out;
-
+	$out !~ s/[^[:ascii:]]//g;
 	open(DAT,' > '.$MT4_PATH.'experts/files/'.$filename) || die("Cannot Open File");
 		print DAT $out;
 	close(DAT);

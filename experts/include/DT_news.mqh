@@ -143,7 +143,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			if( ObjectFind(name) != -1 ){
 				name = StringConcatenate( news_data[i][NEWS_DESC1], i, " ", news_data[i][NEWS_DESC2], " ",TimeMinute( time ));
 			}
-   name = StringSubstr( name, 0, 61 );
+			name = StringSubstr( name, 0, 61 );
 
 			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
 			ObjectSetText( name, icon, 8, font, c );
@@ -192,9 +192,9 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	errorCheck("displayNews");
 }
 
-bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font ){
+bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font){
+	int pow;
 	// trade_power = 0;
- int pow; 
 	if( power == "" ){
 		icon = "?";
 		font = "Arial";
@@ -228,11 +228,11 @@ bool getIconAndFont( string power, string good_effect, int& position, string& ic
 			// trade_power = pow;
 		}else{
 		 if( pow == 3 ){
+					icon = "t";
+					font = "Wingdings";
+				}else if( pow == 2 ){
 					icon = "I";
 					font = "Arial Black";
-				}else if( pow == 2 ){
-					icon = "ó";
-					font = "Wingdings 3";
 				}else{
 					icon = "I";
 					font = "Arial";
