@@ -95,7 +95,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	disp_max = TimeCurrent() + NEWS_DISPLAY_ZONE;
 	color c;
 	min = win_min + (item_size * 1.3);
-	static string NEWS_TRADE = StringConcatenate( StringSubstr( sym, 0, 6 ), "_news_trade" );
+	// static string NEWS_TRADE = StringConcatenate( StringSubstr( sym, 0, 6 ), "_news_trade" );
 
 	for( i = 0; i < len; i++ ){
 		position = StringFind( sym, news_data[i][NEWS_CURRENCY]);
@@ -143,16 +143,14 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 			if( ObjectFind(name) != -1 ){
 				name = StringConcatenate( news_data[i][NEWS_DESC1], i, " ", news_data[i][NEWS_DESC2], " ",TimeMinute( time ));
 			}
-			if( StringLen( name ) > 61 ){
-				name = StringSubstr( name, 0, 61 );
-			}
+   name = StringSubstr( name, 0, 61 );
 
 			ObjectCreate( name, OBJ_TEXT, 0, chart_time, p1 );
 			ObjectSetText( name, icon, 8, font, c );
 			errorCheck("displayNews "+name);
 
 			if( time > disp_min && time < disp_max ){
-				if( offset > 3 && time > TimeCurrent() && no_separator ){
+				if( time > TimeCurrent() && no_separator ){
 					name = "(news separator)";
 					ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
 					ObjectSet( name, OBJPROP_CORNER, 2 );
@@ -177,7 +175,7 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				if( news_data[i][NEWS_GOODEF] != "-" ){
 					name = StringConcatenate( name, news_data[i][NEWS_GOODEF] );
 				}
-				StringSubstr( name, 0, 61 );
+				name = StringSubstr( name, 0, 61 );
     
 				ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
 				ObjectSet( name, OBJPROP_CORNER, 2 );
@@ -194,8 +192,9 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 	errorCheck("displayNews");
 }
 
-bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font, int& trade_power ){
+bool getIconAndFont( string power, string good_effect, int& position, string& icon, string& font ){
 	// trade_power = 0;
+ int pow; 
 	if( power == "" ){
 		icon = "?";
 		font = "Arial";

@@ -30,8 +30,8 @@
 #define CT_FIBO_38 0.377 // 0.382
 #define CT_FIBO_61 0.613 // 0.618
 
-#define NEWS_ID_OFFSET 1262277040 // 40 year
-#define POS_SEP 1262300400 // 2010-01-01
+// #define NEWS_ID_OFFSET 1262277040 // 40 year
+// #define POS_SEP 1262300400 // 2010-01-01
 
 string CT_CLINES[][4];
 
@@ -112,18 +112,18 @@ int start(){
       }
     }
     
-    static bool STOP_NEWS_TRADE = false;
-    static string NEWS_SWITCH = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_switch" );
-    static string NEWS_TRADE = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_trade" );
-    if( GlobalVariableCheck(NEWS_SWITCH) ){
-      if( GlobalVariableGet( NEWS_SWITCH ) == 1.0 ){
-        STOP_NEWS_TRADE = true;
-      }else{
-        STOP_NEWS_TRADE = false;
-      }
-    }else{
-      STOP_NEWS_TRADE = false;
-    }
+    // static bool STOP_NEWS_TRADE = false;
+    // static string NEWS_SWITCH = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_switch" );
+    // static string NEWS_TRADE = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_trade" );
+    // if( GlobalVariableCheck(NEWS_SWITCH) ){
+      // if( GlobalVariableGet( NEWS_SWITCH ) == 1.0 ){
+        // STOP_NEWS_TRADE = true;
+      // }else{
+        // STOP_NEWS_TRADE = false;
+      // }
+    // }else{
+      // STOP_NEWS_TRADE = false;
+    // }
   }
 
  static double PEEK_FOR_SPREAD_LOG = 0.0;
