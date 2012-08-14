@@ -18,7 +18,7 @@ int start(){
   if( ObjectFind("DT_BO_icon_news_3") != -1 ){
     int news_nr = StrToInteger( getGlobal("PAST_NEWS") );
     datetime date = TimeLocal() - (TimeDayOfWeek(TimeLocal()) * 86400 ) - ( (news_nr + 1) * 604800 );
-    string file_name = StringConcatenate("Calendar-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),"-",TimeYear(date),".csv");
+    string file_name = StringConcatenate("Calendar-", TimeYear(date), "-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),".csv");
     
     int handle;
     handle = FileOpen( file_name, FILE_CSV|FILE_READ, ';' );

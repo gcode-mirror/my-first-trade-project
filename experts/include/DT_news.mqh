@@ -15,7 +15,7 @@
 #define NEWS_DESC2 6
 
 #define NEWS_UPDATE_ZONE 900 // 15 min
-#define NEWS_DISPLAY_ZONE 18000 // 5 hour
+#define NEWS_DISPLAY_ZONE 21600 // 6 hour
 
 string NEWS_FILE_NAMES[];
 
