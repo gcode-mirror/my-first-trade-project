@@ -30,9 +30,6 @@
 #define CT_FIBO_38 0.377 // 0.382
 #define CT_FIBO_61 0.613 // 0.618
 
-// #define NEWS_ID_OFFSET 1262277040 // 40 year
-// #define POS_SEP 1262300400 // 2010-01-01
-
 string CT_CLINES[][4];
 
 int CT_START_TIME;
@@ -101,32 +98,19 @@ int start(){
     }
     
 // ###############################################################  Init Trade Allowance  ##############################################################
-    static bool STOP_CL_TRADE = false;
+    static bool STOP_TRADE = false;
     if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
-      STOP_CL_TRADE = false;
+      STOP_TRADE = false;
     }else{
       if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
-        STOP_CL_TRADE = true;
+        STOP_TRADE = true;
       }else{
-        STOP_CL_TRADE = false;
+        STOP_TRADE = false;
       }
     }
-    
-    // static bool STOP_NEWS_TRADE = false;
-    // static string NEWS_SWITCH = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_switch" );
-    // static string NEWS_TRADE = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_news_trade" );
-    // if( GlobalVariableCheck(NEWS_SWITCH) ){
-      // if( GlobalVariableGet( NEWS_SWITCH ) == 1.0 ){
-        // STOP_NEWS_TRADE = true;
-      // }else{
-        // STOP_NEWS_TRADE = false;
-      // }
-    // }else{
-      // STOP_NEWS_TRADE = false;
-    // }
   }
 
- static double PEEK_FOR_SPREAD_LOG = 0.0;
+  static double PEEK_FOR_SPREAD_LOG = 0.0;
 	static int BAR_TIME_REFRESH = PERIOD_M1;
 	static double LAST_PEEK_PRICE = 0.0;
 	static double LAST_BAR_TIME = 0.0;
@@ -254,7 +238,7 @@ int start(){
         }
 
         double open_time = OrderOpenTime();
-        if( open_time + CT_KEEP_POS_TIME < TimeCurrent() || STOP_CL_TRADE ){
+        if( open_time + CT_KEEP_POS_TIME < TimeCurrent() || STOP_TRADE ){
           OrderDelete( ticket );
           errorCheck( StringConcatenate( Symbol(), " Position closed due to timer expired or trade stopped, ticket id:", ticket ) );
           log( StringConcatenate( Symbol(), " Position closed due to timer expired or trade stopped, ticket id:", ticket ), 0.02 );
@@ -314,7 +298,7 @@ int start(){
       errorCheck("Channel trade modify position part");
     }else{
 // #################################################################  Find NEW LMIT Positon  ##################################################################    
-      if( STOP_CL_TRADE ){
+      if( STOP_TRADE ){
         return (0);
       }
 			

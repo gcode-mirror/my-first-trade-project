@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=4666
+leftpos=3363
 digits=3
 scale=4
 graph=1
@@ -14,7 +14,7 @@ ohlc=0
 askline=0
 days=0
 descriptions=0
-shift_size=10
+shift_size=31
 fixed_pos=0
 window_left=176
 window_top=232
@@ -78,7 +78,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1345089600
+time_0=1345237200
 </object>
 <object>
 type=1
