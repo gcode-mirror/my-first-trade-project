@@ -54,16 +54,16 @@ bool startNews(string isOn){ //return (0);
 	if(isOn == "0" || Period() > PERIOD_H4){return (false);}
 	if(delayTimer(APP_ID_NEWS, 2200)){return (false);}
 	if( ArrayRange( news_data, 0 ) == 0 ){
-  downloadCalendar();
+		downloadCalendar();
 		if( loadCSVfile( news_data ) ){
 			displayNews( news_data, win_min, win_max );
 		}
 	}else{
-  int res = hasRecentNews( news_data );
+		int res = hasRecentNews( news_data );
 		if( res == 2 ){
-   downloadCalendar();
-  }
-  if( res > 0 ){
+			downloadCalendar();
+		}
+		if( res > 0 ){
 			if( loadCSVfile( news_data ) ){
 				displayNews( news_data, win_min, win_max );
 			}
@@ -73,7 +73,6 @@ bool startNews(string isOn){ //return (0);
 			displayNews( news_data, win_min, win_max );
 		}
 	}
-
   return (errorCheck("startNews"));
 }
 
@@ -257,19 +256,19 @@ int hasRecentNews( string& news_data[][] ){
 	double time, max = TimeCurrent(), min;
 	min = max - NEWS_UPDATE_ZONE;
 	string sym = Symbol();
- bool need_download = ( sym == "EURUSD-Pro" );
+  bool need_download = ( sym == "EURUSD-Pro" );
 	for ( i = 0; i < len; i++ ){
 		time = StrToDouble( news_data[i][NEWS_TIME] );
 		if( time > min && time < max ){
-   if( need_download ){
-    if( StringFind( sym, news_data[i][NEWS_CURRENCY] ) != -1 ){
-      return (2);
-    }else{
-      res = 1;
-    }
-   }else if( StringFind( sym, news_data[i][NEWS_CURRENCY] ) != -1 ){
-     return (1);
-   }
+			if( need_download ){
+				if( StringFind( sym, news_data[i][NEWS_CURRENCY] ) != -1 ){
+					return (2);
+				}else{
+					res = 1;
+				}
+			}else if( StringFind( sym, news_data[i][NEWS_CURRENCY] ) != -1 ){
+				return (1);
+			}
 		}
 	}
 	return (res);
@@ -302,6 +301,7 @@ bool loadCSVfile( string& news_data[][] ){
 					addComment( NEWS_FILE_NAMES[i]+" ("+( i + 1 )+") doesn't exist!", 1 );
 					setGlobal( "PAST_NEWS", i );
 					ArrayResize( NEWS_FILE_NAMES, i );
+					break;
 				}
       }
       return (false);
