@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=4481
+leftpos=6284
 digits=5
 scale=4
 graph=1
@@ -984,7 +984,7 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1343145600
+time_0=1343149200
 value_0=1.204210
 time_1=1343923200
 value_1=1.213400
