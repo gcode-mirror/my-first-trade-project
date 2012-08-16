@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=60
-leftpos=5523
+leftpos=4676
 digits=5
 scale=4
 graph=1
@@ -37,6 +37,18 @@ stops_color=17919
 height=181
 <indicator>
 name=main
+<object>
+type=22
+object_name=Arrow 39511
+period_flags=0
+create_time=1345034839
+color=255
+weight=1
+background=0
+symbol_code=241
+time_0=1345042800
+value_0=1.049198
+</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH

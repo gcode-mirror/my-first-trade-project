@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=6237
+leftpos=4481
 digits=5
 scale=4
 graph=1
@@ -458,6 +458,18 @@ time_0=0
 value_0=1.217071
 </object>
 <object>
+type=22
+object_name=Arrow 39604
+period_flags=0
+create_time=1345034932
+color=255
+weight=1
+background=0
+symbol_code=241
+time_0=1345038540
+value_0=1.227793
+</object>
+<object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
 period_flags=0
@@ -550,6 +562,22 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_cLine_g1_sig_1344276226
+period_flags=63
+create_time=1345097342
+description=2012.08.06 18:03:46 G1
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1343113200
+value_0=1.205814
+time_1=1343923200
+value_1=1.213400
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_cLine_g1_sig_1344276229
 period_flags=63
 create_time=1344269029
@@ -578,22 +606,6 @@ time_0=1342443600
 value_0=1.219773
 time_1=1343908800
 value_1=1.233093
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g1_sup_1344276226
-period_flags=63
-create_time=1344269045
-description=2012.08.06 18:03:46 G1 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1343113200
-value_0=1.205814
-time_1=1343923200
-value_1=1.213400
 ray=1
 </object>
 <object>
@@ -961,6 +973,21 @@ time_0=1343149200
 value_0=1.204210
 time_1=1343890800
 value_1=1.210977
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 39007
+period_flags=0
+create_time=1345099871
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1343145600
+value_0=1.204210
+time_1=1343923200
+value_1=1.213400
 ray=1
 </object>
 <object>
