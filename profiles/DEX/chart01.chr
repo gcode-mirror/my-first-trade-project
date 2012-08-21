@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=240
-leftpos=2324
+period=60
+leftpos=6362
 digits=5
 scale=4
 graph=1
@@ -34,7 +34,7 @@ askline_color=17919
 stops_color=17919
 
 <window>
-height=242
+height=236
 <indicator>
 name=main
 <object>
@@ -498,7 +498,7 @@ color=4163021
 style=0
 weight=2
 background=1
-time_0=1345896000
+time_0=1346270400
 </object>
 <object>
 type=2
@@ -534,82 +534,82 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1344276222
-period_flags=63
-create_time=1345553944
-description=2012.08.06 18:03:42 G1
+object_name=DT_GO_cLine_g1_sig_1345591207
+period_flags=0
+create_time=1345584021
+description=2012.08.21 23:20:07 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1342684800
-value_0=1.232400
-time_1=1344211200
-value_1=1.244340
+time_0=1342098000
+value_0=1.216700
+time_1=1345496400
+value_1=1.226850
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345142852
-period_flags=63
-create_time=1345135654
-description=2012.08.16 18:47:32 G1
+object_name=DT_GO_cLine_g1_sig_1345591208
+period_flags=0
+create_time=1345584021
+description=2012.08.21 23:20:08 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1342706400
-value_0=1.222920
-time_1=1343808000
-value_1=1.233650
+time_0=1341496800
+value_0=1.236400
+time_1=1344895800
+value_1=1.246540
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345142857
-period_flags=63
-create_time=1345135658
-description=2012.08.16 18:47:37 G1
+object_name=DT_GO_cLine_g1_sig_1345591209
+period_flags=0
+create_time=1345584021
+description=2012.08.21 23:20:09 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1342792800
-value_0=1.214410
-time_1=1344434400
-value_1=1.232660
+time_0=1341597600
+value_0=1.227873
+time_1=1344996000
+value_1=1.238023
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345142860
-period_flags=63
-create_time=1345135660
-description=2012.08.16 18:47:40 G1
+object_name=DT_GO_cLine_g1_sig_1345591210
+period_flags=0
+create_time=1345584021
+description=2012.08.21 23:20:10 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1343030400
-value_0=1.208355
-time_1=1344985800
-value_1=1.231805
+time_0=1342080000
+value_0=1.208040
+time_1=1345478400
+value_1=1.218190
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sup_1345142862
+object_name=DT_GO_cLine_g1_sig_1345591264
 period_flags=63
-create_time=1345135674
-description=2012.08.16 18:47:42 G1 /\ /\ /\ /\ /\
-color=3329330
+create_time=1345584065
+description=2012.08.21 23:21:04 G1
+color=15570276
 style=0
 weight=1
 background=1
-time_0=1343149200
-value_0=1.204210
+time_0=1342454400
+value_0=1.202003
 time_1=1345464000
-value_1=1.229510
+value_1=1.211189
 ray=1
 </object>
 <object>
