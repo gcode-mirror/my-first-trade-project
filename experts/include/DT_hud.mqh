@@ -110,7 +110,7 @@ bool initHud(){
   EXP_LAST_MOD_GV = StringConcatenate( sym, "_cLines_lastMod" );
   GlobalVariableSet( EXP_LAST_MOD_GV, TimeLocal() );
   
-  updateChannelArray();
+  // updateChannelArray();
   
 	return (errorCheck("initHud"));
 }
@@ -179,7 +179,7 @@ bool startHud(){
 
 	// ====================== History info bar ======================
 	int tmp, i, j, histroy_len = ArrayRange( HUD_HISTORY_LINE_NAMES, 0 ), c_line_len = ArraySize(HUD_CHANNEL_LINE_NAMES);
-	double t1, p1, t2, p2;
+	double t1, p1, t2, p2, tmp2;
 	bool has_change = false;
 	
 	for( i = 0; i < histroy_len; i++ ){
@@ -266,8 +266,12 @@ bool startHud(){
 	}
 	
 	tmp = ObjectsTotal();
-	if( has_change || HUD_OBJ_TOTAL != tmp ){
-		HUD_OBJ_TOTAL = tmp;
+	tmp2 = ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 );
+ static double trade_time_limit_val = 0.0;
+	if( has_change || HUD_OBJ_TOTAL != tmp || trade_time_limit_val != tmp2 ){
+		if(Symbol() == "AUDUSD-Pro"){ Alert("update");}
+  HUD_OBJ_TOTAL = tmp;
+  trade_time_limit_val = tmp2;
 		updateChannelArray();
 		GlobalVariableSet( HUD_HISTORY_GLOBAL_NAME, HUD_SELF_HISTORY_GLOBAL_VAL );
 		ObjectSetText( "DT_BO_hud_history",StringConcatenate( "Histrory: ", ArrayRange( HUD_HISTORY_LINE_NAMES, 0 ), "/", HUD_SELF_HISTORY_GLOBAL_VAL ),8,"Arial", Black );
