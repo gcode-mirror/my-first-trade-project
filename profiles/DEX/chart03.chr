@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=60
-leftpos=6587
+period=240
+leftpos=2334
 digits=3
 scale=4
 graph=1
@@ -739,27 +739,27 @@ value_0=95.601512
 </object>
 <object>
 type=22
-object_name=Arrow 51561
+object_name=Arrow 15020
 period_flags=0
-create_time=1345571177
-color=16711680
+create_time=1345731244
+color=255
 weight=1
 background=0
 symbol_code=242
-time_0=1345579200
-value_0=99.027284
+time_0=1345737600
+value_0=98.480929
 </object>
 <object>
 type=22
-object_name=Arrow 51567
+object_name=Arrow 15025
 period_flags=0
-create_time=1345571183
-color=16711680
+create_time=1345731249
+color=255
 weight=1
 background=0
 symbol_code=241
-time_0=1345647600
-value_0=98.515394
+time_0=1345809600
+value_0=97.880271
 </object>
 <object>
 type=2
@@ -1085,10 +1085,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1344607200
-value_0=95.717077
-time_1=1345467600
-value_1=97.799077
+time_0=1345032000
+value_0=96.533852
+time_1=1345737600
+value_1=98.615852
 ray=1
 </object>
 <object>
