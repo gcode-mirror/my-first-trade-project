@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=240
-leftpos=4289
+period=60
+leftpos=3616
 digits=3
 scale=4
 graph=1
@@ -110,66 +110,66 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_res_1345210194
+object_name=DT_GO_cLine_g1_res_1345757062
 period_flags=63
-create_time=1345531482
-description=2012.08.17 13:29:54 G1 \/ \/ \/ \/ \/
+create_time=1345749871
+description=2012.08.23 21:24:22 G1 \/ \/ \/ \/ \/
 color=9639167
 style=0
 weight=1
 background=1
-time_0=1344524400
-value_0=78.790000
-time_1=1345428000
-value_1=79.659000
+time_0=1345428000
+value_0=79.659000
+time_1=1345752000
+value_1=79.437960
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345210201
+object_name=DT_GO_cLine_g1_sig_1345757051
 period_flags=63
-create_time=1345203002
-description=2012.08.17 13:30:01 G1
+create_time=1345749852
+description=2012.08.23 21:24:11 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1344535200
-value_0=78.526000
-time_1=1345204800
-value_1=79.304124
+time_0=1345035600
+value_0=78.591000
+time_1=1345662000
+value_1=78.284000
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345210211
+object_name=DT_GO_cLine_g1_sig_1345757055
 period_flags=63
-create_time=1345203129
-description=2012.08.17 13:30:11 G1
+create_time=1345749855
+description=2012.08.23 21:24:15 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1344844800
-value_0=78.167555
-time_1=1345521600
-value_1=78.957039
+time_0=1345039200
+value_0=79.040296
+time_1=1345723200
+value_1=78.694000
 ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g1_sig_1345210238
+object_name=DT_GO_cLine_g1_sig_1345757058
 period_flags=63
-create_time=1345706130
-description=2012.08.17 13:30:38 G1
+create_time=1345749858
+description=2012.08.23 21:24:18 G1
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1345420800
-value_0=77.937770
-time_1=1345795200
-value_1=78.494384
+time_0=1345089600
+value_0=79.389952
+time_1=1345752000
+value_1=79.058392
 ray=1
 </object>
 <object>
@@ -333,6 +333,69 @@ value_1=0.010000
 ray=0
 </object>
 <object>
+type=14
+object_name=Expansion 35570
+period_flags=0
+create_time=1345751794
+color=255
+style=2
+weight=1
+background=0
+color2=0
+style2=0
+weight2=1
+time_0=1337713200
+value_0=80.146000
+time_1=1337785200
+value_1=79.210000
+time_2=1338364800
+value_2=79.406823
+levels_ray=0
+level_0=0.6180
+description_0=FE 61.8
+level_1=1.0000
+description_1=FE 100.0
+level_2=1.6180
+description_2=FE 161.8
+</object>
+<object>
+type=14
+object_name=Expansion 35957
+period_flags=0
+create_time=1345752181
+color=255
+style=2
+weight=1
+background=0
+color2=0
+style2=0
+weight2=1
+time_0=1333479600
+value_0=82.991000
+time_1=1333623600
+value_1=81.828000
+time_2=1333717200
+value_2=82.555000
+levels_ray=0
+level_0=0.6180
+description_0=FE 61.8
+level_1=1.0000
+description_1=FE 100.0
+level_2=1.6180
+description_2=FE 161.8
+</object>
+<object>
+type=1
+object_name=Horizontal Line 43962
+period_flags=0
+create_time=1345760186
+color=9408444
+style=0
+weight=1
+background=1
+value_0=82.378646
+</object>
+<object>
 type=2
 object_name=Trendline 1343937017
 period_flags=0
@@ -462,32 +525,47 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 14935
+object_name=Trendline 35873
 period_flags=0
-create_time=1345731159
+create_time=1345752097
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1345420800
-value_0=79.657835
-time_1=1345881600
-value_1=79.350835
+time_0=1333332000
+value_0=83.303000
+time_1=1334221200
+value_1=81.769809
+ray=0
+</object>
+<object>
+type=2
+object_name=Trendline 36557
+period_flags=0
+create_time=1345752781
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1337713200
+value_0=80.146000
+time_1=1337922000
+value_1=79.822000
 ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 14949
+object_name=Trendline 44115
 period_flags=0
-create_time=1345731173
+create_time=1345760339
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1345032000
-value_0=78.591000
-time_1=1345651200
-value_1=78.284000
+time_0=1333371600
+value_0=81.494896
+time_1=1333623600
+value_1=81.828000
 ray=1
 </object>
 <object>
