@@ -28,8 +28,6 @@ double HUD_CHANNEL_LINE_DATA[][4];
 string HUD_HISTORY_GLOBAL_NAME;
 double HUD_SELF_HISTORY_GLOBAL_VAL;
 
-int HUD_OBJ_TOTAL = 0;
-
 double HUD_WINDOW_FADE = 0.0;
 
 string EXP_FILE_NAME;
@@ -234,7 +232,6 @@ bool startHud(){
 			HUD_HISTORY_LINE_DATA[tmp][REDO][P1] = p1;
 			HUD_HISTORY_LINE_DATA[tmp][REDO][T2] = t2;
 			HUD_HISTORY_LINE_DATA[tmp][REDO][P2] = p2;
-			
 			has_change = true;
 			// printArr();
 		}
@@ -265,13 +262,13 @@ bool startHud(){
 		}
 	}
 	
-	tmp = ObjectsTotal();
+	tmp = getClineNr();
 	tmp2 = ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 );
- static double trade_time_limit_val = 0.0;
-	if( has_change || HUD_OBJ_TOTAL != tmp || trade_time_limit_val != tmp2 ){
-		if(Symbol() == "AUDUSD-Pro"){ Alert("update");}
-  HUD_OBJ_TOTAL = tmp;
-  trade_time_limit_val = tmp2;
+	static double trade_time_limit_val = 0.0;
+	static double cline_nr = 0;
+	if( has_change || cline_nr != tmp || trade_time_limit_val != tmp2 ){
+		cline_nr = tmp;
+		trade_time_limit_val = tmp2;
 		updateChannelArray();
 		GlobalVariableSet( HUD_HISTORY_GLOBAL_NAME, HUD_SELF_HISTORY_GLOBAL_VAL );
 		ObjectSetText( "DT_BO_hud_history",StringConcatenate( "Histrory: ", ArrayRange( HUD_HISTORY_LINE_NAMES, 0 ), "/", HUD_SELF_HISTORY_GLOBAL_VAL ),8,"Arial", Black );
@@ -306,6 +303,16 @@ bool startHud(){
     }
   }
 	return (errorCheck("startHud"));
+}
+
+int getClineNr(){
+	int i, len = ObjectsTotal(), res = 0;
+  for (i= len - 1; i>=0; i--) {
+    if( StringSubstr( ObjectName(i), 5, 7 ) == "_cLine_" ){
+			res++;
+		}
+	}
+	return (res);
 }
 
 double getF100time( double price ){
@@ -405,7 +412,6 @@ void updateChannelArray(){
       j++;
     }
   }
-  HUD_OBJ_TOTAL = len;
   
   out = StringConcatenate(out,"DT_GO_channel_trade_time_limit;",DoubleToStr(ObjectGet("DT_GO_channel_trade_time_limit", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_COLOR ),";",ObjectType( "DT_GO_channel_trade_time_limit" ),"\r\n");
   
