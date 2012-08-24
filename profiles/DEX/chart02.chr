@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=3616
+period=240
+leftpos=2343
 digits=3
 scale=4
 graph=1
@@ -37,6 +37,30 @@ stops_color=17919
 height=328
 <indicator>
 name=main
+<object>
+type=22
+object_name=Arrow 17204
+period_flags=0
+create_time=1345798964
+color=255
+weight=1
+background=0
+symbol_code=241
+time_0=1345813200
+value_0=78.585369
+</object>
+<object>
+type=22
+object_name=Arrow 17211
+period_flags=0
+create_time=1345798971
+color=255
+weight=1
+background=0
+symbol_code=242
+time_0=1346227200
+value_0=79.177463
+</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH

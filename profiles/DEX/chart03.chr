@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=30
-leftpos=6309
+period=60
+leftpos=6638
 digits=3
 scale=4
 graph=1
@@ -1048,79 +1048,79 @@ ray=0
 type=1
 object_name=DT_GO_TradeLines_OP
 period_flags=0
-create_time=1345760643
+create_time=1345813087
 description=0.1 lot
 color=16711680
 style=1
 weight=1
 background=0
-value_0=98.670000
+value_0=98.254000
 </object>
 <object>
 type=21
 object_name=DT_GO_TradeLines_OP_label
 period_flags=0
-create_time=1345760643
+create_time=1345813087
 description=0.1 lot
 color=16711680
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1345167000
-value_0=98.670000
+time_0=1344920400
+value_0=98.254000
 </object>
 <object>
 type=1
 object_name=DT_GO_TradeLines_SL
 period_flags=0
-create_time=1345760643
-description=127 pip  16.2 USD  3573 HUF  16.2 unit
+create_time=1345813087
+description=258 pip  32.9 USD  7318 HUF  32.9 unit
 color=255
 style=1
 weight=1
 background=0
-value_0=98.797000
+value_0=98.512000
 </object>
 <object>
 type=21
 object_name=DT_GO_TradeLines_SL_label
 period_flags=0
-create_time=1345760643
-description=127 pip  16.2 USD  3573 HUF  16.2 unit
+create_time=1345813087
+description=258 pip  32.9 USD  7318 HUF  32.9 unit
 color=255
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1345167000
-value_0=98.797000
+time_0=1344920400
+value_0=98.512000
 </object>
 <object>
 type=1
 object_name=DT_GO_TradeLines_TP
 period_flags=0
-create_time=1345760643
-description=138 pip  17.6 USD  3895 HUF  17.6 unit
+create_time=1345813087
+description=341 pip  43.5 USD  9678 HUF  43.5 unit
 color=32768
 style=1
 weight=1
 background=0
-value_0=98.531563
+value_0=97.912832
 </object>
 <object>
 type=21
 object_name=DT_GO_TradeLines_TP_label
 period_flags=0
-create_time=1345760643
-description=138 pip  17.6 USD  3895 HUF  17.6 unit
+create_time=1345813087
+description=341 pip  43.5 USD  9678 HUF  43.5 unit
 color=32768
 font=Arial
 fontsize=7
 angle=0
 background=0
-time_0=1345167000
-value_0=98.531563
+time_0=1344920400
+value_0=97.912832
 </object>
 <object>
 type=2
@@ -1156,9 +1156,9 @@ ray=0
 </object>
 <object>
 type=14
-object_name=Expansion 35656
+object_name=Expansion 17038
 period_flags=0
-create_time=1345751880
+create_time=1345798798
 color=255
 style=2
 weight=1
@@ -1166,12 +1166,12 @@ background=0
 color2=0
 style2=0
 weight2=1
-time_0=1345464000
-value_0=97.732000
-time_1=1345665600
-value_1=99.180000
-time_2=1345834800
-value_2=98.502500
+time_0=1345564800
+value_0=99.180000
+time_1=1345662000
+value_1=98.149000
+time_2=1345874400
+value_2=98.487005
 levels_ray=0
 level_0=0.6180
 description_0=FE 61.8
@@ -1179,36 +1179,6 @@ level_1=1.0000
 description_1=FE 100.0
 level_2=1.6180
 description_2=FE 161.8
-</object>
-<object>
-type=2
-object_name=Trendline 33796
-period_flags=0
-create_time=1345750020
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1345564800
-value_0=99.180000
-time_1=1345744800
-value_1=98.729000
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 33816
-period_flags=0
-create_time=1345750040
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1345465800
-value_0=97.732000
-time_1=1345662000
-value_1=98.149000
-ray=1
 </object>
 <object>
 type=2
@@ -1254,6 +1224,22 @@ value_0=100.355021
 time_1=1342465200
 value_1=97.013584
 ray=1
+</object>
+<object>
+type=17
+object_name=Triangle 6271
+period_flags=0
+create_time=1345788031
+color=16711680
+style=0
+weight=1
+background=0
+time_0=1345564800
+value_0=99.180000
+time_1=1345215600
+value_1=97.721000
+time_2=1345874400
+value_2=98.487005
 </object>
 </indicator>
 <indicator>

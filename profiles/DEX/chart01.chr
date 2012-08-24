@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=4295
+leftpos=2345
 digits=5
 scale=4
 graph=1
