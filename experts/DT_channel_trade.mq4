@@ -22,7 +22,7 @@
 #define CT_SL_FACTOR 1.3
 
 #define CT_MID_SPEED_LIMIT 140.0
-#define CT_BOUND_SPEED_LIMIT 220.0
+#define CT_BOUND_SPEED_LIMIT 420.0 //220
 
 #define CT_KEEP_POS_TIME 7200 // 1,5 hour
 #define CT_POS_DIF_TIME 21600 // 6 hour
@@ -37,7 +37,8 @@ int CT_START_TIME;
 double CT_OFFSET = 0.0;
 double CT_MIN_DIST = 0.0;
 double CT_MAX_DIST = 0.0;
-double CT_MAX_LOSE = 0.0;
+double CT_MAX_G1_LOSE = 0.0;
+double CT_MAX_G2_LOSE = 0.0;
 
 double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
@@ -60,7 +61,8 @@ int init(){
   CT_OFFSET = 65/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MIN_DIST = 270/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
-  CT_MAX_LOSE = 260/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_MAX_G1_LOSE = 260/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+  CT_MAX_G2_LOSE = 80/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.1, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
@@ -179,13 +181,22 @@ int start(){
           }
         }
 				
+				
+				trade_line_ts_str = OrderMagicNumber();
+        if( !getCLineData( trade_line_ts_str, trade_line_name, trade_line_group, trade_line_pos ) ){
+          OrderDelete( ticket );
+          errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",trade_line_name,"! ticket id :", ticket ) );
+          log( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",trade_line_name,"! ticket id :", ticket ), 0.03 );
+          return (0);
+        }
+				
         comment = OrderComment();
 				fibo_100 = NormalizeDouble( StrToDouble( StringSubstr( comment, 2, 7 ) ), Digits );
 				if( StringSubstr( comment, 0, 1 ) == "B" ){ // bound
-					setPosData( new_tp, tmp, "bound", fibo_100, LAST_PEEK_PRICE );
+					setPosData( new_tp, tmp, "bound", fibo_100, LAST_PEEK_PRICE, ObjectGet( trade_line_name, OBJPROP_PRICE1 ) < ObjectGet( trade_line_name, OBJPROP_PRICE2 ), trade_line_group );
 					BAR_TIME_REFRESH = PERIOD_M15;
 				}else{
-					setPosData( new_tp, tmp, "mid", fibo_100, LAST_PEEK_PRICE );
+					setPosData( new_tp, tmp, "mid", fibo_100, LAST_PEEK_PRICE, ObjectGet( trade_line_name, OBJPROP_PRICE1 ) < ObjectGet( trade_line_name, OBJPROP_PRICE2 ), trade_line_group );
 					BAR_TIME_REFRESH = PERIOD_M1;
 				}
 				
@@ -270,7 +281,7 @@ int start(){
 					fibo_100 = NormalizeDouble( StrToDouble(StringSubstr( comment, 2, 7 ) ), Digits );
           
 					double new_sl = 0.0;
-					setPosData( new_tp, new_sl, trade_line_pos, fibo_100, trade_line_price );
+					setPosData( new_tp, new_sl, trade_line_pos, fibo_100, trade_line_price, ObjectGet( trade_line_name, OBJPROP_PRICE1 ) < ObjectGet( trade_line_name, OBJPROP_PRICE2 ), trade_line_group );
 
           if( GetTickCount() < CT_START_TIME ){
             CT_START_TIME = GetTickCount();
@@ -307,7 +318,6 @@ int start(){
 			string speed_log = "", siblings[2] = {"",""};
 			
 			for( i = 0; i < len; i++ ){
-			
 				// error missing cLine
 				if( ObjectFind( CT_CLINES[i][CL_NAME] ) == -1 ){
 					log( StringConcatenate( "Error cLine is missing: ",CT_CLINES[i][CL_NAME]," (", Symbol(), ")" ), trade_line_ts + 0.04 );
@@ -472,7 +482,7 @@ int start(){
           }
         }
 				
-				setPosData( tp, sl, CT_CLINES[i][CL_POS], fibo_100, trade_line_price );
+				setPosData( tp, sl, CT_CLINES[i][CL_POS], fibo_100, trade_line_price, ObjectGet( trade_line_name, OBJPROP_PRICE1 ) < ObjectGet( trade_line_name, OBJPROP_PRICE2 ), trade_line_group );
 				
 				if( crashToCLine( trade_line_name, MathMax( op, sl ), MathMin( op, sl ) ) ){
 					log( StringConcatenate( "Stop loss price crash to other cLine! (", Symbol(), ")" ), trade_line_ts + 1.17 );
@@ -822,19 +832,34 @@ bool alreadyBelowCLine( double trade_line_price ,double fibo_100, double fibo_10
   return ( false );
 }
 
-void setPosData( double& tp, double& sl, string pos, double fibo_100, double trade_line_price ){
+void setPosData( double& tp, double& sl, string pos, double fibo_100, double trade_line_price, bool dir, string group ){
 	if( pos == "bound" ){
+		double max_lose;
+		if( group == "g1" ){
+			max_lose = CT_MAX_G1_LOSE;
+		}else{
+			max_lose = CT_MAX_G2_LOSE;
+		}
+		
 		if( fibo_100 > trade_line_price ){ // BUY
-			tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_38), Digits );
-			if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
-				sl = NormalizeDouble( trade_line_price - CT_MAX_LOSE, Digits );
+			if( dir ){
+				tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_61), Digits );
+			}else{
+				tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_38), Digits );
+			}
+			if( MathAbs( trade_line_price - sl ) > max_lose ){
+				sl = NormalizeDouble( trade_line_price - max_lose, Digits );
 			}else{
 				sl = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * 0.236), Digits );
 			}
 		}else{ // SELL
-			tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_61) + CT_SPREAD, Digits );
-			if( MathAbs( trade_line_price - sl ) > CT_MAX_LOSE ){
-				sl = NormalizeDouble( trade_line_price + CT_MAX_LOSE, Digits );
+			if( dir ){
+				tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_38) + CT_SPREAD, Digits );
+			}else{
+				tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_61) + CT_SPREAD, Digits );
+			}
+			if( MathAbs( trade_line_price - sl ) > max_lose ){
+				sl = NormalizeDouble( trade_line_price + max_lose, Digits );
 			}else{
 				sl = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * 0.236) + CT_SPREAD, Digits );
 			}
