@@ -28,7 +28,6 @@ sub process{
 	my $save_file = 0;
 	my $year = ((localtime)[5])+1900;
 	my ($month, $day, $date, $currency, $prio, $desc, $act, $forc, $prev, $unit, $ts, $avarage, $goodeffect, $max, $power, $desc2, $dif, $len, $unknown, $save_data);
-	my @blocks;
 	
 	$tmp = (localtime(time))[6];
 	$ts = time - ($tmp * 86400);
@@ -46,50 +45,38 @@ sub process{
   
   # print $html;
   # print 'http://www.forexfactory.com/calendar.php?week='.$month.$day.'.'.$year;
-	# exit;
-  
-	# @blocks = read_file("c:\\mt4\\ppp.html");
-	# my $html = '';
-	# for(@blocks){
-		# $html .= $_;
-	# }
 	
 	# open(DAT,' > ppp.html') || die("Cannot Open File");
 		# print DAT $html;
 	# close(DAT);
 	# exit;
 	
-	$html = substr ($html, index( $html, '<tr class="calendar_row' ));
-	$tmp = index( $html, '<tr class="calendar_row" data-eventid="">' );
-	if( $tmp == -1 ){
-		$tmp = index( $html, '</table>' );
-	}
-	$html = substr ($html, 0, $tmp);
-	$html =~ s/\s*\n\s*//g;
-	$html =~ s/\s{2,}/ /g;
-		
-	@blocks = split(/<\/tr><tr class="calendar_row" data-eventid="\d+">/, $html);
 	
-	# print $blocks[$#blocks - 1]."\n\n";
-	# my @arr = split(/<\/td>/, $blocks[3]);
 	# for(@arr){
 		# print $_."\n\n";
 	# }
 	# exit;
+  
+	$html =~ s/\s*\n\s*//g;
+	$html =~ s/\s{2,}/ /g;
 	
 	$month = $day = $date = $prio = $desc = $ts = '';
 	my @currencies = qw(EUR AUD GBP JPY USD);
-	my @lines;
-	for(@blocks){
-		@lines = split(/<\/td>/, $_);
+  my @lines;
+  while( $html =~ /<tr class="calendar_row" data-eventid="\d+">(.*?)<\/tr>/g ){
+    $tmp = $1;
+    @lines = ();
+    while( $tmp =~ /<td(.*?)>(.*?)<\/td>/g ){
+      push (@lines, $2);
+    }
 		
-		if( $lines[0] =~ />(\S{3}) (\d+)\s*<\/div>/ ){
+		if( $lines[0] =~ /<div class="eventday_multiple">(\S{3}) (\d+)\s*<\/div>/ ){
 			$day = $2;
 			$date = $1.' '.$day.', '.$year;
 			$month = getMonthId($1);
 		}
 		
-		if( $lines[2] =~ />([A-Z]{3})$/ ){
+		if( $lines[2] =~ /([A-Z]{3})/ ){
 			$currency =  $1;
 			if( !grep $_ eq $currency, @currencies ){
 				next;
@@ -99,7 +86,7 @@ sub process{
 			last;
 		}
 		
-		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic).*/ ){
+		if( $lines[3] =~ /title="(Medium|High|Low|Non-Economic)/ ){
 			$tmp = $1;
 			if( $tmp eq 'High' ){
 				$prio = 3;
@@ -113,14 +100,14 @@ sub process{
 			last;
 		}
     
-		if( $lines[1] =~ />(\d+):(\d+)(am|pm)/ ){
+		if( $lines[1] =~ /(\d+):(\d+)(am|pm)/ ){
 			$tmp = $1;
 			if( $3 eq 'pm' ){
 				$tmp += 12;
 			}
-			$ts = timelocal( 0, $2, $tmp, $day, $month, $year ) + $TIMEZONE;
+			$ts = timelocal( 0, $2, $tmp-1, $day, $month, $year ) + $TIMEZONE;
       
-		}elsif( $lines[1] =~ />(All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
+		}elsif( $lines[1] =~ /(All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
 			$ts = timelocal( 0, 0, 0, $day, $month, $year );
       $prio = 0;
 		}else{
@@ -128,7 +115,7 @@ sub process{
 			last;
 		}
 
-		if( $lines[4] =~ /<div>\s*(.*)\s*<\/div>$/ ){
+		if( $lines[4] =~ /<div>\s*(.*)\s*<\/div>/ ){
 			$desc = $1;
 			$desc =~ s/;/:/g;
 			$desc =~ s/\\/\//g;
@@ -138,8 +125,10 @@ sub process{
 			last;
 		}
 		
-		$lines[6] =~ s/<\/.*$//;
-		$lines[6] =~ s/<.*">//;
+    if( $lines[6] =~ /<span (.*?)>(.*?)<\/span>/ ){
+      $lines[6] = $2;
+    }
+    $lines[6] = trim($lines[6]);
 		if( $lines[6] eq '' ){
 			$act = '-';
 		}elsif( $lines[6] =~ /(-?\d+\.?\d*)(\D*)$/ ){
@@ -150,8 +139,10 @@ sub process{
 			last;
 		}
 		
-		$lines[7] =~ s/<\/.*$//;
-		$lines[7] =~ s/<.*">//;
+		if( $lines[7] =~ /<span (.*?)>(.*?)<\/span>/ ){
+      $lines[7] = $2;
+    }
+    $lines[7] = trim($lines[7]);
 		if( $lines[7] eq '' ){
 			$forc = '-';
 		}elsif( $lines[7] =~ /(-?\d+\.?\d*)(\D*)$/ ){
@@ -161,8 +152,10 @@ sub process{
 			last;
 		}
 		
-		$lines[8] =~ s/<\/.*$//;
-		$lines[8] =~ s/<.*">//;
+		if( $lines[8] =~ /<span (.*?)>(.*?)<\/span>/ ){
+      $lines[8] = $2;
+    }
+    $lines[8] = trim($lines[8]);
 		if( $lines[8] eq '' ){
 			$prev = '-';
 		}elsif( $lines[8] =~ /(-?\d+\.?\d*)(\D*)$/ ){
@@ -319,6 +312,13 @@ sub saveHistoryData{
 	open(DAT," > history.pl") || die("Cannot Open File");
 		print DAT $out;
 	close(DAT);
+}
+
+sub trim($){
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
 }
 
 process();
