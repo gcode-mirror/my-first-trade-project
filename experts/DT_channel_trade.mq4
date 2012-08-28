@@ -25,7 +25,7 @@
 #define CT_BOUND_SPEED_LIMIT 420.0 //220
 
 #define CT_KEEP_POS_TIME 7200 // 1,5 hour
-#define CT_POS_DIF_TIME 21600 // 6 hour
+#define CT_POS_DIF_TIME 86400 // 24 hour
 #define CT_FIBO_23 0.232 // 0.236
 #define CT_FIBO_38 0.377 // 0.382
 #define CT_FIBO_61 0.613 // 0.618
@@ -39,6 +39,10 @@ double CT_MIN_DIST = 0.0;
 double CT_MAX_DIST = 0.0;
 double CT_MAX_G1_LOSE = 0.0;
 double CT_MAX_G2_LOSE = 0.0;
+
+
+double CT_ZZ_TP = 0.0;
+double CT_ZZ_SL = 0.0;
 
 double CT_SPREAD = 0.0;
 double CT_THRESHOLD = 0.0;
@@ -63,6 +67,10 @@ int init(){
   CT_MAX_DIST = 1100/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_G1_LOSE = 260/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
   CT_MAX_G2_LOSE = 80/MarketInfo(Symbol(),MODE_TICKVALUE)*Point;
+	
+  CT_ZZ_TP = 90 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+  CT_ZZ_SL = 90 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+	
   CT_START_TIME = GetTickCount() + 180000; // 3 min
   CT_SPREAD = NormalizeDouble( getMySpread() * 1.1, Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
@@ -325,6 +333,11 @@ int start(){
 					return (0);
 				}
 				
+				// cLine is not trade line
+				if( CT_CLINES[i][CL_STATE] == "sig" ){
+					continue;
+				}
+				
 				// current cLine price
 				trade_line_price = getClineValueByShift( CT_CLINES[i][CL_NAME] );
 								
@@ -333,11 +346,6 @@ int start(){
 					log( StringConcatenate( "Error cLine is not enought long: ",CT_CLINES[i][CL_NAME]," (", Symbol(), ")" ), trade_line_ts + 0.05 );
 					setChannelLinesArr( EXP_FILE_NAME );
 					return (0);
-				}
-				
-				// cLine is not trade line
-				if( CT_CLINES[i][CL_STATE] == "sig" ){
-					continue;
 				}
 				
 				// cLine not in trade zone
@@ -399,14 +407,7 @@ int start(){
 				}
 				
 				// cLine in group or not?
-				if( CT_CLINES[i][CL_GROUP] == "g0" ){
-					// distance between Fibo 100 and cLine farther than MAX distance
-					if( dif > CT_MAX_DIST ){
-						log( StringConcatenate( "Fibo DISTANCE is too HIGH! Cline: ", CT_CLINES[i][CL_NAME]," Max Distance: ",CT_MAX_DIST," Curr distance:", dif , " (", Symbol(), ")"), trade_line_ts + 0.12 );
-						continue;
-					}
-				}else{
-				
+				if( CT_CLINES[i][CL_GROUP] != "g0" ){
 					// get cLine siblings
 					getSiblingLines( fibo_100 > trade_line_price, siblings, CT_CLINES[i][CL_GROUP], i, len, 2 );
 					
@@ -415,37 +416,36 @@ int start(){
 						log( StringConcatenate( "Error primary sibling missing GR:", CT_CLINES[i][CL_GROUP]," cLine:",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.13 );
 						return (0);
 					}
-				}
 				
-				// Speed of price movment
-				speed = priceSpeed( trade_line_name, speed_log );
-				
-				if( CT_CLINES[i][CL_POS] == "bound" ){
-					if( speed > CT_BOUND_SPEED_LIMIT ){
-            log( StringConcatenate( "Bar SPEED is too fast in Boundary cLine!", speed_log ), speed );
-            return (0);
-          }
-        }else{
-					// distance between Fibo 100 and cLine farther than secondary sibling
-					if( siblings[1] != "" ){
-						if( MathAbs( getClineValueByShift( siblings[1] ) - trade_line_price ) < MathAbs( fibo_time_cross_p - fibo_100 ) ){
-							fibo_100 = getCLineItercept( siblings[0], fibo_100_time, trade_line_price > fibo_100 );
-							if( fibo_100 == 0.0 ){
-								log( StringConcatenate( "Error in getCLineItercept not find itercept: ",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.14 );
-								return (0);
+					// Speed of price movment
+					speed = priceSpeed( trade_line_name, speed_log );
+					
+					if( CT_CLINES[i][CL_POS] == "bound" ){
+						if( speed > CT_BOUND_SPEED_LIMIT ){
+							log( StringConcatenate( "Bar SPEED is too fast in Boundary cLine!", speed_log ), speed );
+							return (0);
+						}
+					}else{
+						// distance between Fibo 100 and cLine farther than secondary sibling
+						if( siblings[1] != "" ){
+							if( MathAbs( getClineValueByShift( siblings[1] ) - trade_line_price ) < MathAbs( fibo_time_cross_p - fibo_100 ) ){
+								fibo_100 = getCLineItercept( siblings[0], fibo_100_time, trade_line_price > fibo_100 );
+								if( fibo_100 == 0.0 ){
+									log( StringConcatenate( "Error in getCLineItercept not find itercept: ",CT_CLINES[i][CL_NAME], " (", Symbol(), ")" ), trade_line_ts + 0.14 );
+									return (0);
+								}
 							}
 						}
+					
+						if( speed > CT_MID_SPEED_LIMIT ){
+							log( StringConcatenate( "Bar SPEED is too fast in midlle cLine!", speed_log ), speed );
+							return (0);
+						}
 					}
-				
-					if( speed > CT_MID_SPEED_LIMIT ){
-            log( StringConcatenate( "Bar SPEED is too fast in midlle cLine!", speed_log ), speed );
-            return (0);
-          }
-        }
+				}
 				
 				trade_line_name = CT_CLINES[i][CL_NAME];
 				break;
-				
 			}
 			
       if( trade_line_name != "" ){
@@ -866,11 +866,11 @@ void setPosData( double& tp, double& sl, string pos, double fibo_100, double tra
 		}
 	}else{
 		if( fibo_100 > trade_line_price ){ // BUY
-			sl = NormalizeDouble( trade_line_price - ((MathAbs( fibo_100 - trade_line_price ) * 0.236) * CT_SL_FACTOR), Digits );
-			tp = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_23), Digits );
+			sl = NormalizeDouble( trade_line_price - CT_ZZ_SL, Digits );
+			tp = NormalizeDouble( trade_line_price + CT_ZZ_TP, Digits );
 		}else{ // SELL
-			sl = NormalizeDouble( trade_line_price + (MathAbs( fibo_100 - trade_line_price ) * 0.236 * CT_SL_FACTOR) + CT_SPREAD, Digits );
-			tp = NormalizeDouble( trade_line_price - (MathAbs( fibo_100 - trade_line_price ) * CT_FIBO_23) + CT_SPREAD, Digits );
+			sl = NormalizeDouble( trade_line_price + CT_ZZ_SL + CT_SPREAD, Digits );
+			tp = NormalizeDouble( trade_line_price - CT_ZZ_TP + CT_SPREAD, Digits );
 		}
 	}
 }

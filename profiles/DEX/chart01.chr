@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=240
-leftpos=2355
+period=60
+leftpos=6477
 digits=5
 scale=4
 graph=1
@@ -682,6 +682,22 @@ value_0=1.000000
 </object>
 <object>
 type=2
+object_name=DT_GO_DAILY_ZZ
+period_flags=0
+create_time=1346173092
+description=1
+color=255
+style=0
+weight=1
+background=0
+time_0=0
+value_0=0.000000
+time_1=1346173200
+value_1=0.010000
+ray=0
+</object>
+<object>
+type=2
 object_name=DT_GO_LOT
 period_flags=0
 create_time=1333402549
@@ -839,32 +855,6 @@ value_0=0.000000
 time_1=1335862800
 value_1=0.010000
 ray=0
-</object>
-<object>
-type=14
-object_name=Expansion 36346
-period_flags=0
-create_time=1345752570
-color=255
-style=2
-weight=1
-background=0
-color2=0
-style2=0
-weight2=1
-time_0=1331132400
-value_0=1.309640
-time_1=1331236800
-value_1=1.329110
-time_2=1331863200
-value_2=1.304621
-levels_ray=0
-level_0=0.6180
-description_0=FE 61.8
-level_1=1.0000
-description_1=FE 100.0
-level_2=1.6180
-description_2=FE 161.8
 </object>
 <object>
 type=2
