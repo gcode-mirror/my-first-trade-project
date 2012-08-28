@@ -128,6 +128,9 @@ sub process{
     if( $lines[6] =~ /<span (.*?)>(.*?)<\/span>/ ){
       $lines[6] = $2;
     }
+    if( $lines[6] =~ /<div (.*?)>(.*?)<\/div>/ ){
+      $lines[6] = $2;
+    }
     $lines[6] = trim($lines[6]);
 		if( $lines[6] eq '' ){
 			$act = '-';
@@ -142,6 +145,9 @@ sub process{
 		if( $lines[7] =~ /<span (.*?)>(.*?)<\/span>/ ){
       $lines[7] = $2;
     }
+    if( $lines[7] =~ /<div (.*?)>(.*?)<\/div>/ ){
+      $lines[7] = $2;
+    }
     $lines[7] = trim($lines[7]);
 		if( $lines[7] eq '' ){
 			$forc = '-';
@@ -153,6 +159,9 @@ sub process{
 		}
 		
 		if( $lines[8] =~ /<span (.*?)>(.*?)<\/span>/ ){
+      $lines[8] = $2;
+    }
+    if( $lines[8] =~ /<div (.*?)>(.*?)<\/div>/ ){
       $lines[8] = $2;
     }
     $lines[8] = trim($lines[8]);

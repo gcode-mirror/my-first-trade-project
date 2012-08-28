@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=240
-leftpos=4302
+period=60
+leftpos=3516
 digits=3
 scale=4
 graph=1
@@ -246,11 +246,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_cLine_g2_res_1346057685
+object_name=DT_GO_cLine_g2_sig_1346057685
 period_flags=63
-create_time=1346050528
-description=2012.08.27 08:54:45 G2 \/ \/ \/ \/ \/
-color=9639167
+create_time=1346142999
+description=2012.08.27 08:54:45 G2
+color=15570276
 style=0
 weight=1
 background=1
@@ -258,6 +258,22 @@ time_0=1345647600
 value_0=78.605506
 time_1=1346029200
 value_1=78.839000
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g2_sig_1346057690
+period_flags=63
+create_time=1346142995
+description=2012.08.27 08:54:50 G2
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1345663800
+value_0=78.284000
+time_1=1345813200
+value_1=78.454000
 ray=1
 </object>
 <object>
@@ -274,22 +290,6 @@ time_0=1345665600
 value_0=78.425052
 time_1=1346047200
 value_1=78.658546
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g2_sup_1346057690
-period_flags=63
-create_time=1346050561
-description=2012.08.27 08:54:50 G2 /\ /\ /\ /\ /\
-color=3329330
-style=0
-weight=1
-background=1
-time_0=1345663800
-value_0=78.284000
-time_1=1345813200
-value_1=78.454000
 ray=1
 </object>
 <object>

@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
 period=60
-leftpos=6714
+leftpos=6684
 digits=3
 scale=4
 graph=1
@@ -1144,22 +1144,6 @@ value_0=100.355021
 time_1=1342465200
 value_1=97.013584
 ray=1
-</object>
-<object>
-type=17
-object_name=Triangle 44817
-period_flags=0
-create_time=1346088721
-color=16711935
-style=0
-weight=1
-background=0
-time_0=1345564800
-value_0=99.180000
-time_1=1345464000
-value_1=97.732000
-time_2=1346313600
-value_2=98.202156
 </object>
 </indicator>
 <indicator>
