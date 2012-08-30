@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=2537
+leftpos=2361
 digits=5
 scale=4
 graph=1
@@ -127,6 +127,22 @@ style=0
 weight=2
 background=1
 time_0=1347840000
+</object>
+<object>
+type=2
+object_name=DT_GO_cLine_g0_sig_1346317011
+period_flags=63
+create_time=1346309811
+description=2012.08.30 08:56:51 G0 
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1343865600
+value_0=1.043580
+time_1=1346112000
+value_1=1.034480
+ray=1
 </object>
 <object>
 type=2
@@ -401,7 +417,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0 15 60
+description=0 15 60 240 1440
 color=255
 style=0
 weight=1
@@ -493,6 +509,21 @@ ray=1
 </object>
 <object>
 type=2
+object_name=Trendline 2277
+period_flags=0
+create_time=1346308325
+color=0
+style=2
+weight=1
+background=1
+time_0=1345233600
+value_0=1.041050
+time_1=1346119200
+value_1=1.034480
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 33040
 period_flags=0
 create_time=1342275856
@@ -534,6 +565,21 @@ time_0=1338321600
 value_0=0.958909
 time_1=1339689600
 value_1=0.992947
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 3800
+period_flags=0
+create_time=1346309848
+color=0
+style=2
+weight=1
+background=1
+time_0=1343174400
+value_0=1.017580
+time_1=1346112000
+value_1=1.034480
 ray=1
 </object>
 </indicator>

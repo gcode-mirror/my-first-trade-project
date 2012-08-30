@@ -34,7 +34,7 @@ void setTrendLines(){
 	double time, top[100][3], down[100][3], to_time = Time[WindowBarsPerChart()];
 	double possible_dist = 3000 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	
-	int j, k, i = 4, top_nr = 0, down_nr = 0;
+	int j, k, i = 4, top_nr = 0, down_nr = 0, found = 0;
   double zz_price = 0.0;
   while( i < Bars ){
     zz_price = iCustom( Symbol(), Period(), "ZigZag", 12, 5, 3, 0, i );
@@ -84,6 +84,7 @@ void setTrendLines(){
 			}
 			if( all_ok ){
 				createTrendLine( top[j][1], top[j][0], top[i][1], top[i][0] );
+				found++;
 			}
 		}
 	}
@@ -107,8 +108,12 @@ void setTrendLines(){
 			}
 			if( all_ok ){
 				createTrendLine( down[j][1], down[j][0], down[i][1], down[i][0] );
+				found++;
 			}
 		}
+	}
+	if( found == 0 ){
+		addComment( "There is no ZigZag Sup-Res line!", 1 );
 	}
 
 	ObjectDelete( helper );
@@ -119,7 +124,7 @@ void createTrendLine( double t1, double p1, double t2, double p2 ){
 	string name = StringConcatenate( "DT_GO_dz_", getPeriodSortName( Period() ), "_", DoubleToStr( t1, 0 ) );
 
 	ObjectCreate( name, OBJ_TREND, 0, t1, p1, t2, p2 );
-  ObjectSet( name, OBJPROP_COLOR, Magenta );
+  ObjectSet( name, OBJPROP_COLOR, Black );
   ObjectSet( name, OBJPROP_RAY, true );
   ObjectSet( name, OBJPROP_BACK, true );
 	ObjectSet( name, OBJPROP_WIDTH, 1 );

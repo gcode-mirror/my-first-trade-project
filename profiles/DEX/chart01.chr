@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=60
-leftpos=6477
+leftpos=4714
 digits=5
 scale=4
 graph=1
@@ -621,54 +621,6 @@ value_1=1.238017
 ray=1
 </object>
 <object>
-type=2
-object_name=DT_GO_cLine_g2_sig_1346063301
-period_flags=63
-create_time=1346153222
-description=2012.08.27 10:28:21 G2
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1345737600
-value_0=1.258950
-time_1=1345824000
-value_1=1.256170
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g2_sig_1346063306
-period_flags=63
-create_time=1346056106
-description=2012.08.27 10:28:26 G2
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1345696200
-value_0=1.255207
-time_1=1345782600
-value_1=1.252427
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_cLine_g2_sig_1346063310
-period_flags=63
-create_time=1346056110
-description=2012.08.27 10:28:30 G2
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1345658400
-value_0=1.253133
-time_1=1345744800
-value_1=1.250353
-ray=1
-</object>
-<object>
 type=22
 object_name=DT_GO_CT_arw_f100_56_1346063301
 period_flags=0
@@ -829,7 +781,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0 15 60
+description=0 15 60 240 1440
 color=255
 style=0
 weight=1
@@ -953,50 +905,17 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1346063276
+object_name=Trendline 17399
 period_flags=0
-create_time=1346056076
-description=2012.08.27 10:27:56
-color=9408444
-style=0
+create_time=1346323447
+color=0
+style=2
 weight=1
 background=1
-time_0=1345467600
-value_0=1.229510
-time_1=1345813200
-value_1=1.248140
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1346063278
-period_flags=0
-create_time=1346056078
-description=2012.08.27 10:27:58
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1345233600
-value_0=1.233470
-time_1=1345784400
-value_1=1.253780
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1346063279
-period_flags=0
-create_time=1346056079
-description=2012.08.27 10:27:59
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1345197600
-value_0=1.238194
-time_1=1345662000
-value_1=1.253820
+time_0=1339891200
+value_0=1.274770
+time_1=1345737600
+value_1=1.258950
 ray=1
 </object>
 <object>
