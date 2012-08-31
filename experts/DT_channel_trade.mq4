@@ -142,7 +142,7 @@ int start(){
           if( o_type == OP_BUYLIMIT ){
             PEEK_FOR_SPREAD_LOG = 99999.0;
           }else{
-            PEEK_FOR_SPREAD_LOG = 0.1;
+            PEEK_FOR_SPREAD_LOG = 0.1; 
           }
         }
 

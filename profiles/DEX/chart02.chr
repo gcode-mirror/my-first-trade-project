@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
-period=60
-leftpos=3555
+period=1440
+leftpos=1762
 digits=3
 scale=4
 graph=1
@@ -425,7 +425,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1342447851
-description=0 15 60 240
+description=0 15 60 240 1440
 color=255
 style=0
 weight=1
@@ -462,6 +462,17 @@ style=0
 weight=1
 background=1
 value_0=82.378646
+</object>
+<object>
+type=1
+object_name=Horizontal Line 52991
+period_flags=0
+create_time=1346424575
+color=9408444
+style=0
+weight=1
+background=1
+value_0=78.221000
 </object>
 <object>
 type=2
@@ -589,6 +600,21 @@ time_0=1342814400
 value_0=78.371126
 time_1=1343859000
 value_1=78.534494
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 28998
+period_flags=0
+create_time=1346400582
+color=33023
+style=0
+weight=1
+background=1
+time_0=1331769600
+value_0=84.179000
+time_1=1340496000
+value_1=80.621000
 ray=1
 </object>
 <object>
