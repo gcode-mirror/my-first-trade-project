@@ -18,19 +18,21 @@ int start(){
   double tod = WindowTimeOnDropped();
   string sel_name = getSelectedLine(tod, pod);
   if( sel_name != "" ){
+	addComment("Can not find line!",1);
+  return(0);
     double price;
     if( ObjectType(sel_name) == OBJ_TREND ){
       price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
     }else{
       price = ObjectGet(sel_name,OBJPROP_PRICE1);
     }
+		
     if( pod > price ){
       renameChannelLine( sel_name, "sup" );
     }else{
       renameChannelLine( sel_name, "res" );
     }
     
-    showCLineGroups( tod );
   }else{
     addComment("Can not find line!",1);
   }

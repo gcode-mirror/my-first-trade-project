@@ -91,6 +91,7 @@ int init(){
 
 int start(){
   if( CONNECTION_FAIL ){
+    Sleep(1000);
     init();
     return (0);
   }

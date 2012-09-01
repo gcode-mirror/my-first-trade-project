@@ -14,12 +14,6 @@
 
 #define TRADE_LOT 0.1
 
-#define TL_NAME 0
-#define TL_TYPE 1
-#define TL_PERI 2
-#define TL_STATE 3
-#define TL_ID 4
-
 #define CT_FIBO_23 0.232 // 0.236
 #define CT_FIBO_38 0.377 // 0.382
 #define CT_FIBO_61 0.613 // 0.618
@@ -32,7 +26,6 @@
 string CT_TLINES[][5];
 
 bool CONNECTION_FAIL = true;
-string INP_FILE_NAME;
 string GV_LAST_MOD;
 int CT_START_TIME;
 
@@ -74,6 +67,7 @@ int init(){
 int start(){
 // ###############################################################  Check connection  ################################################################  
   if( CONNECTION_FAIL ){
+		Sleep(1000);
     init();
     return (0);
   }
@@ -267,7 +261,7 @@ int start(){
     }
     
     // to this cLine there was closed position lately
-    if( tLineLatelyUsed( StrToDouble(CT_TLINES[i][TL_ID]) ) ){
+    if( tLineLatelyUsed( StrToDouble(CT_TLINES[i][TL_ID]), CT_TIME_BWEEN_TRADES ) ){
       log( StringConcatenate( Symbol()," During ",TimeToStr( CT_TIME_BWEEN_TRADES, TIME_MINUTES)," hours at ", CT_TLINES[i][TL_NAME]," line we have Opened Position!" ), 11.0, StrToDouble(CT_TLINES[i][TL_ID]) );
       return (0);
     }
@@ -351,34 +345,6 @@ int start(){
   }
 }
 
-bool tLineLatelyUsed( int magic ){
-  int i = 0, len = OrdersTotal();
-  string symb = Symbol();
-  for( ; i < len; i++ ) {
-    if( OrderSelect( i, SELECT_BY_POS ) ) {
-      if( OrderSymbol() == symb ) {
-        if( OrderMagicNumber() == magic ){
-          return (true);
-        }
-      }
-    }
-  }
-  
-  len = OrdersHistoryTotal();
-  for( i = 0; i < len; i++ ) {
-    if( OrderSelect( i, SELECT_BY_POS, MODE_HISTORY ) ) {
-      if( OrderSymbol() == symb ) {
-        if( OrderMagicNumber() == magic ){
-          if( OrderOpenTime() + CT_TIME_BWEEN_TRADES > Time[0] ){
-            return (true);
-          }
-        }
-      }
-    }
-  }
-  return (false);
-}
-
 bool setPositionPrices( int o_type, string line_type, double& tp, double& sl, double op, string line_period = "", double fibo_100 = 0.0, bool dir = true ){
   if( line_type == "CL" ){
     if( o_type % 2 == 0 ){ // BUY
@@ -438,16 +404,6 @@ string getTradeLineNameFromId( string id ){
     }
   }
   return ("");
-}
-
-int getSymbolID(){
-  int len = ArraySize(SYMBOLS_STR);
-  for(int i=0; i < len; i++) {
-    if(SYMBOLS_STR[i] == Symbol()){
-      return (i);
-    }
-  }
-  return (-1);
 }
 
 double getOpenPrice( int o_type, double price ){

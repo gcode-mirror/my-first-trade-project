@@ -308,7 +308,7 @@ bool startHud(){
 int getClineNr(){
 	int i, len = ObjectsTotal(), res = 0;
   for (i= len - 1; i>=0; i--) {
-    if( StringSubstr( ObjectName(i), 5, 7 ) == "_cLine_" ){
+    if( StringSubstr( ObjectName(i), 7, 5 ) == "Line_" ){
 			res++;
 		}
 	}
@@ -397,7 +397,7 @@ void updateChannelArray(){
   len= ObjectsTotal();
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
-    if( StringSubstr( name, 5, 7 ) == "_cLine_" ){
+    if( StringSubstr( name, 7, 5 ) == "Line_" ){
 
       ArrayResize( HUD_CHANNEL_LINE_NAMES, j + 1 );
       ArrayResize( HUD_CHANNEL_LINE_DATA, j + 1 );

@@ -18,87 +18,65 @@ int start(){
   double tod = WindowTimeOnDropped();
   string sel_name = getSelectedLine( tod, WindowPriceOnDropped(), true );
 
-  if( sel_name != "" ){
-    string name, desc;
+  if( sel_name != "" && ObjectType( sel_name ) == OBJ_TREND ){
+    string name, desc, type, time_frame;
     color c;
-    int type, time_frames, width;
-    bool was_cLine = false, ray = ObjectGet(sel_name,OBJPROP_RAY);
+    int width, cmd_id, style;
     double time = TimeLocal();
-
-    if( StringSubstr( sel_name, 5, 7 ) == "_cLine_" ){
-      if( ObjectType( sel_name ) == OBJ_TREND ){
-        name = "Trendline " + DoubleToStr( time, 0 );
-        type = OBJ_TREND;
-      }else{
-        name = "Horizontal Line " + DoubleToStr( time, 0 );
-        type = OBJ_HLINE;
-      }
+    if( StringSubstr( sel_name, 7, 5 ) == "Line_" ){
+			name = "Trendline " + DoubleToStr( time, 0 );
       c = RosyBrown;
-      time_frames = 0;
       width = 1;
       desc = TimeToStr( time, TIME_DATE|TIME_SECONDS);
-      was_cLine = true;
-      
     }else{
-      name = "DT_GO_cLine_g0_sig_" + DoubleToStr( time, 0 );
-      if( ObjectType( sel_name ) == OBJ_TREND ){
-        type = OBJ_TREND;
-      }else{
-        type = OBJ_HLINE;
-      }
-      
-      if( Period() > PERIOD_H4 ){
-        time_frames = 0;
-        width = 2;
-      }else{
-        time_frames = OBJ_PERIOD_M1|OBJ_PERIOD_M5|OBJ_PERIOD_M15|OBJ_PERIOD_M30|OBJ_PERIOD_H1|OBJ_PERIOD_H4;
-        width = 1;
-      }
+			
+			cmd_id = MessageBox( "ZigZag line or Channel line?", "Select type", MB_YESNOCANCEL|MB_ICONQUESTION );
+		
+			if( cmd_id == IDYES ){
+				type = "zLine";
+				style = STYLE_SOLID;
+				if( Period() == PERIOD_H4 ){
+					time_frame = "H4";
+					width = 1;
+				}else if( Period() == PERIOD_D1 ){
+					time_frame = "D1";
+					width = 2;
+				}else{
+					cmd_id = MessageBox( "Period Hour 4 or Daily?", "Select period", MB_YESNOCANCEL|MB_ICONQUESTION );
+					if( cmd_id == IDYES ){
+						time_frame = "H4";
+						width = 1;
+					}else if( cmd_id == IDNO ){
+						time_frame = "D1";
+						width = 2;
+					}else if( cmd_id == IDCANCEL ){
+						return (0);
+					}
+				}
+				
+			}else if( cmd_id == IDNO ){
+				type = "cLine";
+				style = STYLE_DASH;
+				time_frame = "H4";
+				width = 1;
+			}else if( cmd_id == IDCANCEL ){
+				return (0);
+			}
       
       c = CornflowerBlue;
-      desc = TimeToStr( time, TIME_DATE|TIME_SECONDS)+" G0 ";
+      desc = TimeToStr( time, TIME_DATE|TIME_SECONDS);
+			name = StringConcatenate( "DT_GO_", type, "_", time_frame, "_sig_", DoubleToStr( time, 0 ) );
     }
 
-    ObjectCreate( name, type, 0, ObjectGet( sel_name,OBJPROP_TIME1 ), ObjectGet( sel_name,OBJPROP_PRICE1 ), ObjectGet( sel_name,OBJPROP_TIME2 ), ObjectGet( sel_name,OBJPROP_PRICE2 ) );
-    ObjectSet( name, OBJPROP_RAY, ray );
+    ObjectCreate( name, OBJ_TREND, 0, ObjectGet( sel_name,OBJPROP_TIME1 ), ObjectGet( sel_name,OBJPROP_PRICE1 ), ObjectGet( sel_name,OBJPROP_TIME2 ), ObjectGet( sel_name,OBJPROP_PRICE2 ) );
+    ObjectSet( name, OBJPROP_RAY, true );
     ObjectSet( name, OBJPROP_COLOR, c );
+    ObjectSet( name, OBJPROP_STYLE, style );
     ObjectSet( name, OBJPROP_BACK, true );
     ObjectSet( name, OBJPROP_WIDTH, width );
-    ObjectSet( name, OBJPROP_TIMEFRAMES, time_frames );
     ObjectSetText( name, desc, 8 );
 
     ObjectDelete( sel_name );
-    
-    if( was_cLine ){
-      return (0);
-    }
-    
-// ##############################  GROUPS  ##################################
-    int cur_group = getCLineProperty( name, "group" );
-  
-    int id = MessageBox( "Current Group Id is "+cur_group+", select Group 1 or Group 2 or reset to Group 0", "Select Group", MB_YESNOCANCEL|MB_ICONQUESTION );
-    
-    int group = 0;
-    if( id == IDYES ){
-      group = 1;
-    }else if( id == IDNO ){
-      group = 2;
-    }else if( id == IDCANCEL ){
-      group = 0;
-    }else{
-      return (0);
-    }
-    
-    addComment( "Rename "+getCLineProperty( name, "ts" )+" g"+cur_group+" to g"+group );
-    if( cur_group == group ){
-      return (0);
-    }
-    
-    renameChannelLine( name, "", group );
-// #########################################################################    
-    
-    showCLineGroups();
   }
-
   return( errorCheck("DT_transform") );
 }
