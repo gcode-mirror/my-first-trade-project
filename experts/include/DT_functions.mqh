@@ -6,11 +6,6 @@
 #property copyright "Dex"
 #property link      ""
 
-#define CLINE_STATE_SIG 100
-#define CLINE_STATE_ALL 102
-#define CLINE_STATE_SUP 103
-#define CLINE_STATE_RES 104
-
 bool errorCheck(string text = "unknown function"){
   int e = GetLastError();
   if(e != 0){
@@ -339,13 +334,11 @@ int WindowLastVisibleBar(){
 
 bool renameChannelLine( string sel_name, string state = "" ){
   string name, desc;
-  bool remove_line = false;
-  
   if( state == "" ){
     state = "sig";
   }
   
-  name = StringConcatenate( StringSubstr(sel_name, 0, 15), state, "_", StringSubstr(sel_name, StringLen(sel_name)-10, 11) );
+  name = StringConcatenate( StringSubstr(sel_name, 0, 15), state, "_", getCLineProperty(sel_name, "ts") );
   
   if( ObjectFind(name) != -1 ){
     ObjectDelete(name);
@@ -358,7 +351,7 @@ bool renameChannelLine( string sel_name, string state = "" ){
   ObjectSet( name, OBJPROP_WIDTH, ObjectGet(sel_name,OBJPROP_WIDTH) );
   ObjectSet( name, OBJPROP_TIMEFRAMES, ObjectGet(sel_name,OBJPROP_TIMEFRAMES) );
   
-  desc = ObjectDescription( sel_name );
+  desc = StringSubstr(ObjectDescription( sel_name ), 0, 19);
   if( desc == "" ){
     desc = TimeToStr( TimeLocal(), TIME_DATE|TIME_SECONDS);
   }
@@ -380,9 +373,7 @@ bool renameChannelLine( string sel_name, string state = "" ){
     ObjectSetText(name, desc);
   }
   
-  if( remove_line ){
-    ObjectDelete(sel_name);
-  }
+	ObjectDelete(sel_name);
   return ( true );
 }
 
@@ -511,34 +502,18 @@ double getScaleNumber( double p1, double p2, string sym ){
   return ( NormalizeDouble((MathAbs( p1 - p2 ) / MarketInfo( sym, MODE_POINT )) * MarketInfo( sym, MODE_TICKVALUE ), 1) );
 }
 
-int getCLineProperty( string name, string attr_name ){
-  if( attr_name == "group" ){
-    string g_id = StringSubstr( name, 13, 1 );
-    if( IsNumeric(g_id) ){
-      return ( StrToInteger(g_id) );
-    }
+string getCLineProperty( string name, string attr_name ){
+  if( attr_name == "tf" ){
+    return (StringSubstr( name, 12, 2 ));
+  }else if( attr_name == "type" ){
+		return ( StringSubstr( name, 6, 5 ) );
   }else if( attr_name == "state" ){
-    string state = StringSubstr( name, 15, 3 );
-    if( state == "sig" ){
-      return ( CLINE_STATE_SIG );
-      
-    }else if( state == "sup" ){
-      return ( CLINE_STATE_SUP );
-      
-    }else if( state == "res" ){
-      return ( CLINE_STATE_RES );
-    
-    }else if( state == "all" ){
-      return ( CLINE_STATE_ALL );
-    }
+		return ( StringSubstr( name, 15, 3 ) );
   }else if( attr_name == "ts" ){
-    string ts = StringSubstr( name, 19, 10 );
-    if( IsNumeric(ts) ){
-      return ( StrToInteger(ts) );
-    }
+		return ( StringSubstr( name, 19, 10 ) );
   }
   Alert( "Input fail getCLineProperty name: "+name+" attribute: "+attr_name );
-  return ( -1 );
+  return ( "" );
 }
 
 bool IsNumeric(string c){
@@ -668,4 +643,42 @@ string getPeriodSortName( int peri ){
     case 43200: return ("MO");
     default: return ("error");
   }
+}
+
+string checkPriceIsZZ( string name ){
+	string tf = getCLineProperty( name, "tf" );
+	int peri;
+	if( tf == "H4" ){
+		peri = PERIOD_H4;
+	}else if( tf == "D1" ){
+		peri = PERIOD_D1;
+	}else{
+		return ("Wrong tf:" + tf);
+	}
+	
+	double p1 = ObjectGet( name, OBJPROP_PRICE1 );
+	double p2 = ObjectGet( name, OBJPROP_PRICE2 );
+	
+	int i = 0;
+	double zz_price;
+	while( i < Bars ){
+		if( p1 == -1.0 && p2 == -1.0 ){
+			break;
+		}
+    zz_price = iCustom( Symbol(), peri, "ZigZag", 12, 5, 3, 0, i );
+    if( zz_price != 0.0 ){
+			if( zz_price == p1 ){
+				p1 = -1.0;
+			}
+			if( zz_price == p2 ){
+				p2 = -1.0;
+			}
+    }
+    i++;
+  }
+	if( p1 == -1.0 && p2 == -1.0 ){
+		return ("ok");
+	}else{
+		return ("Not FIT to ZZ in " + tf + ": " + name +"!" );
+	}
 }

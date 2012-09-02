@@ -31,7 +31,7 @@ int start(){
 
   if( pod == 0.0 ){
     if( sel_name != "" ){
-			if( StringSubstr( sel_name, 5, 7 ) == "_cLine_" ){
+			if( StringSubstr( sel_name, 7, 5 ) == "Line_" ){
 				renameChannelLine( sel_name );
 			}else{
 				ObjectSet( sel_name, OBJPROP_COLOR, RosyBrown );

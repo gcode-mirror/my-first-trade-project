@@ -54,6 +54,12 @@ int start(){
 					}
 				}
 				
+				string res = checkPriceIsZZ( sel_name );
+				if( res != "ok" ){
+					addComment( res, 1 );
+					return (0);
+				}
+				
 			}else if( cmd_id == IDNO ){
 				type = "cLine";
 				style = STYLE_DASH;
@@ -76,6 +82,7 @@ int start(){
     ObjectSet( name, OBJPROP_WIDTH, width );
     ObjectSetText( name, desc, 8 );
 
+		addComment( "Transformed to " + name, 2 );
     ObjectDelete( sel_name );
   }
   return( errorCheck("DT_transform") );

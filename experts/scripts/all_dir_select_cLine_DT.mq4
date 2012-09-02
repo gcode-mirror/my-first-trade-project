@@ -19,14 +19,18 @@ int start(){
   
   if( sel_name != "" ){
     string status = "";
-    if( getCLineProperty(sel_name, "state") == CLINE_STATE_SIG ){
+    if( getCLineProperty(sel_name, "state") == "sig" ){
       status = "all";
-    }else{
-      status = "sig";
+			string res = checkPriceIsZZ( sel_name );
+			if( res != "ok" ){
+				addComment( res, 1 );
+				return (0);
+			}
+			
+		}else{
+      status = "sig";	
     }
     renameChannelLine( sel_name, status );
-    
-    showCLineGroups( tod );
   }
   
   return(0);
