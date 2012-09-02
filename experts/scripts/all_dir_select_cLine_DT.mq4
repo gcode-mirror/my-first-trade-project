@@ -21,10 +21,13 @@ int start(){
     string status = "";
     if( getCLineProperty(sel_name, "state") == "sig" ){
       status = "all";
-			string res = checkPriceIsZZ( sel_name );
-			if( res != "ok" ){
-				addComment( res, 1 );
-				return (0);
+			
+			if( getCLineProperty(sel_name, "type") == "zLine" ){
+				string res = checkPriceIsZZ( sel_name );
+				if( res != "ok" ){
+					addComment( res, 1 );
+					return (0);
+				}
 			}
 			
 		}else{

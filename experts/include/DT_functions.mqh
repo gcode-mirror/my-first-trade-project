@@ -645,15 +645,17 @@ string getPeriodSortName( int peri ){
   }
 }
 
-string checkPriceIsZZ( string name ){
-	string tf = getCLineProperty( name, "tf" );
-	int peri;
-	if( tf == "H4" ){
-		peri = PERIOD_H4;
-	}else if( tf == "D1" ){
-		peri = PERIOD_D1;
-	}else{
-		return ("Wrong tf:" + tf);
+string checkPriceIsZZ( string name, string tf = "" ){
+	if( tf == "" ){
+		tf = getCLineProperty( name, "tf" );
+		int peri;
+		if( tf == "H4" ){
+			peri = PERIOD_H4;
+		}else if( tf == "D1" ){
+			peri = PERIOD_D1;
+		}else{
+			return ("Wrong tf:" + tf);
+		}
 	}
 	
 	double p1 = ObjectGet( name, OBJPROP_PRICE1 );

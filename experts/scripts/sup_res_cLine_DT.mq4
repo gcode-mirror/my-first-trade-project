@@ -20,10 +20,12 @@ int start(){
   if( sel_name != "" ){
     double price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
 		
-		string res = checkPriceIsZZ( sel_name );
-		if( res != "ok" ){
-			addComment( res, 1 );
-			return (0);
+		if( getCLineProperty(sel_name, "type") == "zLine" ){
+			string res = checkPriceIsZZ( sel_name );
+			if( res != "ok" ){
+				addComment( res, 1 );
+				return (0);
+			}
 		}
 		
 		string state;

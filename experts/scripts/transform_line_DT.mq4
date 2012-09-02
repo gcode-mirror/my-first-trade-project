@@ -54,7 +54,7 @@ int start(){
 					}
 				}
 				
-				string res = checkPriceIsZZ( sel_name );
+				string res = checkPriceIsZZ( sel_name, time_frame );
 				if( res != "ok" ){
 					addComment( res, 1 );
 					return (0);
