@@ -31,17 +31,17 @@ int start(){
 		string name, vline = "AA_GO_real_price_level_vline";
 		int nr = 20;
 		int shift = iBarShift( NULL, 0, tod ) + ( nr / 2 );
-		double t1, t2 = Time[shift], line_price;
+		double t1, t2, line_price;
 		
 		ObjectCreate( vline, OBJ_VLINE, 0, tod, 0);
 		ObjectSet( vline, OBJPROP_COLOR, Orange);
 		ObjectSet(vline, OBJPROP_BACK, true);
 		
-		while( nr > 0 ){
+		while( nr > 0 && shift > 0 ){
 			name = "DT_GO_real_price_level_hline_" + nr;
 			line_price = ObjectGetValueByShift( sel_name, shift );
-			t1 = t2;
-			t2 = t1 + ( Period() * 60 );
+			t1 = Time[shift];
+			t2 = Time[shift - 1];
 			ObjectCreate( name, OBJ_TREND, 0, t1, line_price, t2, line_price );
 			ObjectSet( name, OBJPROP_COLOR, Orange );
 			ObjectSet( name, OBJPROP_BACK, true );

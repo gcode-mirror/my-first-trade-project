@@ -8,9 +8,8 @@
 
 #define TL_NAME 0
 #define TL_TYPE 1
-#define TL_PERI 2
-#define TL_STATE 3
-#define TL_ID 4
+#define TL_STATE 2
+#define TL_ID 3
 
 void setChannelLinesArr( string file_type, string &arr[][] ){
   static double last_mod = 1.0;
@@ -22,16 +21,16 @@ void setChannelLinesArr( string file_type, string &arr[][] ){
     readCLinesFromFile();
     
     int len = ObjectsTotal(), j = 0;
-    string name;
+    string name, type;
     for( int i = 0; i < len; i++ ){
       name = ObjectName(i);
-      if( StringSubstr( name, 6, 5 ) == file_type ){
+      type = getCLineProperty( name, "type" );
+      if( type == file_type ){
         ArrayResize( arr, j + 1 );
         arr[j][TL_NAME] = name;
-        arr[j][TL_TYPE] = StringSubstr( name, 12, 2 );
-        arr[j][TL_PERI] = StringSubstr( name, 15, 2 );
-        arr[j][TL_STATE] = StringSubstr( name, 18, 3 );
-        arr[j][TL_ID] = StringSubstr( name, 22, 10 );
+        arr[j][TL_TYPE] = type;
+        arr[j][TL_STATE] = getCLineProperty( name, "state" );
+        arr[j][TL_ID] = getCLineProperty( name, "ts" );
         j++;
       }
     }
@@ -87,13 +86,16 @@ void log( string text, double val = 0.0, double id = 0.0 ){
   if( id == 0.0 ){
     if( last_log_val[0][1] == val ){
       return;
+    }else{
+      last_log_val[0][1] = val;
     }
   }else{
     for( int i = 1; i < len; i++ ){
-      if( last_log_val[i][1] == id ){
-        if( last_log_val[i][2] == val ){
+      if( last_log_val[i][0] == id ){
+        if( last_log_val[i][1] == val ){
           return;
         }else{
+          last_log_val[i][1] = val;
           uknown = false;
           break;
         }
@@ -101,8 +103,8 @@ void log( string text, double val = 0.0, double id = 0.0 ){
     }
     if( uknown ){
       ArrayResize( last_log_val, len + 1 );
-      last_log_val[len][1] = id;
-      last_log_val[len][2] = val;
+      last_log_val[len][0] = id;
+      last_log_val[len][1] = val;
     }
   }
   Alert( text );

@@ -34,8 +34,8 @@ bool startChannel(/*string isOn*/){
   // if(isOn == "0"){return (false);}
 	if(delayTimer(APP_ID_CHANNEL, 4000)){return (false);}
   
-  int j, state, obj_total= ObjectsTotal();
-  string name;
+  int j, obj_total= ObjectsTotal();
+  string name, state;
   double price, ts;
   bool is_up = false;
   
@@ -59,10 +59,10 @@ bool startChannel(/*string isOn*/){
       if( price != 0.0 ){
         if( Bid > price - CH_OFFSET && Bid < price + CH_OFFSET ){
           state = getCLineProperty( name, "state" );
-          if( state == CLINE_STATE_SIG || (state == CLINE_STATE_SUP && is_up) || (state == CLINE_STATE_RES && !is_up) ){
+          if( state == "sig" || (state == "sup" && is_up) || (state == "res" && !is_up) ){
             continue;
           }
-          ts = getCLineProperty( name, "ts" );
+          ts = StrToDouble(getCLineProperty( name, "ts" ));
           if( GlobalVariableGet(CH_NAME) != ts ){
             GlobalVariableSet(CH_NAME, ts);
           }

@@ -127,19 +127,19 @@ bool startHud(){
 	ObjectSetText( "DT_BO_hud_spread", StringConcatenate( "Spread: ",DoubleToStr(spread,0), " / ", HUD_MY_SPREAD ), 8, "Arial", c );
 
 	// ====================== channel_trade info bar ======================
-	if( IsExpertEnabled() && Period() < PERIOD_D1 ){
-    if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
-      ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
-    }else{
+	if( IsExpertEnabled() ){
+    if( ObjectFind("DT_GO_channel_trade_time_limit") != -1 ){
       if( ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 ) < iTime( NULL, PERIOD_M1, 0) ){
         ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade Stopped!", 10, "Arial", Red );
       }else{
         ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
       }
+    }else{
+      ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is ON", 10, "Arial", LimeGreen );
     }
   }else{
     ObjectSetText( "DT_BO_channel_trade_info", "Channel Trade is OFF", 10, "Arial", Black );
-  }
+  }  
 
 	// ====================== Scale info line ======================
   if( HUD_PRICE_MIN != WindowPriceMin(0) || HUD_PRICE_MAX != WindowPriceMax(0)){
@@ -263,7 +263,11 @@ bool startHud(){
 	}
 	
 	tmp = getClineNr();
-	tmp2 = ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 );
+  if( ObjectFind("DT_GO_channel_trade_time_limit") == -1 ){
+    tmp2 = 0.0;
+  }else{
+    tmp2 = ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_TIME1 );
+  }
 	static double trade_time_limit_val = 0.0;
 	static double cline_nr = 0;
 	if( has_change || cline_nr != tmp || trade_time_limit_val != tmp2 ){
@@ -398,7 +402,6 @@ void updateChannelArray(){
   for (i= len - 1; i>=0; i--) {
     name = ObjectName(i);
     if( StringSubstr( name, 7, 5 ) == "Line_" ){
-
       ArrayResize( HUD_CHANNEL_LINE_NAMES, j + 1 );
       ArrayResize( HUD_CHANNEL_LINE_DATA, j + 1 );
       HUD_CHANNEL_LINE_NAMES[j] = name;
@@ -408,12 +411,16 @@ void updateChannelArray(){
       HUD_CHANNEL_LINE_DATA[j][T2] = ObjectGet( name, OBJPROP_TIME2 );
       HUD_CHANNEL_LINE_DATA[j][P2] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ) ,Digits );
       
-      out = StringConcatenate(out,name,";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T1] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P1] ,Digits ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T2] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P2] ,Digits ),";",ObjectGet( name, OBJPROP_COLOR ),";",ObjectType( name ),"\r\n");
+      if( getCLineProperty( name, "state" ) != "sig" ){
+        out = StringConcatenate(out,name,";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T1] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P1] ,Digits ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][T2] ,0 ),";",DoubleToStr( HUD_CHANNEL_LINE_DATA[j][P2] ,Digits ),";",ObjectGet( name, OBJPROP_COLOR ),";",ObjectType( name ),"\r\n");
+      }
       j++;
     }
   }
   
-  out = StringConcatenate(out,"DT_GO_channel_trade_time_limit;",DoubleToStr(ObjectGet("DT_GO_channel_trade_time_limit", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_COLOR ),";",ObjectType( "DT_GO_channel_trade_time_limit" ),"\r\n");
+  if( ObjectFind("DT_GO_channel_trade_time_limit") != -1 ){
+    out = StringConcatenate(out,"DT_GO_channel_trade_time_limit;",DoubleToStr(ObjectGet("DT_GO_channel_trade_time_limit", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_channel_trade_time_limit", OBJPROP_COLOR ),";",ObjectType( "DT_GO_channel_trade_time_limit" ),"\r\n");
+  }
   
   handle = FileOpen( EXP_FILE_NAME, FILE_BIN|FILE_WRITE );
   if(handle > 0){

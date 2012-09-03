@@ -338,7 +338,7 @@ bool renameChannelLine( string sel_name, string state = "" ){
     state = "sig";
   }
   
-  name = StringConcatenate( StringSubstr(sel_name, 0, 15), state, "_", getCLineProperty(sel_name, "ts") );
+  name = StringConcatenate( StringSubstr(sel_name, 0, 12), state, "_", getCLineProperty(sel_name, "ts") );
   
   if( ObjectFind(name) != -1 ){
     ObjectDelete(name);
@@ -503,14 +503,12 @@ double getScaleNumber( double p1, double p2, string sym ){
 }
 
 string getCLineProperty( string name, string attr_name ){
-  if( attr_name == "tf" ){
-    return (StringSubstr( name, 12, 2 ));
-  }else if( attr_name == "type" ){
+  if( attr_name == "type" ){
 		return ( StringSubstr( name, 6, 5 ) );
   }else if( attr_name == "state" ){
-		return ( StringSubstr( name, 15, 3 ) );
+		return ( StringSubstr( name, 12, 3 ) );
   }else if( attr_name == "ts" ){
-		return ( StringSubstr( name, 19, 10 ) );
+		return ( StringSubstr( name, 16, 10 ) );
   }
   Alert( "Input fail getCLineProperty name: "+name+" attribute: "+attr_name );
   return ( "" );
@@ -645,19 +643,7 @@ string getPeriodSortName( int peri ){
   }
 }
 
-string checkPriceIsZZ( string name, string tf = "" ){
-	if( tf == "" ){
-		tf = getCLineProperty( name, "tf" );
-		int peri;
-		if( tf == "H4" ){
-			peri = PERIOD_H4;
-		}else if( tf == "D1" ){
-			peri = PERIOD_D1;
-		}else{
-			return ("Wrong tf:" + tf);
-		}
-	}
-	
+string checkPriceIsZZ( string name ){
 	double p1 = ObjectGet( name, OBJPROP_PRICE1 );
 	double p2 = ObjectGet( name, OBJPROP_PRICE2 );
 	
@@ -667,7 +653,7 @@ string checkPriceIsZZ( string name, string tf = "" ){
 		if( p1 == -1.0 && p2 == -1.0 ){
 			break;
 		}
-    zz_price = iCustom( Symbol(), peri, "ZigZag", 12, 5, 3, 0, i );
+    zz_price = iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, i );
     if( zz_price != 0.0 ){
 			if( zz_price == p1 ){
 				p1 = -1.0;
@@ -681,6 +667,27 @@ string checkPriceIsZZ( string name, string tf = "" ){
 	if( p1 == -1.0 && p2 == -1.0 ){
 		return ("ok");
 	}else{
-		return ("Not FIT to ZZ in " + tf + ": " + name +"!" );
+		return ("Not FIT to ZZ: " + name +"!" );
 	}
+}
+
+string objectFindAdv( string filter, int from = -1, int nr = -1 ){
+  int i, len, total;
+  string name;  
+  total= ObjectsTotal();
+
+  len = StringLen(filter);
+  for( i= total - 1 ; i >= 0; i-- ) {
+    name= ObjectName(i);
+    if( from != -1 && nr != -1 ){
+      if( StringSubstr( name, from, nr ) == filter ){
+        return (name);
+      }
+    }else{
+      if( StringFind( name, filter ) ){
+        return (name);
+      }
+    }
+  }
+  return ("");
 }

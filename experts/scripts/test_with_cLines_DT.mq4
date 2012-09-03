@@ -71,11 +71,11 @@ int start(){
 				break;
 			}
 			name = StringSubstr( in, 0, 29 );
-			if( ObjectFind(name) != -1 ){
+			if( getCLineProperty( sel_name, "ts") != getCLineProperty( name, "ts") ){
 				ObjectCreate( StringConcatenate( "DT_BO_test_line_", i ), OBJ_TEXT, 0, tod, getClineValueByShift( name, iBarShift( NULL, 0, tod ) ) );
 				ObjectSetText( StringConcatenate( "DT_BO_test_line_", i ), "ë", 11, "Wingdings", Blue );
 			}else{
-				addComment( name+" line already in test file!", 1 );
+				addComment( sel_name+" line already in test file!", 1 );
 				removeObjects( "test_line" );
 				return (0);
 			}
@@ -86,7 +86,7 @@ int start(){
 		out = StringConcatenate( sel_name,";",DoubleToStr( ObjectGet( sel_name, OBJPROP_TIME1 ) ,0 ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_PRICE1 ) ,Digits ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_TIME2 ) ,0 ),";",DoubleToStr( ObjectGet( sel_name, OBJPROP_PRICE2 ) ,Digits ),";",ObjectGet( sel_name, OBJPROP_COLOR ),";",ObjectType( sel_name ),"\r\n" );
 
 		saveToFile( out, true );
-		addComment( sel_name + "added!", 2 );
+		addComment( sel_name + " added!", 2 );
 		
 		WindowRedraw();
     Sleep(3300);
