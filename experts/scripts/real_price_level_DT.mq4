@@ -37,11 +37,15 @@ int start(){
 		ObjectSet( vline, OBJPROP_COLOR, Orange);
 		ObjectSet(vline, OBJPROP_BACK, true);
 		
-		while( nr > 0 && shift > 0 ){
+		while( nr > 0 && shift >= 0 ){
 			name = "DT_GO_real_price_level_hline_" + nr;
 			line_price = ObjectGetValueByShift( sel_name, shift );
 			t1 = Time[shift];
-			t2 = Time[shift - 1];
+      if( shift == 0 ){
+        t2 = t1 + (Period() * 60);
+      }else{
+        t2 = Time[shift - 1];
+      }
 			ObjectCreate( name, OBJ_TREND, 0, t1, line_price, t2, line_price );
 			ObjectSet( name, OBJPROP_COLOR, Orange );
 			ObjectSet( name, OBJPROP_BACK, true );

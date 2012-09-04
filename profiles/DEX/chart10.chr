@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=2740
+leftpos=2504
 digits=5
 scale=4
 graph=2
@@ -37,6 +37,21 @@ stops_color=17919
 height=100
 <indicator>
 name=main
+<object>
+type=2
+object_name=DT_GO_zLine_res_1346746812
+period_flags=0
+create_time=1346756592
+color=9639167
+style=0
+weight=1
+background=0
+time_0=1345550400
+value_0=1.052050
+time_1=1346241600
+value_1=1.039780
+ray=1
+</object>
 </indicator>
 </window>
 

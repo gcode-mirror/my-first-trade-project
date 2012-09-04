@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=4332
+leftpos=2384
 digits=5
 scale=4
 graph=1
@@ -240,6 +240,21 @@ time_0=1342584000
 value_0=1.231293
 time_1=1345636800
 value_1=1.257843
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 40464
+period_flags=0
+create_time=1346739728
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1345737600
+value_0=1.258950
+time_1=1346414400
+value_1=1.263750
 ray=1
 </object>
 </indicator>
