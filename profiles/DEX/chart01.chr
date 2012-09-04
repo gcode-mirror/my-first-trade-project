@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=2384
+leftpos=4339
 digits=5
 scale=4
 graph=1
@@ -186,7 +186,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1346699076
-description=0 240 60
+description=0 240 60 1440
 color=255
 style=0
 weight=1
@@ -196,6 +196,21 @@ value_0=0.000000
 time_1=1346702400
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=2
+object_name=Trendline 11179
+period_flags=0
+create_time=1346775979
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1319673600
+value_0=1.424730
+time_1=1335830400
+value_1=1.328400
+ray=1
 </object>
 <object>
 type=2
