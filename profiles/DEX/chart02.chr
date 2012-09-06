@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=240
-leftpos=4344
+leftpos=2373
 digits=3
 scale=4
 graph=1
@@ -37,17 +37,6 @@ stops_color=17919
 height=328
 <indicator>
 name=main
-<object>
-type=0
-object_name=AA_GO_real_price_level_vline
-period_flags=0
-create_time=1346862518
-color=42495
-style=0
-weight=1
-background=1
-time_0=1346860800
-</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH

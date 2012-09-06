@@ -301,8 +301,8 @@ bool startHud(){
           channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_f100_", idx, "_", magic ), fibo_100_val, Black, fibo_100_time );
         }
         channelTradeArrow( op_arw, op, Blue, ot );
-        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_tp_", idx, "_", magic ), OrderTakeProfit(), Red, ot );
-        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_sl_", idx, "_", magic ), OrderStopLoss(), Green, ot );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_tp_", idx, "_", magic ), OrderTakeProfit(), Green, ot );
+        channelTradeArrow( StringConcatenate( "DT_GO_CT_arw_sl_", idx, "_", magic ), OrderStopLoss(), Red, ot );
       }
     }
   }

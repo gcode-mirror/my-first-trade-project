@@ -41,8 +41,8 @@ int init(){
   }
 
 	CT_SYM_ID = getSymbolID();
-	CT_SPREAD = NormalizeDouble( getMySpread() * 1.1, Digits );
-  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
+	CT_SPREAD = NormalizeDouble( getMySpread(), Digits );
+  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.2, Digits );
 	CT_OFFSET = 65 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	CT_MIN_DIST = 270 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	GV_HEARTBEAT = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_ZZ_", getPeriodSortName( Period() ), "_heartbeat" );
@@ -80,6 +80,10 @@ int start(){
         trade_allowed = true;
       }
     }
+  }
+  
+  if( !trade_allowed ){
+    return (0);
   }
 
 // ###########################################################  Find NEW LMIT Positons  ############################################################
