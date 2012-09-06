@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=4813
+period=240
+leftpos=4350
 digits=5
 scale=4
 graph=1
@@ -37,30 +37,6 @@ stops_color=17919
 height=236
 <indicator>
 name=main
-<object>
-type=22
-object_name=Arrow 39100
-period_flags=0
-create_time=1346934972
-color=255
-weight=1
-background=0
-symbol_code=242
-time_0=1346943600
-value_0=1.260522
-</object>
-<object>
-type=22
-object_name=Arrow 39109
-period_flags=0
-create_time=1346934981
-color=255
-weight=1
-background=0
-symbol_code=241
-time_0=1346950800
-value_0=1.252826
-</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
@@ -223,6 +199,22 @@ ray=0
 </object>
 <object>
 type=2
+object_name=DT_GO_zLine_res_1346869534
+period_flags=0
+create_time=1346944795
+description=2012.09.05 18:25:34 \/ \/ \/ \/ \/
+color=9639167
+style=0
+weight=1
+background=1
+time_0=1345737600
+value_0=1.258950
+time_1=1346414400
+value_1=1.263750
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_zLine_res_1346869573
 period_flags=0
 create_time=1346862446
@@ -235,22 +227,6 @@ time_0=1344211200
 value_0=1.244340
 time_1=1345737600
 value_1=1.258950
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_zLine_sig_1346869534
-period_flags=0
-create_time=1346913078
-description=2012.09.05 18:25:34
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1345737600
-value_0=1.258950
-time_1=1346414400
-value_1=1.263750
 ray=1
 </object>
 <object>

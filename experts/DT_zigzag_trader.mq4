@@ -14,7 +14,7 @@
 #include <WinUser32.mqh>
 
 #define TRADE_LOT 0.1
-#define CT_TIME_BWEEN_TRADES 72000 // 20 hour
+#define CT_TIME_BWEEN_TRADES 18000 // 5 hour
 
 string TLINES[][5];
 string GV_HEARTBEAT;
@@ -42,7 +42,7 @@ int init(){
 
 	CT_SYM_ID = getSymbolID();
 	CT_SPREAD = NormalizeDouble( getMySpread(), Digits );
-  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.2, Digits );
+  CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
 	CT_OFFSET = 65 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	CT_MIN_DIST = 270 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	GV_HEARTBEAT = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_ZZ_", getPeriodSortName( Period() ), "_heartbeat" );
