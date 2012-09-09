@@ -188,13 +188,3 @@ bool tLineLatelyUsed( int magic, double allow_break ){
   }
   return (false);
 }
-
-int getSymbolID(){
-  int len = ArraySize(SYMBOLS_STR);
-  for(int i=0; i < len; i++) {
-    if(SYMBOLS_STR[i] == Symbol()){
-      return (i);
-    }
-  }
-  return (-1);
-}

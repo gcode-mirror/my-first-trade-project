@@ -1,8 +1,8 @@
 <chart>
-symbol=EURJPY-Pro
-period=60
-leftpos=4320
-digits=3
+symbol=GBPUSD-Pro
+period=1440
+leftpos=1766
+digits=5
 scale=4
 graph=1
 fore=0
@@ -55,7 +55,7 @@ draw_0=1
 color_0=255
 style_0=0
 weight_0=0
-period_flags=4
+period_flags=0
 show_data=1
 </indicator>
 </window>

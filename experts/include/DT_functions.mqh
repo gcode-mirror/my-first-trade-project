@@ -684,10 +684,20 @@ string objectFindAdv( string filter, int from = -1, int nr = -1 ){
         return (name);
       }
     }else{
-      if( StringFind( name, filter ) ){
+      if( StringFind( name, filter ) != -1 ){
         return (name);
       }
     }
   }
   return ("");
+}
+
+int getSymbolID(){
+  int len = ArraySize(SYMBOLS_STR);
+  for(int i=0; i < len; i++) {
+    if(SYMBOLS_STR[i] == Symbol()){
+      return (i);
+    }
+  }
+  return (-1);
 }
