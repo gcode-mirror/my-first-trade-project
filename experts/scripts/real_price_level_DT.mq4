@@ -79,7 +79,7 @@ int start(){
     if( Open[shift + 1] > op ){ // buy
       next_zz = nextZigZag( shift, 1 );
       type = "buy";
-      while( ( !pos_opened && i > to ) || ( pos_opened && i > 0 ) ){
+      while( ( !pos_opened && i > to ) || ( pos_opened && i >= 0 ) ){
         l = iLow( NULL, PERIOD_M1, i );
         h = iHigh( NULL, PERIOD_M1, i );
         
@@ -131,7 +131,7 @@ int start(){
     }else{ // sell
       type = "sell";
       next_zz = nextZigZag( shift, -1 );
-      while( ( !pos_opened && i > to ) || ( pos_opened && i > 0 ) ){
+      while( ( !pos_opened && i > to ) || ( pos_opened && i >= 0 ) ){
         l = iLow( NULL, PERIOD_M1, i );
         h = iHigh( NULL, PERIOD_M1, i );
         
