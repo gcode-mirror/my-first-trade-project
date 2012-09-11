@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=240
-leftpos=4300
+leftpos=2298
 digits=5
 scale=2
 graph=2
@@ -38,10 +38,47 @@ height=100
 <indicator>
 name=main
 <object>
+type=22
+object_name=#57243991 sell limit 0.10 GBPUSD-Pro at 1.60563
+period_flags=0
+create_time=1347374309
+description=DT_GO_zLine_res_1347220442 (1347220442)
+color=42495
+weight=1
+background=0
+symbol_code=1
+time_0=1347377903
+value_0=1.605630
+</object>
+<object>
+type=22
+object_name=#57243991 sell limit 0.10 GBPUSD-Pro at 1.60563 stop loss at 1.
+period_flags=0
+create_time=1347374309
+color=255
+weight=1
+background=0
+symbol_code=4
+time_0=1347377903
+value_0=1.606870
+</object>
+<object>
+type=22
+object_name=#57243991 sell limit 0.10 GBPUSD-Pro at 1.60563 take profit at 
+period_flags=0
+create_time=1347374309
+color=16711680
+weight=1
+background=0
+symbol_code=4
+time_0=1347377903
+value_0=1.603170
+</object>
+<object>
 type=2
 object_name=DT_GO_zLine_res_1347220418
 period_flags=0
-create_time=1347307915
+create_time=1347344508
 color=9639167
 style=0
 weight=1
@@ -56,7 +93,7 @@ ray=1
 type=2
 object_name=DT_GO_zLine_res_1347220442
 period_flags=0
-create_time=1347307915
+create_time=1347344508
 color=9639167
 style=0
 weight=1
@@ -71,7 +108,7 @@ ray=1
 type=2
 object_name=DT_GO_zLine_sup_1346868289
 period_flags=0
-create_time=1347307915
+create_time=1347344508
 color=3329330
 style=0
 weight=1
