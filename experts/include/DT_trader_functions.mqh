@@ -17,7 +17,7 @@ void setChannelLinesArr( string file_type, string &arr[][] ){
 	
   if( last_mod != GlobalVariableGet( g_name ) ){
     last_mod = GlobalVariableGet( g_name );
-
+    
     readCLinesFromFile();
     
     int len = ObjectsTotal(), j = 0;
@@ -43,7 +43,7 @@ void setChannelLinesArr( string file_type, string &arr[][] ){
 bool readCLinesFromFile(){
   string file_name, in, arr[7]; // name = 0, t1 = 1, p1 = 2, t2 = 3, p2 = 4, col = 5, type = 6
   int j = 0, handle;
-  double time_0_p;
+  double t1, t2, p1, p2;
 
   ObjectsDeleteAll();
 	if( IsTesting() ){
@@ -68,10 +68,26 @@ bool readCLinesFromFile(){
     j++;
 
     if( j == 7 ){
-      ObjectCreate( arr[0], StrToInteger( arr[6] ), 0, StrToDouble(arr[1]), StrToDouble(arr[2]), StrToDouble(arr[3]), StrToDouble(arr[4]) );
+      t1 = NormalizeDouble( StrToDouble(arr[1]), 0 );
+      p1 = NormalizeDouble( StrToDouble(arr[2]), Digits );
+      t2 = NormalizeDouble( StrToDouble(arr[3]), 0 );
+      p2 = NormalizeDouble( StrToDouble(arr[4]), Digits );
+      j = 0;
+      
+      if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t1 ) ), Digits) == p1 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t1 ) ), Digits) == p1) ){
+        // log( StringConcatenate( Symbol()," Line P1 val not match to ZZ: ", arr[0] ), 11.0, StrToDouble(getCLineProperty( arr[0], "ts" )) );
+        log( StringConcatenate( Symbol()," ", iBarShift( NULL, PERIOD_H4, t1 )," Line P1 val not match to ZZ: ", arr[0]," p1 ",p1, "zz ", iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t1 ) ) ), 11.0, StrToDouble(getCLineProperty( arr[0], "ts" )) );
+        continue;
+      }
+      
+      if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t2 ) ), Digits) == p2 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t2 ) ), Digits) == p2) ){
+        log( StringConcatenate( Symbol()," Line P2 val not match to ZZ: ", arr[0] ), 11.0, StrToDouble(getCLineProperty( arr[0], "ts" )) );
+        continue;
+      }
+
+      ObjectCreate( arr[0], StrToInteger( arr[6] ), 0, t1, p1, t2, p2 );
       ObjectSet( arr[0], OBJPROP_RAY, true );
       ObjectSet( arr[0], OBJPROP_COLOR, StrToInteger(arr[5]) );
-      j = 0;
     }
   }
   FileClose( handle );

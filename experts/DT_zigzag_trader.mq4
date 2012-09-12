@@ -105,7 +105,7 @@ int start(){
           if( magic > 1000 ){
             o_type = OrderType();
             double new_op;
-            int shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() );
+            int shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
             if( o_type % 2 == 0 ){ // BUY
               new_op = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift) ), Digits );
               if( NormalizeDouble( OrderOpenPrice(), Digits ) < NormalizeDouble( new_op + CT_SPREAD + CT_THRESHOLD, Digits ) ){
@@ -120,6 +120,10 @@ int start(){
             
             fibo_100 = NormalizeDouble( StrToDouble( OrderComment() ), Digits );
             new_tp = getTpPrice( o_type, new_op, fibo_100, fibo_100_time );
+            
+            if( new_tp == OrderTakeProfit( ) ){
+              continue;
+            }
             
             if( GetTickCount() < CT_START_TIME ){
               CT_START_TIME = GetTickCount();
