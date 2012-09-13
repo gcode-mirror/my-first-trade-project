@@ -15,19 +15,47 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-	int i, len = ObjectsTotal();
-  string name;
-  for ( i = 0; i < len; i++) {
-    name = ObjectName(i);
-    if( StringSubstr( name, 5, 4 ) == "_dz_" ){
-			removeObjects( "dz", "GO" );
-			return (0);
-		}
-  }
+  double tod = WindowTimeOnDropped();
 
-	setTrendLines();
+  if( tod == 0.0 ){
+    int i, len = ObjectsTotal();
+    string name;
+    for ( i = 0; i < len; i++) {
+      name = ObjectName(i);
+      if( StringSubstr( name, 5, 4 ) == "_dz_" ){
+        removeObjects( "dz", "GO" );
+        return (0);
+      }
+    }
+    showTrendLines();
+  }else{
+    showTrendLines( tod );
+  }
 	return (0);
 }
+
+void showTrendLines( double time_from = 0.0 ){
+  int H4_shift = 0, D1_shift = 0;
+  if( time_from != 0.0 ){
+    H4_shift = iBarShift( NULL, PERIOD_H4, time_from );
+    D1_shift = iBarShift( NULL, PERIOD_D1, time_from );
+  }
+  
+  while( i < Bars ){
+  
+  }
+}
+
+void getZZPrices( int peri, int shift ){
+  double price;
+  while( shift < Bars ){
+    price = iCustom( Symbol(), peri, "ZigZag", 12, 5, 3, 0, shift );
+    if( price != 0.0 ){
+      
+    }
+    shift++;
+  }
+}  
 
 
 void setTrendLines(){
@@ -76,12 +104,12 @@ void setTrendLines(){
 				continue;
 			}
 			all_ok = true;
-			for( k = j - 1; k >= 0; k-- ){
-				if( top[k][0] > ObjectGetValueByShift( helper, top[k][2] ) ){
-					all_ok = false;
-					break;
-				}
-			}
+			// for( k = j - 1; k >= 0; k-- ){
+				// if( top[k][0] > ObjectGetValueByShift( helper, top[k][2] ) ){
+					// all_ok = false;
+					// break;
+				// }
+			// }
 			if( all_ok ){
 				createTrendLine( top[j][1], top[j][0], top[i][1], top[i][0] );
 				found++;
@@ -100,12 +128,12 @@ void setTrendLines(){
 				continue;
 			}
 			all_ok = true;
-			for( k = j - 1; k >= 0; k-- ){
-				if( down[k][0] < ObjectGetValueByShift( helper, down[k][2] ) ){
-					all_ok = false;
-					break;
-				}
-			}
+			// for( k = j - 1; k >= 0; k-- ){
+				// if( down[k][0] < ObjectGetValueByShift( helper, down[k][2] ) ){
+					// all_ok = false;
+					// break;
+				// }
+			// }
 			if( all_ok ){
 				createTrendLine( down[j][1], down[j][0], down[i][1], down[i][0] );
 				found++;

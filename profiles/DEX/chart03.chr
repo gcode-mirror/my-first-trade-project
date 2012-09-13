@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=240
-leftpos=2428
+period=1440
+leftpos=1452
 digits=3
 scale=4
 graph=1
@@ -186,7 +186,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1346699761
-description=0 240 60 1440
+description=0 240 60 1440 10080
 color=255
 style=0
 weight=1
@@ -199,27 +199,11 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_zLine_res_1346868101
+object_name=DT_GO_zLine_sig_1346707311
 period_flags=0
-create_time=1346861045
-description=2012.09.05 18:01:41 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1345564800
-value_0=99.180000
-time_1=1347019200
-value_1=100.430000
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_zLine_sup_1346707311
-period_flags=0
-create_time=1347479119
-description=2012.09.03 21:21:51 /\ /\ /\ /\ /\
-color=3329330
+create_time=1347556716
+description=2012.09.03 21:21:51
+color=15570276
 style=0
 weight=1
 background=1
@@ -227,6 +211,22 @@ time_0=1346414400
 value_0=99.026000
 time_1=1347364800
 value_1=99.523000
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_zLine_sig_1346868101
+period_flags=0
+create_time=1347573872
+description=2012.09.05 18:01:41
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1347019200
+value_0=100.430000
+time_1=1347436800
+value_1=100.644000
 ray=1
 </object>
 <object>
@@ -271,8 +271,8 @@ weight=1
 background=1
 time_0=1334534400
 value_0=104.619000
-time_1=1340236800
-value_1=101.622000
+time_1=1340928000
+value_1=101.391000
 ray=1
 </object>
 <object>
@@ -314,10 +314,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1346112000
-value_0=97.887000
-time_1=1346414400
-value_1=99.026000
+time_0=1346414400
+value_0=99.026000
+time_1=1347019200
+value_1=100.430000
 ray=1
 </object>
 </indicator>

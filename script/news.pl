@@ -260,7 +260,7 @@ sub process{
 	}
 	
 	if( $save_file == 1 ){
-		# saveHistoryData();
+		saveHistoryData();
 	}
 	
 	# print $out;
