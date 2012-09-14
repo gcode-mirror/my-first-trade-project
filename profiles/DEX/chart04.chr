@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=1440
-leftpos=1797
+period=240
+leftpos=2513
 digits=5
 scale=4
 graph=1
@@ -558,27 +558,11 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_zLine_sig_1347220418
+object_name=DT_GO_zLine_sig_1346868289
 period_flags=0
-create_time=1347524753
-description=2012.09.09 19:53:38
+create_time=1347604516
+description=2012.09.05 18:04:49
 color=15570276
-style=0
-weight=1
-background=1
-time_0=1313712000
-value_0=1.661810
-time_1=1335744000
-value_1=1.630130
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_zLine_sup_1346868289
-period_flags=0
-create_time=1346861615
-description=2012.09.05 18:04:49 /\ /\ /\ /\ /\
-color=3329330
 style=0
 weight=1
 background=1
@@ -590,11 +574,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_zLine_sup_1346868707
+object_name=DT_GO_zLine_sig_1346868707
 period_flags=0
-create_time=1347399564
-description=2012.09.05 18:11:47 /\ /\ /\ /\ /\
-color=3329330
+create_time=1347604513
+description=2012.09.05 18:11:47
+color=15570276
 style=0
 weight=1
 background=1
@@ -606,11 +590,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_zLine_sup_1347484556
+object_name=DT_GO_zLine_sig_1347484556
 period_flags=0
-create_time=1347477360
-description=2012.09.12 21:15:56 /\ /\ /\ /\ /\
-color=3329330
+create_time=1347604504
+description=2012.09.12 21:15:56
+color=15570276
 style=0
 weight=1
 background=1
@@ -618,6 +602,22 @@ time_0=1343390400
 value_0=1.576790
 time_1=1345708800
 value_1=1.591240
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_zLine_sup_1347220418
+period_flags=0
+create_time=1347604518
+description=2012.09.09 19:53:38 /\ /\ /\ /\ /\
+color=3329330
+style=0
+weight=1
+background=1
+time_0=1313712000
+value_0=1.661810
+time_1=1335744000
+value_1=1.630130
 ray=1
 </object>
 <object>

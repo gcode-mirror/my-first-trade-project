@@ -1,7 +1,7 @@
 <chart>
 symbol=EURJPY-Pro
-period=1440
-leftpos=1452
+period=240
+leftpos=2436
 digits=3
 scale=4
 graph=1
@@ -186,7 +186,7 @@ type=2
 object_name=DT_GO_ZIGZAG_SWITCH
 period_flags=0
 create_time=1346699761
-description=0 240 60 1440 10080
+description=0 240 60 1440 10080 30 15 5
 color=255
 style=0
 weight=1
@@ -269,10 +269,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1334534400
-value_0=104.619000
-time_1=1340928000
-value_1=101.391000
+time_0=1322179200
+value_0=102.486000
+time_1=1340236800
+value_1=101.622000
 ray=1
 </object>
 <object>
