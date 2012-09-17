@@ -644,31 +644,19 @@ string getPeriodSortName( int peri ){
 }
 
 string checkPriceIsZZ( string name ){
-	double p1 = ObjectGet( name, OBJPROP_PRICE1 );
-	double p2 = ObjectGet( name, OBJPROP_PRICE2 );
-	
-	int i = 0;
-	double zz_price;
-	while( i < Bars ){
-		if( p1 == -1.0 && p2 == -1.0 ){
-			break;
-		}
-    zz_price = iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, i );
-    if( zz_price != 0.0 ){
-			if( zz_price == p1 ){
-				p1 = -1.0;
-			}
-			if( zz_price == p2 ){
-				p2 = -1.0;
-			}
-    }
-    i++;
+	double t1 = NormalizeDouble( ObjectGet( name, OBJPROP_TIME1 ), Digits );
+	double t2 = NormalizeDouble( ObjectGet( name, OBJPROP_TIME2 ), Digits );
+	double p1 = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE1 ), Digits );
+	double p2 = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ), Digits );
+
+  if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t1 ) ), Digits) == p1 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t1 ) ), Digits) == p1) ){
+    return ("P1 Not FIT to ZZ: " + name +"!" );
   }
-	if( p1 == -1.0 && p2 == -1.0 ){
-		return ("ok");
-	}else{
-		return ("Not FIT to ZZ: " + name +"!" );
-	}
+  
+  if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t2 ) ), Digits) == p2 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t2 ) ), Digits) == p2) ){
+    return ("P2 Not FIT to ZZ: " + name +"!" );
+  }
+  return ("ok");
 }
 
 string objectFindAdv( string filter, int from = -1, int nr = -1 ){

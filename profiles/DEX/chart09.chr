@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=5039
+leftpos=7010
 digits=5
 scale=2
 graph=2
@@ -37,21 +37,6 @@ stops_color=17919
 height=100
 <indicator>
 name=main
-<object>
-type=2
-object_name=DT_GO_zLine_sup_1347220418
-period_flags=0
-create_time=1347604571
-color=3329330
-style=0
-weight=1
-background=0
-time_0=1313712000
-value_0=1.661810
-time_1=1335744000
-value_1=1.630130
-ray=1
-</object>
 </indicator>
 </window>
 

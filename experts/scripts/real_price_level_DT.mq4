@@ -54,6 +54,11 @@ int start(){
 			nr--;
 		}
     
+    if( ObjectGet( sel_name, OBJPROP_TIME1) < Time[Bars - 1] ){
+      Alert( "Line run out from chart!" );
+      return (0);
+    }
+    
     shift = iBarShift( NULL, 0, tod );
     double next_zz, prev_zz = prevZigZag( shift );
     double op = ObjectGetValueByShift( sel_name, shift ), h, l;

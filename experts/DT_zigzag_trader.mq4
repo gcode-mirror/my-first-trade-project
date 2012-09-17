@@ -46,7 +46,7 @@ int init(){
 	CT_SYM_ID = getSymbolID();
 	CT_SPREAD = NormalizeDouble( getMySpread(), Digits );
   CT_THRESHOLD = NormalizeDouble( CT_SPREAD * 0.5, Digits );
-	CT_OFFSET = 65 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
+	CT_OFFSET = 80 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	CT_MIN_DIST = 270 / MarketInfo(Symbol(),MODE_TICKVALUE) * Point;
 	GV_HEARTBEAT = StringConcatenate( StringSubstr(Symbol(), 0, 6), "_ZZ_", getPeriodSortName( Period() ), "_heartbeat" );
 	CT_START_TIME = GetTickCount() + 180000; // 3 min
@@ -95,8 +95,8 @@ int start(){
   string comment;
   
   static int timer_2 = 0;
-  if( GetTickCount() > timer_2 ){
-    timer_2 = GetTickCount() + 300000; // 5 minutes
+  if( IsTesting() || GetTickCount() > timer_2 ){
+    timer_2 = GetTickCount() + 120000; // 2 minutes
     len = OrdersTotal();
     for( ; i < len; i++ ) {
       if( OrderSelect( i, SELECT_BY_POS ) ) {
@@ -104,25 +104,53 @@ int start(){
           magic = OrderMagicNumber();
           if( magic > 1000 ){
             o_type = OrderType();
-            double new_op;
+            double new_sl, new_op, lowest, highest;
             int shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
+            lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift) ), Digits );
+            highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+            
+            op = NormalizeDouble( OrderOpenPrice(), Digits );
+            sl = NormalizeDouble( OrderStopLoss(), Digits );
+            tp = NormalizeDouble( OrderTakeProfit(), Digits );
             if( o_type % 2 == 0 ){ // BUY
-              new_op = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift) ), Digits );
-              if( NormalizeDouble( OrderOpenPrice(), Digits ) < NormalizeDouble( new_op + CT_SPREAD + CT_THRESHOLD, Digits ) ){
+              new_op = lowest;
+              if( highest > op + SYMBOLS_SL_CHANGE[CT_SYM_ID] ){
+                new_sl = NormalizeDouble( op + SYMBOLS_SL_2[CT_SYM_ID], Digits );
+                if( new_sl == sl ){
+                  continue;
+                }
+                new_tp = tp;
+              }else if( NormalizeDouble( new_op + CT_SPREAD + CT_THRESHOLD, Digits ) < op ){
+                fibo_100 = NormalizeDouble( StrToDouble( OrderComment() ), Digits );
+                new_tp = getTpPrice( o_type, new_op, fibo_100, fibo_100_time );
+                
+                if( new_tp == tp ){
+                  continue;
+                }
+                new_sl = sl;
+              }else{
                 continue;
-              }
+              }  
             }else{
-              new_op = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
-              if( NormalizeDouble( OrderOpenPrice(), Digits ) > NormalizeDouble( new_op - CT_THRESHOLD, Digits ) ){
+              new_op = highest;
+              if( lowest < op - SYMBOLS_SL_CHANGE[CT_SYM_ID] ){
+                new_sl = NormalizeDouble( op - SYMBOLS_SL_2[CT_SYM_ID] + CT_SPREAD, Digits );
+                if( new_sl == sl ){
+                  continue;
+                }
+                new_tp = tp;
+                
+              }else if( NormalizeDouble( new_op - CT_THRESHOLD, Digits ) > NormalizeDouble( OrderOpenPrice(), Digits ) ){
+                fibo_100 = NormalizeDouble( StrToDouble( OrderComment() ), Digits );
+                new_tp = getTpPrice( o_type, new_op, fibo_100, fibo_100_time );
+                
+                if( new_tp == tp ){
+                  continue;
+                }
+                new_sl = sl;
+              }else{
                 continue;
               }
-            }
-            
-            fibo_100 = NormalizeDouble( StrToDouble( OrderComment() ), Digits );
-            new_tp = getTpPrice( o_type, new_op, fibo_100, fibo_100_time );
-            
-            if( new_tp == OrderTakeProfit( ) ){
-              continue;
             }
             
             if( GetTickCount() < CT_START_TIME ){
@@ -132,12 +160,12 @@ int start(){
               }
             }
             
-            OrderModify( OrderTicket(), NormalizeDouble( OrderOpenPrice(), Digits ), NormalizeDouble( OrderStopLoss(), Digits ), new_tp, TimeCurrent()+5400, Red );
+            OrderModify( OrderTicket(), op, new_sl, new_tp, TimeCurrent()+5400, Red );
             
-/* !! */    Print(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", OrderTicket(),  " NEW TP:", new_tp, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber()));
-/* !! */    log(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", OrderTicket(),  " NEW TP:", new_tp, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber()), MathRand(), magic );     
+/* !! */    Print(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", OrderTicket(), " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber(), " op:", op, " new_op:", new_op, " tp:", tp, " new_tp:", new_tp, " sl:", sl, " new_sl:", new_sl));
+/* !! */    log(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", OrderTicket(),  " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", OrderMagicNumber(), " op:", op, " new_op:", new_op, " tp:", tp, " new_tp:", new_tp, " sl:", sl, " new_sl:", new_sl), MathRand(), magic );     
 
-            errorCheck(StringConcatenate(Symbol(), " Modify Positions Bid:", Bid, " Ask:", Ask, " op:"+ new_op, " tp:", tp, " tp:", new_tp));            
+            errorCheck(StringConcatenate(Symbol(), " Modify Positions Bid:", Bid, " Ask:", Ask, " op:", op, " new_op:", new_op, " tp:", tp, " new_tp:", new_tp, " sl:", sl, " new_sl:", new_sl ));            
           }
         }
       }
