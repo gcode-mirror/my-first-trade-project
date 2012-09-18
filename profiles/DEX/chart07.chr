@@ -1,7 +1,7 @@
 <chart>
 symbol=USDJPY-Pro
 period=60
-leftpos=5201
+leftpos=3755
 digits=3
 scale=2
 graph=2
