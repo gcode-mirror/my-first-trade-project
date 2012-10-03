@@ -70,12 +70,12 @@ sub process{
       push (@lines, $2);
     }
 		
-		if( $lines[0] =~ /<div class="eventday_multiple">(\S{3}) (\d+)\s*<\/div>/ ){
+		if( $lines[0] =~ /<div.*>(\S{3}) (\d+)\s*<\/div>/ ){
 			$day = $2;
 			$date = $1.' '.$day.', '.$year;
 			$month = getMonthId($1);
 		}
-		
+    
 		if( $lines[2] =~ /([A-Z]{3})/ ){
 			$currency =  $1;
 			if( !grep $_ eq $currency, @currencies ){

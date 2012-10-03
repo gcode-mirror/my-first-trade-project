@@ -1,8 +1,9 @@
 <chart>
-symbol=EURUSD-Pro
+symbol=EURUSD
 period=60
-leftpos=4480
-digits=5
+leftpos=581
+offline=1
+digits=4
 scale=4
 graph=1
 fore=0
@@ -16,10 +17,10 @@ days=0
 descriptions=0
 shift_size=10
 fixed_pos=0
-window_left=175
-window_top=175
-window_right=1841
-window_bottom=720
+window_left=100
+window_top=100
+window_right=1845
+window_bottom=507
 window_type=3
 background_color=16777215
 foreground_color=0
@@ -55,7 +56,7 @@ draw_0=1
 color_0=255
 style_0=0
 weight_0=0
-period_flags=4
+period_flags=0
 show_data=1
 </indicator>
 </window>
