@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=1713
+leftpos=1731
 digits=5
 scale=4
 graph=1
@@ -184,6 +184,21 @@ level_7=2.6180
 description_7=261.8
 level_8=4.2360
 description_8=423.6
+</object>
+<object>
+type=2
+object_name=Trendline 31331
+period_flags=0
+create_time=1349352035
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1348819200
+value_0=1.295950
+time_1=1349193600
+value_1=1.296770
+ray=1
 </object>
 <object>
 type=2
