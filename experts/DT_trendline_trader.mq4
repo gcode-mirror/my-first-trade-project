@@ -14,9 +14,9 @@
 #include <DT_functions.mqh>
 #include <WinUser32.mqh>
 
-#define TIME_BWEEN_TRADES 18000 // 5 hour
+#define TIME_BWEEN_TRADES 18000 // 5 hour (min 4 hour !!!!)
 #define FIBO_TP 0.380 // 0.382
-#define TRADE_LOT 0.01
+#define TRADE_LOT 0.1
 #define EXPIRATION_TIME 7200 // 2 hour
 
 bool CONNECTION_FAIL = true;
@@ -70,6 +70,11 @@ int start(){
       }else{
         st_trade_allowed = true;
       }
+    }
+    
+    if( Period() != PERIOD_H4 ){
+      log( StringConcatenate( Symbol()," trendline trader not in H4 period! curr. is ", Period() ), 1.0 );
+      st_trade_allowed = false;
     }
 
     if( st_offset == 0.0 ){
@@ -136,31 +141,33 @@ int start(){
                 }
                 
                 expiration = TimeCurrent() + EXPIRATION_TIME;
+              }else{
+                continue;
               }
               
             // #####################################################  OP_BUY - OP_SELL ###############################################################
             }else{
-              shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
+              shift = iBarShift( NULL, 0, OrderOpenTime() ) + 1;
               if( o_type == OP_BUY ){ // Buy
-                if( iHigh( NULL, PERIOD_M5, 0 ) > NormalizeDouble( OrderTakeProfit(), Digits ) ){
+                if( High[0] >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                   OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", iHigh( NULL, PERIOD_M5, 0 ), " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", iHigh( NULL, PERIOD_M5, 0 ), " ticket id :", ticket ), 8.0, magic );
+                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", High[0], " ticket id :", ticket ) );
+                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", High[0], " ticket id :", ticket ), 8.0, magic );
                   continue;
                 }
               
-                tLine_price = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift) ), Digits );
+                tLine_price = NormalizeDouble( Low[iLowest( NULL, 0, MODE_LOW, shift)], Digits );
                 new_op = NormalizeDouble( tLine_price + st_spread, Digits );
                 
               }else{ // Sell
-                if( iLow( NULL, PERIOD_M5, 0 ) < NormalizeDouble( OrderTakeProfit(), Digits ) ){
+                if( Low[0] <= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                   OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", iLow( NULL, PERIOD_M5, 0 ), " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", iLow( NULL, PERIOD_M5, 0 ), " ticket id :", ticket ), 8.0, magic );
+                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", Low[0], " ticket id :", ticket ) );
+                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", Low[0], " ticket id :", ticket ), 8.0, magic );
                   continue;
                 }
               
-                tLine_price = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+                tLine_price = NormalizeDouble( High[iHighest( NULL, 0, MODE_HIGH, shift)], Digits );
                 new_op = tLine_price;
               }
               

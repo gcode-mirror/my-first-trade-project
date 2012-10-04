@@ -133,3 +133,25 @@ string getSelectedLine( double time_cord, double price_cord, bool search_all = f
   errorCheck("getSelectedLine");
   return (sel_name);
 }
+
+int getPositionByDaD(double price_cord, string symb = ""){
+  int i = 0, len = OrdersTotal(), ticket = 0;
+  double o, dif = 999999;
+
+  if( symb == ""){
+    symb = Symbol();
+  }
+  
+  for (; i < len; i++) {      
+    if (OrderSelect(i, SELECT_BY_POS)) {        
+      if (OrderSymbol() == symb) {
+        o = OrderOpenPrice();
+        if( MathAbs( o - price_cord ) < dif ){
+          dif = MathAbs( o - price_cord );
+          ticket = OrderTicket();
+        }
+      }
+    }
+  }
+  return (ticket);
+}
