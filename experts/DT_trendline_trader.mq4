@@ -91,8 +91,8 @@ int start(){
     return (0);
   }
 
-  int i, magic, o_type, shift, ticket;
-  double tLine_price, op, sl, tp, fibo_100 = 0.0, new_op, new_tp, new_sl, expiration;
+  int i, magic, o_type, ticket, shift;
+  double tLine_price, op, sl, tp, fibo_100 = 0.0, new_op, new_tp, new_sl, expiration, highest, lowest;
   string comment, tLine_name;
   
 // #####################################################  modify Positions  ######################################################
@@ -147,27 +147,31 @@ int start(){
               
             // #####################################################  OP_BUY - OP_SELL ###############################################################
             }else{
-              shift = iBarShift( NULL, 0, OrderOpenTime() ) + 1;
+              shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
               if( o_type == OP_BUY ){ // Buy
-                if( High[0] >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
+                highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+                if( highest >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                   OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", High[0], " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," high:", High[0], " ticket id :", ticket ), 8.0, magic );
+                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, " ticket id :", ticket ) );
+                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, High[0], " ticket id :", ticket ), 8.0, magic );
                   continue;
                 }
               
-                tLine_price = NormalizeDouble( Low[iLowest( NULL, 0, MODE_LOW, shift)], Digits );
+                lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
+                tLine_price = lowest;
                 new_op = NormalizeDouble( tLine_price + st_spread, Digits );
                 
               }else{ // Sell
+                lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
                 if( Low[0] <= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                   OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", Low[0], " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," low:", Low[0], " ticket id :", ticket ), 8.0, magic );
+                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ) );
+                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ), 8.0, magic );
                   continue;
                 }
               
-                tLine_price = NormalizeDouble( High[iHighest( NULL, 0, MODE_HIGH, shift)], Digits );
+                highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+                tLine_price = highest;
                 new_op = tLine_price;
               }
               
