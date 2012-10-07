@@ -91,211 +91,229 @@ int start(){
     return (0);
   }
 
-  int i, magic, o_type, ticket, shift;
-  double tLine_price, op, sl, tp, fibo_100 = 0.0, new_op, new_tp, new_sl, expiration, highest, lowest;
+  int i = 0, magic = 0, o_type, ticket, shift, len = OrdersTotal();
+  double tLine_price, op, sl, tp, fibo_100 = 0.0, new_op, new_tp, new_sl, expiration, highest, lowest, tmp;
   string comment, tLine_name;
   
-// #####################################################  modify Positions  ######################################################
   static double st_timer_2 = 0.0;
-  
-  if( iTime( NULL, PERIOD_M1, 0) > st_timer_2 ){
+	for( ; i < len; i++ ){
+		if( OrderSelect( i, SELECT_BY_POS ) ){
+			if( OrderSymbol() == Symbol() ){
+				magic = OrderMagicNumber();
+			}
+		}
+	}
+	
+// #####################################################  modify Positions  ######################################################
+	if( magic > 1000 ){
+		if( iTime( NULL, PERIOD_M1, 0) < st_timer_2 ){
+			return (0);
+		}
     st_timer_2 = iTime( NULL, PERIOD_M1, 0) + 120; // 2min
-    for( i = OrdersTotal() - 1; i >= 0; i-- ){
-      if( OrderSelect( i, SELECT_BY_POS ) ){
-        if( OrderSymbol() == Symbol() ){
-          magic = OrderMagicNumber();
-          if( magic > 1000 ){
-            o_type = OrderType();
-            ticket = OrderTicket();
-            // #####################################################  OP_BUYLIMIT - OP_SELLLIMIT #####################################################
-            if( o_type > 1 ){
-              if( st_op_mod < Time[0] ){
-                st_op_mod = Time[0];
-                tLine_name = getTLineName( st_tLine, magic+"" );
-                tLine_price = getTLineValueByShift( tLine_name );
-                
-                if( tLine_name == "" || tLine_price == 0.0 ){
-                  OrderDelete( ticket );
-                  errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Error limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ), 8.0, magic );
-                  continue;
-                }
-                
-                if( o_type == OP_BUYLIMIT ){ // Buy
-                  new_op = NormalizeDouble( tLine_price + st_spread, Digits );
-                  new_sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
-                }else{  // Sell
-                  new_op = NormalizeDouble( tLine_price, Digits );
-                  new_sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
-                }
-                
-                op = NormalizeDouble( OrderOpenPrice(), Digits );
-                if( new_op == op ){
-                  continue;
-                }
-                
-                new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
-                if( new_tp == -1.0 ){
-                  log( StringConcatenate( Symbol()," Error Limit position tp change ticket id :", ticket ), 8.0, magic );
-                  continue;
-                }
-                
-                expiration = TimeCurrent() + EXPIRATION_TIME;
-              }else{
-                continue;
-              }
-              
-            // #####################################################  OP_BUY - OP_SELL ###############################################################
-            }else{
-              shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
-              if( o_type == OP_BUY ){ // Buy
-                highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
-                if( highest >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
-                  OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, High[0], " ticket id :", ticket ), 8.0, magic );
-                  continue;
-                }
-              
-                lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
-                tLine_price = lowest;
-                new_op = NormalizeDouble( tLine_price + st_spread, Digits );
-                
-              }else{ // Sell
-                lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
-                if( Low[0] <= NormalizeDouble( OrderTakeProfit(), Digits ) ){
-                  OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
-                  errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ) );
-                  log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ), 8.0, magic );
-                  continue;
-                }
-              
-                highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
-                tLine_price = highest;
-                new_op = tLine_price;
-              }
-              
-              new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
-              
-              if( new_tp == -1.0 ){
-                log( StringConcatenate( Symbol()," Error Open position tp change ticket id :", ticket ), 8.0, magic );
-                continue;
-              }
-              
-              if( new_tp == NormalizeDouble( OrderTakeProfit(), Digits ) ){
-                continue;
-              }
-              
-              new_op = NormalizeDouble( OrderOpenPrice(), Digits );
-              new_sl = NormalizeDouble( OrderStopLoss(), Digits );
-              
-              expiration = OrderExpiration();
-            }
-            
-            OrderModify( ticket, new_op, new_sl, new_tp, expiration, Red );
-            
-/* !! */    Print(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", magic, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl));
-/* !! */    log(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", magic, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl), MathRand(), magic );     
+		
+		o_type = OrderType();
+		ticket = OrderTicket();
+		// #####################################################  OP_BUYLIMIT - OP_SELLLIMIT #####################################################
+		if( o_type > 1 ){
+			if( st_op_mod < Time[0] ){
+				st_op_mod = Time[0];
+				tLine_name = getTLineName( st_tLine, magic+"" );
+				tLine_price = getTLineValueByShift( tLine_name );
+				
+				if( tLine_name == "" || tLine_price == 0.0 ){
+					OrderDelete( ticket );
+					errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ) );
+					log( StringConcatenate( Symbol()," Error limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ), 8.0, magic );
+					return (0);
+				}
+				
+				if( o_type == OP_BUYLIMIT ){ // Buy
+					new_op = NormalizeDouble( tLine_price + st_spread, Digits );
+					new_sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
+				}else{  // Sell
+					new_op = NormalizeDouble( tLine_price, Digits );
+					new_sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
+				}
+				
+				op = NormalizeDouble( OrderOpenPrice(), Digits );
+				if( new_op == op ){
+					return (0);
+				}
+				
+				new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
+				if( new_tp == -1.0 ){
+					log( StringConcatenate( Symbol()," Error Limit position tp change ticket id :", ticket ), 8.0, magic );
+					return (0);
+				}
+				
+				expiration = TimeCurrent() + EXPIRATION_TIME;
+			}else{
+				return (0);
+			}
+			
+		// #####################################################  OP_BUY - OP_SELL ###############################################################
+		}else{
+			shift = iBarShift( NULL, PERIOD_M1, OrderOpenTime() ) + 1;
+			if( o_type == OP_BUY ){ // Buy
+				highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+				if( highest >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
+					OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
+					errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, " ticket id :", ticket ) );
+					log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", highest, High[0], " ticket id :", ticket ), 8.0, magic );
+					return (0);
+				}
+			
+				lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
+				tLine_price = lowest;
+				new_op = NormalizeDouble( tLine_price + st_spread, Digits );
+				
+			}else{ // Sell
+				lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
+				if( Low[0] <= NormalizeDouble( OrderTakeProfit(), Digits ) ){
+					OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
+					errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ) );
+					log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", lowest, " ticket id :", ticket ), 8.0, magic );
+					return (0);
+				}
+			
+				highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
+				tLine_price = highest;
+				new_op = tLine_price;
+			}
+			
+			new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
+			
+			if( new_tp == -1.0 ){
+				log( StringConcatenate( Symbol()," Error Open position tp change ticket id :", ticket ), 8.0, magic );
+				return (0);
+			}
+			
+			if( new_tp == NormalizeDouble( OrderTakeProfit(), Digits ) ){
+				return (0);
+			}
+			
+			new_op = NormalizeDouble( OrderOpenPrice(), Digits );
+			new_sl = NormalizeDouble( OrderStopLoss(), Digits );
+			
+			expiration = OrderExpiration();
+		}
+		
+		if( GetTickCount() < st_start_time ){
+			if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want MODIFY position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
+				return(0);
+			}
+		}
+		
+		OrderModify( ticket, new_op, new_sl, new_tp, expiration, Red );
+		
+/* !! */    Print(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", magic, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl, "exp:", TimeToStr(expiration,TIME_DATE|TIME_SECONDS)));
+/* !! */    log(StringConcatenate("OP Mod: ", Symbol(), " oType:", o_type, " Ticket:", ticket,  " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Mag:", magic, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl, "exp:", TimeToStr(expiration,TIME_DATE|TIME_SECONDS)), MathRand(), magic );     
 
-            errorCheck(StringConcatenate(Symbol(), " Modify Positions Bid:", Bid, " Ask:", Ask, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl ));            
-            
-          }
-        }
-      }
-    }
-  }
+		errorCheck(StringConcatenate(Symbol(), " Modify Positions Bid:", Bid, " Ask:", Ask, " new_op:", new_op, " new_tp:", new_tp, " new_sl:", new_sl ));            
+		return (0);
+		
+	}else{
 // ###########################################################  Find NEW LMIT Positons  ############################################################
-  int len = ArrayRange( st_tLine, 0 );
-  for( i = 0; i < len; i++ ){
-    // error missing tLine
-    if( ObjectFind( st_tLine[i][TL_NAME] ) == -1 ){
-      log( StringConcatenate( Symbol()," Error tLine is missing: ",st_tLine[i][TL_NAME] ), 7.0, StrToDouble(st_tLine[i][TL_ID]) );
-      loadTrendlines( st_tLine );
-      len = ArrayRange( st_tLine, 0 );
-      continue;
-    }
+		// has lately used tLine 
+		if( hasLatelyUsedTLine( TIME_BWEEN_TRADES ) ){
+			log( StringConcatenate( Symbol()," In ",TimeToStr( TIME_BWEEN_TRADES, TIME_MINUTES)," hours there was Opened Position!" ), 11.0 );
+			return (0);
+		}
+			
+		double min_dist = 999999.0;
+		len = ArrayRange( st_tLine, 0 );
+		for( i = 0; i < len; i++ ){
+			// missing tLine
+			if( ObjectFind( st_tLine[i][TL_NAME] ) == -1 ){
+				log( StringConcatenate( Symbol()," Error tLine is missing: ",st_tLine[i][TL_NAME] ), 7.0, StrToDouble(st_tLine[i][TL_ID]) );
+				loadTrendlines( st_tLine );
+				len = ArrayRange( st_tLine, 0 );
+				return (0);
+			}
+			
+			// signal line
+			if( st_tLine[i][TL_STATE] == "sig" ){
+				continue;
+			}
+			
+			// Current time not cross tLine (tLine is too short or below Time[0])
+			tLine_price = getTLineValueByShift( st_tLine[i][TL_NAME] );
+			if( tLine_price == 0.0){
+				log( StringConcatenate( Symbol()," Error tLine is not enought long: ",st_tLine[i][TL_NAME] ), 8.0, StrToDouble(st_tLine[i][TL_ID]) );
+				loadTrendlines( st_tLine );
+				len = ArrayRange( st_tLine, 0 );
+				continue;
+			}
+			
+			// get the closest line
+			tmp = MathAbs( tLine_price - Bid );
+			if( tmp < min_dist ){
+				min_dist = tmp;
+			}else{
+				continue;
+			}
+			
+			// tLine not in trade zone
+			if( Bid > tLine_price + st_offset || Bid < tLine_price - st_offset ){
+				continue;
+			}
 
-    // signal line
-    if( st_tLine[i][TL_STATE] == "sig" ){
-      continue;
-    }
+			// price go against Resistance or Suppress tLine
+			if( Open[0] > tLine_price ){
+				if( st_tLine[i][TL_STATE] == "res" ){  // Resistance
+					log( StringConcatenate( Symbol()," Resistance line: ",st_tLine[i][TL_NAME]," Curr Open[0]:", Open[0] ), 9.0, StrToDouble(st_tLine[i][TL_ID]) );
+					continue;
+				}else{
+					if( Low[0] < tLine_price ){
+						log( StringConcatenate( Symbol(), " Warning you are late from BUY LIMIT trade line price:", tLine_price," bar low: ", Low[0] ), 15.0, StrToDouble(st_tLine[i][TL_ID]) );
+						continue;
+					}
+				}
+			}else{
+				if( st_tLine[i][TL_STATE] == "sup" ){  // Suppress
+					log( StringConcatenate( Symbol()," Suppress line: ",st_tLine[i][TL_NAME]," Curr Open[0]:", Open[0] ), 10.0, StrToDouble(st_tLine[i][TL_ID]) );
+					continue;
+				}else{
+					if( High[0] > tLine_price ){
+						log( StringConcatenate( Symbol(), " Warning you are late from SELL LIMIT trade line price:", tLine_price," bar high: ", High[0] ), 16.0, StrToDouble(st_tLine[i][TL_ID]) );
+						continue;
+					}
+				}
+			}
+		}
 
-    // Current time not cross tLine (tLine is too short or below Time[0])
-    tLine_price = getTLineValueByShift( st_tLine[i][TL_NAME] );
-    if( tLine_price == 0.0){
-      log( StringConcatenate( Symbol()," Error tLine is not enought long: ",st_tLine[i][TL_NAME] ), 8.0, StrToDouble(st_tLine[i][TL_ID]) );
-      loadTrendlines( st_tLine );
-      len = ArrayRange( st_tLine, 0 );
-      continue;
-    }
 
-    // tLine not in trade zone
-    if( Bid > tLine_price + st_offset || Bid < tLine_price - st_offset ){
-      continue;
-    }
+			tp = getTakeProfit( st_tLine[i][TL_ID], tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, st_tLine[i][TL_ID]), fibo_100 );
+			if( tp == -1.0 ){
+				continue;
+			}
 
-    // price go against Resistance or Suppress tLine
-    if( Open[0] > tLine_price ){
-      if( st_tLine[i][TL_STATE] == "res" ){  // Resistance
-        log( StringConcatenate( Symbol()," Resistance line: ",st_tLine[i][TL_NAME]," Curr Open[0]:", Open[0] ), 9.0, StrToDouble(st_tLine[i][TL_ID]) );
-        continue;
-      }else{
-        if( Low[0] < tLine_price ){
-          log( StringConcatenate( Symbol(), " Warning you are late from BUY LIMIT trade line price:", tLine_price," bar low: ", Low[0] ), 15.0, StrToDouble(st_tLine[i][TL_ID]) );
-          continue;
-        }
-      }
-      o_type = OP_BUYLIMIT;
+			if( GetTickCount() < st_start_time ){
+				if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
+					return(0);
+				}
+			}
 
-    }else{
-      if( st_tLine[i][TL_STATE] == "sup" ){  // Suppress
-        log( StringConcatenate( Symbol()," Suppress line: ",st_tLine[i][TL_NAME]," Curr Open[0]:", Open[0] ), 10.0, StrToDouble(st_tLine[i][TL_ID]) );
-        continue;
-      }else{
-        if( High[0] > tLine_price ){
-          log( StringConcatenate( Symbol(), " Warning you are late from SELL LIMIT trade line price:", tLine_price," bar high: ", High[0] ), 16.0, StrToDouble(st_tLine[i][TL_ID]) );
-          continue;
-        }
-      }
-      o_type = OP_SELLLIMIT;
-    }
+			RefreshRates();
+			if( Open[0] > tLine_price ){ // Buy
+				o_type = OP_BUYLIMIT;
+				op = NormalizeDouble( tLine_price + st_spread, Digits );
+				sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
+			}else{  // Sell
+				o_type = OP_SELLLIMIT;
+				op = NormalizeDouble( tLine_price, Digits );
+				sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
+			}
 
-    // to this tLine there was closed position lately
-    if( tLineLatelyUsed( StrToInteger(st_tLine[i][TL_ID]), TIME_BWEEN_TRADES ) ){
-      log( StringConcatenate( Symbol()," During ",TimeToStr( TIME_BWEEN_TRADES, TIME_MINUTES)," hours at ", st_tLine[i][TL_NAME]," line we have Opened Position!" ), 11.0, StrToDouble(st_tLine[i][TL_ID]) );
-      return (0);
-    }
-
-    tp = getTakeProfit( st_tLine[i][TL_ID], tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, st_tLine[i][TL_ID]), fibo_100 );
-    if( tp == -1.0 ){
-      continue;
-    }
-
-    if( GetTickCount() < st_start_time ){
-      if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
-        return(0);
-      }
-    }
-
-    RefreshRates();
-    if( Open[0] > tLine_price ){ // Buy
-      op = NormalizeDouble( tLine_price + st_spread, Digits );
-      sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
-    }else{  // Sell
-      op = NormalizeDouble( tLine_price, Digits );
-      sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
-    }
-
-    comment = DoubleToStr( fibo_100, 5 );
-    OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger(st_tLine[i][TL_ID]), TimeCurrent() + EXPIRATION_TIME, Orange );
+			comment = DoubleToStr( fibo_100, 5 );
+			OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger(st_tLine[i][TL_ID]), TimeCurrent() + EXPIRATION_TIME, Orange );
 
 /* !! */  Print(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[i][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
 /* !! */  log(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[i][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 18.0, StrToDouble(st_tLine[i][TL_ID]) );
 
-    errorCheck("NEW LIMIT pos Bid:"+ Bid+ " Ask:"+ Ask);
-  }
+			errorCheck("NEW LIMIT pos Bid:"+ Bid+ " Ask:"+ Ask);
 
-  errorCheck("ppppp");
+	}
 }
 
 double getTakeProfit( string tl_id, double tLine_price, int o_type, double st_min_profit, double st_max_profit, double spread, double nearest_line_price, double& fibo_100 ){
@@ -487,24 +505,13 @@ void loadTrendlines( string &arr[][] ){
   }
 }
 
-bool tLineLatelyUsed( int magic, double time_between ){
-  int i = 0, len = OrdersTotal();
+bool hasLatelyUsedTLine( double time_between ){
+  int i = 0, len = OrdersHistoryTotal();
   string symb = Symbol();
-  for( ; i < len; i++ ) {
-    if( OrderSelect( i, SELECT_BY_POS ) ) {
-      if( OrderSymbol() == symb ) {
-        if( OrderMagicNumber() == magic ){
-          return (true);
-        }
-      }
-    }
-  }
-
-  len = OrdersHistoryTotal();
   for( i = 0; i < len; i++ ) {
     if( OrderSelect( i, SELECT_BY_POS, MODE_HISTORY ) ) {
       if( OrderSymbol() == symb ) {
-        if( OrderMagicNumber() == magic ){
+        if( OrderMagicNumber() > 1000 ){
           if( OrderOpenTime() + time_between > TimeCurrent() ){
             return (true);
           }

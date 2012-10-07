@@ -18,6 +18,7 @@ int start(){
   double pod = WindowPriceOnDropped();
   double tod = WindowTimeOnDropped();
   string sel_name = getSelectedLine( tod, pod );
+	
   if( sel_name != "" ){
     string state = StringSubstr( sel_name, 12, 3 );
     double price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );

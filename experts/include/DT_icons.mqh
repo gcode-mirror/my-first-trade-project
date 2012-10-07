@@ -45,6 +45,7 @@ void changeIcon( int index ){
   for ( int i = ObjectsTotal() - 1; i >= 0; i-- ){
     name = ObjectName(i);
     if( StringSubstr( name, 0, 12 ) == "DT_BO_icon_"+index ){
+			icon_name = name;
       break;
     }
   }
@@ -53,7 +54,7 @@ void changeIcon( int index ){
     return;
   }
   
-  string gv_name = StringSubstr( name, 23 );
+  string gv_name = StringSubstr( name, 24 );
   if( getGlobal( gv_name ) == "0" ){
     setGlobal( gv_name, "1" );
     ObjectSet( icon_name, OBJPROP_COLOR, White );

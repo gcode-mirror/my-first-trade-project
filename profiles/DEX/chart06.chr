@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=3592
+leftpos=1740
 digits=5
 scale=4
 graph=2
@@ -18,9 +18,9 @@ shift_size=10
 fixed_pos=0
 window_left=175
 window_top=175
-window_right=1841
+window_right=1467
 window_bottom=720
-window_type=1
+window_type=3
 background_color=16777215
 foreground_color=0
 barup_color=0
@@ -99,11 +99,5 @@ ray=1
 </object>
 </indicator>
 </window>
-
-<expert>
-name=DT_trendline_trader
-flags=343
-window_num=0
-</expert>
 </chart>
 
