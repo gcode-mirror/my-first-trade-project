@@ -95,7 +95,6 @@ int start(){
   double tLine_price, op, sl, tp, fibo_100 = 0.0, new_op, new_tp, new_sl, expiration, highest, lowest, tmp;
   string comment, tLine_name;
   
-  static double st_timer_2 = 0.0;
 	for( ; i < len; i++ ){
 		if( OrderSelect( i, SELECT_BY_POS ) ){
 			if( OrderSymbol() == Symbol() ){
@@ -105,6 +104,7 @@ int start(){
 	}
 	
 // #####################################################  modify Positions  ######################################################
+  static double st_timer_2 = 0.0;
 	if( magic > 1000 ){
 		if( iTime( NULL, PERIOD_M1, 0) < st_timer_2 ){
 			return (0);
@@ -222,6 +222,7 @@ int start(){
 			
 		double min_dist = 999999.0;
 		len = ArrayRange( st_tLine, 0 );
+    int used_idx = -1;
 		for( i = 0; i < len; i++ ){
 			// missing tLine
 			if( ObjectFind( st_tLine[i][TL_NAME] ) == -1 ){
@@ -242,14 +243,6 @@ int start(){
 				log( StringConcatenate( Symbol()," Error tLine is not enought long: ",st_tLine[i][TL_NAME] ), 8.0, StrToDouble(st_tLine[i][TL_ID]) );
 				loadTrendlines( st_tLine );
 				len = ArrayRange( st_tLine, 0 );
-				continue;
-			}
-			
-			// get the closest line
-			tmp = MathAbs( tLine_price - Bid );
-			if( tmp < min_dist ){
-				min_dist = tmp;
-			}else{
 				continue;
 			}
 			
@@ -280,40 +273,49 @@ int start(){
 					}
 				}
 			}
-		}
-
-
-			tp = getTakeProfit( st_tLine[i][TL_ID], tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, st_tLine[i][TL_ID]), fibo_100 );
-			if( tp == -1.0 ){
+      
+      // get the closest line
+			tmp = MathAbs( tLine_price - Bid );
+			if( tmp < min_dist ){
+				min_dist = tmp;
+        used_idx = i;
+			}else{
 				continue;
 			}
+		}
 
-			if( GetTickCount() < st_start_time ){
-				if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
-					return(0);
-				}
-			}
+    if( used_idx != -1 ){
+      RefreshRates();
+      if( Open[0] > tLine_price ){ // Buy
+        o_type = OP_BUYLIMIT;
+        op = NormalizeDouble( tLine_price + st_spread, Digits );
+        sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
+      }else{  // Sell
+        o_type = OP_SELLLIMIT;
+        op = NormalizeDouble( tLine_price, Digits );
+        sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
+      }
+      
+      tp = getTakeProfit( st_tLine[used_idx][TL_ID], tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, st_tLine[used_idx][TL_ID]), fibo_100 );
+      if( tp == -1.0 ){
+        return(0);
+      }
+      
+      if( GetTickCount() < st_start_time ){
+        if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
+          return(0);
+        }
+      }
 
-			RefreshRates();
-			if( Open[0] > tLine_price ){ // Buy
-				o_type = OP_BUYLIMIT;
-				op = NormalizeDouble( tLine_price + st_spread, Digits );
-				sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
-			}else{  // Sell
-				o_type = OP_SELLLIMIT;
-				op = NormalizeDouble( tLine_price, Digits );
-				sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
-			}
+      comment = DoubleToStr( fibo_100, 5 );
+      OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger(st_tLine[used_idx][TL_ID]), TimeCurrent() + EXPIRATION_TIME, Orange );
 
-			comment = DoubleToStr( fibo_100, 5 );
-			OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger(st_tLine[i][TL_ID]), TimeCurrent() + EXPIRATION_TIME, Orange );
+/* !! */  Print(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[used_idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
+/* !! */  log(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[used_idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 18.0, StrToDouble(st_tLine[used_idx][TL_ID]) );
 
-/* !! */  Print(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[i][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
-/* !! */  log(StringConcatenate("Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[i][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 18.0, StrToDouble(st_tLine[i][TL_ID]) );
-
-			errorCheck("NEW LIMIT pos Bid:"+ Bid+ " Ask:"+ Ask);
-
-	}
+      errorCheck( "NEW LIMIT pos Bid:"+ Bid+ " Ask:"+ Ask );
+    }
+  }
 }
 
 double getTakeProfit( string tl_id, double tLine_price, int o_type, double st_min_profit, double st_max_profit, double spread, double nearest_line_price, double& fibo_100 ){
