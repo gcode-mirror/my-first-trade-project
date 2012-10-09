@@ -20,21 +20,17 @@ int start(){
 	int start = StringFind( desc, "/", 0 ) + 1;
 	int len = StrToInteger( StringSubstr( desc, start ) );
   
-	if( len == 0 ){
-		addComment( "Can't REDO history is empty!", 1 );
-	}else{
-		if( GlobalVariableCheck( gv_name ) ){
-			gv_val = GlobalVariableGet( gv_name );
-			if( gv_val < len ){
-				gv_val = gv_val + 1.0;
-				GlobalVariableSet( gv_name, gv_val );
-				addComment( "REDO to "+DoubleToStr(gv_val,0)+" position", 2 );
-			}else{
-				addComment( "Can't REDO, history limit reached!", 1 );
-			}
-		}else{
-			addComment( "Can't REDO "+DoubleToStr(gv_name,0)+" global does not exist!", 1 );
-		}
-	}
+	if( GlobalVariableCheck( gv_name ) ){
+    gv_val = GlobalVariableGet( gv_name );
+    if( gv_val < len ){
+      gv_val = gv_val + 1.0;
+      GlobalVariableSet( gv_name, gv_val );
+      addComment( "REDO to "+DoubleToStr(gv_val,0)+" position", 2 );
+    }else{
+      addComment( "Can't REDO, history limit reached!", 1 );
+    }
+  }else{
+    addComment( "Can't REDO "+DoubleToStr(gv_name,0)+" global does not exist!", 1 );
+  }
   return(0);
 }

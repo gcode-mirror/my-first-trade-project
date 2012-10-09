@@ -6,57 +6,53 @@
 
 void startHistory(){
   static int st_timer = 0;
+  // if( !EXT_BOSS ){
+    // return;
+  // }
   if( GetTickCount() < st_timer ){
     return;
   }
-  
+
   st_timer = GetTickCount() + 2000;
-  
+
   static double selected = -1;
   static string global_name = "";
-  
-  static string st_tLine_ref_names[0];
+
+  static string st_tLine_ref_str[0][2];
   static double st_tLine_ref_data[0][4];
-  static double st_tLine_hist_data[0][6]; // 0 = t1, 1 = p1, 2 = t2, 3 = p2, 4 = ref line id, 5 = hist nr
-  static double st_tLine_hist_index[0][2]; // 0 = ref line id, 1 = hist nr
-  
-  int i, j, k, idx = 0, idx2, len = ArraySize( st_tLine_ref_names ), len2, removed = 0, hist_nr;
-  double tmp;
+  static double st_tLine_hist_from[0][5]; // 0 = line_id, 1 = t1, 2 = p1, 3 = t2, 4 = p2
+  static double st_tLine_hist_to[0][5]; // 0 = line_id, 1 = t1, 2 = p1, 3 = t2, 4 = p2
+
+  int idx = 0, i, len = ObjectsTotal(), j, len2, len3;
   bool is_new, has_change = false;
+  double t1, p1, t2, p2;
   string name;
-  
-  // init 
+
+  // init
   if( selected == -1 ){
-    ArrayResize( st_tLine_ref_names, 30 );
+    selected = 0.0;
+    global_name = StringConcatenate( getSymbol(), "_History" );
+    GlobalVariableSet( global_name, 0.0 );
+
+    ArrayResize( st_tLine_ref_str, 30 );
     ArrayResize( st_tLine_ref_data, 30 );
-    ArrayResize( st_tLine_hist_data, 30 );
-    for ( i = ObjectsTotal() - 1; i >= 0; i-- ){
+
+    for( i = 0; i < len; i++ ){
       name = ObjectName(i);
       if( StringSubstr( name, 5, 7 ) == "_tLine_" ){
-        st_tLine_ref_names[idx] = name;
+        st_tLine_ref_str[idx][0] = name;
+        st_tLine_ref_str[idx][1] = StringSubstr( name, 16, 10 );
         st_tLine_ref_data[idx][0] = ObjectGet( name, OBJPROP_TIME1 );
         st_tLine_ref_data[idx][1] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE1 ) ,Digits );
         st_tLine_ref_data[idx][2] = ObjectGet( name, OBJPROP_TIME2 );
         st_tLine_ref_data[idx][3] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ) ,Digits );
-        
-        st_tLine_hist_data[idx][0] = st_tLine_ref_data[idx][0];
-        st_tLine_hist_data[idx][1] = st_tLine_ref_data[idx][1];
-        st_tLine_hist_data[idx][2] = st_tLine_ref_data[idx][2];
-        st_tLine_hist_data[idx][3] = st_tLine_ref_data[idx][3];
-        st_tLine_hist_data[idx][4] = idx;
-        st_tLine_hist_data[idx][5] = 0;
         idx++;
       }
     }
-    
-    ArrayResize( st_tLine_ref_names, idx );
+
+    ArrayResize( st_tLine_ref_str, idx );
     ArrayResize( st_tLine_ref_data, idx );
-    ArrayResize( st_tLine_hist_data, idx );
-    
-    selected = 0.0;
-    global_name = StringConcatenate( getSymbol(), "_History" );
-    GlobalVariableSet( global_name, 0.0 );
-    
+
     removeObjects("history");
     int xpos = 15 * nrOfIcons();
     name = "DT_BO_history_hud";
@@ -65,214 +61,207 @@ void startHistory(){
     ObjectSet( name, OBJPROP_XDISTANCE,  xpos );
     ObjectSet( name, OBJPROP_YDISTANCE, 15 );
     ObjectSetText( name, "Histrory: 0/0", 9, "Consolas", Blue );
+
     has_change = true;
   }
-	
-  // has new
-  for ( i = ObjectsTotal() - 1; i >= 0; i-- ){
+
+  len2 = ArrayRange( st_tLine_ref_str, 0 );
+  for( i = 0; i < len; i++ ){
     name = ObjectName(i);
     if( StringSubstr( name, 5, 7 ) == "_tLine_" ){
       is_new = true;
-      for ( j = 0; j < len; j++ ){
-        if( name == st_tLine_ref_names[j] ){
+      for( j = 0; j < len2; j++ ){
+        if( name == st_tLine_ref_str[j][0] ){
+          idx = j;
           is_new = false;
           break;
         }
       }
-      
-      if( is_new ){
-        idx = ArraySize( st_tLine_ref_names );
-        ArrayResize( st_tLine_ref_names, idx + 1 );
-        ArrayResize( st_tLine_ref_data, idx + 1 );
-        st_tLine_ref_names[idx] = name;
-        st_tLine_ref_data[idx][0] = ObjectGet( name, OBJPROP_TIME1 );
-        st_tLine_ref_data[idx][1] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE1 ) ,Digits );
-        st_tLine_ref_data[idx][2] = ObjectGet( name, OBJPROP_TIME2 );
-        st_tLine_ref_data[idx][3] = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ) ,Digits );
-        
-        idx2 = ArrayRange( st_tLine_hist_data, 0 );
-        ArrayResize( st_tLine_hist_data, idx2 + 1 );
-        st_tLine_hist_data[idx2][0] = st_tLine_ref_data[idx][0];
-        st_tLine_hist_data[idx2][1] = st_tLine_ref_data[idx][1];
-        st_tLine_hist_data[idx2][2] = st_tLine_ref_data[idx][2];
-        st_tLine_hist_data[idx2][3] = st_tLine_ref_data[idx][3];
-        st_tLine_hist_data[idx2][4] = idx;
-        st_tLine_hist_data[idx2][5] = 0;
-        has_change = true;
-      }
-    }
-  }
-  
-  // is modified or deleted
-  double t1, p1, t2, p2;
-  for( i = 0; i < len; i++ ){
-    if( ObjectFind( st_tLine_ref_names[i]) == -1 ){ //remove
-      // remove line from ref array
-      for( j = i + 1; j < len; j++ ){
-        st_tLine_ref_names[j-1] = st_tLine_ref_names[j];
-        st_tLine_ref_data[j-1][0] = st_tLine_ref_data[j][0];
-        st_tLine_ref_data[j-1][1] = st_tLine_ref_data[j][1];
-        st_tLine_ref_data[j-1][2] = st_tLine_ref_data[j][2];
-        st_tLine_ref_data[j-1][3] = st_tLine_ref_data[j][3];
-      }
-      len = len - 1;
-      ArrayResize( st_tLine_ref_names, len );
-      ArrayResize( st_tLine_ref_data, len );
-      
-      // remove line from hist array
-      len2 = ArrayRange( st_tLine_hist_data, 0 );
-      removed = 0;
-      for( j = 0; j < len2; j++ ){
-        if( st_tLine_hist_data[j][4] == i ){
-          for( k = j + 1; k < len2; k++ ){
-            st_tLine_hist_data[k-1][0] = st_tLine_hist_data[k][0];
-            st_tLine_hist_data[k-1][1] = st_tLine_hist_data[k][1];
-            st_tLine_hist_data[k-1][2] = st_tLine_hist_data[k][2];
-            st_tLine_hist_data[k-1][3] = st_tLine_hist_data[k][3];
-            st_tLine_hist_data[k-1][4] = st_tLine_hist_data[k][4];
-            st_tLine_hist_data[k-1][5] = st_tLine_hist_data[k][5];
-          }
-          j--;
-          removed++;
-        }
-      }
-      ArrayResize( st_tLine_hist_data, len2 - removed );
-      
-      // remove line from hist idx array
-      len2 = ArrayRange( st_tLine_hist_index, 0 );
-      removed = 0;
-      for( j = 0; j < len2; j++ ){
-        if( st_tLine_hist_index[j][0] == i ){
-          for( k = j + 1; k < len2; k++ ){
-            st_tLine_hist_index[k-1][0] = st_tLine_hist_index[k][0];
-            st_tLine_hist_index[k-1][1] = st_tLine_hist_index[k][1];
-          }
-          if( selected != 0 && j < selected ){
-            selected--;
-          }
-          j--;
-          removed++;
-        }
-      }
-      GlobalVariableSet( global_name, selected );
-      ArrayResize( st_tLine_hist_index, len2 - removed );
-      ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", (len2 - removed), "/", DoubleToStr(selected, 0) ), 9, "Consolas", Blue );
-      has_change = true;
-			
-    }else{ // modified
-      t1 = ObjectGet( st_tLine_ref_names[i], OBJPROP_TIME1 );
-      p1 = NormalizeDouble( ObjectGet( st_tLine_ref_names[i], OBJPROP_PRICE1 ) ,Digits );
-      t2 = ObjectGet( st_tLine_ref_names[i], OBJPROP_TIME2 );
-      p2 = NormalizeDouble( ObjectGet( st_tLine_ref_names[i], OBJPROP_PRICE2 ) ,Digits );
-      if( st_tLine_ref_data[i][0] != t1 || st_tLine_ref_data[i][1] != p1 || st_tLine_ref_data[i][2] != t2 || st_tLine_ref_data[i][3] != p2 ){
-        len2 = ArrayRange( st_tLine_hist_data, 0 );
-        if( selected < len2 - 1 ){
-          len2 = selected + 1;
-        }
-				
-				st_tLine_ref_data[i][0] = t1;
-        st_tLine_ref_data[i][1] = p1;
-        st_tLine_ref_data[i][2] = t2;
-        st_tLine_ref_data[i][3] = p2;
-        
+
+      t1 = ObjectGet( name, OBJPROP_TIME1 );
+      p1 = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE1 ) ,Digits );
+      t2 = ObjectGet( name, OBJPROP_TIME2 );
+      p2 = NormalizeDouble( ObjectGet( name, OBJPROP_PRICE2 ) ,Digits );
+
+      if( is_new ){   // has new
+        ArrayResize( st_tLine_ref_str, len2 + 1 );
         ArrayResize( st_tLine_ref_data, len2 + 1 );
-        st_tLine_hist_data[len2][0] = t1;
-        st_tLine_hist_data[len2][1] = p1;
-        st_tLine_hist_data[len2][2] = t2;
-        st_tLine_hist_data[len2][3] = p2;
-        st_tLine_hist_data[len2][4] = i;
-        
-				// due to modification save line new position
-        hist_nr = 0;
-        for( j = 0; j < len2; j++ ){
-          if( st_tLine_hist_data[j][4] == i ){
-            if( st_tLine_hist_data[j][5] > hist_nr ){
-              hist_nr = st_tLine_hist_data[j][5];
-            }
+        st_tLine_ref_str[len2][0] = name;
+        st_tLine_ref_str[len2][1] = StringSubstr( name, 16, 10 );
+        st_tLine_ref_data[len2][0] = t1;
+        st_tLine_ref_data[len2][1] = p1;
+        st_tLine_ref_data[len2][2] = t2;
+        st_tLine_ref_data[len2][3] = p2;
+
+        len2++;
+        has_change = true;
+
+      }else{   // modified
+        if( st_tLine_ref_data[idx][0] != t1 || st_tLine_ref_data[idx][1] != p1 || st_tLine_ref_data[idx][2] != t2 || st_tLine_ref_data[idx][3] != p2 ){
+          len3 = ArrayRange( st_tLine_hist_from, 0 );
+          if( selected < len3 - 1 ){
+            len3 = selected;
           }
+          
+          Alert( StringConcatenate(st_tLine_ref_data[idx][0]," ",t1," ",st_tLine_ref_data[idx][1]," ",p1 ," ",st_tLine_ref_data[idx][2]," ",t2," ",st_tLine_ref_data[idx][3]," ",p2) );
+          
+          ArrayResize( st_tLine_hist_from, len3 + 1 );
+          ArrayResize( st_tLine_hist_to, len3 + 2 );
+Alert( "len "+len3 );
+          st_tLine_hist_from[len3][0] = StrToDouble( StringSubstr( name, 16, 10 ) );
+          st_tLine_hist_from[len3][1] = st_tLine_ref_data[idx][0];
+          st_tLine_hist_from[len3][2] = st_tLine_ref_data[idx][1];
+          st_tLine_hist_from[len3][3] = st_tLine_ref_data[idx][2];
+          st_tLine_hist_from[len3][4] = st_tLine_ref_data[idx][3];
+
+          st_tLine_hist_to[len3 + 1][0] = st_tLine_hist_from[len3][0];
+          st_tLine_hist_to[len3 + 1][1] = t1;
+          st_tLine_hist_to[len3 + 1][2] = p1;
+          st_tLine_hist_to[len3 + 1][3] = t2;
+          st_tLine_hist_to[len3 + 1][4] = p2;
+
+          st_tLine_ref_data[idx][0] = t1;
+          st_tLine_ref_data[idx][1] = p1;
+          st_tLine_ref_data[idx][2] = t2;
+          st_tLine_ref_data[idx][3] = p2;
+
+          ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", (len3 + 1), "/", (len3 + 1)), 9, "Consolas", Blue );
+          selected = selected + 1.0;
+          GlobalVariableSet( global_name, selected );
+          has_change = true;
         }
-        hist_nr++;
-        st_tLine_hist_data[len2][5] = hist_nr;
-        
-				// set new position index to hist_index
-        len2 = ArrayRange( st_tLine_hist_index, 0 );
-        ArrayResize( st_tLine_hist_index, len2 + 1 );
-        st_tLine_hist_index[len2][0] = i;
-        st_tLine_hist_index[len2][1] = hist_nr;
-        ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", (len2 + 1), "/", (len2 + 1)), 9, "Consolas", Blue );
-        selected = selected + 1.0;
-				GlobalVariableSet( global_name, selected );
-				has_change = true;
       }
     }
   }
-  
-  // is selected changed
-  tmp = GlobalVariableGet( global_name );
-  if( selected != tmp ){
-    len = ArrayRange( st_tLine_hist_index, 0 );
-    len2 = ArrayRange( st_tLine_hist_data, 0 );
-    if( selected < tmp ){ // Undo
-      for( i = selected; i <= tmp && tmp < len; i++ ){
-        for( j = 0; j < len2; j++ ){
-          if( st_tLine_hist_data[j][4] == st_tLine_hist_index[i][0] && st_tLine_hist_data[j][5] == st_tLine_hist_index[i][1] ){
-            k = st_tLine_hist_data[j][4];
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_TIME1, st_tLine_hist_data[j][0] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_PRICE1, st_tLine_hist_data[j][1] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_TIME2, st_tLine_hist_data[j][2] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_PRICE2, st_tLine_hist_data[j][3] );
-						
-						st_tLine_ref_data[k][0] = st_tLine_hist_data[j][0];
-						st_tLine_ref_data[k][1] = st_tLine_hist_data[j][1];
-						st_tLine_ref_data[k][2] = st_tLine_hist_data[j][2];
-						st_tLine_ref_data[k][3] = st_tLine_hist_data[j][3];
-          }                                            
-        }
+
+  len = ArrayRange( st_tLine_ref_str, 0 );
+  for( i = 0; i < len; i++ ){
+    if( ObjectFind( st_tLine_ref_str[i][0] ) == -1 ){ //remove
+      len = removeItem( selected, st_tLine_ref_str, st_tLine_ref_str, st_tLine_ref_data, st_tLine_ref_data, st_tLine_hist_from, st_tLine_hist_from, st_tLine_hist_to, st_tLine_hist_to, st_tLine_ref_str[i][0], StrToDouble( st_tLine_ref_str[i][1] ) );
+      if( i > 0 ){
+        i++;
       }
-    }else{ // Redo
-      for( i = selected; i > 0 && i >= tmp; i-- ){
-        for( j = 0; j < len2; j++ ){
-          if( st_tLine_hist_data[j][4] == st_tLine_hist_index[i][0] && st_tLine_hist_data[j][5] == st_tLine_hist_index[i][1] - 1.0 ){
-            k = st_tLine_hist_data[j][4];
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_TIME1, st_tLine_hist_data[j][0] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_PRICE1, st_tLine_hist_data[j][1] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_TIME2, st_tLine_hist_data[j][2] );
-            ObjectSet( st_tLine_ref_names[k], OBJPROP_PRICE2, st_tLine_hist_data[j][3] );
-						
-						st_tLine_ref_data[k][0] = st_tLine_hist_data[j][0];
-						st_tLine_ref_data[k][1] = st_tLine_hist_data[j][1];
-						st_tLine_ref_data[k][2] = st_tLine_hist_data[j][2];
-						st_tLine_ref_data[k][3] = st_tLine_hist_data[j][3];
-          }
-        }
-      }
+
+      GlobalVariableSet( global_name, selected );
+      ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", DoubleToStr(selected, 0), "/", ArrayRange( st_tLine_hist_to, 0 ) ), 9, "Consolas", Blue );
+      has_change = true;
     }
+// Alert(st_tLine_ref_str[i][0]+" "+st_tLine_ref_data[i][0])  ;
+  }
+// Alert("--------------")  ;
+  // is selected changed
+  int tmp = GlobalVariableGet( global_name );
+  if( selected != tmp ){
+    if( tmp < selected ){ // Undo
+      idx = getHistLineName( st_tLine_ref_str, DoubleToStr(st_tLine_hist_from[tmp][0], 0) );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_TIME1, st_tLine_hist_from[tmp][1] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_PRICE1, st_tLine_hist_from[tmp][2] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_TIME2, st_tLine_hist_from[tmp][3] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_PRICE2, st_tLine_hist_from[tmp][4] );
+      
+      st_tLine_ref_data[idx][0] = st_tLine_hist_from[tmp][1];
+      st_tLine_ref_data[idx][1] = st_tLine_hist_from[tmp][2];
+      st_tLine_ref_data[idx][2] = st_tLine_hist_from[tmp][3];
+      st_tLine_ref_data[idx][3] = st_tLine_hist_from[tmp][4];
+    }else{ // Redo
+      idx = getHistLineName( st_tLine_ref_str, DoubleToStr(st_tLine_hist_to[tmp][0], 0) );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_TIME1, st_tLine_hist_to[tmp][1] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_PRICE1, st_tLine_hist_to[tmp][2] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_TIME2, st_tLine_hist_to[tmp][3] );
+      ObjectSet( st_tLine_ref_str[idx][0], OBJPROP_PRICE2, st_tLine_hist_to[tmp][4] );
+      
+      st_tLine_ref_data[idx][0] = st_tLine_hist_to[tmp][1];
+      st_tLine_ref_data[idx][1] = st_tLine_hist_to[tmp][2];
+      st_tLine_ref_data[idx][2] = st_tLine_hist_to[tmp][3];
+      st_tLine_ref_data[idx][3] = st_tLine_hist_to[tmp][4];
+    }                                              
+    
+    ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", tmp, "/", ArrayRange( st_tLine_hist_from, 0 )), 9, "Consolas", Blue );
     selected = tmp;
     has_change = true;
   }
-  
+
   if( has_change ){
-		syncTradeCharts( st_tLine_ref_names, st_tLine_ref_data );
+    syncTradeCharts( st_tLine_ref_str, st_tLine_ref_data );
   }
+
+  errorCheck("sds");
 }
 
-void syncTradeCharts( string& line_name[], double &line_data[][4] ){
+int getHistLineName( string& ref_str[][2], string id ){
+  int i = 0, len = ArrayRange( ref_str, 0 );
+  for( ; i< len; i++ ){
+    if( ref_str[i][1] == id ){
+      return ( i );
+    }
+  }
+  return ( -1 );
+}
+
+int removeItem( double& selected, string& orig_ref_str[][2], string copy_ref_str[][2], double& orig_ref_data[][4], double copy_ref_data[][4], double& orig_hist_from[][5], double copy_hist_from[][5], double& orig_hist_to[][5], double copy_hist_to[][5], string name, double id ){
+  int i = 0, len = ArrayRange( copy_hist_from, 0 ), nr = 0;
+  for( ; i < len; i++ ){
+    if( copy_hist_from[i][0] != id ){
+      orig_hist_from[nr][0] = copy_hist_from[i][0];
+      orig_hist_from[nr][1] = copy_hist_from[i][1];
+      orig_hist_from[nr][2] = copy_hist_from[i][2];
+      orig_hist_from[nr][3] = copy_hist_from[i][3];
+      orig_hist_from[nr][4] = copy_hist_from[i][4];
+
+      nr++;
+
+      orig_hist_to[nr][0] = copy_hist_to[i + 1][0];
+      orig_hist_to[nr][1] = copy_hist_to[i + 1][1];
+      orig_hist_to[nr][2] = copy_hist_to[i + 1][2];
+      orig_hist_to[nr][3] = copy_hist_to[i + 1][3];
+      orig_hist_to[nr][4] = copy_hist_to[i + 1][4];
+
+    }else{
+      if( selected != 0 && i < selected ){
+        selected--;
+      }
+    }
+  }
+  ArrayResize( orig_hist_from, nr );
+  ArrayResize( orig_hist_to, nr + 1 );
+
+  len = ArrayRange( copy_ref_str, 0 );
+  nr = 0;
+  for( i = 0; i < len; i++ ){
+    if( copy_ref_str[i][0] != name ){
+      orig_ref_str[nr][0] = copy_ref_str[i][0];
+      orig_ref_str[nr][1] = copy_ref_str[i][1];
+
+      orig_ref_data[nr][0] = copy_ref_data[i][0];
+      orig_ref_data[nr][1] = copy_ref_data[i][1];
+      orig_ref_data[nr][2] = copy_ref_data[i][2];
+      orig_ref_data[nr][3] = copy_ref_data[i][3];
+
+      nr++;
+    }
+  }
+  ArrayResize( orig_ref_str, nr );
+  ArrayResize( orig_ref_data, nr );
+  return ( nr );
+}
+
+void syncTradeCharts( string& line_str[][2], double &line_data[][4] ){
 	static string file_name = "";
 	static string global_name = "";
 	if( file_name == "" ){
 		file_name = StringConcatenate( getSymbol(), "_tLines.csv" );
 		global_name = StringConcatenate( getSymbol(), "_tLines_lastMod.csv" );
 	}
-	int i = 0, len = ArraySize( line_name );
+	int i = 0, len = ArrayRange( line_str, 0 );
 	string out = "";
 	for( ; i < len; i++ ){
-		out = StringConcatenate(out, line_name[i], ";", DoubleToStr(line_data[i][0],0), ";", DoubleToStr(line_data[i][1],Digits), ";", DoubleToStr(line_data[i][2],0), ";", DoubleToStr(line_data[i][3],Digits), ";", ObjectGet(line_name[i],OBJPROP_COLOR), ";", ObjectType(line_name[i]),"\r\n" );
+		out = StringConcatenate(out, line_str[i][0], ";", DoubleToStr(line_data[i][0],0), ";", DoubleToStr(line_data[i][1],Digits), ";", DoubleToStr(line_data[i][2],0), ";", DoubleToStr(line_data[i][3],Digits), ";", ObjectGet(line_str[i][0],OBJPROP_COLOR), ";", ObjectType(line_str[i][0]),"\r\n" );
 	}
-	
+
 	if( ObjectFind("DT_GO_trade_timing") != -1 ){
     out = StringConcatenate(out,"DT_GO_trade_timing;",DoubleToStr(ObjectGet("DT_GO_trade_timing", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_trade_timing", OBJPROP_COLOR ),";",ObjectType( "DT_GO_trade_timing" ),"\r\n");
   }
-	
+
 	int handle = FileOpen( file_name, FILE_BIN|FILE_WRITE );
   if( handle > 0 ){
     FileWriteString( handle, out, StringLen(out) );
@@ -280,5 +269,4 @@ void syncTradeCharts( string& line_name[], double &line_data[][4] ){
   }
   GlobalVariableSet( global_name, TimeLocal() );
 	errorCheck( "syncTradeCharts" );
-// Alert("saved "+Symbol())  ;
 }
