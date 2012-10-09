@@ -103,11 +103,11 @@ void startHistory(){
             len3 = selected;
           }
           
-          Alert( StringConcatenate(st_tLine_ref_data[idx][0]," ",t1," ",st_tLine_ref_data[idx][1]," ",p1 ," ",st_tLine_ref_data[idx][2]," ",t2," ",st_tLine_ref_data[idx][3]," ",p2) );
+          // Alert( StringConcatenate(st_tLine_ref_data[idx][0]," ",t1," ",st_tLine_ref_data[idx][1]," ",p1 ," ",st_tLine_ref_data[idx][2]," ",t2," ",st_tLine_ref_data[idx][3]," ",p2) );
           
           ArrayResize( st_tLine_hist_from, len3 + 1 );
           ArrayResize( st_tLine_hist_to, len3 + 2 );
-Alert( "len "+len3 );
+
           st_tLine_hist_from[len3][0] = StrToDouble( StringSubstr( name, 16, 10 ) );
           st_tLine_hist_from[len3][1] = st_tLine_ref_data[idx][0];
           st_tLine_hist_from[len3][2] = st_tLine_ref_data[idx][1];
@@ -146,9 +146,8 @@ Alert( "len "+len3 );
       ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", DoubleToStr(selected, 0), "/", ArrayRange( st_tLine_hist_to, 0 ) ), 9, "Consolas", Blue );
       has_change = true;
     }
-// Alert(st_tLine_ref_str[i][0]+" "+st_tLine_ref_data[i][0])  ;
   }
-// Alert("--------------")  ;
+  
   // is selected changed
   int tmp = GlobalVariableGet( global_name );
   if( selected != tmp ){
@@ -185,7 +184,7 @@ Alert( "len "+len3 );
     syncTradeCharts( st_tLine_ref_str, st_tLine_ref_data );
   }
 
-  errorCheck("sds");
+  errorCheck("history");
 }
 
 int getHistLineName( string& ref_str[][2], string id ){

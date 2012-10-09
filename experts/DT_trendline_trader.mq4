@@ -14,7 +14,8 @@
 #include <DT_functions.mqh>
 #include <WinUser32.mqh>
 
-#define TIME_BWEEN_TRADES 18000 // 5 hour (min 4 hour !!!!)
+// #define TIME_BWEEN_TRADES 18000 // 5 hour (min 4 hour !!!!)
+#define TIME_BWEEN_TRADES 28000 // 5 hour (min 4 hour !!!!)
 #define FIBO_TP 0.380 // 0.382
 #define TRADE_LOT 0.1
 #define EXPIRATION_TIME 7200 // 2 hour
@@ -142,6 +143,8 @@ int start(){
 				
 				new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
 				if( new_tp == -1.0 ){
+          OrderDelete( ticket );
+					errorCheck( StringConcatenate( Symbol()," Error Limit position tp change ticket id :", ticket ) );
 					log( StringConcatenate( Symbol()," Error Limit position tp change ticket id :", ticket ), 8.0, magic );
 					return (0);
 				}
@@ -165,7 +168,7 @@ int start(){
 			
 				lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
 				tLine_price = lowest;
-				new_op = NormalizeDouble( tLine_price + st_spread, Digits );
+				// new_op = NormalizeDouble( tLine_price + st_spread, Digits );
 				
 			}else{ // Sell
 				lowest = NormalizeDouble( iLow( NULL, PERIOD_M1, iLowest( NULL, PERIOD_M1, MODE_LOW, shift ) ), Digits );
@@ -178,7 +181,7 @@ int start(){
 			
 				highest = NormalizeDouble( iHigh( NULL, PERIOD_M1, iHighest( NULL, PERIOD_M1, MODE_HIGH, shift) ), Digits );
 				tLine_price = highest;
-				new_op = tLine_price;
+				// new_op = tLine_price;
 			}
 			
 			new_tp = getTakeProfit( magic+"", tLine_price, o_type, st_min_profit, st_max_profit, st_spread, getNearestLinePrice(o_type, tLine_price, st_tLine, magic+""), fibo_100 );
