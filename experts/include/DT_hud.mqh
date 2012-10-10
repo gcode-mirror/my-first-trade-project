@@ -25,7 +25,7 @@ void initHud(){
   ObjectSet( name, OBJPROP_YDISTANCE, 1 );
   ObjectSetText( name, "Spread:0/0", 9, "Consolas", Blue );
   
-  xpos = xpos + (StringLen(txt) * 7) + 200;
+  xpos = xpos + (StringLen(txt) * 7) + 120;
   
   name = "DT_BO_hud_expert_info";
   ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );

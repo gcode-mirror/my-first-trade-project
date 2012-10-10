@@ -26,6 +26,8 @@ extern int EXT_WEEDS_OF_NEWS = 1;
 #include <DT_fade.mqh>
 #include <DT_history.mqh>
 #include <DT_news.mqh>
+#include <DT_objects.mqh>
+
 bool CONNECTION_FAIL = true;
 
 int init(){
@@ -71,6 +73,7 @@ int start(){
   // startNews();
   startHistory();
   startHud();
+  startObjects();
   
   errorCheck("global start");
   return(0);

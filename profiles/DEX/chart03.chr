@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=240
-leftpos=1717
+period=1440
+leftpos=799
 digits=5
 scale=4
 graph=1
@@ -52,6 +52,36 @@ value_0=0.000000
 time_1=1349222400
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=10
+object_name=DT_GO_fibo_1
+period_flags=0
+create_time=1349902016
+color=255
+style=2
+weight=1
+background=1
+color2=2139610
+style2=0
+weight2=1
+time_0=1347580800
+value_0=1.062450
+time_1=1349683200
+value_1=1.014900
+levels_ray=1
+level_0=1.0000
+description_0=F1 100 | 4755
+level_1=0.6180
+description_1=F1 61.8 | 2939
+level_2=0.5000
+description_2=F1 50 | 2378
+level_3=0.3820
+description_3=F1 38.2 | 1816
+level_4=0.2360
+description_4=F1 23.6 | 1122
+level_5=0.0000
+description_5=F1 0.0
 </object>
 <object>
 type=2
@@ -119,38 +149,6 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_res_1349394575
-period_flags=0
-create_time=1349387381
-description=2012.10.04 23:49:35 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=1
-background=1
-time_0=1338508800
-value_0=0.956190
-time_1=1346889600
-value_1=1.016430
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sig_1349280449
-period_flags=0
-create_time=1349806622
-description=2012.10.03 16:07:29
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1334102400
-value_0=1.022590
-time_1=1346889600
-value_1=1.016430
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1349296571
 period_flags=0
 create_time=1349289371
@@ -182,6 +180,22 @@ value_1=1.027440
 ray=1
 </object>
 <object>
+type=2
+object_name=DT_GO_tLine_sup_1349909788
+period_flags=0
+create_time=1349902937
+description=2012.10.10 22:56:28 /\ /\ /\ /\ /\
+color=3329330
+style=0
+weight=2
+background=1
+time_0=1334102400
+value_0=1.022590
+time_1=1346889600
+value_1=1.016430
+ray=1
+</object>
+<object>
 type=1
 object_name=Horizontal Line 6335
 period_flags=0
@@ -209,17 +223,34 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 55142
+object_name=Trendline 1349909816
 period_flags=0
-create_time=1349506918
+create_time=1349902616
+description=2012.10.10 22:56:56
 color=9408444
 style=0
-weight=1
+weight=2
 background=1
-time_0=1346889600
-value_0=1.016430
-time_1=1349308800
-value_1=1.018180
+time_0=1338508800
+value_0=0.956190
+time_1=1346889600
+value_1=1.016430
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1349909828
+period_flags=0
+create_time=1349902628
+description=2012.10.10 22:57:08
+color=9408444
+style=0
+weight=2
+background=1
+time_0=1311724800
+value_0=1.107990
+time_1=1330473600
+value_1=1.085610
 ray=1
 </object>
 </indicator>

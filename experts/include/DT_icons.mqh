@@ -26,7 +26,7 @@ int showIcon( int x, int y, string text, string font, string isOn, string global
   ObjectSet( name, OBJPROP_YDISTANCE, y_cord + y );
   ObjectSet( name, OBJPROP_BACK, false);
   if( isOn != "0" ){ lb_color = White; }else{ lb_color = DarkGray; }
-  ObjectSetText(name,text,16,font,lb_color);
+  ObjectSetText( name, text, 16, font, lb_color );
 	
 	name = StringConcatenate( "DT_BO_icon_" , icon_nr, "_background" );
   ObjectCreate(name, OBJ_LABEL, 0, 0, 0);
@@ -35,7 +35,7 @@ int showIcon( int x, int y, string text, string font, string isOn, string global
   ObjectSet(name, OBJPROP_YDISTANCE, y_cord);
   ObjectSet(name, OBJPROP_BACK, false);
   if( isOn != "0" ){ lb_color = DeepSkyBlue; }else{ lb_color = Gainsboro; }
-  ObjectSetText(name,"g",18,"Webdings",lb_color);  
+  ObjectSetText(name,"g",18,"Webdings",lb_color );  
   
 	return ( icon_nr );
 }

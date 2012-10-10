@@ -79,7 +79,7 @@ int start(){
     }
 
     if( st_offset == 0.0 ){
-      st_offset = 80 / MarketInfo( Symbol(), MODE_TICKVALUE ) * Point;
+      st_offset = 60 / MarketInfo( Symbol(), MODE_TICKVALUE ) * Point;
       st_min_profit = getSymbolData( MIN_PROFIT );
       st_max_profit = getSymbolData( MAX_PROFIT );
       st_spread = getSymbolData( SPREAD );
@@ -289,6 +289,7 @@ int start(){
 
     if( used_idx != -1 ){
       RefreshRates();
+      tLine_price = getTLineValueByShift( st_tLine[used_idx][TL_NAME] );
       if( Open[0] > tLine_price ){ // Buy
         o_type = OP_BUYLIMIT;
         op = NormalizeDouble( tLine_price + st_spread, Digits );

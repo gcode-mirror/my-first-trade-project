@@ -55,12 +55,20 @@ int start(){
       addComment( sel_name + " transformed to tLine!", 2 );
     }
     
-
+    int width;
+    if( Period() == PERIOD_W1 ){
+      width = 3;
+    }else if( Period() == PERIOD_D1 ){
+      width = 2;
+    }else{
+      width = 1;
+    }
+    
     ObjectCreate( name, o_type, 0, t1, p1, t2, p2 );
     ObjectSet( name, OBJPROP_RAY, true );
     ObjectSet( name, OBJPROP_COLOR, c );
     ObjectSet( name, OBJPROP_BACK, true );
-    ObjectSet( name, OBJPROP_WIDTH, 1 );
+    ObjectSet( name, OBJPROP_WIDTH, width );
     ObjectSetText( name, TimeToStr( time, TIME_DATE|TIME_SECONDS), 8 );
     ObjectDelete( sel_name );
   }else{
