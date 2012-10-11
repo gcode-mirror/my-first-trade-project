@@ -19,23 +19,34 @@
 //+------------------------------------------------------------------+
 int start(){
 	double pod = WindowPriceOnDropped();
-  double time_from, zz_price, tod = WindowTimeOnDropped();
-	int i, shift = iBarShift( NULL, PERIOD_H4, tod );
+  double tmp, time_from, zz_price = 0.0, tod = WindowTimeOnDropped();
+	int i, len, shift = iBarShift( NULL, PERIOD_H4, tod ) - 2;
   bool dir;
 	
-	for( i = shift + 2; i > 0 || i > shift -2; i-- ){
-		zz_price = iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, i );
-		if( zz_price != 0.0 ){
-			time_from = iTime( NULL, PERIOD_H4, i - 1 );
+  if( shift < 0 ){
+    shift = 0;
+  }
+  
+	for( i = shift; i < Bars; i++ ){
+    tmp = iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, i );
+    if( tmp != 0.0 ){
+      zz_price = tmp;
+      time_from = iTime( NULL, PERIOD_H4, i - 1 );
       dir = ( zz_price == iHigh( NULL, PERIOD_H4, i ) );
-			break;
-		}
-	}
-	
-	if( zz_price == 0.0 ){
-		addComment( "Cannot find the peak!", 1 );
-		return (0);
-	}
+      break;
+    }
+  }
+  
+  if( i > iBarShift( NULL, PERIOD_H4, tod ) + 2 ){
+    if( dir ){
+      zz_price = iLow( NULL, PERIOD_H4, iBarShift( NULL, PERIOD_H4, tod ) );
+      dir = false;
+    }else{
+      zz_price = iHigh( NULL, PERIOD_H4, iBarShift( NULL, PERIOD_H4, tod ) );
+      dir = true;
+    }
+    time_from = iTime( NULL, PERIOD_H4, iBarShift( NULL, PERIOD_H4, tod ) - 1 );
+  }
   
 	int mb_cmd;
 	string new_fibo;
@@ -83,21 +94,22 @@ int start(){
   ArrayInitialize( res, 0.0 );
 	bool start_search;
 	
-	double tmp;
+	// for( i = 0; i < 1; i++ ){
 	for( i = 0; i < PERI_NR; i++ ){
 		start_search = false;
 		shift = iBarShift( NULL, peris[i], time_from );
-		for( j = shift; j < shift + 200; j++ ){
+    len = iBars( NULL, peris[i] );
+		for( j = shift; j < len; j++ ){
 			tmp = iCustom( Symbol(),  peris[i], "ZigZag", 12, 5, 3, 0, j );
 			if( start_search ){
-				if( tmp != 0.0 ){
+				if( tmp != 0.0 && tmp != zz_price ){
 					next_ZZ[i][0] = tmp;
 					next_ZZ[i][1] = iTime( NULL, peris[i], j );
 					break;
 				} 
 			}
 			
-			if( tmp == zz_price ){
+			if( iTime( NULL, peris[i], j ) < time_from ){
 				start_search = true;
 			}
 		}
@@ -110,7 +122,7 @@ int start(){
   }
   
   if( next_ZZ[i][0] == 0.0 ){
-    addComment( "Invalid fibo values!", 1 );
+    addComment( "Invalid fibo values!"+zz_price, 1 );
 		return (0);
   }
   
@@ -119,8 +131,8 @@ int start(){
 	res[0][1] = next_ZZ[i][1];
 	
   j = 0;
-	for( i = i + 1; i < PERI_NR && j < 3; i++ ){
-		if( next_ZZ[i][0] != res[j][0] ){
+	for( i = i + 1; i < PERI_NR && j < 2; i++ ){
+		if( res[j][0] != next_ZZ[i][0] && next_ZZ[i][0] != 0.0 ){
       j++;
       res[j][0] = next_ZZ[i][0];
       res[j][1] = next_ZZ[i][1];
@@ -128,18 +140,20 @@ int start(){
 		}
 	}
   
+  for( ; j < 2 ; j++ ){
+    out = StringConcatenate( out, "skip                " );
+  }
+  
 	mb_cmd = MessageBox( out, "Which period do you prefer?", MB_YESNOCANCEL|MB_ICONQUESTION );
   if( mb_cmd == IDYES ){
     createFibo( dir, new_fibo, time_from, zz_price, res[0][1], res[0][0] );
   }else if( mb_cmd == IDNO ){
     if( res[1][0] == 0.0 ){
-      addComment( "Invalid fibo values!", 1 );
       return (0);
     }
     createFibo( dir, new_fibo, time_from, zz_price, res[1][1], res[1][0] );
   }else{
     if( res[2][0] == 0.0 ){
-      addComment( "Invalid fibo values!", 1 );
       return (0);
     }
     createFibo( dir, new_fibo, time_from, zz_price, res[2][1], res[2][0] );
