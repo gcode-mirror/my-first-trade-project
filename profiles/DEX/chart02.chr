@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=1440
-leftpos=1641
+period=60
+leftpos=1824
 digits=5
 scale=4
 graph=1
@@ -243,11 +243,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sup_1349909683
+object_name=DT_GO_tLine_sig_1349909683
 period_flags=0
-create_time=1349902488
-description=2012.10.10 22:54:43 /\ /\ /\ /\ /\
-color=3329330
+create_time=1349944807
+description=2012.10.10 22:54:43
+color=15570276
 style=0
 weight=2
 background=1
