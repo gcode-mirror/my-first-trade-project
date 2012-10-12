@@ -31,7 +31,11 @@ int start(){
     tmp = iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, i );
     if( tmp != 0.0 ){
       zz_price = tmp;
-      time_from = iTime( NULL, PERIOD_H4, i - 1 );
+      if( i > 1 ){
+        time_from = iTime( NULL, PERIOD_H4, i - 1 );
+      }else{
+        time_from = iTime( NULL, PERIOD_H4, 0 );
+      }
       dir = ( zz_price == iHigh( NULL, PERIOD_H4, i ) );
       break;
     }
@@ -94,15 +98,17 @@ int start(){
   ArrayInitialize( res, 0.0 );
 	bool start_search;
 	
-	// for( i = 0; i < 1; i++ ){
-	for( i = 0; i < PERI_NR; i++ ){
+	for( i = 0; i < 1; i++ ){
+	// for( i = 0; i < PERI_NR; i++ ){
 		start_search = false;
 		shift = iBarShift( NULL, peris[i], time_from );
     len = iBars( NULL, peris[i] );
+          // Alert(shift+" "+TimeToStr(time_from,TIME_DATE|TIME_SECONDS) +" "+len);
 		for( j = shift; j < len; j++ ){
 			tmp = iCustom( Symbol(),  peris[i], "ZigZag", 12, 5, 3, 0, j );
 			if( start_search ){
 				if( tmp != 0.0 && tmp != zz_price ){
+          Alert(zz_price);
 					next_ZZ[i][0] = tmp;
 					next_ZZ[i][1] = iTime( NULL, peris[i], j );
 					break;
@@ -121,7 +127,7 @@ int start(){
     i++;
   }
   
-  if( next_ZZ[i][0] == 0.0 ){
+  if( next_ZZ[0][0] == 0.0 ){
     addComment( "Invalid fibo values!"+zz_price, 1 );
 		return (0);
   }
