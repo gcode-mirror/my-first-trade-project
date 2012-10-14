@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=60
-leftpos=1852
+period=240
+leftpos=3604
 digits=5
 scale=4
 graph=1
@@ -135,7 +135,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1349991066
+create_time=1350059518
 color=255
 style=2
 weight=1
@@ -227,18 +227,18 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_res_1349966522
+object_name=DT_GO_tLine_res_1350259715
 period_flags=0
-create_time=1349959368
-description=2012.10.11 14:42:02 \/ \/ \/ \/ \/
+create_time=1350252519
+description=2012.10.15 00:08:35 \/ \/ \/ \/ \/
 color=9639167
 style=0
 weight=2
 background=1
-time_0=1338508800
-value_0=0.956190
-time_1=1346889600
-value_1=1.016430
+time_0=1330473600
+value_0=1.085610
+time_1=1347580800
+value_1=1.062450
 ray=1
 </object>
 <object>
@@ -275,6 +275,38 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_tLine_sig_1350065248
+period_flags=0
+create_time=1350058048
+description=2012.10.12 18:07:28
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1349409600
+value_0=1.027440
+time_1=1349942400
+value_1=1.029340
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_tLine_sig_1350230888
+period_flags=0
+create_time=1350223689
+description=2012.10.14 16:08:08
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1346241600
+value_0=1.039780
+time_1=1348660800
+value_1=1.032830
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_tLine_sup_1349909788
 period_flags=0
 create_time=1349902937
@@ -283,10 +315,10 @@ color=3329330
 style=0
 weight=2
 background=1
-time_0=1334102400
-value_0=1.022590
-time_1=1346889600
-value_1=1.016430
+time_0=1346889600
+value_0=1.016430
+time_1=1349654400
+value_1=1.014900
 ray=1
 </object>
 <object>
@@ -313,22 +345,6 @@ time_0=1348214400
 value_0=1.051900
 time_1=1348790400
 value_1=1.047380
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1349909828
-period_flags=0
-create_time=1349902628
-description=2012.10.10 22:57:08
-color=9408444
-style=0
-weight=2
-background=1
-time_0=1311724800
-value_0=1.107990
-time_1=1330473600
-value_1=1.085610
 ray=1
 </object>
 </indicator>

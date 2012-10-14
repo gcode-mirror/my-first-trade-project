@@ -29,6 +29,11 @@ int start(){
     p2 = NormalizeDouble( ObjectGet( sel_name, OBJPROP_PRICE2 ), Digits );
     o_type = ObjectType( sel_name );
     
+    if( iBars( NULL, PERIOD_H4 ) - 1 == iBarShift( NULL, PERIOD_H4, t1 ) ){
+      addComment( "Line out of H4 chart!", 1 );
+      return (0);
+    }
+    
     if( StringSubstr( sel_name, 5, 7 ) == "_tLine_"){
       if( o_type == OBJ_TREND ){
         name = "Trendline " + DoubleToStr( time, 0 );

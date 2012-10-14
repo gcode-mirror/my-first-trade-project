@@ -18,6 +18,11 @@
 #define NEWS_DISPLAY_ZONE 21600 // 6 hour
 
 void startNews(){
+	static bool not_supported = false;
+  if( not_supported ){
+    return;
+  }
+  
 	static double win_min = 0.0;
 	static double win_max = 0.0;
 	static string news_data[0][7];
@@ -33,7 +38,15 @@ void startNews(){
   
   if( st_switch == "-1" ){
     st_switch = getGlobal("NEWS_SWITCH");
-		icon_id = showIcon( 1, 1, "ü", "Webdings", st_switch, "NEWS_SWITCH" ); 
+		icon_id = showIcon( 1, 1, "ü", "Webdings", st_switch, "NEWS_SWITCH" );
+    
+    if( !isSupportedCurrency() ){
+      if( st_switch != "0" ){
+        changeIcon( icon_id );
+      }
+      not_supported = true;
+      return;
+    }
 		
 		icon_extension = StringConcatenate( "DT_BO_icon_" , icon_id, "_w_extension" );
 		ObjectCreate( icon_extension, OBJ_LABEL, 0, 0, 0);
@@ -365,4 +378,16 @@ string PadString(string toBePadded, string paddingChar, int paddingLength){
     toBePadded = StringConcatenate(paddingChar,toBePadded);
   }
   return (toBePadded);
+}
+
+bool isSupportedCurrency(){
+  string currs[5] = { "EUR", "AUD", "GBP", "JPY", "USD" };
+  string left = StringSubstr( Symbol(), 0, 3 );
+  string right = StringSubstr( Symbol(), 3, 3 );
+  for( int i = 0; i < 5; i++ ){
+    if( left == currs[i] || right == currs[i] ){
+      return ( true );
+    }
+  }
+  return ( false );
 }

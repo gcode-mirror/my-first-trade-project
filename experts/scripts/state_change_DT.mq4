@@ -24,6 +24,11 @@ int start(){
     double price = ObjectGetValueByShift( sel_name, iBarShift( NULL, 0, tod) );
     int cmd_id;
     
+    if( iBars( NULL, PERIOD_H4 ) - 1 == iBarShift( NULL, PERIOD_H4, ObjectGet( sel_name, OBJPROP_TIME1 ) ) ){
+      addComment( "Line out of H4 chart!", 1 );
+      return (0);
+    }
+    
     if( state == "sig" ){
       cmd_id = MessageBox( "Sup-Res                      All                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){

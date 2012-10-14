@@ -44,11 +44,12 @@ void changeIcon( int index ){
   string name, icon_name = "";
   for ( int i = ObjectsTotal() - 1; i >= 0; i-- ){
     name = ObjectName(i);
-    if( StringSubstr( name, 0, 12 ) == "DT_BO_icon_"+index ){
+    if( StringSubstr( name, 0, 23 ) == "DT_BO_icon_"+index+"_foreground" ){
 			icon_name = name;
       break;
     }
   }
+  
   if( icon_name == "" ){
     Alert( "Icon idx:"+index+" not found!" );
     return;

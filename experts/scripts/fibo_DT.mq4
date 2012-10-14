@@ -98,8 +98,8 @@ int start(){
   ArrayInitialize( res, 0.0 );
 	bool start_search;
 	
-	for( i = 0; i < 1; i++ ){
-	// for( i = 0; i < PERI_NR; i++ ){
+	// for( i = 0; i < 1; i++ ){
+	for( i = 0; i < PERI_NR; i++ ){
 		start_search = false;
 		shift = iBarShift( NULL, peris[i], time_from );
     len = iBars( NULL, peris[i] );
@@ -108,9 +108,10 @@ int start(){
 			tmp = iCustom( Symbol(),  peris[i], "ZigZag", 12, 5, 3, 0, j );
 			if( start_search ){
 				if( tmp != 0.0 && tmp != zz_price ){
-          Alert(zz_price);
-					next_ZZ[i][0] = tmp;
-					next_ZZ[i][1] = iTime( NULL, peris[i], j );
+          if( (dir && iLow( NULL, peris[i], j ) == tmp ) || (!dir && iHigh( NULL, peris[i], j ) == tmp ) ){
+            next_ZZ[i][0] = tmp;
+            next_ZZ[i][1] = iTime( NULL, peris[i], j );
+          }
 					break;
 				} 
 			}
@@ -122,31 +123,35 @@ int start(){
 		out = StringConcatenate( out, peris_txt[i], ": ", getFiboLevel(next_ZZ[i][0], zz_price), "   |   " );
 	}
   
+  out = out + "\n";
+  j = 0;
   i = 0;
   if( new_fibo == "DT_GO_fibo_2" ){
     i++;
   }
+  for( ; i < PERI_NR && j < 3; i++ ){
+    if(j == 0 && next_ZZ[i][0] != 0.0){
+      res[j][0] = next_ZZ[i][0];
+      res[j][1] = next_ZZ[i][1];
+      out = StringConcatenate( out, peris_txt[i], ": ", getFiboLevel(res[j][0], zz_price), "                " );
+      j++;
+    }else if(j > 0){
+      if( res[j-1][0] != next_ZZ[i][0] && next_ZZ[i][0] != 0.0 ){
+        res[j][0] = next_ZZ[i][0];
+        res[j][1] = next_ZZ[i][1];
+        out = StringConcatenate( out, peris_txt[i], ": ", getFiboLevel(res[j][0], zz_price), "                " );
+        j++;
+      }
+    } 
   
-  if( next_ZZ[0][0] == 0.0 ){
+  }
+  
+  if( res[0][0] == 0.0 ){
     addComment( "Invalid fibo values!"+zz_price, 1 );
 		return (0);
   }
   
-  out = StringConcatenate( out, "\n\n", peris_txt[i], ": ", getFiboLevel(next_ZZ[i][0], zz_price), "                " );
-  res[0][0] = next_ZZ[i][0];
-	res[0][1] = next_ZZ[i][1];
-	
-  j = 0;
-	for( i = i + 1; i < PERI_NR && j < 2; i++ ){
-		if( res[j][0] != next_ZZ[i][0] && next_ZZ[i][0] != 0.0 ){
-      j++;
-      res[j][0] = next_ZZ[i][0];
-      res[j][1] = next_ZZ[i][1];
-			out = StringConcatenate( out, peris_txt[i], ": ", getFiboLevel(res[j][0], zz_price), "                " );
-		}
-	}
-  
-  for( ; j < 2 ; j++ ){
+  for( ; j < 3 ; j++ ){
     out = StringConcatenate( out, "skip                " );
   }
   
