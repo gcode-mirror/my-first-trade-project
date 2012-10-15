@@ -12,6 +12,10 @@
   int ShellExecuteA( int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd );
 #import
 
+#import "user32.dll"
+	bool GetWindowRect(int h, int& pos[4]);
+#import
+
 extern bool EXT_BOSS = false;
 extern int EXT_WEEDS_OF_NEWS = 1;
 
@@ -70,7 +74,7 @@ int start(){
   startSession();
   startArchive();
   startFade();
-  // startNews();
+  startNews();
   startHistory();
   startHud();
   startObjects();

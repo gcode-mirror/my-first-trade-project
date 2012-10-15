@@ -55,6 +55,12 @@ void startNews(){
 		ObjectSet( icon_extension, OBJPROP_YDISTANCE, ObjectGet( StringConcatenate( "DT_BO_icon_" , icon_id, "_background" ), OBJPROP_YDISTANCE) + 11 );
 		ObjectSet( icon_extension, OBJPROP_BACK, false);
 		ObjectSetText( icon_extension, EXT_WEEDS_OF_NEWS+"", 8, "Arial Black", Blue );
+    
+    if( EXT_BOSS ){
+      if( !GlobalVariableCheck( "NEWS_update_id" ) ){
+        GlobalVariableSet( "NEWS_update_id", 0.0 );
+      }
+    }
   }
   
   st_timer = GetTickCount() + 2200;
@@ -72,11 +78,12 @@ void startNews(){
   if( st_switch == "0" || Period() > PERIOD_H4 || StringLen(Symbol()) < 6 ){
     return;
   }
+  
 	if( ArrayRange( news_data, 0 ) == 0 ){
 		downloadCalendar();
 		if( loadCSVfile( news_data ) ){
-			displayNews( news_data, win_min, win_max );
-		}
+      displayNews( news_data, win_min, win_max );
+		} 
 	}else{
 		int res = hasRecentNews( news_data );
 		if( res == 2 ){
@@ -84,6 +91,7 @@ void startNews(){
 		}
 		if( res > 0 ){
 			if( loadCSVfile( news_data ) ){
+        
 				displayNews( news_data, win_min, win_max );
 			}
 			return;
@@ -92,22 +100,31 @@ void startNews(){
 			displayNews( news_data, win_min, win_max );
 		}
 	}
+  errorCheck("ttttt");
 }
 
-void displayNews( string& news_data[][], double& win_min, double& win_max ){
-	deleteNewsItems();
-	win_max = WindowPriceMax(0);
-	win_min = WindowPriceMin(0);
-  int trade_power, i, peri = Period(), offset = 3;
+bool displayNews( string& news_data[][], double& win_min, double& win_max ){
+  deleteNewsItems();
+	static double window_width = 0.0;
+  int i, peri = Period(), offset = 3;
 	int position, len = ArrayRange( news_data,0 ), time_shift, prev_top_time_shift = -1, prev_bottom_time_shift = -1;
 	string sym = Symbol(), name, icon = "", font = "";
-	double trade_val, prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size = (win_max - win_min) * (24 / GlobalVariableGet("DT_window_width") ), disp_max, disp_min;
+	double prev_top_price, prev_bottom_price, min, time, chart_time, p1, item_size, disp_max, disp_min;
 	bool no_separator = true;
+  win_max = WindowPriceMax(0);
+  win_min = WindowPriceMin(0);
+  
+  if( window_width == 0.0 ){
+    int WindowDims[4];
+		GetWindowRect( WindowHandle( Symbol(), Period() ), WindowDims );
+		window_width = WindowDims[2] - WindowDims[0] - 47;
+  }
+  item_size = (win_max - win_min) * (24 / window_width );
+  
 	disp_min = TimeCurrent() - NEWS_DISPLAY_ZONE;
 	disp_max = TimeCurrent() + NEWS_DISPLAY_ZONE;
 	color c;
 	min = win_min + (item_size * 1.3);
-	// static string NEWS_TRADE = StringConcatenate( StringSubstr( sym, 0, 6 ), "_news_trade" );
 
 	for( i = 0; i < len; i++ ){
 		position = StringFind( sym, news_data[i][NEWS_CURRENCY]);
@@ -140,7 +157,6 @@ void displayNews( string& news_data[][], double& win_min, double& win_max ){
 				font = "Wingdings 3";
 			}else{
 				getIconAndFont( news_data[i][NEWS_POWER], news_data[i][NEWS_GOODEF], position, icon, font );
-				// getIconAndFont( news_data[i][NEWS_POWER], news_data[i][NEWS_GOODEF], position, icon, font, trade_power );
 
 				if( news_data[i][NEWS_PRIO] == "3" ){
 					c = Red;
@@ -304,7 +320,7 @@ bool loadCSVfile( string& news_data[][] ){
 	ArrayResize( news_data, 0 );
   
   if( len == 0 ){
-    newsFileName( news_file_names );
+    len = newsFileName( news_file_names );
   }
 
 	for( i = 0; i < len; i++ ){
@@ -330,6 +346,7 @@ bool loadCSVfile( string& news_data[][] ){
 			FileClose(handle);
 			return (false);
 		}
+    
 		col = 0;
 		while( !FileIsEnding(handle) ){
 			if( col == 0 ){
@@ -359,10 +376,11 @@ bool loadCSVfile( string& news_data[][] ){
 		}
 		FileClose(handle);
 	}
-	return (errorCheck("loadCSVfile"));
+  errorCheck("loadCSVfile");
+	return ( nr > 0 );
 }
 
-void newsFileName( string& arr[] ){
+int newsFileName( string& arr[] ){
   int i;
   datetime date;
 
@@ -371,6 +389,7 @@ void newsFileName( string& arr[] ){
     date = TimeLocal() - (TimeDayOfWeek(TimeLocal()) * 86400 ) - ( i * 604800 );
     arr[i] = StringConcatenate("Calendar-", TimeYear(date), "-", PadString(DoubleToStr(TimeMonth(date),0),"0",2),"-",PadString(DoubleToStr(TimeDay(date),0),"0",2),".csv");
   }
+  return ( i );
 }
 
 string PadString(string toBePadded, string paddingChar, int paddingLength){

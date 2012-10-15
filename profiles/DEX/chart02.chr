@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=60
-leftpos=1853
+period=240
+leftpos=1963
 digits=5
 scale=4
 graph=1
@@ -37,30 +37,6 @@ stops_color=17919
 height=154
 <indicator>
 name=main
-<object>
-type=22
-object_name=Arrow 1449
-period_flags=0
-create_time=1349977513
-color=255
-weight=1
-background=1
-symbol_code=241
-time_0=1349985600
-value_0=1.603440
-</object>
-<object>
-type=22
-object_name=Arrow 1453
-period_flags=0
-create_time=1349977517
-color=255
-weight=1
-background=1
-symbol_code=242
-time_0=1350014400
-value_0=1.610179
-</object>
 <object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH

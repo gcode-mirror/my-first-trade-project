@@ -34,6 +34,7 @@ int start(){
       return (0);
     }
     
+    int width;
     if( StringSubstr( sel_name, 5, 7 ) == "_tLine_"){
       if( o_type == OBJ_TREND ){
         name = "Trendline " + DoubleToStr( time, 0 );
@@ -42,6 +43,8 @@ int start(){
       }
       c = RosyBrown;
       addComment( sel_name + " transformed to normal line!", 2 );
+      width = ObjectGet( sel_name, OBJPROP_WIDTH );
+      
     }else{
       c = CornflowerBlue;
 			name = StringConcatenate( "DT_GO_tLine_sig_", DoubleToStr( time, 0 ) );
@@ -58,15 +61,18 @@ int start(){
         }
       }
       addComment( sel_name + " transformed to tLine!", 2 );
-    }
-    
-    int width;
-    if( Period() == PERIOD_W1 ){
-      width = 3;
-    }else if( Period() == PERIOD_D1 ){
-      width = 2;
-    }else{
-      width = 1;
+      
+      if( ObjectGet( sel_name, OBJPROP_WIDTH ) > 1 ){
+        width = ObjectGet( sel_name, OBJPROP_WIDTH );
+      }else{
+        if( Period() == PERIOD_W1 ){
+          width = 3;
+        }else if( Period() == PERIOD_D1 ){
+          width = 2;
+        }else{
+          width = 1;
+        }
+      }
     }
     
     ObjectCreate( name, o_type, 0, t1, p1, t2, p2 );
