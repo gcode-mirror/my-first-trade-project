@@ -56,14 +56,14 @@ int start(){
   
   for( i = 0; i < idx; i++ ){
     shift = iBarShift( NULL, 0, ObjectGet( lines[i][0], OBJPROP_TIME2 ) );
-    while( shift > 0 ){
+    while( shift >= 0 ){
       if( shift >= bars ){
         shift = bars - 1;
       }
       
       rpl_name = StringConcatenate( lines[i][1], shift );
       p = ObjectGetValueByShift( lines[i][0], shift );
-      if( shift == 1 ){
+      if( shift == 0 ){
         ObjectCreate( rpl_name, OBJ_TREND, 0, Time[shift], p, Time[shift] + (Period() * 60), p );
       }else{
         ObjectCreate( rpl_name, OBJ_TREND, 0, Time[shift], p, Time[shift - 1], p );

@@ -14,6 +14,7 @@
 //+------------------------------------------------------------------+
 int start(){
   double pod = WindowPriceOnDropped();
+  double tod = WindowTimeOnDropped();
   int nr = 0, i = 0, j, len = ObjectsTotal();
   string name;
   double fibo_levels[6] = { 1, 0.618, 0.5, 0.382, 0.236, 0 };
@@ -40,11 +41,17 @@ int start(){
         p1 = res[i];
       }
     }
-    if( p1 == 0.0 ){
+  }
+  
+  int shift = iBarShift( NULL, 0, tod );
+  if( p1 == 0.0 ){
+    if( MathAbs( High[shift] - pod ) < max_dist ){
+      p1 = High[shift];
+    }else if( MathAbs( Low[shift] - pod ) < max_dist ){
+      p1 = Low[shift];
+    }else{
       p1 = pod;
     }
-  }else{
-    p1 = pod;
   }
   
   name = "DT_GO_tLine_sig_" + DoubleToStr( time, 0 );

@@ -107,26 +107,27 @@ int start(){
 // #####################################################  modify Positions  ######################################################
   static double st_timer_2 = 0.0;
 	if( magic > 1000 ){
-		if( iTime( NULL, PERIOD_M1, 0) < st_timer_2 ){
+		if( TimeCurrent() < st_timer_2 ){
 			return (0);
 		}
-    st_timer_2 = iTime( NULL, PERIOD_M1, 0) + 120; // 2min
+    st_timer_2 = TimeCurrent() + 90; // 2min
 		
 		o_type = OrderType();
 		ticket = OrderTicket();
 		// #####################################################  OP_BUYLIMIT - OP_SELLLIMIT #####################################################
 		if( o_type > 1 ){
+      tLine_name = getTLineName( st_tLine, magic+"" );
+      tLine_price = getTLineValueByShift( tLine_name );
+      
+      if( tLine_name == "" || tLine_price == 0.0 ){
+        OrderDelete( ticket );
+        errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ) );
+        log( StringConcatenate( Symbol()," Error limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ), 8.0, magic );
+        return (0);
+      }
+    
 			if( st_op_mod < Time[0] ){
 				st_op_mod = Time[0];
-				tLine_name = getTLineName( st_tLine, magic+"" );
-				tLine_price = getTLineValueByShift( tLine_name );
-				
-				if( tLine_name == "" || tLine_price == 0.0 ){
-					OrderDelete( ticket );
-					errorCheck( StringConcatenate( Symbol()," Limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ) );
-					log( StringConcatenate( Symbol()," Error limit position is closed due to missing channel line: ",tLine_name,"! ticket id :", ticket ), 8.0, magic );
-					return (0);
-				}
 				
 				if( o_type == OP_BUYLIMIT ){ // Buy
 					new_op = NormalizeDouble( tLine_price + st_spread, Digits );

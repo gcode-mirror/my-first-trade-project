@@ -29,9 +29,11 @@ int start(){
     p2 = NormalizeDouble( ObjectGet( sel_name, OBJPROP_PRICE2 ), Digits );
     o_type = ObjectType( sel_name );
     
-    if( iBars( NULL, PERIOD_H4 ) - 1 == iBarShift( NULL, PERIOD_H4, t1 ) ){
-      addComment( "Line out of H4 chart!", 1 );
-      return (0);
+    if( o_type == OBJ_TREND ){
+      if( iBars( NULL, PERIOD_H4 ) - 1 == iBarShift( NULL, PERIOD_H4, t1 ) ){
+        addComment( "Line out of H4 chart!", 1 );
+        return (0);
+      }
     }
     
     int width;
