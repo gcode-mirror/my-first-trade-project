@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=240
-leftpos=1745
+period=60
+leftpos=1865
 digits=5
 scale=4
 graph=1
@@ -87,7 +87,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1349902184
+create_time=1350459544
 color=255
 style=2
 weight=1
@@ -95,21 +95,21 @@ background=1
 color2=8388608
 style2=0
 weight2=1
-time_0=1349438400
-value_0=1.621690
-time_1=1349841600
-value_1=1.597570
+time_0=1350284400
+value_0=1.602060
+time_1=1350460800
+value_1=1.614110
 levels_ray=1
 level_0=1.0000
-description_0=F2 100 | 2412
+description_0=F2 100 | 1654
 level_1=0.6180
-description_1=F2 61.8 | 1491
+description_1=F2 61.8 | 1022
 level_2=0.5000
-description_2=F2 50 | 1206
+description_2=F2 50 | 827
 level_3=0.3820
-description_3=F2 38.2 | 921
+description_3=F2 38.2 | 632
 level_4=0.2360
-description_4=F2 23.6 | 569
+description_4=F2 23.6 | 390
 level_5=0.0000
 description_5=F2 0.0
 </object>
@@ -179,18 +179,18 @@ ray=0
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_res_1349394456
+object_name=DT_GO_tLine_res_1349377612
 period_flags=0
-create_time=1349387277
-description=2012.10.04 23:47:36 \/ \/ \/ \/ \/
+create_time=1350462779
+description=2012.10.04 19:06:52 \/ \/ \/ \/ \/
 color=9639167
 style=0
 weight=1
 background=1
-time_0=1348804800
-value_0=1.627200
-time_1=1349438400
-value_1=1.621690
+time_0=1346832000
+value_0=1.582550
+time_1=1349294400
+value_1=1.606670
 ray=1
 </object>
 <object>
@@ -211,18 +211,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sig_1349377612
+object_name=DT_GO_tLine_sig_1349394456
 period_flags=0
-create_time=1350424580
-description=2012.10.04 19:06:52
+create_time=1350461538
+description=2012.10.04 23:47:36
 color=15570276
 style=0
 weight=1
 background=1
-time_0=1346832000
-value_0=1.582550
-time_1=1349294400
-value_1=1.606670
+time_0=1348804800
+value_0=1.627200
+time_1=1349438400
+value_1=1.621690
 ray=1
 </object>
 <object>

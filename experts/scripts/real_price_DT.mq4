@@ -28,7 +28,7 @@ int start(){
     }
   }
   
-  if( Period() != PERIOD_H4 ){
+  if( Period() < PERIOD_H4 ){
     addComment( "Wrong period!", 1 );
     return (0);
   }
