@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=15
-leftpos=2572
+period=240
+leftpos=1753
 digits=5
 scale=4
 graph=1
@@ -13793,18 +13793,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_res_1350497587
+object_name=DT_GO_tLine_res_1350559580
 period_flags=0
-create_time=1350490394
-description=2012.10.17 18:13:07 \/ \/ \/ \/ \/
+create_time=1350552385
+description=2012.10.18 11:26:20 \/ \/ \/ \/ \/
 color=9639167
 style=0
-weight=1
+weight=2
 background=1
-time_0=1349308800
-value_0=1.018180
-time_1=1349942400
-value_1=1.029340
+time_0=1338508800
+value_0=0.956190
+time_1=1346889600
+value_1=1.016430
 ray=1
 </object>
 <object>
@@ -13873,6 +13873,22 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_tLine_sig_1350497587
+period_flags=0
+create_time=1350552367
+description=2012.10.17 18:13:07
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1349308800
+value_0=1.018180
+time_1=1349942400
+value_1=1.029340
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_tLine_sup_1349909788
 period_flags=0
 create_time=1349902937
@@ -13911,22 +13927,6 @@ time_0=1347624000
 value_0=1.062450
 time_1=1348790400
 value_1=1.047380
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1350431669
-period_flags=0
-create_time=1350424469
-description=2012.10.16 23:54:29
-color=9408444
-style=0
-weight=2
-background=1
-time_0=1338508800
-value_0=0.956190
-time_1=1346889600
-value_1=1.016430
 ray=1
 </object>
 </indicator>
