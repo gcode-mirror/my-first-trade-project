@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=240
-leftpos=1793
+period=1440
+leftpos=1648
 digits=5
 scale=4
 graph=1
@@ -38,6 +38,30 @@ height=154
 <indicator>
 name=main
 <object>
+type=22
+object_name=Arrow 26952
+period_flags=0
+create_time=1350592840
+color=255
+weight=1
+background=1
+symbol_code=242
+time_0=1350601200
+value_0=1.307054
+</object>
+<object>
+type=22
+object_name=Arrow 26957
+period_flags=0
+create_time=1350592845
+color=255
+weight=1
+background=1
+symbol_code=241
+time_0=1350604800
+value_0=1.304517
+</object>
+<object>
 type=2
 object_name=DT_GO_ARCHIVE_SWITCH
 period_flags=0
@@ -52,6 +76,36 @@ value_0=0.000000
 time_1=1349222400
 value_1=0.010000
 ray=0
+</object>
+<object>
+type=10
+object_name=DT_GO_fibo_1
+period_flags=0
+create_time=1350592813
+color=255
+style=2
+weight=1
+background=1
+color2=2139610
+style2=0
+weight2=1
+time_0=1350266400
+value_0=1.289070
+time_1=1350504000
+value_1=1.313930
+levels_ray=1
+level_0=1.0000
+description_0=F1 100 | 2486
+level_1=0.6180
+description_1=F1 61.8 | 1536
+level_2=0.5000
+description_2=F1 50 | 1243
+level_3=0.3820
+description_3=F1 38.2 | 950
+level_4=0.2360
+description_4=F1 23.6 | 587
+level_5=0.0000
+description_5=F1 0.0
 </object>
 <object>
 type=2
@@ -150,22 +204,6 @@ value_1=1.280360
 ray=1
 </object>
 <object>
-type=2
-object_name=DT_GO_tLine_sig_1350075943
-period_flags=0
-create_time=1350068743
-description=2012.10.12 21:05:43
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1346414400
-value_0=1.263750
-time_1=1348761600
-value_1=1.282840
-ray=1
-</object>
-<object>
 type=21
 object_name=DT_GO_tLine_sig_1350412425
 period_flags=0
@@ -228,18 +266,6 @@ value_1=1.282510
 ray=1
 </object>
 <object>
-type=1
-object_name=Horizontal Line 1350413222
-period_flags=0
-create_time=1350406022
-description=2012.10.16 18:47:02
-color=9408444
-style=0
-weight=1
-background=1
-value_0=1.307130
-</object>
-<object>
 type=2
 object_name=Trendline 1349900387
 period_flags=0
@@ -273,18 +299,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 1350425697
+object_name=Trendline 1350600077
 period_flags=0
-create_time=1350418497
-description=2012.10.16 22:14:57
+create_time=1350592877
+description=2012.10.18 22:41:17
 color=9408444
 style=0
-weight=1
+weight=2
 background=1
-time_0=1348819200
-value_0=1.295950
-time_1=1350043200
-value_1=1.299160
+time_0=1332806400
+value_0=1.338530
+time_1=1347840000
+value_1=1.317170
 ray=1
 </object>
 <object>
