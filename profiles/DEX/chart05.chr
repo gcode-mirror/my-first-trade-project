@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=240
-leftpos=2096
+leftpos=1820
 digits=5
 scale=4
 graph=2
@@ -38,10 +38,47 @@ height=154
 <indicator>
 name=main
 <object>
+type=22
+object_name=#59621059 buy limit 0.10 GBPUSD-Pro at 1.59959
+period_flags=0
+create_time=1350662139
+description=1.61783 (1349909683)
+color=42495
+weight=1
+background=0
+symbol_code=1
+time_0=1350665734
+value_0=1.599590
+</object>
+<object>
+type=22
+object_name=#59621059 buy limit 0.10 GBPUSD-Pro at 1.59959 stop loss at 1.5
+period_flags=0
+create_time=1350662139
+color=255
+weight=1
+background=0
+symbol_code=4
+time_0=1350665734
+value_0=1.598650
+</object>
+<object>
+type=22
+object_name=#59621059 buy limit 0.10 GBPUSD-Pro at 1.59959 take profit at 1
+period_flags=0
+create_time=1350662139
+color=16711680
+weight=1
+background=0
+symbol_code=4
+time_0=1350665734
+value_0=1.606430
+</object>
+<object>
 type=2
 object_name=DT_GO_tLine_res_1349377612
 period_flags=0
-create_time=1350593117
+create_time=1350643527
 color=9639167
 style=0
 weight=1
@@ -56,7 +93,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_res_1349909658
 period_flags=0
-create_time=1350593117
+create_time=1350643527
 color=9639167
 style=0
 weight=1
@@ -71,7 +108,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1349394456
 period_flags=0
-create_time=1350593117
+create_time=1350643527
 color=15570276
 style=0
 weight=1
@@ -86,7 +123,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1350259344
 period_flags=0
-create_time=1350593117
+create_time=1350643527
 color=15570276
 style=0
 weight=1
@@ -101,7 +138,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sup_1349909683
 period_flags=0
-create_time=1350593117
+create_time=1350643527
 color=3329330
 style=0
 weight=1
