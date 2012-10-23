@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=10080
-leftpos=661
+period=240
+leftpos=3647
 digits=5
 scale=4
 graph=1
@@ -87,7 +87,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1350059518
+create_time=1350979874
 color=255
 style=2
 weight=1
@@ -95,21 +95,21 @@ background=1
 color2=8388608
 style2=0
 weight2=1
-time_0=1349668800
-value_0=1.014900
-time_1=1349956800
-value_1=1.029340
+time_0=1350259200
+value_0=1.020200
+time_1=1350561600
+value_1=1.041130
 levels_ray=1
 level_0=1.0000
-description_0=F2 100 | 1444
+description_0=F2 100 | 2093
 level_1=0.6180
-description_1=F2 61.8 | 892
+description_1=F2 61.8 | 1293
 level_2=0.5000
-description_2=F2 50 | 722
+description_2=F2 50 | 1047
 level_3=0.3820
-description_3=F2 38.2 | 552
+description_3=F2 38.2 | 800
 level_4=0.2360
-description_4=F2 23.6 | 341
+description_4=F2 23.6 | 494
 level_5=0.0000
 description_5=F2 0.0
 </object>
@@ -227,38 +227,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sig_1349296582
-period_flags=0
-create_time=1349872987
-description=2012.10.03 20:36:22
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1348660800
-value_0=1.032830
-time_1=1349409600
-value_1=1.027440
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sig_1350065248
-period_flags=0
-create_time=1350058048
-description=2012.10.12 18:07:28
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1349409600
-value_0=1.027440
-time_1=1349942400
-value_1=1.029340
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1350230888
 period_flags=0
 create_time=1350223689
@@ -267,17 +235,17 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1346241600
-value_0=1.039780
-time_1=1348660800
-value_1=1.032830
+time_0=1348660800
+value_0=1.032830
+time_1=1349942400
+value_1=1.029340
 ray=1
 </object>
 <object>
 type=2
 object_name=DT_GO_tLine_sig_1350599711
 period_flags=0
-create_time=1350592511
+create_time=1351027814
 description=2012.10.18 22:35:11
 color=15570276
 style=0
@@ -287,6 +255,22 @@ time_0=1347624000
 value_0=1.062450
 time_1=1350547200
 value_1=1.041130
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_tLine_sig_1351030796
+period_flags=0
+create_time=1351023596
+description=2012.10.23 22:19:56
+color=15570276
+style=0
+weight=2
+background=1
+time_0=1317686400
+value_0=0.938740
+time_1=1338508800
+value_1=0.956190
 ray=1
 </object>
 <object>
@@ -318,17 +302,62 @@ value_0=1.292200
 </object>
 <object>
 type=2
-object_name=Trendline 1091
+object_name=Trendline 20719
 period_flags=0
-create_time=1349387331
+create_time=1350979823
 color=9408444
 style=0
 weight=1
 background=1
-time_0=1347624000
-value_0=1.062450
-time_1=1348790400
-value_1=1.047380
+time_0=1348790400
+value_0=1.047380
+time_1=1350547200
+value_1=1.041130
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 20735
+period_flags=0
+create_time=1350979839
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1349308800
+value_0=1.018180
+time_1=1349942400
+value_1=1.029340
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 37134
+period_flags=0
+create_time=1350996238
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1349668800
+value_0=1.014900
+time_1=1350259200
+value_1=1.020200
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 64507
+period_flags=0
+create_time=1351023611
+color=9408444
+style=0
+weight=3
+background=1
+time_0=1225065600
+value_0=0.600400
+time_1=1338508800
+value_1=0.956190
 ray=1
 </object>
 </indicator>

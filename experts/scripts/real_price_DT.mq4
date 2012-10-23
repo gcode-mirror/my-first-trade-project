@@ -24,6 +24,12 @@ int start(){
     name = ObjectName(i);
     if( StringSubstr( name, 0, 17 ) == "DT_GO_real_price_" ){
       removeObjects( "real_price", "GO" );
+      if( ObjectFind( "DT_GO_RULER_SWITCH" ) == -1 ){
+        for( i = 0; i < len; i++ ){
+          name = ObjectName(i);
+          ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
+        }
+      }
       return (0);
     }
   }
@@ -49,6 +55,9 @@ int start(){
           continue;
         }
         lines[idx][0] = name;
+        if( ObjectFind( "DT_GO_RULER_SWITCH" ) == -1 ){
+          ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
+        }
         idx++;
       }
     }
