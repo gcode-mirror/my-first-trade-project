@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=1
-leftpos=29078
+period=15
+leftpos=3748
 digits=5
 scale=4
 graph=1
@@ -256,22 +256,6 @@ value_1=1.313930
 ray=1
 </object>
 <object>
-type=2
-object_name=DT_GO_tLine_sig_1350982980
-period_flags=0
-create_time=1350975780
-description=2012.10.23 09:03:00
-color=15570276
-style=0
-weight=2
-background=1
-time_0=1338508800
-value_0=1.228800
-time_1=1349049600
-value_1=1.280360
-ray=1
-</object>
-<object>
 type=21
 object_name=DT_GO_tLine_sig_1351002116
 period_flags=0
@@ -296,6 +280,22 @@ style=0
 weight=1
 background=1
 value_0=1.300000
+</object>
+<object>
+type=2
+object_name=DT_GO_tLine_sig_1351002428
+period_flags=0
+create_time=1351082383
+description=2012.10.23 14:27:08
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1346832000
+value_0=1.250160
+time_1=1349913600
+value_1=1.282510
+ray=1
 </object>
 <object>
 type=2
@@ -331,18 +331,18 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sup_1351002428
+object_name=DT_GO_tLine_sup_1350982980
 period_flags=0
-create_time=1351027695
-description=2012.10.23 14:27:08 /\ /\ /\ /\ /\
+create_time=1351067502
+description=2012.10.23 09:03:00 /\ /\ /\ /\ /\
 color=3329330
 style=0
-weight=1
+weight=2
 background=1
-time_0=1346832000
-value_0=1.250160
-time_1=1349913600
-value_1=1.282510
+time_0=1338508800
+value_0=1.228800
+time_1=1349049600
+value_1=1.280360
 ray=1
 </object>
 <object>
@@ -375,22 +375,6 @@ time_0=1275868800
 value_0=1.187500
 time_1=1326412800
 value_1=1.262440
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1351002704
-period_flags=0
-create_time=1350995504
-description=2012.10.23 14:31:44
-color=9408444
-style=0
-weight=2
-background=1
-time_0=1338508800
-value_0=1.228800
-time_1=1349049600
-value_1=1.280360
 ray=1
 </object>
 <object>
