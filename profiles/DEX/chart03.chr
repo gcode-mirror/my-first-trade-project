@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=1775
+leftpos=3652
 digits=5
 scale=4
 graph=1
@@ -87,7 +87,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1350979874
+create_time=1351102552
 color=255
 style=2
 weight=1
@@ -95,21 +95,21 @@ background=1
 color2=8388608
 style2=0
 weight2=1
-time_0=1350259200
-value_0=1.020200
-time_1=1350561600
-value_1=1.041130
+time_0=1350547200
+value_0=1.041130
+time_1=1351022400
+value_1=1.023560
 levels_ray=1
 level_0=1.0000
-description_0=F2 100 | 2093
+description_0=F2 100 | 1757
 level_1=0.6180
-description_1=F2 61.8 | 1293
+description_1=F2 61.8 | 1086
 level_2=0.5000
-description_2=F2 50 | 1047
+description_2=F2 50 | 879
 level_3=0.3820
-description_3=F2 38.2 | 800
+description_3=F2 38.2 | 671
 level_4=0.2360
-description_4=F2 23.6 | 494
+description_4=F2 23.6 | 415
 level_5=0.0000
 description_5=F2 0.0
 </object>
@@ -286,6 +286,21 @@ value_0=1.292200
 </object>
 <object>
 type=2
+object_name=Trendline 10145
+period_flags=0
+create_time=1351100321
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1346889600
+value_0=1.016430
+time_1=1349942400
+value_1=1.029340
+ray=1
+</object>
+<object>
+type=2
 object_name=Trendline 20719
 period_flags=0
 create_time=1350979823
@@ -323,10 +338,10 @@ color=9408444
 style=0
 weight=1
 background=1
-time_0=1349668800
-value_0=1.014900
-time_1=1350259200
-value_1=1.020200
+time_0=1350259200
+value_0=1.020200
+time_1=1351008000
+value_1=1.023560
 ray=1
 </object>
 <object>
