@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
 period=60
-leftpos=1989
+leftpos=2071
 digits=5
 scale=4
 graph=1
@@ -219,22 +219,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_res_1350259344
-period_flags=0
-create_time=1351027752
-description=2012.10.15 00:02:24 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=2
-background=1
-time_0=1313712000
-value_0=1.661810
-time_1=1335744000
-value_1=1.630130
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1349377612
 period_flags=0
 create_time=1351100240
@@ -298,6 +282,22 @@ value_1=1.577740
 ray=1
 </object>
 <object>
+type=2
+object_name=DT_GO_tLine_sup_1350259344
+period_flags=0
+create_time=1351166891
+description=2012.10.15 00:02:24 /\ /\ /\ /\ /\
+color=3329330
+style=0
+weight=2
+background=1
+time_0=1313712000
+value_0=1.661810
+time_1=1335744000
+value_1=1.630130
+ray=1
+</object>
+<object>
 type=10
 object_name=Fibo 36272
 period_flags=0
@@ -346,6 +346,36 @@ time_0=1326412800
 value_0=1.523310
 time_1=1340150400
 value_1=1.577740
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 4975
+period_flags=0
+create_time=1351160687
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1348804800
+value_0=1.627200
+time_1=1350475200
+value_1=1.617830
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 4993
+period_flags=0
+create_time=1351160705
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1347552000
+value_0=1.607190
+time_1=1349827200
+value_1=1.597570
 ray=1
 </object>
 <object>
