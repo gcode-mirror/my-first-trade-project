@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=60
-leftpos=2014
+period=240
+leftpos=1791
 digits=5
 scale=4
 graph=1
@@ -56,7 +56,7 @@ ray=0
 <object>
 type=10
 object_name=DT_GO_fibo_1
-period_flags=-1
+period_flags=0
 create_time=1349902016
 color=255
 style=2
@@ -86,7 +86,7 @@ description_5=F1 0.0
 <object>
 type=10
 object_name=DT_GO_fibo_2
-period_flags=-1
+period_flags=0
 create_time=1351187691
 color=255
 style=2
@@ -227,22 +227,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sig_1350230888
-period_flags=0
-create_time=1350223689
-description=2012.10.14 16:08:08
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1348660800
-value_0=1.032830
-time_1=1349942400
-value_1=1.029340
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1350599711
 period_flags=0
 create_time=1351027814
@@ -295,6 +279,22 @@ weight=1
 background=1
 time_0=1346889600
 value_0=1.016430
+time_1=1349942400
+value_1=1.029340
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1351240024
+period_flags=0
+create_time=1351232824
+description=2012.10.26 08:27:04
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1348660800
+value_0=1.032830
 time_1=1349942400
 value_1=1.029340
 ray=1
