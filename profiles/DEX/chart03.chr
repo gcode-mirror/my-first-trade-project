@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=1791
+leftpos=3666
 digits=5
 scale=4
 graph=1
@@ -219,10 +219,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1342094400
-value_0=1.010030
-time_1=1346889600
-value_1=1.016430
+time_0=1346889600
+value_0=1.016430
+time_1=1349668800
+value_1=1.014900
 ray=1
 </object>
 <object>
@@ -258,6 +258,22 @@ value_1=0.956190
 ray=1
 </object>
 <object>
+type=2
+object_name=DT_GO_tLine_sig_1351288668
+period_flags=0
+create_time=1351281468
+description=2012.10.26 21:57:48
+color=15570276
+style=0
+weight=2
+background=1
+time_0=1344470400
+value_0=1.061310
+time_1=1350518400
+value_1=1.041130
+ray=1
+</object>
+<object>
 type=1
 object_name=Horizontal Line 6335
 period_flags=0
@@ -267,67 +283,6 @@ style=0
 weight=1
 background=0
 value_0=1.292200
-</object>
-<object>
-type=2
-object_name=Trendline 10145
-period_flags=0
-create_time=1351100321
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1346889600
-value_0=1.016430
-time_1=1349942400
-value_1=1.029340
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1351240024
-period_flags=0
-create_time=1351232824
-description=2012.10.26 08:27:04
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1348660800
-value_0=1.032830
-time_1=1349942400
-value_1=1.029340
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 20719
-period_flags=0
-create_time=1350979823
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1348790400
-value_0=1.047380
-time_1=1350547200
-value_1=1.041130
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 20735
-period_flags=0
-create_time=1350979839
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1349308800
-value_0=1.018180
-time_1=1349942400
-value_1=1.029340
-ray=1
 </object>
 <object>
 type=2
