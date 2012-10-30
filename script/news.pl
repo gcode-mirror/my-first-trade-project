@@ -107,7 +107,9 @@ sub process{
 			}
 			$ts = timelocal( 0, $2, $tmp-1, $day, $month, $year ) + $TIMEZONE;
       
-		}elsif( $lines[1] =~ /(Day \d+|All Day|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
+		}elsif( $lines[1] =~ /(Postponed|Cancelled)/ ){
+      next;
+		}elsif( $lines[1] =~ /(Day \d+|All Day|Postponed|Cancelled|Tentative|\d{1,2}[a-z]{2}-\d{1,2}[a-z]{2})/ ){
 			$ts = timelocal( 0, 0, 0, $day, $month, $year );
       $prio = 0;
 		}else{
