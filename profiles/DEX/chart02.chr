@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=15
-leftpos=3750
+period=1
+leftpos=33067
 digits=5
 scale=4
 graph=1
@@ -39,27 +39,27 @@ height=154
 name=main
 <object>
 type=22
-object_name=Arrow 12047
+object_name=Arrow 50199
 period_flags=0
-create_time=1351757583
+create_time=1352057879
 color=255
 weight=1
 background=1
 symbol_code=241
-time_0=1351758000
-value_0=1.615342
+time_0=1351893600
+value_0=1.602082
 </object>
 <object>
 type=22
-object_name=Arrow 12058
+object_name=Arrow 50204
 period_flags=0
-create_time=1351757594
+create_time=1352057884
 color=255
 weight=1
 background=1
 symbol_code=242
-time_0=1351771200
-value_0=1.623065
+time_0=1351908000
+value_0=1.605087
 </object>
 <object>
 type=2
@@ -111,7 +111,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1351201219
+create_time=1352057865
 color=255
 style=2
 weight=1
@@ -119,21 +119,21 @@ background=1
 color2=8388608
 style2=0
 weight2=1
-time_0=1351008000
-value_0=1.591330
-time_1=1351180800
-value_1=1.614340
+time_0=1351756800
+value_0=1.617490
+time_1=1351886400
+value_1=1.600730
 levels_ray=1
 level_0=1.0000
-description_0=F2 100 | 2301
+description_0=F2 100 | 1676
 level_1=0.6180
-description_1=F2 61.8 | 1422
+description_1=F2 61.8 | 1036
 level_2=0.5000
-description_2=F2 50 | 1151
+description_2=F2 50 | 838
 level_3=0.3820
-description_3=F2 38.2 | 879
+description_3=F2 38.2 | 640
 level_4=0.2360
-description_4=F2 23.6 | 543
+description_4=F2 23.6 | 396
 level_5=0.0000
 description_5=F2 0.0
 </object>
@@ -311,37 +311,6 @@ time_0=1349827200
 value_0=1.597570
 time_1=1351526400
 value_1=1.600640
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 11920
-period_flags=0
-create_time=1351757456
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1349827200
-value_0=1.597570
-time_1=1351166400
-value_1=1.614340
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1351207715
-period_flags=0
-create_time=1351200515
-description=2012.10.25 23:28:35
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1346832000
-value_0=1.582550
-time_1=1349827200
-value_1=1.597570
 ray=1
 </object>
 <object>
