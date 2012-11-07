@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=15
-leftpos=4565
+period=240
+leftpos=1880
 digits=5
 scale=4
 graph=1
@@ -148,22 +148,6 @@ value_1=0.010000
 ray=0
 </object>
 <object>
-type=2
-object_name=DT_GO_tLine_res_1352061056
-period_flags=0
-create_time=1352145953
-description=2012.11.04 20:30:56 \/ \/ \/ \/ \/
-color=9639167
-style=0
-weight=2
-background=1
-time_0=1339891200
-value_0=1.274770
-time_1=1349049600
-value_1=1.280360
-ray=1
-</object>
-<object>
 type=21
 object_name=DT_GO_tLine_sig_1350412425
 period_flags=0
@@ -303,6 +287,22 @@ time_0=1349049600
 value_0=1.280360
 time_1=1349913600
 value_1=1.282510
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_tLine_sig_1352061056
+period_flags=0
+create_time=1352272909
+description=2012.11.04 20:30:56
+color=15570276
+style=0
+weight=2
+background=1
+time_0=1339891200
+value_0=1.274770
+time_1=1349049600
+value_1=1.280360
 ray=1
 </object>
 <object>
