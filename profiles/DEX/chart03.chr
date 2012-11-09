@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=1440
-leftpos=1290
+period=240
+leftpos=1828
 digits=5
 scale=4
 graph=1
@@ -56,7 +56,7 @@ ray=0
 <object>
 type=10
 object_name=DT_GO_fibo_1
-period_flags=-1
+period_flags=0
 create_time=1349902016
 color=255
 style=2
@@ -86,7 +86,7 @@ description_5=F1 0.0
 <object>
 type=10
 object_name=DT_GO_fibo_2
-period_flags=-1
+period_flags=0
 create_time=1352299557
 color=255
 style=2
