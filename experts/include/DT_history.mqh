@@ -251,9 +251,16 @@ void syncTradeCharts( string& line_str[][2], double &line_data[][4] ){
 		file_name = StringConcatenate( getSymbol(), "_tLines.csv" );
 		global_name = StringConcatenate( getSymbol(), "_tLines_lastMod.csv" );
 	}
-	int i = 0, len = ArrayRange( line_str, 0 );
+	int i, j, len = ArrayRange( line_str, 0 );
 	string out = "";
-	for( ; i < len; i++ ){
+	for( i = 0; i < len; i++ ){
+    for( j = i + 1; j < len; j++ ){
+      if( line_str[i][0] == line_str[j][0] && line_str[i][1] == line_str[j][1] && line_str[i][2] == line_str[j][2] && line_str[i][3] == line_str[j][3] ){
+        ObjectDelete( line_str[j][0] );
+        Alert( Symbol()+" error duplicated line removed: "+line_str[i][0] );
+        return;
+      }
+    }
 		out = StringConcatenate(out, line_str[i][0], ";", DoubleToStr(line_data[i][0],0), ";", DoubleToStr(line_data[i][1],Digits), ";", DoubleToStr(line_data[i][2],0), ";", DoubleToStr(line_data[i][3],Digits), ";", ObjectGet(line_str[i][0],OBJPROP_COLOR), ";", ObjectType(line_str[i][0]),"\r\n" );
 	}
 

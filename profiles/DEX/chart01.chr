@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=2448
+period=240
+leftpos=4637
 digits=5
 scale=4
 graph=1
@@ -319,9 +319,39 @@ ray=1
 </object>
 <object>
 type=2
-object_name=Trendline 38988
+object_name=Trendline 18216
 period_flags=0
-create_time=1352308812
+create_time=1352484648
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1351238400
+value_0=1.288240
+time_1=1352260800
+value_1=1.287610
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 26022
+period_flags=0
+create_time=1352492454
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1351152000
+value_0=1.302300
+time_1=1352188800
+value_1=1.276340
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 3984
+period_flags=0
+create_time=1352667024
 color=9408444
 style=0
 weight=1
