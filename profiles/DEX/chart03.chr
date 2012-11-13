@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=3733
+leftpos=1866
 digits=5
 scale=4
 graph=1
@@ -263,21 +263,6 @@ time_0=1351872000
 value_0=1.033090
 time_1=1352462400
 value_1=1.035910
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 4194
-period_flags=0
-create_time=1352667234
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1350259200
-value_0=1.020200
-time_1=1351800000
-value_1=1.041910
 ray=1
 </object>
 <object>
