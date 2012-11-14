@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=4649
+leftpos=1904
 digits=5
 scale=4
 graph=1
@@ -106,6 +106,36 @@ level_4=0.2360
 description_4=F1 23.6 | 507
 level_5=0.0000
 description_5=F1 0.0
+</object>
+<object>
+type=10
+object_name=DT_GO_fibo_2
+period_flags=0
+create_time=1352900896
+color=255
+style=2
+weight=1
+background=1
+color2=8388608
+style2=0
+weight2=1
+time_0=1352700000
+value_0=1.273870
+time_1=1352808000
+value_1=1.266120
+levels_ray=1
+level_0=1.0000
+description_0=F2 100 | 775
+level_1=0.6180
+description_1=F2 61.8 | 479
+level_2=0.5000
+description_2=F2 50 | 388
+level_3=0.3820
+description_3=F2 38.2 | 296
+level_4=0.2360
+description_4=F2 23.6 | 183
+level_5=0.0000
+description_5=F2 0.0
 </object>
 <object>
 type=2
@@ -31605,17 +31635,6 @@ value_0=1.288240
 time_1=1352260800
 value_1=1.287610
 ray=1
-</object>
-<object>
-type=0
-object_name=Vertical Line 48714
-period_flags=0
-create_time=1352842826
-color=255
-style=0
-weight=1
-background=0
-time_0=1352289600
 </object>
 </indicator>
 <indicator>
