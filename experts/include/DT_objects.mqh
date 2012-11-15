@@ -51,7 +51,7 @@ void createObjectsIcon( string text, bool is_on = true ){
   static int icon_nr = 0;
   static int xpos = 0;
   if( icon_nr == 0 ){
-    xpos = 15 * nrOfIcons() + (StringLen(ObjectDescription("DT_BO_hud_info")) * 7) + 260;
+    xpos = 15 * nrOfIcons() + (StringLen(ObjectDescription("DT_BO_hud_info")) * 7) + 270;
   }
   int x_cord = xpos + ( icon_nr * 20 );
   

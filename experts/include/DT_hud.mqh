@@ -40,6 +40,25 @@ void initHud(){
   ObjectSet( name, OBJPROP_XDISTANCE, xpos - 14 );
   ObjectSet( name, OBJPROP_YDISTANCE, 0 );
   ObjectSet( name, OBJPROP_BACK, true);
+  
+  xpos = xpos + 127;
+  
+  name = "DT_BO_hud_used_tline_txt";
+  ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( name, OBJPROP_CORNER, 0 );
+  ObjectSet( name, OBJPROP_XDISTANCE, xpos );
+  ObjectSet( name, OBJPROP_YDISTANCE, 2 );
+  ObjectSet( name, OBJPROP_BACK, true);
+  ObjectSetText( name, "0", 10, "Consolas", DarkGray );
+  
+  
+  name = "DT_BO_hud_used_tline_bg";
+  ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
+  ObjectSet( name, OBJPROP_CORNER, 0 );
+  ObjectSet( name, OBJPROP_XDISTANCE, xpos - 5 );
+  ObjectSet( name, OBJPROP_YDISTANCE, 0 );
+  ObjectSet( name, OBJPROP_BACK, true);
+  ObjectSetText( name, "g", 13, "Webdings", Gainsboro );
 }
 
 
@@ -49,8 +68,11 @@ void startHud(){
     st_timer = GetTickCount() + 2000;
     
     static double my_spread = -1.0;
+    static string symb = "";
+    
     if( my_spread == -1.0 ){
       my_spread = getSymbolData( SPREAD ) * MathPow( 10, Digits );
+      symb = Symbol();
       initHud();
     }
     
@@ -79,6 +101,36 @@ void startHud(){
     }else{
       ObjectSetText( "DT_BO_hud_expert_info", "Trading is OFF", 10, "Consolas", DimGray );
       ObjectSetText( "DT_BO_hud_expert_bg", "gggggggg", 12, "Webdings", Gainsboro );
+    }
+  
+    int i = 0, len = OrdersHistoryTotal(), j, len2 = ObjectsTotal(), magic, nr = 0;
+    string name, tmp;
+    for( ; i < len; i++ ) {
+      if( OrderSelect( i, SELECT_BY_POS, MODE_HISTORY ) ) {
+        if( OrderSymbol() == symb ) {
+          magic = OrderMagicNumber();
+          if( magic > 1000 ){
+            tmp = ""+magic;
+            for( j = 0; j < len2; j++ ){
+              name = ObjectName(j);
+              if( StringSubstr( name, 16, 10 ) == tmp ){
+                if( ObjectGet( name, OBJPROP_COLOR ) != Black ){
+                  ObjectSet( name, OBJPROP_COLOR, Black );
+                }
+                nr++;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    if( nr > 0 ){
+      ObjectSetText( "DT_BO_hud_used_tline_txt", ""+nr, 10, "Consolas", White );
+      ObjectSetText( "DT_BO_hud_used_tline_bg", "g", 13, "Webdings", Red );
+    }else{
+      ObjectSetText( "DT_BO_hud_used_tline_txt", "0", 10, "Consolas", DarkGray );
+      ObjectSetText( "DT_BO_hud_used_tline_bg", "g", 13, "Webdings", Gainsboro );
     }
   }
 }
