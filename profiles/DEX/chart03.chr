@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=1440
-leftpos=1722
+period=240
+leftpos=3758
 digits=5
 scale=4
 graph=1
@@ -87,7 +87,7 @@ description_5=F1 0.0
 type=10
 object_name=DT_GO_fibo_2
 period_flags=0
-create_time=1353019829
+create_time=1353278450
 color=255
 style=2
 weight=1
@@ -97,19 +97,19 @@ style2=0
 weight2=1
 time_0=1352880000
 value_0=1.045830
-time_1=1353009600
-value_1=1.030670
+time_1=1353096000
+value_1=1.028720
 levels_ray=1
 level_0=1.0000
-description_0=F2 100 | 1516
+description_0=F2 100 | 1711
 level_1=0.6180
-description_1=F2 61.8 | 937
+description_1=F2 61.8 | 1057
 level_2=0.5000
-description_2=F2 50 | 758
+description_2=F2 50 | 856
 level_3=0.3820
-description_3=F2 38.2 | 579
+description_3=F2 38.2 | 654
 level_4=0.2360
-description_4=F2 23.6 | 358
+description_4=F2 23.6 | 404
 level_5=0.0000
 description_5=F2 0.0
 </object>
@@ -254,18 +254,6 @@ value_1=1.035910
 ray=1
 </object>
 <object>
-type=1
-object_name=DT_GO_tLine_sig_1353058209
-period_flags=0
-create_time=1353054609
-description=2012.11.16 09:30:09
-color=15570276
-style=0
-weight=1
-background=1
-value_0=1.036460
-</object>
-<object>
 type=2
 object_name=DT_GO_tLine_sml_1352711645
 period_flags=0
@@ -298,6 +286,22 @@ value_1=1.014900
 ray=1
 </object>
 <object>
+type=2
+object_name=DT_GO_tLine_sml_1353282085
+period_flags=0
+create_time=1353278489
+description=2012.11.18 23:41:29
+color=16711935
+style=0
+weight=1
+background=1
+time_0=1351872000
+value_0=1.033090
+time_1=1352462400
+value_1=1.035910
+ray=1
+</object>
+<object>
 type=1
 object_name=Horizontal Line 6335
 period_flags=0
@@ -319,8 +323,23 @@ weight=1
 background=1
 time_0=1351008000
 value_0=1.023560
-time_1=1352995200
-value_1=1.030670
+time_1=1353081600
+value_1=1.028720
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 20957
+period_flags=0
+create_time=1353273821
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1352260800
+value_0=1.048010
+time_1=1352880000
+value_1=1.045830
 ray=1
 </object>
 <object>
@@ -351,21 +370,6 @@ time_0=1349942400
 value_0=1.029340
 time_1=1351872000
 value_1=1.033090
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 4180
-period_flags=0
-create_time=1352667220
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1351872000
-value_0=1.033090
-time_1=1352462400
-value_1=1.035910
 ray=1
 </object>
 <object>

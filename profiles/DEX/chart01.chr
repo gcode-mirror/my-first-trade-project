@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=1956
+leftpos=4668
 digits=5
 scale=4
 graph=1
@@ -241,22 +241,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sig_1351289634
-period_flags=0
-create_time=1353015632
-description=2012.10.26 22:13:54
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1349913600
-value_0=1.282510
-time_1=1352188800
-value_1=1.276340
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1351289713
 period_flags=0
 create_time=1351494876
@@ -293,26 +277,10 @@ color=15570276
 style=0
 weight=1
 background=1
-time_0=1351152000
-value_0=1.302300
-time_1=1352260800
-value_1=1.287610
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sig_1352798572
-period_flags=0
-create_time=1353016042
-description=2012.11.15 22:47:22
-color=15570276
-style=0
-weight=1
-background=1
-time_0=1351238400
-value_0=1.288240
-time_1=1352188800
-value_1=1.276340
+time_0=1352260800
+value_0=1.287610
+time_1=1352980800
+value_1=1.280170
 ray=1
 </object>
 <object>
@@ -343,22 +311,6 @@ weight=2
 background=1
 time_0=1339891200
 value_0=1.274770
-time_1=1349049600
-value_1=1.280360
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sml_1352420184
-period_flags=0
-create_time=1353019716
-description=2012.11.15 23:48:36
-color=0
-style=0
-weight=2
-background=1
-time_0=1334534400
-value_0=1.299510
 time_1=1349049600
 value_1=1.280360
 ray=1
@@ -396,16 +348,36 @@ value_1=1.302060
 ray=1
 </object>
 <object>
-type=1
-object_name=DT_GO_tLine_sml_1353107854
+type=2
+object_name=DT_GO_tLine_sml_1353277194
 period_flags=0
-create_time=1353104265
-description=2012.11.16 23:17:45
+create_time=1353278350
+description=2012.11.18 23:39:10
 color=16711935
+style=0
+weight=2
+background=1
+time_0=1334534400
+value_0=1.299510
+time_1=1349049600
+value_1=1.280360
+ray=1
+</object>
+<object>
+type=2
+object_name=Trendline 1353277340
+period_flags=0
+create_time=1353273740
+description=2012.11.18 22:22:20
+color=9408444
 style=0
 weight=1
 background=1
-value_0=1.277965
+time_0=1352793600
+value_0=1.266120
+time_1=1353067200
+value_1=1.269030
+ray=1
 </object>
 <object>
 type=2
