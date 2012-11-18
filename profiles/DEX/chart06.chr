@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=1944
+leftpos=1926
 digits=5
 scale=4
 graph=2
@@ -20,7 +20,7 @@ window_left=175
 window_top=175
 window_right=1467
 window_bottom=720
-window_type=1
+window_type=3
 background_color=16777215
 foreground_color=0
 barup_color=0

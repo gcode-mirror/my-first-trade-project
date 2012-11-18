@@ -102,7 +102,7 @@ int start(){
   
   double tLine_price, tp, sl, op, fibo_100;
   string comment = "";
-  int i = 0, o_type, len = OrdersTotal(), magic, ticket, hist_ticket;
+  int i = 0, o_type, len = OrdersTotal(), magic, ticket, main_ticket;
   // #####################################################  modify Positions  ######################################################
   
   static double st_mod_timer = 0.0;
@@ -136,14 +136,16 @@ int start(){
             }
             
           }else if( o_type > 3 ){
-            hist_ticket = StrToInteger( OrderComment() );
-            if( hist_ticket != 0 ){
-/* !!!*/      if( OrderSelect( hist_ticket, SELECT_BY_TICKET, MODE_HISTORY ) ){
+            main_ticket = StrToInteger( OrderComment() );
+            if( main_ticket != 0 ){
+/* !!!*/      if( OrderSelect( main_ticket, SELECT_BY_TICKET, MODE_HISTORY ) ){
                 if( OrderMagicNumber() == magic ){
-                  if( OrderProfit() > 0.0 ){
+                  if( OrderProfit() > 0.0 && OrderCloseTime() != 0.0 ){
                     OrderDelete( ticket );
-                    errorCheck( StringConcatenate( Symbol()," close safety position ticket id :", hist_ticket, " magic:", magic, " closed ticket:", ticket ) );
-                    log( StringConcatenate( Symbol()," close safety position ticket id :", hist_ticket, " magic:", magic, " closed ticket:", ticket ), 8.0, magic );
+                    errorCheck( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ) );
+                    log( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ), 8.0, magic );
+										
+										Alert(OrderTicket()+"  OrderComment:"+ OrderComment()+" OrderCloseTime:"+OrderCloseTime()+" OrderType:"+OrderType()+" OrderProfit:"+OrderProfit() );
                     continue;
                   }
                 }
@@ -172,7 +174,7 @@ int start(){
     RefreshRates();
     if( st_tLine[idx][TL_STATE] == "sml" ){
       if( peekIsNotEnoughFar( is_buy, tLine_price, st_max_dist ) ){
-        log( StringConcatenate( Symbol()," Closest Peek is not enought far: ",st_tLine[idx][TL_NAME] ), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );
+        log( StringConcatenate( Symbol()," Closest Peek is not enought far: ",st_tLine[idx][TL_NAME]," tLine_price:", tLine_price, " is_buy", is_buy ), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );
         return(0);
       }
     
@@ -227,7 +229,7 @@ int start(){
         tp = NormalizeDouble( op + st_fail_tp, Digits );
         sl = NormalizeDouble( op - st_fail_sl, Digits );
       }
-      comment = ticket;
+      comment = ticket+"";
       OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), TimeCurrent() + EXPIRATION_TIME, Blue );
       
     }
@@ -309,13 +311,13 @@ double getSmallTakeProfit( bool is_buy, double &tLine_price, string& st_tLine[][
 bool peekIsNotEnoughFar( bool is_buy, double &tLine_price, double &st_max_dist ){
   int i = 0;
   if( is_buy ){
-    for( ;i < 40; i++ ){
+    for( ;i < 50; i++ ){
       if( iHigh( NULL, PERIOD_M5, i ) - tLine_price > st_max_dist ){
         return ( false );
       }
     }
   }else{
-    for( ;i < 40; i++ ){
+    for( ;i < 50; i++ ){
       if( tLine_price - iLow( NULL, PERIOD_M5, i )  > st_max_dist ){
         return ( false );
       }
