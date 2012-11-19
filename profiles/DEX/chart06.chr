@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
 period=240
-leftpos=1950
+leftpos=3879
 digits=5
 scale=4
 graph=2
@@ -38,84 +38,10 @@ height=154
 <indicator>
 name=main
 <object>
-type=22
-object_name=#61309557 sell limit 0.10 AUDUSD-Pro at 1.03939
-period_flags=0
-create_time=1353321128
-description=(1353282085)
-color=42495
-weight=1
-background=0
-symbol_code=1
-time_0=1353321122
-value_0=1.039390
-</object>
-<object>
-type=22
-object_name=#61309557 sell limit 0.10 AUDUSD-Pro at 1.03939 stop loss at 1.
-period_flags=0
-create_time=1353321128
-color=255
-weight=1
-background=0
-symbol_code=4
-time_0=1353321122
-value_0=1.040340
-</object>
-<object>
-type=22
-object_name=#61309557 sell limit 0.10 AUDUSD-Pro at 1.03939 take profit at 
-period_flags=0
-create_time=1353321128
-color=16711680
-weight=1
-background=0
-symbol_code=4
-time_0=1353321122
-value_0=1.038340
-</object>
-<object>
-type=22
-object_name=#61309566 buy stop 0.10 AUDUSD-Pro at 1.04034
-period_flags=0
-create_time=1353321129
-description=61309557 (1353282085)
-color=16711680
-weight=1
-background=0
-symbol_code=1
-time_0=1353321122
-value_0=1.040340
-</object>
-<object>
-type=22
-object_name=#61309566 buy stop 0.10 AUDUSD-Pro at 1.04034 stop loss at 1.03
-period_flags=0
-create_time=1353321129
-color=255
-weight=1
-background=0
-symbol_code=4
-time_0=1353321122
-value_0=1.039540
-</object>
-<object>
-type=22
-object_name=#61309566 buy stop 0.10 AUDUSD-Pro at 1.04034 take profit at 1.
-period_flags=0
-create_time=1353321129
-color=16711680
-weight=1
-background=0
-symbol_code=4
-time_0=1353321122
-value_0=1.041540
-</object>
-<object>
 type=2
 object_name=DT_GO_tLine_sig_1349909788
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=15570276
 style=0
 weight=1
@@ -130,7 +56,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1350259715
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=15570276
 style=0
 weight=1
@@ -145,7 +71,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1351030796
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=15570276
 style=0
 weight=1
@@ -160,7 +86,7 @@ ray=1
 type=1
 object_name=DT_GO_tLine_sig_1352757766
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=15570276
 style=0
 weight=1
@@ -171,7 +97,7 @@ value_0=1.044260
 type=2
 object_name=DT_GO_tLine_sig_1353023136
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=15570276
 style=0
 weight=1
@@ -186,7 +112,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sml_1352711645
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=16711935
 style=0
 weight=1
@@ -201,7 +127,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sml_1353023045
 period_flags=0
-create_time=1353310348
+create_time=1353351871
 color=16711935
 style=0
 weight=1
@@ -216,8 +142,8 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sml_1353282085
 period_flags=0
-create_time=1353310348
-color=16711935
+create_time=1353351871
+color=0
 style=0
 weight=1
 background=0

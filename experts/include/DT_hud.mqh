@@ -103,7 +103,7 @@ void startHud(){
       ObjectSetText( "DT_BO_hud_expert_bg", "gggggggg", 12, "Webdings", Gainsboro );
     }
   
-    int i = 0, len = OrdersHistoryTotal(), j, len2 = ObjectsTotal(), magic, nr = 0;
+    int i = 0, len = OrdersHistoryTotal(), j, len2 = ObjectsTotal(), magic, prev_magic = 0, nr = 0;
     string name, tmp;
     for( ; i < len; i++ ) {
       if( OrderSelect( i, SELECT_BY_POS, MODE_HISTORY ) ) {
@@ -118,7 +118,10 @@ void startHud(){
                   if( ObjectGet( name, OBJPROP_COLOR ) != Black ){
                     ObjectSet( name, OBJPROP_COLOR, Black );
                   }
-                  nr++;
+                  if( magic != prev_magic ){
+                    nr++;
+                    prev_magic = magic;
+                  }
                 }
               }
             }

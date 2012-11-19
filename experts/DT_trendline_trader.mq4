@@ -140,7 +140,7 @@ int start(){
             if( main_ticket != 0 ){
 /* !!!*/      if( OrderSelect( main_ticket, SELECT_BY_TICKET, MODE_HISTORY ) ){
                 if( OrderMagicNumber() == magic ){
-                  if( OrderProfit() > 0.0 && OrderCloseTime() != 0.0 ){
+                  if( OrderProfit() >= 0.0 && OrderCloseTime() != 0.0 ){
                     OrderDelete( ticket );
                     errorCheck( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ) );
                     log( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ), 8.0, magic );
@@ -230,7 +230,7 @@ int start(){
         sl = NormalizeDouble( op - st_fail_sl, Digits );
       }
       comment = ticket+"";
-      OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), TimeCurrent() + EXPIRATION_TIME, Blue );
+      OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), 0, Blue );
       
     }
     
