@@ -115,7 +115,7 @@ string getSelectedLine( double time_cord, double price_cord, bool search_all = f
   
   for (j= obj_total-1; j>=0; j--) {
     name = ObjectName(j);
-    if( (search_all || StringSubstr( name, 5, 7 ) == "_tLine_") && ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
+    if( ( ObjectType( name ) == OBJ_TREND || ObjectType( name ) == OBJ_HLINE ) && (search_all || StringSubstr( name, 5, 7 ) == "_tLine_") && ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
 			t1 = ObjectGet(name,OBJPROP_TIME1);
 			t2 = ObjectGet(name,OBJPROP_TIME2);
 			price = getTLineValueByShift( name, shift);

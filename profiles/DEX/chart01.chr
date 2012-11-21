@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=5
-leftpos=11053
+period=240
+leftpos=4686
 digits=5
 scale=4
 graph=1
@@ -82,6 +82,36 @@ level_4=0.2360
 description_4=F1 23.6 | 1128
 level_5=0.0000
 description_5=F1 0.0
+</object>
+<object>
+type=10
+object_name=DT_GO_fibo_2
+period_flags=0
+create_time=1353516059
+color=255
+style=2
+weight=1
+background=1
+color2=8388608
+style2=0
+weight2=1
+time_0=1353470400
+value_0=1.273600
+time_1=1353513600
+value_1=1.283320
+levels_ray=1
+level_0=1.0000
+description_0=F2 100 | 972
+level_1=0.6180
+description_1=F2 61.8 | 601
+level_2=0.5000
+description_2=F2 50 | 486
+level_3=0.3820
+description_3=F2 38.2 | 371
+level_4=0.2360
+description_4=F2 23.6 | 229
+level_5=0.0000
+description_5=F2 0.0
 </object>
 <object>
 type=2
@@ -242,18 +272,6 @@ value_1=1.280360
 ray=1
 </object>
 <object>
-type=1
-object_name=DT_GO_tLine_sig_1352223252
-period_flags=0
-create_time=1352219652
-description=2012.11.06 17:34:12
-color=15570276
-style=0
-weight=1
-background=1
-value_0=1.289240
-</object>
-<object>
 type=2
 object_name=DT_GO_tLine_sig_1353022597
 period_flags=0
@@ -331,22 +349,6 @@ time_0=1352793600
 value_0=1.266120
 time_1=1353067200
 value_1=1.269030
-ray=1
-</object>
-<object>
-type=2
-object_name=Trendline 1353399865
-period_flags=0
-create_time=1353396265
-description=2012.11.20 08:24:25
-color=9408444
-style=0
-weight=1
-background=1
-time_0=1352188800
-value_0=1.276340
-time_1=1352980800
-value_1=1.280170
 ray=1
 </object>
 <object>
