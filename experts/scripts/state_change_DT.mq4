@@ -78,7 +78,7 @@ void changeTLineState( string sel_name, string state ){
   string name, old_state = StringSubstr( sel_name, 12, 3 );
   double time = TimeLocal();
   
-  if( old_state == state ){
+  if( ObjectGet( sel_name, OBJPROP_COLOR ) == Black  || old_state == state ){
     name = StringConcatenate( "DT_GO_tLine_", state, "_", DoubleToStr( time, 0 ) );
   }else{
     name = StringConcatenate( "DT_GO_tLine_", state, "_", StringSubstr( sel_name, 16, 10 ) );

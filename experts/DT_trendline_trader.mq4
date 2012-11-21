@@ -272,7 +272,7 @@ int getClosestTLineId( string &st_tLine[][], double &st_offset ){
     
     // has lately used tLine 
     if( alreadyUsedThisTLine( order_history, StrToInteger( st_tLine[i][TL_ID] ) ) ){
-      // log( StringConcatenate( Symbol()," In ",TimeToStr( TIME_BWEEN_TRADES, TIME_MINUTES)," hours there was Opened Position! id:", st_tLine[i][TL_ID] ), 11.0, StrToDouble(st_tLine[i][TL_ID]) );
+      log( StringConcatenate( Symbol()," This line (", StrToDouble(st_tLine[i][TL_ID]) ,") is already used!" ), 11.0, StrToDouble(st_tLine[i][TL_ID]) );
       continue;
     }
     
