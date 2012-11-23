@@ -1,7 +1,7 @@
 <chart>
 symbol=GBPUSD-Pro
-period=15
-leftpos=5197
+period=1440
+leftpos=1736
 digits=5
 scale=4
 graph=1
@@ -82,36 +82,6 @@ level_4=0.2360
 description_4=F1 23.6 | 824
 level_5=0.0000
 description_5=F1 0.0
-</object>
-<object>
-type=10
-object_name=DT_GO_fibo_2
-period_flags=0
-create_time=1353516035
-color=255
-style=2
-weight=1
-background=1
-color2=8388608
-style2=0
-weight2=1
-time_0=1353470400
-value_0=1.588240
-time_1=1353513600
-value_1=1.594840
-levels_ray=1
-level_0=1.0000
-description_0=F2 100 | 660
-level_1=0.6180
-description_1=F2 61.8 | 408
-level_2=0.5000
-description_2=F2 50 | 330
-level_3=0.3820
-description_3=F2 38.2 | 252
-level_4=0.2360
-description_4=F2 23.6 | 156
-level_5=0.0000
-description_5=F2 0.0
 </object>
 <object>
 type=2
@@ -259,6 +229,38 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_tLine_sig_1353454230
+period_flags=0
+create_time=1353656052
+description=2012.11.23 08:34:12
+color=15570276
+style=0
+weight=1
+background=1
+time_0=1351166400
+value_0=1.614340
+time_1=1352260800
+value_1=1.604200
+ray=1
+</object>
+<object>
+type=2
+object_name=DT_GO_tLine_sig_1353519608
+period_flags=0
+create_time=1353654920
+description=2012.11.23 08:15:20
+color=15570276
+style=0
+weight=2
+background=1
+time_0=1340150400
+value_0=1.577740
+time_1=1350950400
+value_1=1.591330
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_tLine_sml_1352746774
 period_flags=0
 create_time=1353534887
@@ -291,43 +293,11 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sml_1353454230
-period_flags=0
-create_time=1353534961
-description=2012.11.21 22:56:01
-color=16711935
-style=0
-weight=1
-background=1
-time_0=1351166400
-value_0=1.614340
-time_1=1352260800
-value_1=1.604200
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sml_1353519608
-period_flags=0
-create_time=1353620188
-description=2012.11.22 22:36:28
-color=16711935
-style=0
-weight=2
-background=1
-time_0=1340150400
-value_0=1.577740
-time_1=1350950400
-value_1=1.591330
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sml_1353571055
 period_flags=0
 create_time=1353567468
 description=2012.11.22 07:57:48
-color=16711935
+color=0
 style=0
 weight=1
 background=1
