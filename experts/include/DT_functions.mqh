@@ -6,6 +6,11 @@
 #property copyright "Dex"
 #property link      ""
 
+#import "user32.dll"
+	int RegisterWindowMessageA(string lpString);
+	int PostMessageA(int hWnd,int Msg,int wParam,int lParam);
+#import
+
 bool errorCheck( string text = "unknown function" ){
   int e = GetLastError();
   if( e != 0 ){
@@ -154,4 +159,22 @@ int getPositionByDaD(double price_cord, string symb = ""){
     }
   }
   return (ticket);
+}
+
+void autoScroll( bool set = false ){
+	if( set ){
+		if( WindowFirstVisibleBar() - WindowBarsPerChart() <= 0 ){
+			GlobalVariableSet( StringConcatenate( getSymbol(), "_autoScroll" ), 1.0 );
+		}
+	}else{
+		if( GlobalVariableGet( StringConcatenate( getSymbol(), "_autoScroll" ) ) == 1.0 ){
+			GlobalVariableSet( StringConcatenate( getSymbol(), "_autoScroll" ), 0.0 );
+			keybd_event(35, 0, 0, 0); // End
+			keybd_event(35, 0, 2, 0);
+		}
+	}
+}
+
+void fakeTick(){
+	PostMessageA(WindowHandle(Symbol(), Period()), RegisterWindowMessageA("MetaTrader4_Internal_Message"), 2, 1);
 }

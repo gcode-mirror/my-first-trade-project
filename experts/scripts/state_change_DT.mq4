@@ -43,9 +43,9 @@ int start(){
     if( ObjectGet( sel_name, OBJPROP_COLOR ) == Black ){
       cmd_id = MessageBox( "renew                      sig                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){
-        changeTLineState( sel_name, state, width );
+        changeTLineState( sel_name, state, width, c );
       }else if( cmd_id == IDNO ){
-        changeTLineState( sel_name, "sig", width );
+        changeTLineState( sel_name, "sig", width, c );
       }else if( cmd_id == IDCANCEL ){
         ObjectSet( sel_name, OBJPROP_WIDTH, width );
         ObjectSet( sel_name, OBJPROP_COLOR, c );
@@ -54,9 +54,9 @@ int start(){
     }else if( state == "sml" ){
       cmd_id = MessageBox( "big                      sig                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){
-        changeTLineState( sel_name, "big", width );
+        changeTLineState( sel_name, "big", width, c );
       }else if( cmd_id == IDNO ){
-        changeTLineState( sel_name, "sig", width );
+        changeTLineState( sel_name, "sig", width, c );
       }else if( cmd_id == IDCANCEL ){
         ObjectSet( sel_name, OBJPROP_WIDTH, width );
         ObjectSet( sel_name, OBJPROP_COLOR, c );
@@ -65,9 +65,9 @@ int start(){
     }else if( state == "big" ){
       cmd_id = MessageBox( "sml                      sig                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){
-        changeTLineState( sel_name, "sml", width );
+        changeTLineState( sel_name, "sml", width, c );
       }else if( cmd_id == IDNO ){
-        changeTLineState( sel_name, "sig", width );
+        changeTLineState( sel_name, "sig", width, c );
       }else if( cmd_id == IDCANCEL ){
         ObjectSet( sel_name, OBJPROP_WIDTH, width );
         ObjectSet( sel_name, OBJPROP_COLOR, c );
@@ -76,9 +76,9 @@ int start(){
     }else if( state == "sig" ){
       cmd_id = MessageBox( "sml                      big                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){
-        changeTLineState( sel_name, "sml", width );
+        changeTLineState( sel_name, "sml", width, c );
       }else if( cmd_id == IDNO ){
-        changeTLineState( sel_name, "big", width );
+        changeTLineState( sel_name, "big", width, c );
       }else if( cmd_id == IDCANCEL ){
         ObjectSet( sel_name, OBJPROP_WIDTH, width );
         ObjectSet( sel_name, OBJPROP_COLOR, c );
@@ -94,11 +94,11 @@ int start(){
   return( errorCheck("state_change") );
 }
 
-void changeTLineState( string sel_name, string state, int width ){
+void changeTLineState( string sel_name, string state, int width, color c ){
   string name, old_state = StringSubstr( sel_name, 12, 3 );
   double time = TimeLocal();
   
-  if( ObjectGet( sel_name, OBJPROP_COLOR ) == Black  || old_state == state ){
+  if( c == Black || old_state == state ){
     name = StringConcatenate( "DT_GO_tLine_", state, "_", DoubleToStr( time, 0 ) );
   }else{
     name = StringConcatenate( "DT_GO_tLine_", state, "_", StringSubstr( sel_name, 16, 10 ) );

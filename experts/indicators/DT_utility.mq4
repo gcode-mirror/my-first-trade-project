@@ -10,10 +10,10 @@
 
 #import "Shell32.dll"
   int ShellExecuteA( int hwnd, string lpOperation, string lpFile, string lpParameters, int lpDirectory, int nShowCmd );
-#import
 
 #import "user32.dll"
 	bool GetWindowRect(int h, int& pos[4]);
+  void keybd_event(int bVk,int bScan,int dwFlags,int dwExtraInfo);
 #import
 
 extern bool EXT_BOSS = false;
@@ -52,6 +52,7 @@ int init(){
   initArchive();
   initFade();
   
+	autoScroll();
   errorCheck("global init");
   return(0);
 }
@@ -59,6 +60,7 @@ int init(){
 int deinit(){
   removeObjects();
 	deleteNewsItems();
+	autoScroll(true);
   errorCheck("global deinit");
   return(0);
 }
@@ -68,7 +70,9 @@ int start(){
     init();
     return (0);
   }
-  
+  if(Symbol() == "EURUSD-Pro"){
+		Alert(Bid);
+	}
   startComments();
   startRuler();
   startSession();
