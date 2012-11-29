@@ -21,31 +21,37 @@ void initFade(){
 }
 
 void startFade(){
-  static int st_timer = 0;
-  static double st_gv_fade_val = -1;
-  if( GetTickCount() > st_timer ){
-    st_timer = GetTickCount() + 2000;
-    
-    if( st_gv_fade_val != GlobalVariableGet("DT_window_fade") ){
-      st_gv_fade_val = GlobalVariableGet("DT_window_fade");
-      
-      if( st_gv_fade_val == 1 ){
-        if( ObjectGet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES ) == -1 ){
-          ObjectSet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES, 0 );
-          if( ObjectFind( "DT_BO_w1_hud_fade_txt_0" ) == -1 ){
-            printRandomText();
-          }
-        }
-      }else{
-        if( ObjectGet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES ) == 0 ){
-          ObjectSet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES, -1 );
-        }
-        removeObjects("w0_fade_txt");
-      }
-    
+  static double st_switch = -1.0;
+  
+  if( st_switch == -1.0 ){
+    st_switch = GlobalVariableGet("DT_window_fade");
+    initFade();
+    if( st_switch == 1.0 ){
+      showFade();
     }
   }
-}   
+  
+  if( st_switch != GlobalVariableGet("DT_window_fade") ){
+    st_switch = GlobalVariableGet("DT_window_fade");
+    if( st_switch == 0.0 ){
+      if( ObjectGet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES ) == 0 ){
+        ObjectSet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES, -1 );
+      }
+      removeObjects("w0_fade_txt");
+    }else{
+      showFade();
+    }
+  }
+}
+
+void showFade(){
+  if( ObjectGet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES ) == -1 ){
+    ObjectSet( "DT_BO_w0_fade_main", OBJPROP_TIMEFRAMES, 0 );
+    if( ObjectFind( "DT_BO_w1_hud_fade_txt_0" ) == -1 ){
+      printRandomText();
+    }
+  }
+} 
 
 bool printRandomText(){
   string name; 

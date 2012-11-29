@@ -18,43 +18,24 @@
 #define NEWS_DISPLAY_ZONE 21600 // 6 hour
 
 void startNews(){
-	static bool not_supported = false;
-  if( not_supported ){
-    return;
-  }
-  
 	static double win_min = 0.0;
 	static double win_max = 0.0;
 	static string news_data[0][7];
-	static int icon_id = -1;
-	static string icon_extension = "";
 	
   static int st_timer = 0;
-  static string st_switch = "-1";
+  static double st_switch = -1.0;
   
-  if( GetTickCount() < st_timer ){
-    return;
-  }
-  
-  if( st_switch == "-1" ){
-    st_switch = getGlobal("NEWS_SWITCH");
-		icon_id = showIcon( 1, 1, "ü", "Webdings", st_switch, "NEWS_SWITCH" );
+  if( st_switch == -1.0 ){
+    st_switch = getGlobal("NEWS");
+    showIcon( "NEWS", 1, 1, "ü", "Webdings", st_switch );
     
-    if( !isSupportedCurrency() ){
-      if( st_switch != "0" ){
-        changeIcon( icon_id );
-      }
-      not_supported = true;
-      return;
-    }
-		
-		icon_extension = StringConcatenate( "DT_BO_icon_" , icon_id, "_w_extension" );
-		ObjectCreate( icon_extension, OBJ_LABEL, 0, 0, 0);
-		ObjectSet( icon_extension, OBJPROP_CORNER, 0);
-		ObjectSet( icon_extension, OBJPROP_XDISTANCE, ObjectGet( StringConcatenate( "DT_BO_icon_" , icon_id, "_background" ), OBJPROP_XDISTANCE) + 15 );
-		ObjectSet( icon_extension, OBJPROP_YDISTANCE, ObjectGet( StringConcatenate( "DT_BO_icon_" , icon_id, "_background" ), OBJPROP_YDISTANCE) + 11 );
-		ObjectSet( icon_extension, OBJPROP_BACK, false);
-		ObjectSetText( icon_extension, EXT_WEEDS_OF_NEWS+"", 8, "Arial Black", Blue );
+    string name = "DT_BO_icon_NEWS_w_extension";
+		ObjectCreate( name, OBJ_LABEL, 0, 0, 0);
+		ObjectSet( name, OBJPROP_CORNER, 0);
+		ObjectSet( name, OBJPROP_XDISTANCE, ObjectGet( "DT_BO_icon_NEWS_background", OBJPROP_XDISTANCE) + 15 );
+		ObjectSet( name, OBJPROP_YDISTANCE, ObjectGet( "DT_BO_icon_NEWS_background", OBJPROP_YDISTANCE) + 11 );
+		ObjectSet( name, OBJPROP_BACK, false);
+		ObjectSetText( name, EXT_WEEDS_OF_NEWS+"", 8, "Arial Black", Blue );
     
     if( EXT_BOSS ){
       if( !GlobalVariableCheck( "NEWS_update_id" ) ){
@@ -63,21 +44,30 @@ void startNews(){
     }
   }
   
-  st_timer = GetTickCount() + 2200;
-  
-  if( st_switch != getGlobal("NEWS_SWITCH") ){
-    st_switch = getGlobal("NEWS_SWITCH");
-    if( st_switch == "0" ){
+  if( st_switch != getGlobal("NEWS") ){
+    st_switch = getGlobal("NEWS");
+    changeIcon( "NEWS", st_switch );
+    if( st_switch == 0.0 ){
       deleteNewsItems();
 			addComment( "Switch OFF News." );
       return;
+    }else{
+      if( !isSupportedCurrency() ){
+        addComment( "This currency is not supported!", 1 );
+        setGlobal( "NEWS", 0.0 );
+        st_switch = 0.0;
+        return;
+      }else{
+        addComment( "Turn ON News." );
+        win_min = -1.0;
+      }
     }
-    addComment( "Turn ON News." );
   }
   
-  if( st_switch == "0" || Period() > PERIOD_H4 || StringLen(Symbol()) < 6 ){
+  if( st_switch == 0.0 || GetTickCount() < st_timer || Period() > PERIOD_H4 ){
     return;
   }
+  st_timer = GetTickCount() + 2200;
   
 	if( ArrayRange( news_data, 0 ) == 0 ){
 		downloadCalendar();
@@ -100,7 +90,6 @@ void startNews(){
 			displayNews( news_data, win_min, win_max );
 		}
 	}
-  errorCheck("ttttt");
 }
 
 bool displayNews( string& news_data[][], double& win_min, double& win_max ){

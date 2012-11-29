@@ -15,14 +15,14 @@
 //+------------------------------------------------------------------+
 int start(){
   bool hide = false;
-  int i, len = ObjectsTotal(), width;
+  int i, len = ObjectsTotal(), width, state = 0;
   string name;
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
     if( ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
       if( ObjectType( name ) == OBJ_FIBO ){
-        hide = true;
+        state = -1;
         break;
       }
     }
@@ -31,15 +31,14 @@ int start(){
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
     if( ObjectType( name ) == OBJ_FIBO ){
-      if( hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == 0 ){
-        ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
-      }else if( !hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
-        ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
-      }
+      ObjectSet( name, OBJPROP_TIMEFRAMES, state );
     }
   }
   
-  changeObjectsIcon( 1, hide );
-  
+  if( state == -1 ){
+    changeObjectsIcon( 1, true );
+  }else{
+    changeObjectsIcon( 1, false );
+  }
   return(0);
 }

@@ -14,10 +14,11 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-	if( IsTesting() ){
-		
-	}else{
-		changeIcon( 2 );
-	}
+  if( getGlobal( "ARCHIVE" ) == 0.0 ){
+    setGlobal( "ARCHIVE", 1.0 );
+  }else{
+    setGlobal( "ARCHIVE", 0.0 );
+  }
+  fakeTick();
   return(0);
 }

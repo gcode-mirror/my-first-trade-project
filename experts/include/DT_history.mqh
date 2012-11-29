@@ -6,9 +6,6 @@
 
 void startHistory(){
   static int st_timer = 0;
-  // if( !EXT_BOSS ){
-    // return;
-  // }
   if( GetTickCount() < st_timer ){
     return;
   }
@@ -16,7 +13,6 @@ void startHistory(){
   st_timer = GetTickCount() + 2000;
 
   static double selected = -1;
-  static string global_name = "";
 
   static string st_tLine_ref_str[0][2];
   static double st_tLine_ref_data[0][4];
@@ -31,8 +27,7 @@ void startHistory(){
   // init
   if( selected == -1 ){
     selected = 0.0;
-    global_name = StringConcatenate( getSymbol(), "_History" );
-    GlobalVariableSet( global_name, 0.0 );
+    setGlobal( "HISTORY", 0.0 );
 
     ArrayResize( st_tLine_ref_str, 30 );
     ArrayResize( st_tLine_ref_data, 30 );
@@ -54,7 +49,7 @@ void startHistory(){
     ArrayResize( st_tLine_ref_data, idx );
 
     removeObjects("history");
-    int xpos = 15 * nrOfIcons();
+    int xpos = 14 * nrOfIcons();
     name = "DT_BO_history_hud";
     ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
     ObjectSet( name, OBJPROP_CORNER, 0 );
@@ -127,7 +122,7 @@ void startHistory(){
 
           ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", (len3 + 1), "/", (len3 + 1)), 9, "Consolas", Blue );
           selected = selected + 1.0;
-          GlobalVariableSet( global_name, selected );
+          setGlobal( "HISTORY", selected );
           has_change = true;
         }
       }
@@ -142,14 +137,14 @@ void startHistory(){
         i++;
       }
 
-      GlobalVariableSet( global_name, selected );
+      setGlobal( "HISTORY", selected );
       ObjectSetText( "DT_BO_history_hud", StringConcatenate( "Histrory: ", DoubleToStr(selected, 0), "/", ArrayRange( st_tLine_hist_to, 0 ) ), 9, "Consolas", Blue );
       has_change = true;
     }
   }
   
   // is selected changed
-  int tmp = GlobalVariableGet( global_name );
+  int tmp = getGlobal( "HISTORY" );
   if( selected != tmp ){
     if( tmp < selected ){ // Undo
       idx = getHistLineName( st_tLine_ref_str, DoubleToStr(st_tLine_hist_from[tmp][0], 0) );
@@ -245,12 +240,6 @@ int removeItem( double& selected, string& orig_ref_str[][2], string copy_ref_str
 }
 
 void syncTradeCharts( string& line_str[][2], double &line_data[][4] ){
-	static string file_name = "";
-	static string global_name = "";
-	if( file_name == "" ){
-		file_name = StringConcatenate( getSymbol(), "_tLines.csv" );
-		global_name = StringConcatenate( getSymbol(), "_tLines_lastMod.csv" );
-	}
 	int i, j, len = ArrayRange( line_str, 0 );
 	string out = "";
 	for( i = 0; i < len; i++ ){
@@ -268,11 +257,11 @@ void syncTradeCharts( string& line_str[][2], double &line_data[][4] ){
     out = StringConcatenate(out,"DT_GO_trade_timing;",DoubleToStr(ObjectGet("DT_GO_trade_timing", OBJPROP_TIME1), 0 ),";0;0;0;",ObjectGet( "DT_GO_trade_timing", OBJPROP_COLOR ),";",ObjectType( "DT_GO_trade_timing" ),"\r\n");
   }
 
-	int handle = FileOpen( file_name, FILE_BIN|FILE_WRITE );
+	int handle = FileOpen( StringConcatenate( getSymbol(), "_tLines.csv" ), FILE_BIN|FILE_WRITE );
   if( handle > 0 ){
     FileWriteString( handle, out, StringLen(out) );
     FileClose( handle );
   }
-  GlobalVariableSet( global_name, TimeLocal() );
+  setGlobal( "SYNC_TL", TimeLocal() );
 	errorCheck( "syncTradeCharts" );
 }

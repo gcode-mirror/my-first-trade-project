@@ -14,15 +14,14 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  bool hide = false;
-  int i, len = ObjectsTotal(), width;
-  string name;
+  int i, len = ObjectsTotal(), width, state = 0;
+  string name, ts;
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
     if( ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
       if( StringSubstr( name, 0, 9 ) == "Trendline" || StringSubstr( name, 0, 10 ) == "Horizontal" ){
-        hide = true;
+        state = -1;
         break;
       }
     }
@@ -30,16 +29,21 @@ int start(){
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
-    if( StringSubstr( name, 0, 9 ) == "Trendline" || StringSubstr( name, 0, 10 ) == "Horizontal" ){
-      if( hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == 0 ){
-        ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
-      }else if( !hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
-        ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
-      }
+    if( StringSubstr( name, 0, 9 ) == "Trendline" ){
+      toggleRealPriceLines( StringSubstr( name, 10 ), state );
+    }else if( StringSubstr( name, 0, 10 ) == "Horizontal" ){
+    
+    }else{
+      continue;
     }
+    ObjectSet( name, OBJPROP_TIMEFRAMES, state );
   }
   
-  changeObjectsIcon( 0, hide );
+  if( state == -1 ){
+    changeObjectsIcon( 0, true );
+  }else{
+    changeObjectsIcon( 0, false );
+  }
   
   return(0);
 }

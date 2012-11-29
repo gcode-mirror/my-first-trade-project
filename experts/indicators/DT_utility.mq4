@@ -31,6 +31,8 @@ extern int EXT_WEEDS_OF_NEWS = 1;
 #include <DT_history.mqh>
 #include <DT_news.mqh>
 #include <DT_objects.mqh>
+#include <DT_zoom.mqh>
+#include <DT_real_price.mqh>
 
 bool CONNECTION_FAIL = true;
 
@@ -42,25 +44,25 @@ int init(){
     CONNECTION_FAIL = false;
   }
   
-  createGlobal( "RULER_SWITCH", "1" );
-  createGlobal( "ARCHIVE_SWITCH", "0" );
-  createGlobal( "NEWS_SWITCH", "1" );
-  createGlobal( "SESSION_SWITCH", "1" );
-  createGlobal( "MONITOR_SWITCH", "0" );
+  createGlobal( "RULER", 1.0 );
+  createGlobal( "ARCHIVE", 0.0 );
+  createGlobal( "NEWS", 1.0 );
+  createGlobal( "SESSION", 1.0 );
+  createGlobal( "ZOOM", 0.0 );
+  createGlobal( "REAL_PRICE", 0.0 );
   
-  initSession();
-  initArchive();
-  initFade();
+  if( getSymbol() == "EURUSD" && EXT_BOSS == false ){
+    addComment( "EURUSD boss state is OFF!", 1 );
+  }
   
-	autoScroll();
   errorCheck("global init");
   return(0);
 }
 
 int deinit(){
+  autoScroll();
   removeObjects();
 	deleteNewsItems();
-	autoScroll(true);
   errorCheck("global deinit");
   return(0);
 }
@@ -70,18 +72,18 @@ int start(){
     init();
     return (0);
   }
-  if(Symbol() == "EURUSD-Pro"){
-		Alert(Bid);
-	}
+  
   startComments();
   startRuler();
   startSession();
   startArchive();
   startFade();
   startNews();
+  startRealPrice();
   startHistory();
   startHud();
   startObjects();
+  startZoom();
   
   errorCheck("global start");
   return(0);

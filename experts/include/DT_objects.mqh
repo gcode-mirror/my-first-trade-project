@@ -51,7 +51,7 @@ void createObjectsIcon( string text, bool is_on = true ){
   static int icon_nr = 0;
   static int xpos = 0;
   if( icon_nr == 0 ){
-    xpos = 15 * nrOfIcons() + (StringLen(ObjectDescription("DT_BO_hud_info")) * 7) + 270;
+    xpos = 14 * nrOfIcons() + (StringLen(ObjectDescription("DT_BO_hud_info")) * 7) + 270;
   }
   int x_cord = xpos + ( icon_nr * 20 );
   
@@ -84,5 +84,17 @@ void changeObjectsIcon( int id, bool is_on ){
   }else{
     ObjectSet( StringConcatenate( "DT_BO_objects_" , id, "_foreground" ), OBJPROP_COLOR, DarkGray );
     ObjectSet( StringConcatenate( "DT_BO_objects_" , id, "_background" ), OBJPROP_COLOR, Gainsboro );
+  }
+}
+
+void toggleRealPriceLines( string ts, int state ){
+  int i, len = ObjectsTotal(), ts_len = StringLen( ts );
+  string name;
+  
+  for( i = 0; i < len; i++ ){
+    name = ObjectName(i);
+    if( StringSubstr( name, 17, ts_len ) == ts ){
+      ObjectSet( name, OBJPROP_TIMEFRAMES, state );
+    }
   }
 }

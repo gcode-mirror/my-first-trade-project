@@ -4,9 +4,9 @@
 //|                                                                  |
 //+------------------------------------------------------------------+
 #property copyright "Dex"
-#property link      ""
+#property link       ""
 
-int showIcon( int x, int y, string text, string font, string isOn, string global_ref ){
+void showIcon( string id, int x, int y, string text, string font, double isOn ){
   static int icon_nr = -1;
   static int icons_range = 6;
   static int icon_size = 23;
@@ -19,50 +19,35 @@ int showIcon( int x, int y, string text, string font, string isOn, string global
   int y_cord = icons_y_pos;
   
   color lb_color;
-  string name = StringConcatenate( "DT_BO_icon_" , icon_nr, "_foreground", "_", global_ref );
-	ObjectCreate(name, OBJ_LABEL, 0, 0, 0);
+  string name = StringConcatenate( "DT_BO_icon_" , id, "_foreground" );
+  if( ObjectFind( name ) == -1 ){
+    ObjectCreate(name, OBJ_LABEL, 0, 0, 0);
+  }
   ObjectSet( name, OBJPROP_CORNER, 0);
   ObjectSet( name, OBJPROP_XDISTANCE, x_cord + x );
   ObjectSet( name, OBJPROP_YDISTANCE, y_cord + y );
   ObjectSet( name, OBJPROP_BACK, false);
-  if( isOn != "0" ){ lb_color = White; }else{ lb_color = DarkGray; }
+  if( isOn == 0.0 ){ lb_color = DarkGray; }else{ lb_color = White; }
   ObjectSetText( name, text, 16, font, lb_color );
 	
-	name = StringConcatenate( "DT_BO_icon_" , icon_nr, "_background" );
-  ObjectCreate(name, OBJ_LABEL, 0, 0, 0);
+	name = StringConcatenate( "DT_BO_icon_" , id, "_background" );
+  if( ObjectFind( name ) == -1 ){
+    ObjectCreate(name, OBJ_LABEL, 0, 0, 0);
+  }
   ObjectSet(name, OBJPROP_CORNER, 0);
   ObjectSet(name, OBJPROP_XDISTANCE, x_cord);
   ObjectSet(name, OBJPROP_YDISTANCE, y_cord);
   ObjectSet(name, OBJPROP_BACK, false);
-  if( isOn != "0" ){ lb_color = DeepSkyBlue; }else{ lb_color = Gainsboro; }
+  if( isOn == 0.0 ){ lb_color = Gainsboro; }else{ lb_color = DeepSkyBlue; }
   ObjectSetText(name,"g",18,"Webdings",lb_color );  
-  
-	return ( icon_nr );
 }
 
-void changeIcon( int index ){
-  string name, icon_name = "";
-  for ( int i = ObjectsTotal() - 1; i >= 0; i-- ){
-    name = ObjectName(i);
-    if( StringSubstr( name, 0, 23 ) == "DT_BO_icon_"+index+"_foreground" ){
-			icon_name = name;
-      break;
-    }
-  }
-  
-  if( icon_name == "" ){
-    Alert( "Icon idx:"+index+" not found!" );
-    return;
-  }
-  
-  string gv_name = StringSubstr( name, 24 );
-  if( getGlobal( gv_name ) == "0" ){
-    setGlobal( gv_name, "1" );
-    ObjectSet( icon_name, OBJPROP_COLOR, White );
-    ObjectSet( StringConcatenate( "DT_BO_icon_" , index, "_background" ), OBJPROP_COLOR, DeepSkyBlue );
+void changeIcon( string id, double isOn ){
+  if( isOn == 0.0 ){
+    ObjectSet( StringConcatenate( "DT_BO_icon_" , id, "_foreground" ), OBJPROP_COLOR, DarkGray );
+    ObjectSet( StringConcatenate( "DT_BO_icon_" , id, "_background" ), OBJPROP_COLOR, Gainsboro );
   }else{
-    setGlobal( gv_name, "0" );
-    ObjectSet( icon_name, OBJPROP_COLOR, DarkGray );
-    ObjectSet( StringConcatenate( "DT_BO_icon_" , index, "_background" ), OBJPROP_COLOR, Gainsboro );
+    ObjectSet( StringConcatenate( "DT_BO_icon_" , id, "_foreground" ), OBJPROP_COLOR, White );
+    ObjectSet( StringConcatenate( "DT_BO_icon_" , id, "_background" ), OBJPROP_COLOR, DeepSkyBlue );
   }
 }

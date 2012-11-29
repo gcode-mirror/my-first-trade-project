@@ -14,10 +14,11 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-	if( IsTesting() ){
-		
-	}else{
-		changeIcon( 4 );
-	}
+  if( getGlobal( "REAL_PRICE" ) == 0.0 ){
+    setGlobal( "REAL_PRICE", 1.0 );
+  }else{
+    setGlobal( "REAL_PRICE", 0.0 );
+  }
+  fakeTick();
   return(0);
 }

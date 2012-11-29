@@ -9,7 +9,7 @@ void initHud(){
   deinitHud();
   
   string name = "DT_BO_hud_info", txt;
-  int xpos = 15 * nrOfIcons();
+  int xpos = 14 * nrOfIcons();
   
   ObjectCreate( name, OBJ_LABEL, 0, 0, 0 );
   ObjectSet( name, OBJPROP_CORNER, 0 );

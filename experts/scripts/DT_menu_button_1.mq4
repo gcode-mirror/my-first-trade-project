@@ -14,10 +14,11 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-	if( IsTesting() ){
-		
-	}else{
-		changeIcon( 1 );
-	}
+  if( getGlobal( "SESSION" ) == 0.0 ){
+    setGlobal( "SESSION", 1.0 );
+  }else{
+    setGlobal( "SESSION", 0.0 );
+  }
+  fakeTick();
   return(0);
 }

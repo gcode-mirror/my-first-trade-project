@@ -14,8 +14,7 @@
 //| script program start function                                    |
 //+------------------------------------------------------------------+
 int start(){
-  bool hide = false;
-  int i, len = ObjectsTotal(), width;
+  int i, len = ObjectsTotal(), width, state = 0;
   string name;
   
   for( i = 0; i < len; i++ ){
@@ -23,7 +22,7 @@ int start(){
     if( ObjectGet( name, OBJPROP_TIMEFRAMES ) != -1 ){
       if( ObjectType( name ) == OBJ_TREND || ObjectType( name ) == OBJ_HLINE ){
         if( StringSubstr( name, 5, 7 ) == "_tLine_" && ObjectGet( name, OBJPROP_WIDTH ) == 1 ){
-          hide = true;
+          state = -1;
           break;
         }
       }
@@ -32,18 +31,19 @@ int start(){
   
   for( i = 0; i < len; i++ ){
     name = ObjectName(i);
-    if( ObjectType( name ) == OBJ_TREND || ObjectType( name ) == OBJ_HLINE ){
-      if( StringSubstr( name, 5, 7 ) == "_tLine_" && ObjectGet( name, OBJPROP_WIDTH ) == 1 ){
-        if( hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == 0 ){
-          ObjectSet( name, OBJPROP_TIMEFRAMES, -1 );
-        }else if( !hide && ObjectGet( name, OBJPROP_TIMEFRAMES ) == -1 ){
-          ObjectSet( name, OBJPROP_TIMEFRAMES, 0 );
-        }
+    if( StringSubstr( name, 5, 7 ) == "_tLine_" && ObjectGet( name, OBJPROP_WIDTH ) == 1 ){  
+      if( ObjectType( name ) == OBJ_TREND ){
+        toggleRealPriceLines( StringSubstr( name, 16, 10 ), state );
       }
+      ObjectSet( name, OBJPROP_TIMEFRAMES, state );
     }
   }
   
-  changeObjectsIcon( 2, hide );
+  if( state == -1 ){
+    changeObjectsIcon( 2, true );
+  }else{
+    changeObjectsIcon( 2, false );
+  }
   
   return(0);
 }

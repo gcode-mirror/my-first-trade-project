@@ -25,7 +25,7 @@ double TIMEZONES[7][4];
 string ZONENAMES[7];
 
 void initSession(){
-  if( getGlobal("SESSION_SWITCH") == "0" ){        
+  if( getGlobal("SESSION") == 0.0 ){
     return;    
   }
   
@@ -106,34 +106,31 @@ void initSession(){
 
 void startSession(){
   static int st_timer = 0;
-  static string st_switch = "-1";
-  static int icon_id = -1;
+  static double st_switch = -1.0;
   
-  if( GetTickCount() < st_timer ){
-    return;
-  }
-
-  if( st_switch == "-1" ){
-    st_switch = getGlobal("SESSION_SWITCH");
-		icon_id = showIcon( 3, 2, "¸", "Wingdings", st_switch, "SESSION_SWITCH" ); 
+  if( st_switch == -1.0 ){
+    st_switch = getGlobal("SESSION");
+    showIcon( "SESSION", 3, 2, "¸", "Wingdings", st_switch );
+    initSession();
   }
   
-  st_timer = GetTickCount() + 3100;
-  if( st_switch != getGlobal("SESSION_SWITCH") ){
-    st_switch = getGlobal("SESSION_SWITCH");
-    if( st_switch == "0" ){
+  if( st_switch != getGlobal("SESSION") ){
+    st_switch = getGlobal("SESSION");
+    changeIcon( "SESSION", st_switch );
+    if( st_switch == 0.0 ){
       deinitSession();
 			addComment( "Switch OFF Session." );
       return;
     }else{
-			addComment( "Turn ON Session." );
       initSession();
+      addComment( "Turn ON Session." );
     }
   }
-    
-  if( st_switch == "0" ){
+  
+  if( st_switch == 0.0 || GetTickCount() < st_timer ){
     return;
   }
+  st_timer = GetTickCount() + 3100;
   
   double time = TimeCurrent();
   int len = ArrayRange( TIMEZONES, 0 );

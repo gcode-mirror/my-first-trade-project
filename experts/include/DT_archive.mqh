@@ -8,7 +8,7 @@
 datetime histDates[0];
 
 void initArchive(){
-  if( getGlobal("ARCHIVE_SWITCH") == "0" ){      
+  if( getGlobal("ARCHIVE") == 0.0 ){
     return;    
   }
   
@@ -38,21 +38,18 @@ void initArchive(){
 
 void startArchive(){
   static int st_timer = 0;
-  static string st_switch = "-1";
-	static int icon_id = -1;
+  static double st_switch = -1.0;
   
-  if( GetTickCount() < st_timer ){
-    return;
+  if( st_switch == -1.0 ){
+    st_switch = getGlobal("ARCHIVE");
+    showIcon( "ARCHIVE", 2, 1, "Í", "Webdings", st_switch );
+    initArchive();
   }
   
-  if( st_switch == "-1" ){
-    st_switch = getGlobal("ARCHIVE_SWITCH");
-		icon_id = showIcon( 2, 1, "Í", "Webdings", st_switch, "ARCHIVE_SWITCH" ); 
-  }
-
-  st_timer = GetTickCount() + 1500;
-  if( st_switch != getGlobal("ARCHIVE_SWITCH") ){
-    if( st_switch == "0" ){
+  if( st_switch != getGlobal("ARCHIVE") ){
+    st_switch = getGlobal("ARCHIVE");
+    changeIcon( "ARCHIVE", st_switch );
+    if( st_switch == 0.0 ){
       deInitArchive();
 			addComment( "Switch OFF Archive." );
       return;
@@ -61,10 +58,12 @@ void startArchive(){
 			addComment( "Turn ON Archive." );
     }
   }
-    
-  if( st_switch == "0" ){
+  
+  if( st_switch == 0.0 || GetTickCount() < st_timer ){
     return;
   }
+  st_timer = GetTickCount() + 1500;
+  
   double curr_time = Time[WindowFirstVisibleBar()];
   int len = ArraySize(histDates), pos_left = 0;
   string text;

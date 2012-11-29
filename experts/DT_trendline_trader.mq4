@@ -456,19 +456,12 @@ void setHistoryArray( int &arr[] ){
 
 void loadTrendlines( string &st_tLine[][] ){
   static double st_last_mod = 1.0;
-  static string st_gv_name = "";
-  static string st_file_name = "";
 
-  if( st_gv_name == "" ){
-    st_gv_name = StringConcatenate( getSymbol(), "_tLines_lastMod" );
-    st_file_name = StringConcatenate( getSymbol(), "_tLines.csv" );
-  }
-
-  if( st_last_mod != GlobalVariableGet( st_gv_name ) ){
-    st_last_mod = GlobalVariableGet( st_gv_name );
+  if( st_last_mod != getGlobal( "SYNC_TL" ) ){
+    st_last_mod = getGlobal( "SYNC_TL" );
 
     ObjectsDeleteAll();
-    int j = 0, handle = FileOpen( st_file_name, FILE_READ, ";" );
+    int j = 0, handle = FileOpen( StringConcatenate( getSymbol(), "_tLines.csv" ), FILE_READ, ";" );
     if( handle < 1 ){
       Alert( StringConcatenate( "File load error in trendline trader (", Symbol(), ")" ) );
       return ( false );
