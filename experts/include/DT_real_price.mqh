@@ -10,7 +10,7 @@ void startRealPrice(){
   static int st_timer = 0;
   static double st_switch = -1.0;
   static double st_curr_H4_time = -1.0;
-  static double st_last_mod = -1.0;
+ // static double st_last_mod = -1.0;
   
   if( st_switch == -1.0 ){
     showIcon( "REAL_PRICE", 3, 1, "4", "Wingdings 3", 0.0 );
@@ -19,6 +19,7 @@ void startRealPrice(){
   double gl_rp = getGlobal("REAL_PRICE");
 
   if( st_switch != gl_rp ){
+  addComment("reload",1);
     st_switch = gl_rp;
     changeIcon( "REAL_PRICE", st_switch );
     if( st_switch == 0.0 ){
@@ -28,7 +29,7 @@ void startRealPrice(){
     }else if( st_switch == 1.0 ){
       if( Period() == PERIOD_H4 ){
         st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
-        st_last_mod = getGlobal( "SYNC_TL" );
+        //st_last_mod = getGlobal( "SYNC_TL" );
         setGlobal( "REAL_PRICE", 2.0 );
         showRealPrices();
         return;
@@ -39,7 +40,7 @@ void startRealPrice(){
       }
     }else if( st_switch == 2.0 ){
       st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
-      st_last_mod = getGlobal( "SYNC_TL" );
+      //st_last_mod = getGlobal( "SYNC_TL" );
       
     }else if( st_switch > 2.0 ){
       showRealPrices();
@@ -55,9 +56,9 @@ void startRealPrice(){
   }
   st_timer = GetTickCount() + 4000;
   
-  if( st_curr_H4_time != iTime( NULL, PERIOD_H4, 0 ) || st_last_mod != getGlobal( "SYNC_TL" ) ){
+  if( st_curr_H4_time != iTime( NULL, PERIOD_H4, 0 )/* || st_last_mod != getGlobal( "SYNC_TL" ) */){
     st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
-    st_last_mod = getGlobal( "SYNC_TL" );
+   // st_last_mod = getGlobal( "SYNC_TL" );
     
     setGlobal( "REAL_PRICE", getCurrPeriodKey() );
     PostMessageA( WindowHandle( Symbol(), Period() ), WM_COMMAND, 33136, 0 );
