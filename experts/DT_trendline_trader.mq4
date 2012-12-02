@@ -10,6 +10,9 @@
 #define TL_STATE 1
 #define TL_ID 2
 
+#define TL_SIB_ABOVE 0
+#define TL_SIB_BELOW 1
+
 #include <DT_defaults.mqh>
 #include <DT_functions.mqh>
 #include <WinUser32.mqh>
@@ -21,6 +24,7 @@
 #define FIBO_TP 0.380 // 0.382
 #define TRADE_LOT 0.1
 #define EXPIRATION_TIME 7200 // 2 hour
+#define NR_OF_ALLOW_POSITION 8 // x/2!
 // #define TIME_BWEEN_TRADES 18000 // 5 hour (min 4 hour !!!!)
 
 bool CONNECTION_FAIL = true;
@@ -123,14 +127,14 @@ int start(){
               if( peak >= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                 OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
                 errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ) );
-                log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ), 8.0, magic );
+                log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," highest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ), 2.0, magic );
                 continue;
               }
             }else{
               if( peak <= NormalizeDouble( OrderTakeProfit(), Digits ) ){
                 OrderClose( ticket, TRADE_LOT, Ask, 3, Red );
                 errorCheck( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ) );
-                log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ), 8.0, magic );
+                log( StringConcatenate( Symbol()," Open position is manually closed, tp: ",NormalizeDouble( OrderTakeProfit(), Digits )," lowest:", peak, " ticket id :", ticket, " Bid:", Bid, " Ask:", Ask ), 3.0, magic );
                 continue;
               }
             }
@@ -143,7 +147,7 @@ int start(){
                   if( OrderProfit() >= 0.0 && OrderCloseTime() != 0.0 ){
                     OrderDelete( ticket );
                     errorCheck( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ) );
-                    log( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ), 8.0, magic );
+                    log( StringConcatenate( Symbol()," close safety position ticket id :", main_ticket, " magic:", magic, " closed ticket:", ticket ), 4.0, magic );
 										
 										Alert(OrderTicket()+"  OrderComment:"+ OrderComment()+" OrderCloseTime:"+OrderCloseTime()+" OrderType:"+OrderType()+" OrderProfit:"+OrderProfit() );
                     continue;
@@ -169,55 +173,54 @@ int start(){
         return(0);
       }
     }
-    is_buy = ( iOpen( NULL, PERIOD_M1, 1 ) > tLine_price );
     
-    RefreshRates();
+    if( iOpen( NULL, PERIOD_M1, 1 ) > tLine_price ){
+      is_buy = true;
+      o_type = OP_BUYLIMIT;
+      op = NormalizeDouble( tLine_price + st_spread, Digits );
+    }else{
+      is_buy = false;
+      o_type = OP_SELLLIMIT;
+      op = NormalizeDouble( tLine_price, Digits );
+    }
+    
+    double siblings[2];
+    getNearestLinePrices( tLine_price, st_tLine, siblings );
+    
+    sl = getStopLoss( is_buy, tLine_price, st_spread, st_stop_loss, st_fail_sl, siblings, st_tLine[idx][TL_ID] );
+    if( sl == -1.0 ){
+      return(0);
+    }
+    
     if( st_tLine[idx][TL_STATE] == "sml" ){
       if( peekIsNotEnoughFar( is_buy, tLine_price, st_max_dist ) ){
-        log( StringConcatenate( Symbol()," Closest Peek is not enought far: ",st_tLine[idx][TL_NAME]," tLine_price:", tLine_price, " is_buy", is_buy ), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );
+        log( StringConcatenate( Symbol()," Closest Peek is not enought far: ",st_tLine[idx][TL_NAME]," tLine_price:", tLine_price, " is_buy:", is_buy ), 5.0, StrToDouble(st_tLine[idx][TL_ID]) );
         return(0);
       }
     
-      tp = getSmallTakeProfit( is_buy, tLine_price, st_tLine, st_spread, st_sml_tp, st_sml_magnet );
-    
-      if( is_buy ){
-        o_type = OP_BUYLIMIT;
-        op = NormalizeDouble( tLine_price + st_spread, Digits );
-        sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
-      }else{
-        o_type = OP_SELLLIMIT;
-        op = NormalizeDouble( tLine_price, Digits );
-        sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
-      }
+      tp = getSmallTakeProfit( is_buy, tLine_price, st_spread, st_sml_tp, st_sml_magnet, siblings, st_tLine[idx][TL_ID] );
+      comment = "";
+      
     }else if( st_tLine[idx][TL_STATE] == "big" ){
     
-      tp = getBigTakeProfit( idx, is_buy, fibo_100, tLine_price, st_tLine, st_spread, st_min_tp, st_max_tp );
-      
-      if( is_buy ){
-        o_type = OP_BUYLIMIT;
-        op = NormalizeDouble( tLine_price + st_spread, Digits );
-        sl = NormalizeDouble( tLine_price - st_stop_loss, Digits );
-      }else{
-        o_type = OP_SELLLIMIT;
-        op = NormalizeDouble( tLine_price, Digits );
-        sl = NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits );
-      }
-      
+      tp = getBigTakeProfit( is_buy, fibo_100, tLine_price, st_spread, st_min_tp, st_max_tp, siblings, st_tLine[idx][TL_ID] );
       comment = DoubleToStr( fibo_100, 5 );
+      
     }else{
-      log( StringConcatenate( Symbol()," unknown state:", st_tLine[idx][TL_STATE], " line:", st_tLine[idx][TL_NAME], Period() ), 2.0, StrToDouble(st_tLine[idx][TL_ID]) );
+      log( StringConcatenate( Symbol()," unknown state:", st_tLine[idx][TL_STATE], " line:", st_tLine[idx][TL_NAME], Period() ), 6.0, StrToDouble(st_tLine[idx][TL_ID]) );
       return (0);
     }
     
     if( tp == -1.0 ){
       return(0);
     }
-    
+ 
     ticket = OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), TimeCurrent() + EXPIRATION_TIME, Orange );
-    if( ticket != -1 ){
+    
 /* !! */  Print(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
-/* !! */  log(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 18.0, StrToDouble(st_tLine[idx][TL_ID]) );        
+/* !! */  log(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );        
 
+    if( ticket != -1 ){
       if( is_buy ){
         o_type = OP_SELLSTOP;
         op = sl;
@@ -232,23 +235,28 @@ int start(){
       comment = ticket+"";
       OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), 0, Blue );
       
+/* !! */  Print(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
+/* !! */  log(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );    
+
     }
-    
-/* !! */  Print(StringConcatenate("NFail Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
-/* !! */  log(StringConcatenate("NFail Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 18.0, StrToDouble(st_tLine[idx][TL_ID]) );    
     
   }
 }
 
 int getClosestTLineId( string &st_tLine[][], double &st_offset ){
-  int i = 0, len = ArrayRange( st_tLine, 0 ), order_history[], used_idx = -1;
+  int i = 0, len = ArrayRange( st_tLine, 0 ), order_history[], used_idx = -1, pos_nr = 0;
   double tLine_price, tmp, min_dist = 999999.0;
   
-  setHistoryArray( order_history );
+  setHistoryArray( order_history, pos_nr );
+  if( pos_nr >= NR_OF_ALLOW_POSITION ){
+    log( StringConcatenate( Symbol()," Allow daily position limit reached! allow:", NR_OF_ALLOW_POSITION, " current:", pos_nr ), 8.0 );
+    return (-1);
+  }
+  
   for( ; i < len; i++ ){
     // missing tLine
     if( ObjectFind( st_tLine[i][TL_NAME] ) == -1 ){
-      log( StringConcatenate( Symbol()," Error tLine is missing: ",st_tLine[i][TL_NAME] ), 7.0, StrToDouble(st_tLine[i][TL_ID]) );
+      log( StringConcatenate( Symbol()," Error tLine is missing: ",st_tLine[i][TL_NAME] ), 9.0, StrToDouble(st_tLine[i][TL_ID]) );
       loadTrendlines( st_tLine );
       return (-1);
     }
@@ -261,7 +269,7 @@ int getClosestTLineId( string &st_tLine[][], double &st_offset ){
     // Current time not cross tLine (tLine is too short or below Time[0])
     tLine_price = getTLineValueByShift( st_tLine[i][TL_NAME] );
     if( tLine_price == 0.0 ){
-      log( StringConcatenate( Symbol()," Error tLine is not enought long: ",st_tLine[i][TL_NAME] ), 8.0, StrToDouble(st_tLine[i][TL_ID]) );
+      log( StringConcatenate( Symbol()," Error tLine is not enought long: ",st_tLine[i][TL_NAME] ), 10.0, StrToDouble(st_tLine[i][TL_ID]) );
       continue;
     }
     
@@ -288,24 +296,46 @@ int getClosestTLineId( string &st_tLine[][], double &st_offset ){
   return ( used_idx );
 }
 
-double getSmallTakeProfit( bool is_buy, double &tLine_price, string& st_tLine[][3], double& st_spread, double& st_sml_tp, double& st_sml_magnet ){
-  double tp = -1.0, nearest_line_price; 
+double getSmallTakeProfit( bool is_buy, double &tLine_price, double& st_spread, double& st_sml_tp, double& st_sml_magnet, double& siblings[2], string line_id ){
   if( is_buy ){
-    tp = NormalizeDouble( tLine_price + st_sml_tp, Digits );
-    nearest_line_price = getNearestLinePriceByDir( false, tp, st_tLine );
-  }else{
-    tp = NormalizeDouble( tLine_price - st_sml_tp + st_spread, Digits );
-    nearest_line_price = getNearestLinePriceByDir( true, tp, st_tLine );
-  }
-  
-  if( nearest_line_price < st_sml_magnet ){
-    if( is_buy ){
-      tp = tp + nearest_line_price;
+    if( siblings[TL_SIB_ABOVE] < st_sml_tp ){
+      log( StringConcatenate( Symbol()," Above sibling is too close (betweeen trade line and TP)! Line id:", line_id ), 12.0, StrToDouble(line_id) );
+      return ( -1.0 );
+    }else if( siblings[TL_SIB_ABOVE] < st_sml_magnet ){
+      return (NormalizeDouble( tLine_price + siblings[TL_SIB_ABOVE], Digits ));
     }else{
-      tp = tp - nearest_line_price;
+      return (NormalizeDouble( tLine_price + st_sml_tp, Digits ));
+    }
+  }else{
+    if( siblings[TL_SIB_BELOW] < st_sml_tp ){
+      log( StringConcatenate( Symbol()," Below sibling is too close (betweeen trade line and TP)! Line id:", line_id ), 13.0, StrToDouble(line_id) );
+      return ( -1.0 );
+    }else if( siblings[TL_SIB_BELOW] < st_sml_magnet ){
+      return (NormalizeDouble( tLine_price - siblings[TL_SIB_BELOW] + st_spread, Digits ));
+    }else{
+      return (NormalizeDouble( tLine_price - st_sml_tp + st_spread, Digits ));
     }
   }
-  return ( tp );
+  return ( -1.0 );
+}
+
+double getStopLoss( bool is_buy, double &tLine_price, double& st_spread, double& st_stop_loss, double& st_fail_sl, double& siblings[2], string line_id ){
+  if( is_buy ){
+    if( siblings[TL_SIB_BELOW] < st_stop_loss + st_fail_sl ){
+      log( StringConcatenate( Symbol()," Below sibling is too close (betweeen trade line and SL)! Line id:", line_id ), 14.0, StrToDouble(line_id) );
+      return ( -1.0 );
+    }else{
+      return (NormalizeDouble( tLine_price - st_stop_loss, Digits ));
+    }
+  }else{
+    if( siblings[TL_SIB_ABOVE] < st_stop_loss + st_fail_sl ){
+      log( StringConcatenate( Symbol()," Abow sibling is too close (betweeen trade line and SL)! Line id:", line_id ), 15.0, StrToDouble(line_id) );
+      return ( -1.0 );
+    }else{
+      return (NormalizeDouble( tLine_price + st_stop_loss + st_spread, Digits ));
+    }
+  }
+  return ( -1.0 );
 }
 
 bool peekIsNotEnoughFar( bool is_buy, double &tLine_price, double &st_max_dist ){
@@ -326,29 +356,35 @@ bool peekIsNotEnoughFar( bool is_buy, double &tLine_price, double &st_max_dist )
   return ( true );
 }
 
-double getBigTakeProfit( int idx, bool is_buy, double &fibo_100, double &tLine_price, string& st_tLine[][3], double& st_spread, double& st_min_tp, double& st_max_tp ){
+double getBigTakeProfit( bool is_buy, double &fibo_100, double &tLine_price, double& st_spread, double& st_min_tp, double& st_max_tp, double& siblings[2], string line_id ){
   static int peris[4] = { 240, 60, 30, 15 };
-  double fibo_tp, nearest_line_price = getNearestLinePriceByDir( is_buy, tLine_price, st_tLine );
+  double fibo_tp;
   
-  for( int i = 0; i < 4; i++ ){ // hard code!!!
+  for( int i = 0; i < 4; i++ ){ // 4 hard code!!!
     fibo_100 = getFibo100( peris[i], tLine_price, is_buy );
     if( fibo_100 == -1.0 ){
-      log( StringConcatenate( Symbol()," Wrong fibo100! Cline: ", st_tLine[idx][TL_NAME] ), 13.0, StrToDouble(st_tLine[idx][TL_ID]) );
+      log( StringConcatenate( Symbol()," Wrong fibo100! line ID: ", line_id ), 16.0, StrToDouble(line_id) );
       return ( -1.0 );
     }
     
     fibo_tp = MathAbs( fibo_100 - tLine_price ) * FIBO_TP;
     
-    if( nearest_line_price < fibo_tp ){
-      fibo_tp = nearest_line_price;
+    if( is_buy ){
+      if( siblings[TL_SIB_ABOVE] < fibo_tp ){
+        fibo_tp = siblings[TL_SIB_ABOVE];
+      }
+    }else{
+      if( siblings[TL_SIB_BELOW] < fibo_tp ){
+        fibo_tp = siblings[TL_SIB_BELOW];
+      }
     }
     
     if( fibo_tp < st_min_tp ){
-      log( StringConcatenate( Symbol()," TP fibo is too close! Cline: ", st_tLine[idx][TL_NAME], " Distance:", DoubleToStr(fibo_tp, Digits) ), 13.0, StrToDouble(st_tLine[idx][TL_ID]) );
+      log( StringConcatenate( Symbol()," TP fibo is too close! line ID: ", line_id, " Distance:", DoubleToStr(fibo_tp, Digits) ), 17.0, StrToDouble(line_id) );
       return ( -1.0 );
     }else if( fibo_tp > st_max_tp ){
       if( i == 3 ){ // hard code!!!
-        log( StringConcatenate( Symbol()," TP fibo is too far! Cline:", st_tLine[idx][TL_NAME], " Distance:", DoubleToStr(fibo_tp, Digits) ), 14.0, StrToDouble(st_tLine[idx][TL_ID]) );
+        log( StringConcatenate( Symbol()," TP fibo is too far! line ID:", line_id, " Distance:", DoubleToStr(fibo_tp, Digits) ), 18.0, StrToDouble(line_id) );
         return ( -1.0 );
       }
       continue;
@@ -362,32 +398,27 @@ double getBigTakeProfit( int idx, bool is_buy, double &fibo_100, double &tLine_p
   }
 }
 
-double getNearestLinePriceByDir( bool above_tLine_price, double &ref_price, string& st_tLine[][3]){
+void getNearestLinePrices( double& tLine_price, string& st_tLine[][3], double& siblings[2] ){
   int i = 0, len = ArrayRange( st_tLine, 0 );
-  double tmp, min = 99999999.9;
-
-  if( above_tLine_price ){
-    for( ; i < len; i++ ){
-      tmp = getTLineValueByShift( st_tLine[i][TL_NAME] );
-      if( tmp > ref_price ){
-        tmp = tmp - ref_price;
-        if( tmp < min ){
-          min = tmp;
-        }
+  double tmp;
+  
+  siblings[TL_SIB_ABOVE] = 99999999.9;
+  siblings[TL_SIB_BELOW] = 99999999.9;
+  
+  for( ; i < len; i++ ){
+    tmp = getTLineValueByShift( st_tLine[i][TL_NAME] );
+    if( tmp > tLine_price ){
+      tmp = tmp - tLine_price;
+      if( tmp < siblings[TL_SIB_ABOVE] ){
+        siblings[TL_SIB_ABOVE] = tmp;
       }
-    }
-  }else{
-    for( ; i < len; i++ ){
-      tmp = getTLineValueByShift( st_tLine[i][TL_NAME] );
-      if( tmp < ref_price ){
-        tmp = ref_price - tmp;
-        if( tmp < min ){
-          min = tmp;
-        }
+    }else if( tmp < tLine_price ){
+      tmp = tLine_price - tmp;
+      if( tmp < siblings[TL_SIB_BELOW] ){
+        siblings[TL_SIB_BELOW] = tmp;
       }
     }
   }
-  return (min);
 }
 
 double getFibo100( int peri, double &tLine_price, bool &is_buy ){
@@ -422,7 +453,9 @@ bool alreadyUsedThisTLine( int &arr[], int magic ){
   return (false);
 }
 
-void setHistoryArray( int &arr[] ){
+void setHistoryArray( int &arr[], int &pos_nr ){
+  double today = iTime(NULL, PERIOD_D1, 0);
+
   ArrayResize( arr, 100 );
   int i = 0, nr = 0, len = OrdersTotal(), magic;
   string symb = Symbol();
@@ -433,6 +466,9 @@ void setHistoryArray( int &arr[] ){
         if( magic > 1000 ){
           arr[nr] = magic;
           nr++;
+          if( OrderOpenTime() > today ){
+            pos_nr++;
+          }
         }
       }
     }
@@ -446,6 +482,9 @@ void setHistoryArray( int &arr[] ){
         if( magic > 1000 ){
           arr[nr] = magic;
           nr++;
+          if( OrderOpenTime() > today ){
+            pos_nr++;
+          }
         }
       }
     }
@@ -487,12 +526,12 @@ void loadTrendlines( string &st_tLine[][] ){
 
           if( type == OBJ_TREND ){
             if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t1 ) ), Digits) == p1 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t1 ) ), Digits) == p1) ){
-              log( StringConcatenate( Symbol()," Line P1 val not match to ZZ: ", p1, " name:", name ), 11.0, StrToDouble(StringSubstr( name, 16, 10 )) );
+              log( StringConcatenate( Symbol()," Line P1 val not match to ZZ: ", p1, " name:", name ), 19.0, StrToDouble(StringSubstr( name, 16, 10 )) );
               break;
             }
 
             if( !(NormalizeDouble(iCustom( Symbol(), PERIOD_H4, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_H4, t2 ) ), Digits) == p2 || NormalizeDouble(iCustom( Symbol(), PERIOD_D1, "ZigZag", 12, 5, 3, 0, iBarShift( NULL, PERIOD_D1, t2 ) ), Digits) == p2) ){
-              log( StringConcatenate( Symbol()," Line P2 val not match to ZZ: ", p2, " name:", name ), 11.0, StrToDouble(StringSubstr( name, 16, 10 )) );
+              log( StringConcatenate( Symbol()," Line P2 val not match to ZZ: ", p2, " name:", name ), 20.0, StrToDouble(StringSubstr( name, 16, 10 )) );
               break;
             }
           }

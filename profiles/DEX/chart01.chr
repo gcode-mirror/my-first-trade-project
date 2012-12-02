@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
-period=60
-leftpos=2845
+period=1
+leftpos=68224
 digits=5
 scale=4
 graph=1
@@ -99,22 +99,6 @@ ray=1
 </object>
 <object>
 type=2
-object_name=DT_GO_tLine_sig_1351289713
-period_flags=0
-create_time=1351494876
-description=2012.10.26 22:15:13
-color=15570276
-style=0
-weight=2
-background=1
-time_0=1338508800
-value_0=1.228800
-time_1=1349049600
-value_1=1.280360
-ray=1
-</object>
-<object>
-type=2
 object_name=DT_GO_tLine_sig_1352061056
 period_flags=0
 create_time=1353509385
@@ -195,6 +179,22 @@ ray=1
 </object>
 <object>
 type=2
+object_name=DT_GO_tLine_sml_1351289713
+period_flags=0
+create_time=1354485106
+description=2012.12.02 22:51:46
+color=16711935
+style=0
+weight=2
+background=1
+time_0=1338508800
+value_0=1.228800
+time_1=1349049600
+value_1=1.280360
+ray=1
+</object>
+<object>
+type=2
 object_name=DT_GO_tLine_sml_1353022762
 period_flags=0
 create_time=1353019179
@@ -207,22 +207,6 @@ time_0=1343088000
 value_0=1.204210
 time_1=1352764800
 value_1=1.266120
-ray=1
-</object>
-<object>
-type=2
-object_name=DT_GO_tLine_sml_1353572368
-period_flags=0
-create_time=1353656078
-description=2012.11.23 08:34:38
-color=16711935
-style=0
-weight=1
-background=1
-time_0=1351238400
-value_0=1.288240
-time_1=1352260800
-value_1=1.287610
 ray=1
 </object>
 <object>
@@ -327,7 +311,7 @@ name=DT_utility
 flags=339
 window_num=0
 <inputs>
-EXT_BOSS=0
+EXT_BOSS=1
 EXT_WEEDS_OF_NEWS=1
 </inputs>
 </expert>

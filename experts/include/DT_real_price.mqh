@@ -57,14 +57,16 @@ void startRealPrice(){
   st_timer = GetTickCount() + 4000;
   
   if( st_curr_H4_time != iTime( NULL, PERIOD_H4, 0 )/* || st_last_mod != getGlobal( "SYNC_TL" ) */){
-    st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
-   // st_last_mod = getGlobal( "SYNC_TL" );
-    
-    setGlobal( "REAL_PRICE", getCurrPeriodKey() );
-    PostMessageA( WindowHandle( Symbol(), Period() ), WM_COMMAND, 33136, 0 );
-    return;
+    if( Period() == PERIOD_H4 ){
+      st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
+      //st_last_mod = getGlobal( "SYNC_TL" );
+      showRealPrices();
+    }else{
+      setGlobal( "REAL_PRICE", getCurrPeriodKey() );
+      PostMessageA( WindowHandle( Symbol(), Period() ), WM_COMMAND, 33136, 0 );
+      return;
+    }
   }
-    
 }
 
 void deInitRealPrice(){
