@@ -273,7 +273,7 @@ sub process{
 }
 
 sub getMonthId{
-	for( my $i = 0; $i < $#months; $i++ ){
+	for( my $i = 0; $i <= $#months; $i++ ){
 		if( $months[$i] eq $_[0] ){
 			return $i;
 		}

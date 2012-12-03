@@ -1,7 +1,7 @@
 <chart>
 symbol=AUDUSD-Pro
-period=240
-leftpos=1953
+period=60
+leftpos=2656
 digits=5
 scale=4
 graph=1
@@ -173,6 +173,21 @@ style=0
 weight=1
 background=0
 value_0=1.292200
+</object>
+<object>
+type=2
+object_name=Trendline 58720
+period_flags=0
+create_time=1354556768
+color=9408444
+style=0
+weight=1
+background=1
+time_0=1344470400
+value_0=1.061310
+time_1=1352246400
+value_1=1.048010
+ray=1
 </object>
 <object>
 type=2
