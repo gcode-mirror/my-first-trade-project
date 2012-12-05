@@ -53,6 +53,7 @@ int init(){
   
   if( getSymbol() == "EURUSD" && EXT_BOSS == false ){
     addComment( "EURUSD boss state is OFF!", 1 );
+    EXT_BOSS = true;
   }
   
   errorCheck("global init");

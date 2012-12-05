@@ -40,7 +40,7 @@ int start(){
       }
     }
     
-    if( ObjectGet( sel_name, OBJPROP_COLOR ) == Black ){
+    if( c == Black ){
       cmd_id = MessageBox( "renew                      sig                      Cancel?", "TLine status change?", MB_YESNOCANCEL|MB_ICONQUESTION );
       if( cmd_id == IDYES ){
         changeTLineState( sel_name, state, width, c );

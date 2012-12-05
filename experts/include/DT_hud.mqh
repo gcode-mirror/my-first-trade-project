@@ -110,18 +110,16 @@ void startHud(){
         if( OrderSymbol() == symb ) {
           magic = OrderMagicNumber();
           if( magic > 1000 ){
-            if( OrderCloseTime() != 0.0 && OrderProfit() != 0.0 ){
-              tmp = ""+magic;
-              for( j = 0; j < len2; j++ ){
-                name = ObjectName(j);
-                if( StringSubstr( name, 16, 10 ) == tmp ){
-                  if( ObjectGet( name, OBJPROP_COLOR ) != Black ){
-                    ObjectSet( name, OBJPROP_COLOR, Black );
-                  }
-                  if( magic != prev_magic ){
-                    nr++;
-                    prev_magic = magic;
-                  }
+            tmp = ""+magic;
+            for( j = 0; j < len2; j++ ){
+              name = ObjectName(j);
+              if( StringSubstr( name, 16, 10 ) == tmp ){
+                if( ObjectGet( name, OBJPROP_COLOR ) != Black && ObjectGet( name, OBJPROP_COLOR ) != DarkOrange ){
+                  ObjectSet( name, OBJPROP_COLOR, Black );
+                }
+                if( magic != prev_magic ){
+                  nr++;
+                  prev_magic = magic;
                 }
               }
             }

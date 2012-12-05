@@ -6,6 +6,13 @@
 #property copyright "Dex"
 #property link      ""
 
+#import "user32.dll"
+int  GetParent(int hWnd);
+int  SendMessageA(int hWnd,int Msg,int wParam,int lParam);
+#import
+
+#define WM_MDIGETACTIVE 0x0229
+
 void startRealPrice(){
   static int st_timer = 0;
   static double st_switch = -1.0;
@@ -57,15 +64,26 @@ void startRealPrice(){
   st_timer = GetTickCount() + 4000;
   
   if( st_curr_H4_time != iTime( NULL, PERIOD_H4, 0 )/* || st_last_mod != getGlobal( "SYNC_TL" ) */){
-    if( Period() == PERIOD_H4 ){
-      st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
-      //st_last_mod = getGlobal( "SYNC_TL" );
-      showRealPrices();
-    }else{
-      setGlobal( "REAL_PRICE", getCurrPeriodKey() );
-      PostMessageA( WindowHandle( Symbol(), Period() ), WM_COMMAND, 33136, 0 );
-      return;
+    if( tabIsActive() ){
+      if( Period() == PERIOD_H4 ){
+        st_curr_H4_time = iTime( NULL, PERIOD_H4, 0 );
+        //st_last_mod = getGlobal( "SYNC_TL" );
+        showRealPrices();
+      }else{
+        setGlobal( "REAL_PRICE", getCurrPeriodKey() );
+        PostMessageA( WindowHandle( Symbol(), Period() ), WM_COMMAND, 33136, 0 );
+        return;
+      }
     }
+  }
+}
+
+bool tabIsActive(){
+  int ActiveMDI = SendMessageA(GetParent(GetParent(WindowHandle(Symbol(),Period()))), WM_MDIGETACTIVE, 0, 0);
+  if(ActiveMDI == GetParent(WindowHandle(Symbol(),Period())) ){
+    return(true);
+  }else{
+    return(false);
   }
 }
 
