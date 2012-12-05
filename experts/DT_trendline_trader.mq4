@@ -168,11 +168,7 @@ int start(){
   if( idx != -1 ){
     tLine_price = getTLineValueByShift( st_tLine[idx][TL_NAME] );
     
-    if( GetTickCount() < st_start_time ){
-      if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
-        return(0);
-      }
-    }
+    
     
     if( iOpen( NULL, PERIOD_M1, 1 ) > tLine_price ){
       is_buy = true;
@@ -214,11 +210,17 @@ int start(){
     if( tp == -1.0 ){
       return(0);
     }
+	
+	if( GetTickCount() < st_start_time ){
+      if( IDNO == MessageBox(StringConcatenate( Symbol(), " Terminal just started, do you want OPEN position?"), "New order?", MB_YESNO|MB_ICONQUESTION ) ){
+        return(0);
+      }
+    }
  
     ticket = OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), TimeCurrent() + EXPIRATION_TIME, Orange );
     
-/* !! */  Print(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
-/* !! */  log(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );        
+/* !! */  Print(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", DoubleToStr(op, Digits), " SL:", DoubleToStr(sl, Digits), " TP:", DoubleToStr(tp, Digits), " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", DoubleToStr(Bid, Digits), " Ask:", DoubleToStr(Ask, Digits), " Stat:", DoubleToStr(tLine_price, Digits), " H:", DoubleToStr(High[0], Digits)," L:", DoubleToStr(Low[0], Digits), " (", Symbol(), ")"));
+/* !! */  log(StringConcatenate("New Ty:", o_type, " Lot:", TRADE_LOT, " OP:", DoubleToStr(op, Digits), " SL:", DoubleToStr(sl, Digits), " TP:", DoubleToStr(tp, Digits),  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", DoubleToStr(Bid, Digits), " Ask:", DoubleToStr(Ask, Digits), " Stat:", DoubleToStr(tLine_price, Digits), " H:", DoubleToStr(High[0], Digits)," L:", DoubleToStr(Low[0], Digits), " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );        
 
     if( ticket != -1 ){
       if( is_buy ){
@@ -235,8 +237,8 @@ int start(){
       comment = ticket+"";
       OrderSend( Symbol(), o_type, TRADE_LOT, op, 5, sl, tp, comment, StrToInteger( st_tLine[idx][TL_ID] ), 0, Blue );
       
-/* !! */  Print(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp, " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price, " H:", High[0]," L:", Low[0], " (", Symbol(), ")"));
-/* !! */  log(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", op, " SL:", sl, " TP:", tp,  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", Bid, " Ask:", Ask, " Stat:", tLine_price," H:", High[0]," L:", Low[0], " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );    
+/* !! */  Print(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", DoubleToStr(op, Digits), " SL:", DoubleToStr(sl, Digits), " TP:", DoubleToStr(tp, Digits), " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", DoubleToStr(Bid, Digits), " Ask:", DoubleToStr(Ask, Digits), " Stat:", DoubleToStr(tLine_price, Digits), " H:", DoubleToStr(High[0], Digits)," L:", DoubleToStr(Low[0], Digits), " (", Symbol(), ")"));
+/* !! */  log(StringConcatenate("Safety Ty:", o_type, " Lot:", TRADE_LOT, " OP:", DoubleToStr(op, Digits), " SL:", DoubleToStr(sl, Digits), " TP:", DoubleToStr(tp, Digits),  " Mag:", st_tLine[idx][TL_ID], " Exp:", TimeCurrent()+EXPIRATION_TIME, " F100:", fibo_100, " Bid:", DoubleToStr(Bid, Digits), " Ask:", DoubleToStr(Ask, Digits), " Stat:", DoubleToStr(tLine_price, Digits), " H:", DoubleToStr(High[0], Digits)," L:", DoubleToStr(Low[0], Digits), " (", Symbol(), ")"), 7.0, StrToDouble(st_tLine[idx][TL_ID]) );        
 
     }
     
