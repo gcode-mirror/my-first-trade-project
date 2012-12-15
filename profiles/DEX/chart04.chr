@@ -1,7 +1,7 @@
 <chart>
 symbol=EURUSD-Pro
 period=240
-leftpos=2100
+leftpos=2107
 digits=5
 scale=4
 graph=2
@@ -38,10 +38,84 @@ height=154
 <indicator>
 name=main
 <object>
+type=22
+object_name=#62751391 sell limit 0.10 EURUSD-Pro at 1.31300
+period_flags=0
+create_time=1355501202
+description=(1355311318)
+color=42495
+weight=1
+background=0
+symbol_code=1
+time_0=1355501194
+value_0=1.313000
+</object>
+<object>
+type=22
+object_name=#62751391 sell limit 0.10 EURUSD-Pro at 1.31300 stop loss at 1.
+period_flags=0
+create_time=1355501202
+color=255
+weight=1
+background=0
+symbol_code=4
+time_0=1355501194
+value_0=1.313880
+</object>
+<object>
+type=22
+object_name=#62751391 sell limit 0.10 EURUSD-Pro at 1.31300 take profit at 
+period_flags=0
+create_time=1355501202
+color=16711680
+weight=1
+background=0
+symbol_code=4
+time_0=1355501194
+value_0=1.311880
+</object>
+<object>
+type=22
+object_name=#62751433 buy stop 0.10 EURUSD-Pro at 1.31388
+period_flags=0
+create_time=1355501204
+description=62751391 (1355311318)
+color=16711680
+weight=1
+background=0
+symbol_code=1
+time_0=1355501194
+value_0=1.313880
+</object>
+<object>
+type=22
+object_name=#62751433 buy stop 0.10 EURUSD-Pro at 1.31388 stop loss at 1.31
+period_flags=0
+create_time=1355501204
+color=255
+weight=1
+background=0
+symbol_code=4
+time_0=1355501194
+value_0=1.313080
+</object>
+<object>
+type=22
+object_name=#62751433 buy stop 0.10 EURUSD-Pro at 1.31388 take profit at 1.
+period_flags=0
+create_time=1355501204
+color=16711680
+weight=1
+background=0
+symbol_code=4
+time_0=1355501194
+value_0=1.315080
+</object>
+<object>
 type=21
 object_name=DT_GO_tLine_sig_1350412425
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 description=Text
 color=15570276
 font=Arial
@@ -55,7 +129,7 @@ value_0=1.400000
 type=2
 object_name=DT_GO_tLine_sig_1351289274
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=15570276
 style=0
 weight=1
@@ -70,7 +144,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1353022891
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=15570276
 style=0
 weight=1
@@ -85,7 +159,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sig_1355217990
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=15570276
 style=0
 weight=1
@@ -100,7 +174,7 @@ ray=1
 type=1
 object_name=DT_GO_tLine_sig_1355248351
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=15570276
 style=0
 weight=1
@@ -111,7 +185,7 @@ value_0=1.300000
 type=2
 object_name=DT_GO_tLine_sml_1353022762
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=16711935
 style=0
 weight=1
@@ -126,7 +200,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sml_1355311318
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=16711935
 style=0
 weight=1
@@ -141,7 +215,7 @@ ray=1
 type=2
 object_name=DT_GO_tLine_sml_1355311397
 period_flags=0
-create_time=1355410841
+create_time=1355494057
 color=0
 style=0
 weight=1
