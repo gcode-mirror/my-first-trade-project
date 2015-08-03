@@ -1,0 +1,1 @@
+try to earn a lot of money
